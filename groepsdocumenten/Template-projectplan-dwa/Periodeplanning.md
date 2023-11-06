@@ -8,7 +8,7 @@
 
 | Datum                    |                    | Maandag | Dinsdag                                                      | Woensdag | Donderdag                                      | Vrijdag         |
 | ------------------------ | :----------------: | ------- | ------------------------------------------------------------ | -------- | ---------------------------------------------- | --------------- |
-| 2023-11-06<br>2023-11-10 |  2-1<br>Pre-game   |         | Workshop over User stories en Unit testen <br> **13.00-17.00 C3.10** |          | Workshop C4 \& Software Guidebook<br>**B1.88** | Sprint Planning |
+| 2023-11-06<br>2023-11-10 |  2-1<br>Pre-game   |         | Workshop over User stories en Unit testen <br> **13.00-17.00 C3.10** |          | Workshop C4 \& Software Guidebook<br>**13:00 - 17:00 B1.88** | Sprint Planning |
 | 2023-11-13<br>2023-11-19 |  2-2<br>Sprint 1   |         |                                                              |          |                                                |                 |
 | 2023-11-20<br>2023-11-26 |  2-3<br>Sprint 1   |         |                                                              |          |                                                |                 |
 | 2023-11-27<br>2023-12-03 |  2-4<br>Sprint 2   |         |                                                              |          |                                                |                 |
