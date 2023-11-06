@@ -3,10 +3,10 @@
 ## Aanwezigen
 
 > - Robert Boudewijn, r.boudewijn@svextend.nl, PO
-> - Jules Koster, groepslid
-> - Richard Visser, groepslid
-> - Mark Evers, groepslid
-> - Matthias Budding, groepslid, Notulist
+> - Jules Koster, Scrum Master
+> - Richard Visser, Product Owner by Proxy
+> - Mark Evers, Kwaliteitsmanager
+> - Matthias Budding, Planner, Notulist
 
 > groepslid = projectgroep-nyala@hotmail.com
 
