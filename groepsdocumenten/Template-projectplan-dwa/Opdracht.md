@@ -1,3 +1,4 @@
 # Opdracht
-
-> De opdracht is om een marketing- en communicatiebeheerapplicatie te ontwikkelen met functies zoals gebruikersregistratie, mailinglijstbeheer, e-mailopstelling en planning, abonnementbeheer, automatische e-mailverzending, rapportage, online e-mailweergave en een admin-panel voor beheerders.
+> Xtend wilt graag een webapplicatie hebben waarin de beheerder mailtemplates kan opstellen, deze opslaan voor later gebruik en eventueel aanpassen. Er moet een mogelijkheid komen voor klanten/studenten van Xtend om zich d.m.v. een QR code of een linkje zich in te schrijven op een bepaalde maillijst en vervolgens mailtjes te ontvangen. Dit zou ook een mogelijkheid moeten zijn voor de beheerder om handmatig mensen toe te voegen, daarnaast moet het voor de klanten/ studenten de mogelijk zijn om zich ook weer uit te schrijven van de maillijsten. Ook moeten mailtjes ingepland kunnen worden zodat ze op een later moment worden verstuurd.
+>
+> Xtend zou ook graag de mogelijkheid willen hebben om statestieken in te kunnen zien van de gestuurde mailtjes, denk hier bijvoorbeeld aan hoe vaak mailtjes geopend zijn, hoeveel mensen zich afmelden van de maillijst aan hand van bepaalde mails. Dit alles moet overzichtelijk in een admin-panel staan zodat de beheerder gemakkelijk templates kan maken en versturen.
