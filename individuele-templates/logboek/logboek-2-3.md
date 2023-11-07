@@ -8,7 +8,7 @@
 
 > [Hier is een lijstje met alle GitHub emojis](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md)
 
-## Maandag 22 november
+## Maandag 20 november
 
 > Eventueel informatieve algemene opmerkingen over deze dag.
 
@@ -18,7 +18,7 @@
 | | | | | | |
 
 
-## Dinsdag 23 november
+## Dinsdag 21 november
 
 > Eventueel informatieve algemene opmerkingen over deze dag.
 
@@ -27,7 +27,7 @@
 | rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
 | | | | | | |
 
-## Woensdag 24 november
+## Woensdag 22 november
 
 > Eventueel informatieve algemene opmerkingen over deze dag.
 
@@ -36,7 +36,7 @@
 | rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
 | | | | | | |
 
-## Donderdag 25 november
+## Donderdag 23 november
 
 > Eventueel informatieve algemene opmerkingen over deze dag.
 
@@ -47,7 +47,7 @@
 
 
 
-## Vrijdag 26 november
+## Vrijdag 24 november
 
 > Eventueel informatieve algemene opmerkingen over deze dag.
 
