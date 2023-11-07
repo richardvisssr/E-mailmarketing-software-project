@@ -14,9 +14,9 @@
 
 Applicatie, met vanuit QR of link jezelf toevoegen aan media lijst.. Email editor waarmee we emails kunnen opstellen en inplannen om naar een bepaalde media lijst te sturen.. Beetje idee als nieuwsbrief, subsribers moeten worden opgeslagen en kunnen zelf unsubscribe.. Automatisch mail versturen naar subs op basis van kalender via api kopeling. Met een get/post te zeggen stuur nu mail en eventueel online mails kunnen bekijken dmv knop om t online te zien. Ook willen we rapportages zoals welke komen aan en wat wordt meeste bekeken en meeste gebruikt en door wie of wat.. Zodat t duidelijk is wat aanspreekt en wat niet, hiermee kan worden bijgehouden
 
-Een admin die alles kan beheren, admin panel, interface voor editor mails.. Het is te vergelijken met mailchamp
+Een admin die alles kan beheren, admin panel, interface voor editor mails.. Het is te vergelijken met mailchimp
 
-Mailchamp kunnen we zeker gebruiken voor eventuele inspiraties en eventueel wanneer we extra dingen zien de heel zeker delen zodat we eventuel extra kunnen doen.. WIL is niet WET
+Mailchimp kunnen we zeker gebruiken voor eventuele inspiraties en eventueel wanneer we extra dingen zien de heel zeker delen zodat we eventuel extra kunnen doen.. WIL is niet WET
 
 ## Prototype of niet
 
@@ -47,7 +47,6 @@ Alles is vrij in te vullen zolang t maar mooi is, liever geen jaren 90.. Als het
 ## Beveiliging
 
 Niks met AVG, heel fijn geen mogelijkheid met toegang tot database buiten de applicatie, via docker is dat te doen met het gebruiken verschillende poorten.. Geen connectie van buitenaf mogelijk
-
 Encryptie met mails heeft minder prioriteit. Dit moet ons proces niet verslomen
 
 ## Email serviceses
