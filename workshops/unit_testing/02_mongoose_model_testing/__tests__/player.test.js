@@ -5,9 +5,9 @@ require('../player');
 
 const Player = mongoose.model('Player');
 
-xdescribe('Player Model Tests', () => {
+describe('Player Model Tests', () => {
     beforeAll(async () => {
-        await mongoose.connect('mongodb://localhost:27017/testPlayerDB');
+        await mongoose.connect('mongodb://127.0.0.1:27017/testPlayerDB');
     });
     
     beforeEach(async () => {
@@ -32,11 +32,20 @@ xdescribe('Player Model Tests', () => {
 
     });
     
-    xtest('item can be added if capacity is not yet exceeded', async () => {
+    test('item can be added if capacity is not yet exceeded', async () => {
+        let testPlayer = await Player.findById('han');
         
+        await testPlayer.addItem('sword');
+
+        const resultPlayer = await Player.findById('han');
+
+        const expectedItem = ['sword'];
+        
+
+        expect(resultPlayer.items).toEqual(expectedItem);
     });
     
-    xtest('item can not be added if nr of items equals the capacity', async () => {
+    test('item can not be added if nr of items equals the capacity', async () => {
     
 
     });

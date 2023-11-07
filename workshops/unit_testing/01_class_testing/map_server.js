@@ -15,6 +15,10 @@ const map = {
     mountain: {
         description: 'a mountain range',
         exits: ['town']
+    },
+    bali: {
+        description: 'a bali range',
+        exits: ['town']
     }
 }
 
