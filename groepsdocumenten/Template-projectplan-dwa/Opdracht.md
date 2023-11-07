@@ -1,3 +1,3 @@
 # Opdracht
 
-> Dit kan simpelweg de tekst zijn die je van de Product Owner hebt gekregen. Noteer hier wel de wijzigingen die eventueel naar boven zijn gekomen binnen 
+> De opdracht is om een marketing- en communicatiebeheerapplicatie te ontwikkelen met functies zoals gebruikersregistratie, mailinglijstbeheer, e-mailopstelling en planning, abonnementbeheer, automatische e-mailverzending, rapportage, online e-mailweergave en een admin-panel voor beheerders.
