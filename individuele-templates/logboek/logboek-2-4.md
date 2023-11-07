@@ -8,7 +8,7 @@
 
 > [Hier is een lijstje met alle GitHub emojis](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md)
 
-## Maandag 29 november
+## Maandag 27 november
 
 > Eventueel informatieve algemene opmerkingen over deze dag.
 
@@ -18,7 +18,7 @@
 | | | | | | |
 
 
-## Dinsdag 30 november
+## Dinsdag 28 november
 
 > Eventueel informatieve algemene opmerkingen over deze dag.
 
@@ -27,7 +27,7 @@
 | rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
 | | | | | | |
 
-## Woensdag 1 december
+## Woensdag 29 december
 
 > Eventueel informatieve algemene opmerkingen over deze dag.
 
@@ -36,7 +36,7 @@
 | rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
 | | | | | | |
 
-## Donderdag 2 december
+## Donderdag 30 december
 
 > Eventueel informatieve algemene opmerkingen over deze dag.
 
@@ -47,7 +47,7 @@
 
 
 
-## Vrijdag 3 december
+## Vrijdag 1 december
 
 > Eventueel informatieve algemene opmerkingen over deze dag.
 
