@@ -12,10 +12,6 @@ Hierbij alle groepsleden en de daarbij gegeven taken
 
 - Matthias: Planner
 
-## Plannen
-
-Dit moet jules nu ff uitzoeken
-
 ## Afspraken
 
 - Hulp vragen wanneer het nodig is en niet lang blijven hangen op een punt
