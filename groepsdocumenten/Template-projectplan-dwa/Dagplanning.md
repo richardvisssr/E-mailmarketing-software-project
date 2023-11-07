@@ -2,13 +2,13 @@
 
 > Een indeling van de elke werkdag inclusief de tijden. Zorg ervoor dat je in de dagindeling in ieder geval vermeldt:
 >
-> - Om en nabij 9 uur
-> - DSU om kwart over 9
-> - Stand van zaken 12:00
-> - Pauze van 10:45 tot 11:00 en 13:00 tot 13:30
-> - 15:30
-> - 16:00
+> - Start werkdag om 09:00 uur
+> - Daily Stand-Up (DSU) om 09:15 uur
+> - Bespreking van de stand van zaken om 12:00 uur
+> - Pauze van 10:45 tot 11:00 uur en van 13:00 tot 13:30 uur
+> - Afsluiten van de werkdag om 15:30 uur
+> - Vertrek naar huis om 16:00 uur
 
 > In principe is het idee dat iedereen dezelfde tijden hanteert. Als er goede redenen zijn om hiervan af te wijken, dan is dat natuurlijk bespreekbaar.
 >
-> - Matthias mag eerder naar huis op maandag omdat hij een persoonlijke probleempje heb
+> - Daarnaast is het vermeldenswaardig dat Matthias op maandag eerder naar huis mag gaan vanwege een persoonlijke kwestie
