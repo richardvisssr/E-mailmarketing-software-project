@@ -2,7 +2,7 @@
 
 ## Rollen
 
-Hierbij alle groepsleden en de daarbij gegeven taken
+Hierbij alle groepsleden en de daarbij gegeven taken.
 
 - Richard: Product owner by proxy
 
@@ -14,7 +14,7 @@ Hierbij alle groepsleden en de daarbij gegeven taken
 
 ## Afspraken
 
-- Hulp vragen wanneer het nodig is en niet lang blijven hangen op een punt
+- Hulp vragen wanneer het nodig is en niet lang blijven hangen op een punt.
 
 ## Ontwikkelmethoden
 
