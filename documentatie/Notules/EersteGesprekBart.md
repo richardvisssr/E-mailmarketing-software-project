@@ -33,7 +33,7 @@ Moeten we ff een bestandje invullen met alle technische constrains zodat dit ook
 We moeten een websockets invoegen
 Dit kunnen we eventueel weer gebruiken bij een analyse of iets dergelijks
 
-## docker
+## Docker
 
 Eventueel kunnen we hulp vragen bij bart met docker..
 
