@@ -1,4 +1,4 @@
-# Notules 07/11/2023
+# Notules 07/11/2023 Kennismakingsgesprek Bart
 
 ## Aanwezigen
 
