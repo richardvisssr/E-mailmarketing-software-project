@@ -46,7 +46,7 @@ Xtend wilt graag een webapplicatie hebben waarin de beheerder mailtemplates kan 
 
 ## 4. Projectgrenzen^2
 
-Gek genoeg geeft opschrijven wat je nét niet meer doet in je project vaak heel veel helderheid over wat je juist wél gaat doen.
+>Gek genoeg geeft opschrijven wat je nét niet meer doet in je project vaak heel veel helderheid over wat je juist wél gaat doen.
 Hierdoor kun je ook voorkomen dat stakeholders tijdens het project met eisen komen die echt buiten de opdracht vallen. In deze
 paragraaf baken je je project dus af. In elk geval ga je hierbij in op:
 
