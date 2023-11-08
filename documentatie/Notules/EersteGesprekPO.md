@@ -13,7 +13,7 @@
 
 > Groepsleden = projectgroep-nyala@hotmail.com
 
-## Algemene informaties
+## Algemene informatie
 
 Applicatie, met vanuit QR of link jezelf toevoegen aan media lijst.. Email editor waarmee we emails kunnen opstellen en inplannen om naar een bepaalde media lijst te sturen.. Beetje idee als nieuwsbrief, subsribers moeten worden opgeslagen en kunnen zelf unsubscribe.. Automatisch mail versturen naar subs op basis van kalender via api kopeling. Met een get/post te zeggen stuur nu mail en eventueel online mails kunnen bekijken dmv knop om t online te zien. Ook willen we rapportages zoals welke komen aan en wat wordt meeste bekeken en meeste gebruikt en door wie of wat.. Zodat t duidelijk is wat aanspreekt en wat niet, hiermee kan worden bijgehouden
 
