@@ -427,33 +427,3 @@ Martin, Bella, en Bruce Hanington, 2012, _Universele ontwerpmethoden_ , BIS Publ
 Stapleton, J. (1999), _DSDM Dynamic Systems Development Method- De methode in de praktijk._ Den Haag: Academic Service.
 
 En verder natuurlijk alle relevante literatuur die in de courses wordt aangeboden.
-
-## Inhoudelijke wijzigingen tov versie 3.
-
-```
-Hoofdstuk Wijziging
-2 Achtergrond van het
-project
-```
-```
-Toegevoegd aan beschrijving: (samenvatting) van de initiële opdracht opnemen
-```
-```
-3 Doelstelling, opdracht
-en op te leveren
-resultaten voor het
-bedrijf en school
-```
-```
-Toegevoegd dat hier de uiteindelijke opdracht, na analyse, moet worden opgenomen
-```
-```
-5 Randvoorwaarden In voorbeelden scherper gesteld dat randvoorwaarden aan een concrete persoon met
-een concrete deadline moeten worden gesteld
-9 Planning Toegevoegd dat mijlpalen en afhankelijkheden moeten worden weergegeven, en dat
-verwijzing naar detailplanning wordt gemaakt
-10 Risico’s Toegevoegd dat risico’s gewogen moeten worden tegen de definitie, waarbij kans *
-impact én de scope van het project in acht moeten worden genomen.
-Toegevoegd student en opdrachtgever niet in diskrediet mogen brengen
-```
-
