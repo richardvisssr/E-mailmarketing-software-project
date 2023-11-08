@@ -1,4 +1,4 @@
-# Notules 06/11/2023 Gesprek Product Owner
+# Notules 08/11/2023 Gesprek Professional Skills Coach
 
 ## Aanwezigen
 
