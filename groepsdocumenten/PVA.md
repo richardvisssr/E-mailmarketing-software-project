@@ -1,43 +1,48 @@
 ## 1. Inleiding
 
-- Doel van het document
-- Korte introductie van de opdracht: wat maak je voor wie?
-- Leeswijzer: wat volgt in de rest van het document
+> - Doel van het document
+> - Korte introductie van de opdracht: wat maak je voor wie?
+> - Leeswijzer: wat volgt in de rest van het document
 
 ## 2. Achtergrond van het project
 
-## In de achtergrond geef je aan waar en voor wie jij de opdracht uitvoert en wat voor hen het belang van het project is.
+> ## In de achtergrond geef je aan waar en voor wie jij de opdracht uitvoert en wat voor hen het belang van het project is.
 
-Denk in elk geval aan:
+> Denk in elk geval aan:
 
-- Beschrijving bedrijf/organisatie in je eigen woorden (geen teksten letterlijk overnemen van website)
-- De opdracht zoals die initieel is geformuleerd is door de opdrachtgever (verwoord in maximaal 1 alinea)
-- De belangrijkste groepen van stakeholders: wie hebben er –naast de opdrachtgever en de projectgroep- te maken met (de
+> - Beschrijving bedrijf/organisatie in je eigen woorden (geen teksten letterlijk overnemen van website)
+>- De opdracht zoals die initieel is geformuleerd is door de opdrachtgever (verwoord in maximaal 1 alinea)
+>- De belangrijkste groepen van stakeholders: wie hebben er –naast de opdrachtgever en de projectgroep- te maken met (de
     resultaten van) het project?
-- Indien relevant: organisatiestructuur van het onderdeel waar opdracht betrekking op heeft
-- De aanleiding voor het project: Wat is de urgentie van het project, de reden dat het bedrijf juist nu dit project wil laten
+>- Indien relevant: organisatiestructuur van het onderdeel waar opdracht betrekking op heeft
+>- De aanleiding voor het project: Wat is de urgentie van het project, de reden dat het bedrijf juist nu dit project wil laten
     uitvoeren (en niet een ander –mogelijk ook belangwekkend- project)?
+
 
 ## 3. Doelstelling, opdracht en op te leveren resultaten voor het bedrijf en school
 
 Als de aanleiding helder is geformuleerd beantwoord je de vraag naar ‘het waarom’ (de doelstelling) en ‘het wat’ (de beoogde
 resultaten) van het project.
 
-- Formuleer eerst het _probleem of de uitdaging_ dat het bedrijf heeft: welk probleem/welke uitdaging moet door of voor het
+> - Formuleer eerst het _probleem of de uitdaging_ dat het bedrijf heeft: welk probleem/welke uitdaging moet door of voor het
     bedrijf worden opgelost? Bijvoorbeeld: het probleem is dat klanten via te veel verschillende kanalen contact opnemen met
     het bedrijf waardoor er geen goed beeld is of de klant al afdoende is geholpen. Waarom wil het bedrijf deze opdracht?
-- Aansluitend daarop formuleer je de _doelstelling_. Bijvoorbeeld: het bedrijf heeft wil _alle_ contacten met de klant via de
+> - Aansluitend daarop formuleer je de _doelstelling_. Bijvoorbeeld: het bedrijf heeft wil _alle_ contacten met de klant via de
     website te laten lopen. Let daarbij op: de doelstelling kan veel groter zijn dan jij met je resultaat oplost, dit is soms een veel
     te grote klus als afstudeer- of projectopdracht. Het is voldoende als jouw resultaat er een bijdrage aanlevert.
-- Deze doelstelling mondt uit in jouw _opdracht_. Het kan zijn dat de uiteindelijke opdracht afwijkt van wat de initiële opdracht
+> - Deze doelstelling mondt uit in jouw _opdracht_. Het kan zijn dat de uiteindelijke opdracht afwijkt van wat de initiële opdracht
     in H2 was, omdat je in je eerste gesprekken binnen de organisatie hebt ontdekt wat de uiteindelijke opdracht is. Wat ga je
     precies voor het bedrijf doen, en wat ga je opleveren? Jij hebt misschien als opdracht: Ontwerp een goede user-interface
     voor de website. Of: ontwerp een perfecte database. Zo’n opdracht kan een essentiële bijdrage leveren aan het behalen
     van de doelstelling.
-- Formuleer welke _concrete resultaten_ het bedrijf van jou wil krijgen als je project is afgelopen? Wat is af als het af is? Geef
+> - Formuleer welke _concrete resultaten_ het bedrijf van jou wil krijgen als je project is afgelopen? Wat is af als het af is? Geef
     daarbij duidelijk aan welke vereisten op het moment van schrijven al bekend zijn. Het gaat dan bijvoorbeeld om
     programmeertaal, omgeving/platform. Mocht er al een ontwerpdocument of een concept meegeleverd worden met de
     opdracht, dan is dat een bijlage. Het is niet de bedoeling dat je zelf al ontwerpdocumentatie maakt in deze fase.
+
+Xtend wilt graag een webapplicatie hebben waarin de beheerder mailtemplates kan opstellen, deze opslaan voor later gebruik en eventueel aanpassen. Er moet een mogelijkheid komen voor klanten/studenten van Xtend om zich d.m.v. een QR code of een linkje zich in te schrijven op een bepaalde maillijst en vervolgens mailtjes te ontvangen. Het zou ook een mogelijkheid moeten zijn voor de beheerder om handmatig mensen toe te voegen, daarnaast moet het voor de klanten/studenten mogelijk zijn om zich ook weer uit te schrijven van de maillijsten. Ook moeten mailtjes ingepland kunnen worden zodat ze op een later moment worden verstuurd. Xtend zou verder graag de mogelijkheid willen hebben om statestieken in te kunnen zien van de gestuurde mailtjes, denk hier bijvoorbeeld aan hoe vaak mailtjes geopend zijn, hoeveel mensen zich afmelden van de maillijst aan hand van bepaalde mails. Dit alles moet overzichtelijk in een admin-panel staan zodat de beheerder gemakkelijk templates kan maken en versturen.
+
+
 
 ## 4. Projectgrenzen^2
 
@@ -100,229 +105,6 @@ je dat het slechts een voorbeeld is!
     tabel te worden opgenomen
 - Verwijs naar achterliggende standaarden (zowel in- als externe), bij voorkeur met hyperlinks
 
-```
-Product Productkwaliteitseisen
-(SMAR(T))
-```
-```
-Benodigde activiteiten om te
-komen tot het product
-```
-```
-Proceskwaliteit
-(5 x W, 1 x H)
-Eindproduct (bijvoorbeeld je
-applicatie)
-```
-```
-Respons in maximaal x tijd
-Maximaal x major bugs
-....
-```
-```
-Functionele en
-integratie-
-testen uitgevoerd door
-het team
-Oplevering en
-goedkeuring van
-tussenproducten door
-opdrachtgever aan het
-einde van iedere sprint
-```
-```
-Functioneel ontwerp Voldoet aan standaard x
-....
-```
-```
-Requirements uitvragen
-Werkzaamheden observeren
-UC-diagram maken
-Fully dressed use cases
-uitschrijven
-Domeinmodel maken
-....
-```
-```
-Iedere use case door
-minstens twee
-teamleden laten
-reviewen daarna
-goedkeuring door
-opdrachtgever
-```
-```
-Code 100% (geslaagde) unittests
-Commentaar in het Engels
-Voldoende aan guideline
-Traceable naar specifieke
-requirements
-Codetaken voldoen aan
-definition of done
-....
-```
-```
-Schrijven code
-Unit tests schrijven
-....
-```
-```
-Iedere pull request
-wordt door minstens
-twee andere teamleden
-gereviewd tegen de
-eisen zoals genoemd in
-kolom twee
-....
-```
-```
-Onderzoeksverslag De vraag is relevant voor
-aanwijsbare stakeholders
-Het antwoord op de vraag wordt
-gebruikt
-....
-```
-```
-(Onderzoeksplan maken)
-Wat is nodig om je
-onderzoeksvraag te
-beantwoorden, welke
-activiteiten moet je doen?
-Bijvoorbeeld:
-Interviewen betrokkenen
-Literatuuronderzoek
-....
-```
-```
-Stakeholders reviewen
-onderzoeksvragen
-voordat onderzoek start
-...
-```
-**Voorbeeld voor een CMD-opdracht**
-
-```
-Product Productkwaliteitseisen
-(SMAR(T))
-```
-```
-Benodigde activiteiten om te
-komen tot het product
-```
-```
-Proceskwaliteit
-(5 x W, 1 x H)
-Omgevingsanalyse Communicatieplan bevat
-tenminste de voorgeschreven
-hoofdstukken
-Requirements eenduidig
-geformuleerd
-...
-```
-```
-Bepalen communicatiestrategie
-Interviewen stakeholders en
-gebruikers
-Uitschrijven Use cases
-Beschrijven
-Informatiearchitectuur
-Formuleren Contentstrategie
-...
-(Functioneel)
-ontwerpdocument
-```
-```
-Bevat tenminste:
-Huisstijl guide
-```
-```
-Creativiteitstechnieken (benoem
-zelf welke) inzetten
-```
-```
-Draft laten
-reviewen door
-```
-
-```
-Product Productkwaliteitseisen
-(SMAR(T))
-```
-```
-Benodigde activiteiten om te
-komen tot het product
-```
-```
-Proceskwaliteit
-(5 x W, 1 x H)
-Overdrachtsdocument
-Onderbouwing en
-verantwoording ontwerp
-...
-```
-```
-Schetsen moodboards
-Maken storyboards
-Visueel ontwerp maken
-Interface ontwerp maken
-...
-```
-```
-minstens twee
-deskundigen
-```
-```
-Prototype Proof of concept
-Gebruikerstesten (usability,
-experience, visueel ontwerp,
-content)
-Voldoet aan doelstelling
-Traceable naar specifieke
-requirements
-...
-```
-```
-Paper prototype maken
-Bouwen clickable demo
-Schrijven testscenario
-Formuleren vragen
-...
-```
-```
-Vragen laten
-controleren
-```
-```
-Storyboard Dient zijn doel
-(presentatie/strategisch)
-Beeldverhouding is gelijk aan
-uiteindelijke beeldverhouding
-materiaal
-```
-```
-Concept maken
-Scenario’s maken
-....
-```
-```
-Bespreken met
-opdrachtgever
-Bespreken in
-team
-Testen met
-gebruiker
-....
-Onderzoeksverslag Geeft antwoord op hoofd- en
-deelvragen
-Maakt uitvoering onderzoek
-inzichtelijk
-....
-```
-```
-... dat wat nodig is om je
-onderzoeksvraag te
-beantwoorden
-```
 ## 7. Ontwikkelmethoden
 
 Nu je weet wat je gaat opleveren (producten en kwaliteit daarvan) en wat je daarvoor moet doen (overzicht activiteiten) met welke
