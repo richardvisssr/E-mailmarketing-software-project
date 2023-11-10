@@ -204,6 +204,9 @@ Hoogendoorn, S. (2012), _Dit is Agile._ Amsterdam: Pearson Education.
 
 Larman, C. (2003), _Agile and Iterative development._ Addison Wesley.
 
+
+HOI
+
 Martin, Bella, en Bruce Hanington, 2012, _Universele ontwerpmethoden_ , BIS Publishers: Amsterdam.
 
 Stapleton, J. (1999), _DSDM Dynamic Systems Development Method- De methode in de praktijk._ Den Haag: Academic Service.
