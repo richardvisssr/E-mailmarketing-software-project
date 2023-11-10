@@ -25,9 +25,9 @@
 - ~~Herformuleren van #4 : Als admin wil ik door mijn templates kunnen browsen zodat ik een template kan versturen of bewerken~~
 - #8 gebruiker -> is de ontvanger van mail, subsriber
 - Uitschrijven -> Lijst met email hierop geabboneerd, kiezen welke van de lijsten je wil uitschrijven, unsub, vanuit daar knop met was het een foutje resub
-- Admin mensen toevoegen, eventueel zelfs uitschrijven -> valideren ff anders formuleren dat de syntax van de mail goed is
+- ~~Admin mensen toevoegen, eventueel zelfs uitschrijven -> valideren ff anders formuleren dat de syntax van de mail goed is~~
 - Maillijsten, met subs, sub kan meerdere lijsten ingeschreven zijn
-- QR code mag er volledig uit. Link is voldoende.. Nul rekening mee houden
+- ~~QR code mag er volledig uit. Link is voldoende.. Nul rekening mee houden~~
 - Ff duidelijk maken hoelang we hebben en wat we denken nodig te hebben..
 - Iets meer een reeële schatting te maken voor de komende sprint planning, waardoor we duidelijkheid creeëren voor de PO
 - Tijd koppelen aan een taak VOOR de sprint planning
