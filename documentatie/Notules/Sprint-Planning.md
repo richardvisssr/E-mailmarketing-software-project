@@ -20,9 +20,9 @@
 
 ## Verbeter puntjes
 
-- Verzoekje van fritz, Login is could have, active directory sso github login of iets gebruiken moet er iets beveiligd worden dan zorgt eventueel xtend daar wel voor
-- Beveiliging van database, niet echt user story. verwerken in bijvoorbeeld guidebook of DoD -- Iets te technisch -- meer een randvoorwaarden dan een user story
-- Herformuleren van #4 : Als admin wil ik door mijn templates kunnen browsen zodat ik een template kan versturen of bewerken
+- ~~Verzoekje van fritz, Login is could have, active directory sso github login of iets gebruiken moet er iets beveiligd worden dan zorgt eventueel xtend daar wel voor~~
+- ~~Beveiliging van database, niet echt user story. verwerken in bijvoorbeeld guidebook of DoD -- Iets te technisch -- meer een randvoorwaarden dan een user story~~
+- ~~Herformuleren van #4 : Als admin wil ik door mijn templates kunnen browsen zodat ik een template kan versturen of bewerken~~
 - #8 gebruiker -> is de ontvanger van mail, subsriber
 - Uitschrijven -> Lijst met email hierop geabboneerd, kiezen welke van de lijsten je wil uitschrijven, unsub, vanuit daar knop met was het een foutje resub
 - Admin mensen toevoegen, eventueel zelfs uitschrijven -> valideren ff anders formuleren dat de syntax van de mail goed is
