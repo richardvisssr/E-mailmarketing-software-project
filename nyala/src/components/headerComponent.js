@@ -1,5 +1,7 @@
-export default function headerComponent(props) {
-    return (
-        <p>Hoi buur</p>
-    );
-};
+export default function HeaderComponent(props) {
+  return (
+    <header>
+      <div>Hoi, buur</div>
+    </header>
+  );
+}
