@@ -2,14 +2,17 @@ export default function UitschrijfForm() {
   return (
     <div>
       <form>
-        <label>
-          Input 1: <input type="text" />
-        </label>
-
-        <label>
-          Input 2: <input type="text" />
-        </label>
-        <button type="submit">Verstuur</button>
+        <div className="mb-3">
+          <label className="form-label">Email address</label>
+          <input type="email" className="form-control" />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Geef hier uw reden op</label>
+          <textarea className="form-control" rows="3"></textarea>
+        </div>
+        <button type="submit" className="btn btn-primary">
+          Verstuur
+        </button>
       </form>
     </div>
   );
