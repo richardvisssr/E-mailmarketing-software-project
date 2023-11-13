@@ -1,30 +1,16 @@
 .knop {
     background-color: #E800E9;
     color: white;
+    width: 30%;
+    align-self: center;
 }
 
-/* .veld {
-    border-style: solid;
-    border-color: #E800E9;
-    border-radius: 5px;
-} */
-
-.vorm {
+.vorm, .laber {
     width: 100%;
-}
-
-.apestaartje {
-    border-style: solid;
-    border-color: #E800E9;
 }
 
 .invoer {
     border-style: solid;
     border-color: #E800E9;
-    border-radius: 5px;
-    width: 80%;
-}
-
-.label {
     width: 100%;
 }
