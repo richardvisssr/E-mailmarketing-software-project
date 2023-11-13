@@ -1,6 +1,7 @@
 export default function UitschrijfForm() {
   return (
-    <div>
+    <div className="d-flex align-items-center flex-column">
+      <h1 className="mb-4">Uitschrijven</h1>
       <form>
         <div className="mb-3">
           <label className="form-label">Email address</label>
