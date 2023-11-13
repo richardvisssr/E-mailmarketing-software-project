@@ -4,11 +4,11 @@ import styles from "@/styles/footer.css";
 export default function FooterComponent(params) {
   return (
     <footer className="border-top bg-white">
-      <div className="d-flex justify-content-around py-0 mt-3">
+      <div className="d-flex flex-wrap justify-content-around py-0 mt-3">
         <p>@ 2023 Nyala</p>
 
         <div className={`${styles.linky}`}>
-          <i className="bi bi-map"></i>
+          <i className="bi bi-map mr-3"></i>
           <a
             target="_blank"
             className={`link-dark link-underline link-underline-opacity-0`}
@@ -19,8 +19,8 @@ export default function FooterComponent(params) {
         </div>
 
         <div className="d-flex justify-content-around py-0 mt-0">
-          <i className="bi bi-envelope-fill mr-3"></i>
-          <p>info@svxtend.nl</p>
+          <i className="bi bi-envelope-fill "></i>
+          <p className="mr-3">info@svxtend.nl</p>
         </div>
 
         <ul className="list-unstyled d-flex">
