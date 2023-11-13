@@ -50,7 +50,7 @@ export default function ToevoegVeld(props) {
             />
           </div>
           <button type="button" className={`btn ${styles.knop} rounded`}>
-            Primary
+            Toevoegen
           </button>
         </div>
       </div>
