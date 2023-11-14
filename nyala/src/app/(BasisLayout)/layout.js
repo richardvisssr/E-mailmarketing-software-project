@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import BasicHeaderComponent from "@/components/HeaderComponent";
+import BasicHeaderComponent from "@/components/BasicHeaderComponent";
 import FooterComponent from "@/components/FooterComponent";
 
 export default function BasisLayout({ children }) {

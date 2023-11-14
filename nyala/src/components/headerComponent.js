@@ -29,6 +29,16 @@ export default function HeaderComponent(props) {
             className={`${styles.linky} nav-link`}
             aria-current="page"
           >
+            Home
+          </Link>
+        </li>
+        <span className="fs-4 text-dark">|</span>
+        <li className="nav-item">
+          <Link
+            href="/"
+            className={`${styles.linky} nav-link`}
+            aria-current="page"
+          >
             Templates
           </Link>
         </li>
