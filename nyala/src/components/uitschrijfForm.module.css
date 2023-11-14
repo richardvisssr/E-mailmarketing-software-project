@@ -4,15 +4,30 @@
   margin: 0;
 }
 
-.customList input[type="radio"] {
-  --bs-check-input-checked-color: #e800e9;
+.warningText {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
 }
 
-.knop {
+.customRadio {
+  accent-color: #a66cf2;
+}
+
+.knopSecondary {
   --bs-btn-color: #fff;
-  --bs-btn-bg: #e800e9;
-  --bs-btn-border-color: #e800e9;
+  --bs-btn-bg: #779bef;
+  --bs-btn-border-color: #779bef;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #e262e2;
-  --bs-btn-hover-border-color: #e800e9;
+  --bs-btn-hover-bg: #62b1ed;
+  --bs-btn-hover-border-color: #62b1ed;
+}
+
+.knopPrimary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #a66cf2;
+  --bs-btn-border-color: #a66cf2;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #c150f3;
+  --bs-btn-hover-border-color: #c150f3;
 }

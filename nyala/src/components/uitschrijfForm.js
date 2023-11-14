@@ -32,8 +32,8 @@ export default function UitschrijfForm({}) {
       } else if (unsubscribeResponse.status === 404) {
         console.log("Subscriber not found");
         setWarning(
-          <div className="alert alert-danger mt-3" role="alert">
-            Vul een geldig email adres in
+          <div>
+            <p className={styles.warningText}>Vul een geldige email in</p>
           </div>
         );
         return false;
@@ -103,13 +103,14 @@ export default function UitschrijfForm({}) {
       <h1 className="mb-4 mt-3">Uitschrijven</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label className="form-label">Email adres</label>
+          <label className="form-label">Email-adres</label>
           <input
             type="email"
             className="form-control w-150"
             onChange={changeEmail}
           />
         </div>
+        {warning}
         <div className="mb-3">
           <label className="form-label">Selecteer uw reden</label>
           <ul>
@@ -124,7 +125,7 @@ export default function UitschrijfForm({}) {
                     name="unsubscribeReason"
                     value={reason}
                     onChange={() => changeReason(reason)}
-                    className="me-2 form-check-input"
+                    className={` me-2 control ${styles.customRadio}`}
                   />
                   {reason === "Anders" && (
                     <div className="d-flex align-items-center">
@@ -144,11 +145,10 @@ export default function UitschrijfForm({}) {
             ))}
           </ul>
         </div>
-        <button type="submit" className={`btn btn-primary`}>
+        <button type="submit" className={`btn ${styles.knopPrimary}`}>
           Verstuur
         </button>
       </form>
-      {warning}
     </div>
   );
 }
