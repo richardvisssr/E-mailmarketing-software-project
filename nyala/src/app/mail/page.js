@@ -1,10 +1,11 @@
 import React from "react";
 import MailBewerken from "@/components/mailBewerken";
+import HeaderComponent from "@/components/HeaderComponent";
 
 function MailPage() {
   return (
     <div>
-      <h1>Mail Page</h1>
+      <HeaderComponent/>
       <MailBewerken />
     </div>
   );

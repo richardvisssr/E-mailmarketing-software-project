@@ -9,40 +9,31 @@ const MailBewerken = () => {
   const editorRef = useRef(null);
 
   const saveDesign = () => {
-    editorRef.current.saveDesign((design) => {
-      console.log("saveDesign", design);
+    editorRef.current.saveDesign(async (design) => {
+      try {
+        const response = await fetch("http://localhost:3001/mail/saveDesign", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(design),
+        });
+        console.log("design:", design);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        console.log("Design saved successfully");
+      } catch (error) {
+        console.error("Error saving design:", error);
+      }
     });
   };
 
-  const exportHtml = () => {
+  const sendEmail = () => {
     editorRef.current.exportHtml((data) => {
       const { design, html } = data;
       console.log("exportHtml", html);
-    });
-  };
-
-  const exportImage = () => {
-    editorRef.current.exportImage((data) => {
-      const { design, url } = data;
-      console.log("exportHtml", url);
-      // let url = 'saveImage'; // Replace with your API URL
-      // let options = {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     // Add any other headers your API requires
-      //   },
-      //   body: JSON.stringify({
-      //     displayMode: 'email',
-      //     design: design, // use the saved design
-      //     // Add any other data your API requires
-      //   })
-      // };
-  
-      // fetch(url, options)
-      //   .then(res => res.json())
-      //   .then(json => console.log(json))
-      //   .catch(err => console.error('error:' + err));
     });
   };
 
@@ -51,12 +42,37 @@ const MailBewerken = () => {
     console.log("onReady");
   };
 
-  const onLoad = (editor) => {
-    // Set the editor instance to the ref
-    // editor instance is created
-    // you can load your template here;
-    // const templateJson = {};
-    // emailEditorRef.current.loadDesign(templateJson);
+  // const onLoad = (editor) => {
+  //   // Set the editor instance to the ref
+  //   // editor instance is created
+  //   // you can load your template here;
+  //   // const templateJson = {};
+  //   // emailEditorRef.current.loadDesign(templateJson);
+  //   editorRef.current = editor;
+  // };
+
+  const onLoad = async (editor) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/mail/loadDesign/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const design = await response.json();
+
+      editorRef.current.loadDesign(design);
+    } catch (error) {
+      console.error("Error loading design:", error);
+    }
     editorRef.current = editor;
   };
 
@@ -81,12 +97,12 @@ const MailBewerken = () => {
           onReady={onReady}
         />
       </div>
-      <div class="p-2 gap-3 d-flex justify-content-center">
+      <div className="p-2 gap-3 d-flex justify-content-center">
         <button onClick={saveDesign} className="btn btn-primary">
           Save Design
         </button>
-        <button onClick={exportImage} className="btn btn-secondary">
-          Export Image
+        <button onClick={sendEmail} className="btn btn-primary">
+          Send Email
         </button>
       </div>
     </div>
