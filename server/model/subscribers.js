@@ -1,9 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require("../utils/connection");
 
-const subscribers = new mongoose.schema({
+const subscribers = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   naam: {
     type: String,
@@ -15,7 +16,7 @@ const subscribers = new mongoose.schema({
   },
 });
 
-const unsubscribe = new mongoose.schema({
+const unsubscribe = new mongoose.Schema({
   reden: {
     type: String,
     required: false,
@@ -23,6 +24,14 @@ const unsubscribe = new mongoose.schema({
 });
 
 const Subscriber = mongoose.model("Subscriber", subscribers);
-const Unsubscribe = mongoose.model("Unsubscribe", unsubscribe);
+const Unsubscriber = mongoose.model("Unsubscribe", unsubscribe);
 
-module.exports = { Subscriber, Unsubscribe };
+const sub = new Subscriber({
+  email: "befibu@jfc.nl",
+  naam: "Bert",
+  abonnement: ["Nieuwsbrief", "Kortingen"],
+});
+
+sub.save();
+
+module.exports = { Subscriber, Unsubscriber };
