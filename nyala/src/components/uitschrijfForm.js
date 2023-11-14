@@ -24,7 +24,7 @@ export default function UitschrijfForm({}) {
         console.log("Subscriber not found");
         return false;
       } else {
-        console.error("Failed to unsubscribe");
+        console.log("Failed to unsubscribe");
         return false;
       }
     } catch (error) {
@@ -46,8 +46,8 @@ export default function UitschrijfForm({}) {
         console.log("Reason added");
         return true;
       } else {
+        console.log("Failed to add reason");
         return false;
-        console.error("Failed to add reason");
       }
     } catch (error) {
       console.error("Error during reason submission:", error);
