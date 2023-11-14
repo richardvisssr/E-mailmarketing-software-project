@@ -1,16 +1,11 @@
 import "bootstrap/dist/css/bootstrap.css";
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import HeaderComponent from "@/components/HeaderComponent";
-import FooterComponent from "@/components/FooterComponent";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="d-flex flex-column min-vh-100 bg-light">
-        <HeaderComponent />
+      <body>
         <div>{children}</div>
-        <div className="wrapper flex-grow-1"></div>
-        <FooterComponent />
       </body>
     </html>
   );
