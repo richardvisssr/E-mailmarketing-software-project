@@ -2,57 +2,84 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Container from "react-bootstrap/Container";
+import FilterPanel from "@/components/adminpanel/filterComponent";
+import CardList from "@/components/adminpanel/cardListComponent";
+import { Placeholder } from "react-bootstrap";
 
 function Page() {
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const templates = {
+    template1: {
+      id: 1,
+      title: 'Template 1',
+    },
+    template2: {
+      id: 2,
+      title: 'Template 2',
+    },
+    template3: {
+      id: 3,
+      title: 'Template 3',
+    },
+    template4: {
+      id: 4,
+      title: 'Template 4',
+    },
+    template5: {
+      id: 5,
+      title: 'Template 5',
+    },
+    template6: {
+      id: 6,
+      title: 'Template 6',
+    },
+    template7: {
+      id: 7,
+      title: 'Template 7',
+    },
+    template8: {
+      id: 8,
+      title: 'Template 8',
+    },
+  };
+
   return (
-    <>
-      <Row xs={1} md={2} className="g-4">
-        {Array.from({ length: 4 }).map((_, idx) => (
-          <Col key={idx}>
-            <Card>
-              <Card.Img variant="top" src="https://picsum.photos/200/50" />
-              <Card.Body>
-                <Card.Title>Card title</Card.Title>
-                <Card.Text>
-                  This is a longer card with supporting text
-                </Card.Text>
-                <div class="d-flex justify-content-between">
-                  <Button variant="primary" onClick={handleShow}>
-                    Aanpassen
-                  </Button>
-                  <Button variant="primary" className="ms-auto" onClick={handleShow}>
-                    Versturen
-                  </Button>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
+    <Container>
+      <Row>
+        <Col md={4}>
+          <FilterPanel />
+        </Col>
+        <Col md={8}>
+          <CardList templates={templates} handleShow={handleShow}/>
+        </Col>
       </Row>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} size="xl">
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Wil je '{}' versturen?</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+        <Modal.Body>
+        <Placeholder as={Modal.Body} animation="glow">
+            <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />{' '}
+            <Placeholder xs={6} /> <Placeholder xs={8} />
+          </Placeholder>
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Close
+            Annuleren
           </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
+          <Button>
+            Versturen
           </Button>
         </Modal.Footer>
       </Modal>
-    </>
+    </Container>
   );
 }
 
