@@ -14,3 +14,9 @@
     border-color: #E800E9;
     width: 100%;
 }
+
+.selectContainer .bootstrap-select {
+    border-style: solid;
+    border-color: #E800E9;
+    width: 100%;
+}

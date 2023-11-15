@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "../app/handmatigToevoegen/toevoeg.module.css";
+import styles from "./ToevoegVeld.module.css";
 
 export default function ToevoegVeld(props) {
   const [data, setData] = useState({ email: "", lijst: "" });
@@ -41,15 +41,20 @@ export default function ToevoegVeld(props) {
               placeholder="Email"
               aria-describedby="basic-addon1"
             />
-
-            <input
-              type="text"
-              className={`form-control ${styles.invoer} p-2 mb-2 rounded`}
-              placeholder="Lijst"
-              aria-describedby="basic-addon1"
-            />
+            <div className={`${styles.selectContainer}`}>
+              <select
+                className={`form-select`}
+                aria-label="Mailinglijst"
+              >
+                <option selected>Kies een mailinglijst</option>
+                <option value="Leden">Leden</option>
+                <option value="Nieuwsbrief">Nieuwsbrief</option>
+                <option value="ICT">ICT</option>
+                <option value="CMD">CMD</option>
+              </select>
+            </div>
           </div>
-          <button type="button" className={`btn ${styles.knop} rounded`}>
+          <button type="button" className={`btn ${styles.knop} rounded mt-3`}>
             Toevoegen
           </button>
         </div>
