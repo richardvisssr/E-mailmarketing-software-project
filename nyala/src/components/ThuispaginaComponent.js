@@ -13,7 +13,9 @@ export default function ThuispaginaComponent(props) {
 
   return (
     <main>
-      <div className={`${styles.customContainer} d-flex flex-column align-items-center align-items-center py-5`}>
+      <div
+        className={`${styles.customContainer} d-flex flex-column align-items-center align-items-center py-5`}
+      >
         <h5 className={`py-5`}>
           Zoek je de s.v. Xtend website? Klik dan op het logo aan de bovenkant
           van de pagina.
