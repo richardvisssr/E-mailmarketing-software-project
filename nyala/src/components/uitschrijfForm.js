@@ -10,7 +10,13 @@ export default function UitschrijfForm({}) {
   const [customReason, setCustomReason] = useState("");
   const [warning, setWarning] = useState(null);
 
-  const reasons = ["Te veel mails", "Ik heb geen interesse meer", "Anders"];
+  const reasons = [
+    "Te veel e-mails",
+    "Irrelevantie",
+    "Verandering van interesses",
+    "Spam",
+    "Anders",
+  ];
 
   const handleUnsubscribe = async () => {
     try {
@@ -28,6 +34,10 @@ export default function UitschrijfForm({}) {
       if (unsubscribeResponse.status === 200) {
         console.log("Subscriber removed");
         setWarning(null);
+
+        // Store unsubscribed email in localStorage
+        localStorage.setItem("unsubscribedEmail", email);
+
         return true;
       } else if (unsubscribeResponse.status === 404) {
         console.log("Subscriber not found");
@@ -47,13 +57,16 @@ export default function UitschrijfForm({}) {
   };
 
   const handleReasonSubmit = async () => {
+    const geselecteerdeReden =
+      reden === "Anders" ? customReason : reden === "" ? null : reden;
+
     try {
       const reasonResponse = await fetch("http://localhost:3001/reason", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ reden }),
+        body: JSON.stringify({ reden: geselecteerdeReden }),
       });
 
       if (reasonResponse.status === 200) {
