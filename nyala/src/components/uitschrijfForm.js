@@ -34,10 +34,7 @@ export default function UitschrijfForm({}) {
       if (unsubscribeResponse.status === 200) {
         console.log("Subscriber removed");
         setWarning(null);
-
-        // Store unsubscribed email in localStorage
         localStorage.setItem("unsubscribedEmail", email);
-
         return true;
       } else if (unsubscribeResponse.status === 404) {
         console.log("Subscriber not found");

@@ -33,4 +33,20 @@ router.post("/reason", async (req, res) => {
   }
 });
 
+router.post("/subscribers/add", async (req, res) => {
+  try {
+    const { email } = req.body;
+    const subscriber = {
+      email,
+    };
+
+    const newSubscriber = new Subscriber(subscriber);
+    await newSubscriber.save();
+    res.status(200).json({ message: "Subscriber added" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 module.exports = router;
