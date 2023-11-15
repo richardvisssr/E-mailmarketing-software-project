@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import styles from "./ThuispaginaComponent.module.css";
 
-export default function ThuispaginaComponent(props) {
+export default function ThuispaginaComponent() {
   const router = useRouter();
 
   useEffect(() => {

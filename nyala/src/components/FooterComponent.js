@@ -1,6 +1,6 @@
 import styles from "./FooterComponent.module.css";
 
-export default function FooterComponent(props) {
+export default function FooterComponent() {
   return (
     <footer className="border-top bg-white">
       <div className="d-flex flex-wrap justify-content-around py-0 mt-3">

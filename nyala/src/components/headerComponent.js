@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./HeaderComponent.module.css";
 
-export default function HeaderComponent(props) {
+export default function HeaderComponent() {
   return (
     <header
       className={`d-flex flex-wrap justify-content-around align-items-center py-1 mb-4 ml-2 border-bottom ${styles.darkHeader}`}

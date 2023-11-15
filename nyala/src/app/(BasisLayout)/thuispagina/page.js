@@ -1,6 +1,6 @@
 import ThuispaginaComponent from "@/components/ThuispaginaComponent";
 
-export default function page({ params }) {
+export default function page() {
   return (
     <ThuispaginaComponent />
   );
