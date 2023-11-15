@@ -10,7 +10,7 @@ export default function page() {
         <span>404</span> - Pagina niet gevonden
       </h1>
       <p>Sorry, de pagina die je zoekt bestaat niet.</p>
-      <Link href="/" className={`${styles.customContainer}`}>
+      <Link href="/" replace className={`${styles.customContainer}`}>
         <button type="button" className={`btn ${styles.knop}`}>
           Ga naar de thuispagina
         </button>
