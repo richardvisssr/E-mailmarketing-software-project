@@ -5,11 +5,12 @@ export default function ToevoegVeld(props) {
   const [data, setData] = useState({ email: undefined, lijst: undefined });
   const [status, setStatus] = useState(false);
   const [foutmelding, setFoutmelding] = useState("");
+  const [succes, setSucces] = useState(false);
 
   useEffect(() => {
     if (status) {
       const postEmail = async () => {
-        const response = fetch(`http://localhost:3001/subscribers/add`, {
+        const response = await fetch(`http://localhost:3001/subscribers/add`, {
           method: "POST",
           headers: {
             Accept: "application/json",
@@ -20,20 +21,33 @@ export default function ToevoegVeld(props) {
             lijst: lijst,
           }),
         });
-        if (response === "insert foutmelding") {
-          setFoutmelding(response);
+        if (response.ok) {
+          setData({ email: undefined, lijst: undefined });
+          setStatus(false);
+          setSucces(true);
+        } else if (!response.ok) {
+          setSucces(false);
         }
       };
       // postEmail();
     }
   }, [status]);
 
+  const melding = 
+    !succes ? ( 
+      <></>
+    ) : (
+    <div className="alert alert-succes" role="alert">
+      <p>Email succesvol toegevoegd.</p>
+    </div>
+  );
+
   const err =
     foutmelding === "" ? (
       <></>
     ) : (
       <div className="alert alert-danger" role="alert">
-        {foutmelding}
+        <p>{foutmelding}</p>
         <i className="bi bi-exclamation-triangle"></i>
       </div>
     );
@@ -45,9 +59,15 @@ export default function ToevoegVeld(props) {
       setFoutmelding("Het emailadres is niet ingevuld.");
     } else if (data.lijst === "") {
       setFoutmelding("De mailinglijst is niet ingevuld.");
-    } else if (data.lijst !== "Leden" || data.lijst !== "Nieuwsbrief" || data.lijst !== "ICT" || data.lijst !== "CMD") {
+    } else if (
+      data.lijst !== "Leden" &&
+      data.lijst !== "Nieuwsbrief" &&
+      data.lijst !== "ICT" &&
+      data.lijst !== "CMD"
+    ) {
       setFoutmelding("De gekozen mailinglijst bestaat niet.");
     } else {
+      setSucces(true);
       setStatus(true);
     }
   };
@@ -63,6 +83,7 @@ export default function ToevoegVeld(props) {
   return (
     <div className="d-flex justify-content-center align-items-center py-5">
       <div>
+        <div>{melding}</div>
         <div>{err}</div>
         <form
           className={`input-group ${styles.vorm} d-flex flex-column`}
