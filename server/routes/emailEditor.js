@@ -14,14 +14,23 @@ router.get("/loadDesign/:id", async (req, res) => {
 });
 
 router.put("/saveDesign", async (req, res) => {
-  const design = new Design({
-    id: req.body.body.id,
-    design: req.body,
-  });
+  const id = req.body.body.id;
+  const design = req.body;
 
   try {
-    await design.save();
-    res.status(200).send("Design saved successfully");
+    const existingDesign = await Design.findOne({ id });
+
+    if (existingDesign) {
+      // Update existing design
+      existingDesign.design = design;
+      await existingDesign.save();
+      res.status(200).send("Design updated successfully");
+    } else {
+      // Create a new design
+      const newDesign = new Design({ id, design });
+      await newDesign.save();
+      res.status(200).send("Design saved successfully");
+    }
   } catch (error) {
     console.error("Error saving design:", error);
     res.status(500).send("Internal Server Error");

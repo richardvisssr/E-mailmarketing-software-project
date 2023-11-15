@@ -1,23 +1,27 @@
-const mongoose = require("../utils/connection");
+const mongoose = require('../utils/connection');
 
 const imageSchema = new mongoose.Schema({
-  dataUrl: String,
-});
+    dataUrl: String,
+  });
+
 
 const designSchema = new mongoose.Schema({
   id: {
     type: String,
     required: true,
-    unique: true,
+    // unique: true
   },
   design: {
     type: Object,
-    required: true,
-  },
+    required: true
+  }
 });
 
-const Design = mongoose.model("Design", designSchema);
+const Design = mongoose.model('Design', designSchema);
 
-const Image = mongoose.model("Image", imageSchema);
+
+const Image = mongoose.model('Image', imageSchema);
 
 module.exports = { Image, Design };
+
+

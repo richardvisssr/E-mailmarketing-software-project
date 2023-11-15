@@ -28,13 +28,32 @@ const MailBewerken = ({ id }) => {
       } catch (error) {
         console.error("Error saving design:", error);
       }
-    });
+      console.log(design)
+    },);
   };
 
   const sendEmail = () => {
-    editorRef.current.exportHtml((data) => {
+    editorRef.current.exportHtml(async (data) => {
       const { design, html } = data;
       console.log("exportHtml", html);
+
+      try {
+        const response = await fetch("/api/sendEmail", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ body: html }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        console.log("Email sent successfully");
+      } catch (error) {
+        console.error("Error sending email:", error);
+      }
     });
   };
 
