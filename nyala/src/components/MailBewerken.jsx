@@ -65,7 +65,7 @@ const MailBewerken = () => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
+console.log("response", response);
       const design = await response.json();
 
       editorRef.current.loadDesign(design);
