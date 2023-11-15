@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./ToevoegVeld.module.css";
 
 export default function ToevoegVeld(props) {
-  const [data, setData] = useState({ email: "", lijst: "" });
+  const [data, setData] = useState({ email: undefined, lijst: undefined });
   const [status, setStatus] = useState(false);
   const [foutmelding, setFoutmelding] = useState("");
 
@@ -32,17 +32,21 @@ export default function ToevoegVeld(props) {
     foutmelding === "" ? (
       <></>
     ) : (
-      <div class="alert alert-danger" role="alert">
+      <div className="alert alert-danger" role="alert">
         {foutmelding}
+        <i className="bi bi-exclamation-triangle"></i>
       </div>
     );
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(data);
     if (data.email === "") {
-      setFoutmelding("Het emailadres is niet ingevuld!");
+      setFoutmelding("Het emailadres is niet ingevuld.");
     } else if (data.lijst === "") {
-      setFoutmelding("Het emailadres is niet ingevuld!");
+      setFoutmelding("De mailinglijst is niet ingevuld.");
+    } else if (data.lijst !== "Leden" || data.lijst !== "Nieuwsbrief" || data.lijst !== "ICT" || data.lijst !== "CMD") {
+      setFoutmelding("De gekozen mailinglijst bestaat niet.");
     } else {
       setStatus(true);
     }
@@ -79,8 +83,9 @@ export default function ToevoegVeld(props) {
               <select
                 className={`form-select`}
                 aria-label="Mailinglijst"
+                onChange={handleLijstChange}
               >
-                <option selected>Kies een mailinglijst</option>
+                <option value="niet gekozen">Kies een mailinglijst</option>
                 <option value="Leden">Leden</option>
                 <option value="Nieuwsbrief">Nieuwsbrief</option>
                 <option value="ICT">ICT</option>
