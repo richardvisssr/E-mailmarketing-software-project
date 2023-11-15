@@ -18,7 +18,6 @@ const MailBewerken = () => {
           },
           body: JSON.stringify(design),
         });
-        console.log("design:", design);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
