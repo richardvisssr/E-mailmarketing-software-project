@@ -5,14 +5,16 @@ import dynamic from "next/dynamic";
 // Use dynamic import to load the EmailEditor component only on the client side
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
-const MailBewerken = () => {
+const MailBewerken = ({ id }) => {
+  // toString(id);
+
   const editorRef = useRef(null);
 
   const saveDesign = () => {
     editorRef.current.saveDesign(async (design) => {
       try {
         const response = await fetch("http://localhost:3001/mail/saveDesign", {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
@@ -39,6 +41,7 @@ const MailBewerken = () => {
   const onReady = () => {
     // editor is ready
     console.log("onReady");
+    onLoad(editorRef.current);
   };
 
   // const onLoad = (editor) => {
@@ -65,7 +68,7 @@ const MailBewerken = () => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-console.log("response", response);
+
       const design = await response.json();
 
       editorRef.current.loadDesign(design);

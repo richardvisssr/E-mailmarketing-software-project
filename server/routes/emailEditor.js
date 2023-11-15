@@ -4,7 +4,8 @@ const router = express.Router();
 
 router.get("/loadDesign/:id", async (req, res) => {
   try {
-    const design = await Design.findById(req.params.id); // Get the design with the specified ID
+    const design = await Design.findOne({ id: req.params.id });
+
     res.json(design.design);
   } catch (error) {
     console.error("Error loading design:", error);
@@ -12,7 +13,7 @@ router.get("/loadDesign/:id", async (req, res) => {
   }
 });
 
-router.post("/saveDesign", async (req, res) => {
+router.put("/saveDesign", async (req, res) => {
   const design = new Design({
     id: req.body.body.id,
     design: req.body,
