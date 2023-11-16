@@ -1,9 +1,5 @@
 # Periodeplanning
 
-> Maak een planning van de complete periode waarin je in ieder geval alle opleverdata, vakantiedagen en gesprekken met de verschillende docenten een plek geeft.
-
-> Hieronder alvast een voorzet
-
 > Gebruik eventueel [deze handige table editor](https://www.tablesgenerator.com/markdown_tables)
 
 | Datum                    |                    | Maandag                                       | Dinsdag                                                                    | Woensdag                                  | Donderdag                                                           | Vrijdag                                                                                    |
