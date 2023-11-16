@@ -18,4 +18,6 @@ Hierbij alle groepsleden en de daarbij gegeven taken.
 
 ## Ontwikkelmethoden
 
-- Bootstrap styling
+- Next.js
+- React.js
+
