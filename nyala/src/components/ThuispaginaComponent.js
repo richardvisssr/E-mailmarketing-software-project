@@ -27,7 +27,7 @@ export default function ThuispaginaComponent() {
             router.push("../../beheerder");
           }}
         >
-          Ga naar de beheerspagina
+          Inloggen
         </button>
       </div>
     </main>

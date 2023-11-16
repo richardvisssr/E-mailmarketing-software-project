@@ -21,17 +21,6 @@ export default function BasicHeaderComponent() {
           className={`${styles.logo}`}
         />
       </a>
-      <ul className="nav nav-pills">
-        <li className="nav-item">
-          <Link
-            href="/"
-            className={`${styles.linky} nav-link`}
-            aria-current="page"
-          >
-            Home
-          </Link>
-        </li>
-      </ul>
     </header>
   );
 }
