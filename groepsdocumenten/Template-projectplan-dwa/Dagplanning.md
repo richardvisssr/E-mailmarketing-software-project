@@ -1,6 +1,6 @@
 # Dagplanning
 
-Een indeling van de elke werkdag inclusief de tijden:
+Een indeling van elke werkdag inclusief de tijden:
 
 - Start werkdag om 09:00 uur.
 - Daily Stand-Up (DSU) om 09:15 uur.
