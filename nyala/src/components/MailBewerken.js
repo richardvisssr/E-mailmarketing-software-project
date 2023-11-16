@@ -1,13 +1,13 @@
 "use client";
 import React, { useRef } from "react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 
 // Use dynamic import to load the EmailEditor component only on the client side
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
 const MailBewerken = ({ id }) => {
-  // toString(id);
-
+  const router = useRouter();
   const editorRef = useRef(null);
 
   const saveDesign = () => {
@@ -28,32 +28,30 @@ const MailBewerken = ({ id }) => {
       } catch (error) {
         console.error("Error saving design:", error);
       }
-      console.log(design)
-    },);
+      console.log(design);
+    });
   };
 
   const sendEmail = () => {
     editorRef.current.exportHtml(async (data) => {
       const { design, html } = data;
       console.log("exportHtml", html);
-
+      // Navigeer naar MailVersturen-pagina met html als een query parameter
       try {
-        const response = await fetch("/api/sendEmail", {
+        const response = await fetch("http://localhost:3001/mail/sendEmail", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ body: html }),
+          body: JSON.stringify({ html: html, id: id }),
         });
-
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error("Network response was not ok");
         }
-
-        console.log("Email sent successfully");
       } catch (error) {
         console.error("Error sending email:", error);
       }
+      router.push(`/mail/${id}/versturen`);
     });
   };
 
