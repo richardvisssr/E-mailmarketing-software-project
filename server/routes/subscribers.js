@@ -67,4 +67,30 @@ router.delete("/unsubscribe", async (req, res) => {
   }
 });
 
+router.delete("/unsubscribe/subs", async (req, res) => {
+  const { email, abonnementen } = req.body;
+
+  try {
+    const subscriber = await Subscriber.findOne({ email });
+
+    if (!subscriber) {
+      return res.status(404).send({ message: "Subscriber not found" });
+    }
+
+    if (abonnementen && abonnementen.length > 0) {
+      subscriber.abonnementen = subscriber.abonnementen.filter(
+        (subscription) => !abonnementen.includes(subscription)
+      );
+    }
+
+    await subscriber.save();
+
+    return res
+      .status(200)
+      .send({ message: "Abonnementen removed successfully" });
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
 module.exports = router;

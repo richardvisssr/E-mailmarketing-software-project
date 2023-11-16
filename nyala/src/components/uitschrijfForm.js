@@ -24,7 +24,7 @@ export default function UitschrijfForm({}) {
     "Anders",
   ];
 
-  const handleUnsubscribe = async () => {
+  const handleCompleteUnsubscribe = async () => {
     try {
       const unsubscribeResponse = await fetch(
         "http://localhost:3001/unsubscribe",
@@ -34,6 +34,44 @@ export default function UitschrijfForm({}) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ email: email }),
+        }
+      );
+
+      if (unsubscribeResponse.status === 200) {
+        console.log("Subscriber removed");
+        setWarning(null);
+        localStorage.setItem("unsubscribedEmail", email);
+        return true;
+      } else if (unsubscribeResponse.status === 404) {
+        console.log("Subscriber not found");
+        setWarning(
+          <div>
+            <p className={styles.warningText}>Vul een geldige email in</p>
+          </div>
+        );
+        return false;
+      } else {
+        console.log("Failed to unsubscribe");
+        return false;
+      }
+    } catch (error) {
+      console.error("Error during unsubscribe:", error);
+    }
+  };
+
+  const handleUnsubscribe = async () => {
+    try {
+      const unsubscribeResponse = await fetch(
+        "http://localhost:3001/unsubscribe/subs",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            abonnementen: geselecteerdeAbonnementen,
+          }),
         }
       );
 
@@ -104,26 +142,15 @@ export default function UitschrijfForm({}) {
 
   const changeValue = (event) => {
     const { value, checked } = event.target;
-    console.log("Value:", value);
-    console.log("Checked:", checked);
-    console.log("Previous Selection:", geselecteerdeAbonnementen);
 
-    // Check if the abonnement is already in the selection
-    const isSelected = geselecteerdeAbonnementen.includes(value);
-
-    if (checked && !isSelected) {
-      // If checked and not already in selection, add to the array
-      const newSelection = [...geselecteerdeAbonnementen, value];
-      console.log("New Selection:", newSelection);
-      setGeselecteerdeAbonnementen(newSelection);
-    } else if (!checked && isSelected) {
-      // If unchecked and in selection, remove from the array
-      const newSelection = geselecteerdeAbonnementen.filter(
-        (abonnement) => abonnement !== value
-      );
-      console.log("New Selection:", newSelection);
-      setGeselecteerdeAbonnementen(newSelection);
-    }
+    setGeselecteerdeAbonnementen((prevSelection) => {
+      // Hier worden onderscheid gemaakt of de select al geselecteerd is of niet
+      if (checked) {
+        return [...prevSelection, value];
+      } else {
+        return prevSelection.filter((sub) => sub !== value);
+      }
+    });
   };
 
   const changeEmail = (e) => {
@@ -145,13 +172,23 @@ export default function UitschrijfForm({}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const sub = await handleUnsubscribe();
-    console.log(sub);
-    if (sub) {
-      const reason = await handleReasonSubmit();
-      if (reason) {
-        console.log("Reason added");
-        router.push("../uitgeschreven");
+    if (abbonementenLijst.length === geselecteerdeAbonnementen.length) {
+      const complete = await handleCompleteUnsubscribe();
+      if (complete) {
+        const reason = await handleReasonSubmit();
+        if (reason) {
+          console.log("Reason added");
+          router.push("../uitgeschreven");
+        }
+      }
+    } else {
+      const sub = await handleUnsubscribe();
+      if (sub) {
+        const reason = await handleReasonSubmit();
+        if (reason) {
+          console.log("Reason added");
+          router.push("../uitgeschreven");
+        }
       }
     }
   };
@@ -173,7 +210,7 @@ export default function UitschrijfForm({}) {
             onClick={getAbonnementen}
             className={`ms-4 btn ${styles.knopPrimary}`}
           >
-            Get
+            Ophalen
           </button>
         </div>
         {warning}
