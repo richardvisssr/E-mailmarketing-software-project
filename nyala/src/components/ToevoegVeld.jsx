@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./ToevoegVeld.module.css";
+import AbonnementenFormulier from "./categorieeënComponent";
 
 export default function ToevoegVeld(props) {
   const [data, setData] = useState({ email: undefined, lijst: undefined });
@@ -113,6 +114,7 @@ export default function ToevoegVeld(props) {
                 <option value="CMD">CMD</option>
               </select>
             </div>
+            {AbonnementenFormulier()}
           </div>
           <input
             type="submit"
