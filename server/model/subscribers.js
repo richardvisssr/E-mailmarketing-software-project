@@ -26,4 +26,12 @@ const unsubscribe = new mongoose.Schema({
 const Subscriber = mongoose.model("Subscriber", subscribers);
 const Unsubscriber = mongoose.model("Unsubscribe", unsubscribe);
 
+// const mat = new Subscriber({
+//   email: "Mat@mat.nl",
+//   naam: "Mat",
+//   abonnement: ["NRC", "Volkskrant"],
+// });
+
+// mat.save();
+
 module.exports = { Subscriber, Unsubscriber };

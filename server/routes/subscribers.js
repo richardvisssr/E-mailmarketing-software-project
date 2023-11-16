@@ -4,16 +4,19 @@ const express = require("express");
 const { Subscriber, Unsubscriber } = require("../model/subscribers");
 const router = express.Router();
 
-router.delete("/unsubscribe", async (req, res) => {
-  const { email } = req.body;
+router.get("/:subscriber/subs", async (req, res) => {
+  const { subscriber } = req.params;
   try {
-    const subscriber = await Subscriber.findOneAndDelete({
-      email: email,
-    });
-    if (!subscriber) {
+    const sub = await Subscriber.findOne(
+      {
+        email: subscriber,
+      },
+      { abonnement: 1 }
+    );
+    if (!sub) {
       return res.status(404).send({ message: "Subscriber not found" });
     }
-    return res.status(200).send({ message: "Subscriber removed" });
+    return res.status(200).send(sub.abonnement);
   } catch (error) {
     return res.status(500).send(error);
   }
@@ -46,6 +49,21 @@ router.post("/subscribers/add", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.delete("/unsubscribe", async (req, res) => {
+  const { email } = req.body;
+  try {
+    const subscriber = await Subscriber.findOneAndDelete({
+      email: email,
+    });
+    if (!subscriber) {
+      return res.status(404).send({ message: "Subscriber not found" });
+    }
+    return res.status(200).send({ message: "Subscriber removed" });
+  } catch (error) {
+    return res.status(500).send(error);
   }
 });
 

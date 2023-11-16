@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./uitschrijfForm.module.css";
+import AbonnementenFormulier from "./categorieeënComponent";
 
 export default function UitschrijfForm({}) {
   const router = useRouter();
@@ -9,6 +10,8 @@ export default function UitschrijfForm({}) {
   const [reden, setReden] = useState("");
   const [customReason, setCustomReason] = useState("");
   const [warning, setWarning] = useState(null);
+  const [abonnementen, setAbonnementen] = useState([]);
+  const [abbonementenLijst, setAbonnementenLijst] = useState();
 
   const reasons = [
     "Te veel e-mails",
@@ -78,6 +81,32 @@ export default function UitschrijfForm({}) {
     }
   };
 
+  const getAbonnementen = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`http://localhost:3001/${email}/subs`);
+      const abonnees = await response.json();
+      setAbonnementenLijst(
+        <AbonnementenFormulier abonnees={abonnees} setValue={changeValue} />
+      );
+    } catch (error) {
+      console.error("Error during subscriber retrieval:", error);
+    }
+  };
+
+  const changeValue = (e) => {
+    const value = e.target.value;
+    if (e.target.checked) {
+      setAbonnementen([...abonnementen, value]);
+    } else {
+      const index = abonnementen.indexOf(value);
+      setAbonnementen([
+        ...abonnementen.slice(0, index),
+        ...abonnementen.slice(index + 1),
+      ]);
+    }
+  };
+
   const changeEmail = (e) => {
     e.preventDefault();
     setEmail(e.target.value);
@@ -111,16 +140,23 @@ export default function UitschrijfForm({}) {
   return (
     <div className="d-flex align-items-center flex-column">
       <h1 className="mb-4 mt-3">Uitschrijven</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label className="form-label">Email-adres</label>
+      <form>
+        <label className="form-label">Email-adres</label>
+        <div className="mb-3 d-flex justify-content-row">
           <input
             type="email"
             className="form-control w-150"
             onChange={changeEmail}
           />
+          <button
+            onClick={getAbonnementen}
+            className={`ms-4 btn ${styles.knopPrimary}`}
+          >
+            Get
+          </button>
         </div>
         {warning}
+        {abbonementenLijst}
         <div className="mb-3">
           <label className="form-label">Selecteer uw reden</label>
           <ul>
@@ -155,8 +191,8 @@ export default function UitschrijfForm({}) {
             ))}
           </ul>
         </div>
-        <button type="submit" className={`btn ${styles.knopPrimary}`}>
-          Verstuur
+        <button onClick={handleSubmit} className={`btn ${styles.knopPrimary}`}>
+          Schrijf uit
         </button>
       </form>
     </div>
