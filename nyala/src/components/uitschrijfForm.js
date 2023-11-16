@@ -12,6 +12,9 @@ export default function UitschrijfForm({}) {
   const [warning, setWarning] = useState(null);
   const [abonnementen, setAbonnementen] = useState([]);
   const [abbonementenLijst, setAbonnementenLijst] = useState();
+  const [geselecteerdeAbonnementen, setGeselecteerdeAbonnementen] = useState(
+    []
+  );
 
   const reasons = [
     "Te veel e-mails",
@@ -83,6 +86,11 @@ export default function UitschrijfForm({}) {
 
   const getAbonnementen = async (e) => {
     e.preventDefault();
+    if (!email) {
+      console.error("Email is required");
+      return;
+    }
+
     try {
       const response = await fetch(`http://localhost:3001/${email}/subs`);
       const abonnees = await response.json();
@@ -94,16 +102,27 @@ export default function UitschrijfForm({}) {
     }
   };
 
-  const changeValue = (e) => {
-    const value = e.target.value;
-    if (e.target.checked) {
-      setAbonnementen([...abonnementen, value]);
-    } else {
-      const index = abonnementen.indexOf(value);
-      setAbonnementen([
-        ...abonnementen.slice(0, index),
-        ...abonnementen.slice(index + 1),
-      ]);
+  const changeValue = (event) => {
+    const { value, checked } = event.target;
+    console.log("Value:", value);
+    console.log("Checked:", checked);
+    console.log("Previous Selection:", geselecteerdeAbonnementen);
+
+    // Check if the abonnement is already in the selection
+    const isSelected = geselecteerdeAbonnementen.includes(value);
+
+    if (checked && !isSelected) {
+      // If checked and not already in selection, add to the array
+      const newSelection = [...geselecteerdeAbonnementen, value];
+      console.log("New Selection:", newSelection);
+      setGeselecteerdeAbonnementen(newSelection);
+    } else if (!checked && isSelected) {
+      // If unchecked and in selection, remove from the array
+      const newSelection = geselecteerdeAbonnementen.filter(
+        (abonnement) => abonnement !== value
+      );
+      console.log("New Selection:", newSelection);
+      setGeselecteerdeAbonnementen(newSelection);
     }
   };
 
@@ -136,6 +155,8 @@ export default function UitschrijfForm({}) {
       }
     }
   };
+
+  console.log(geselecteerdeAbonnementen);
 
   return (
     <div className="d-flex align-items-center flex-column">
