@@ -24,7 +24,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| 4 uur aan taak <br> 1.5 uur geluisterd + notules formuleren| https://github.com/HANICA-DWA/project-sep23-nyala/issues/8 <br> Simon Brown gastcollege| | Heb lang gezocht naar aanpassen radio button color.. Uiteindelijk veelste lang want was heel makkelijk. En vond de simon brown persoonlijk niet heel interresabt  |😡:,| https://github.com/HANICA-DWA/project-sep23-nyala/commit/0f93a97c3b90811e6ecd136b1e57e1bb0796995e|
+| 4 uur aan taak <br> 1.5 uur geluisterd + notules formuleren| https://github.com/HANICA-DWA/project-sep23-nyala/issues/8 <br> Simon Brown gastcollege| | Heb lang gezocht naar aanpassen radio button color.. Uiteindelijk veelste lang want was heel makkelijk. En vond de simon brown persoonlijk niet heel interresabt  |😡:| https://github.com/HANICA-DWA/project-sep23-nyala/commit/0f93a97c3b90811e6ecd136b1e57e1bb0796995e|
 | | | | | | |
 
 ## Woensdag 15 november
