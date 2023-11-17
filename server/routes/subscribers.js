@@ -39,8 +39,6 @@ router.post("/reason", async (req, res) => {
 router.put("/subscribers/add", async (req, res) => {
   const { email, abonnementen } = req.body;
   try {
-    // Check if the subscriber already exists
-
     await Subscriber.findOneAndUpdate(
       { email: email },
       { $addToSet: { abonnement: abonnementen } },
