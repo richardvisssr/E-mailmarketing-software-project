@@ -18,20 +18,8 @@ export default function ToevoegVeld(props) {
   useEffect(() => {
     const fetchLijsten = async () => {
       const response = await fetch("http://localhost:3001/lijsten/add");
-      if (response.ok) {
-        setMelding({
-          type: "succes",
-          bericht: "De lijst is succesvol toegevoegd",
-        });
-      } else {
-        setMelding({
-          type: "foutmelding",
-          bericht:
-            "Er heeft zich een fout opgetreden tijdens het toevoegen van de lijst.",
-        });
-      }
     };
-    fetchLijsten();
+    // fetchLijsten();
 
     if (status) {
       const postEmail = async () => {
@@ -88,12 +76,30 @@ export default function ToevoegVeld(props) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            lijst: data.email,
+            lijst: lijsten,
           }),
         });
-      } catch (error) {}
+        if (response.ok) {
+          setMelding({
+            type: "succes",
+            bericht: "De lijst is succesvol toegevoegd",
+          });
+        } else {
+          setMelding({
+            type: "foutmelding",
+            bericht:
+              "Er heeft zich een fout opgetreden tijdens het toevoegen van de lijst.",
+          });
+        }
+      } catch (error) {
+        setMelding({
+          type: "foutmelding",
+          bericht:
+            "Er heeft zich een fout opgetreden tijdens het toevoegen van de lijst.",
+        });
+      }
     };
-    postLijsten();
+    // postLijsten();
   }, [lijsten]);
 
   const handleLijstToevoegen = (event) => {
