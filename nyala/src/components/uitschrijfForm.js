@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./uitschrijfForm.module.css";
-import AbonnementenFormulier from "./categorieeënComponent";
+import AbonnementenFormulier from "./CategorieeënComponent";
 
 // Hoofdcomponent voor het uitschrijfformulier
 export default function UitschrijfForm({}) {
@@ -10,8 +10,8 @@ export default function UitschrijfForm({}) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [reden, setReden] = useState("");
-  const [customReason, setCustomReason] = useState("");
-  const [warning, setWarning] = useState(null);
+  const [eigenReden, setEigenReden] = useState("");
+  const [waarschuwing, setWaarschuwing] = useState(null);
   const [abbonementenLijst, setAbonnementenLijst] = useState();
   const [geselecteerdeAbonnementen, setGeselecteerdeAbonnementen] = useState(
     []
@@ -42,24 +42,24 @@ export default function UitschrijfForm({}) {
       );
 
       if (unsubscribeResponse.status === 200) {
-        console.log("Subscriber removed");
-        setWarning(null);
+        console.log("Abonee verwijderd");
+        setWaarschuwing(null);
         localStorage.setItem("unsubscribedEmail", email);
         return true;
       } else if (unsubscribeResponse.status === 404) {
-        console.log("Subscriber not found");
-        setWarning(
+        console.log("Kon de abonnee niet vinden");
+        setWaarschuwing(
           <div>
             <p className={styles.warningText}>Vul een geldige email in</p>
           </div>
         );
         return false;
       } else {
-        console.log("Failed to unsubscribe");
+        console.log("Uitschrijven mislukt");
         return false;
       }
     } catch (error) {
-      console.error("Error during unsubscribe:", error);
+      console.error("Error tijdens uitschrijven:", error);
     }
   };
 
@@ -81,27 +81,27 @@ export default function UitschrijfForm({}) {
       );
 
       if (unsubscribeResponse.status === 200) {
-        console.log("Subscriber removed");
-        setWarning(null);
+        console.log("Inschrijvingen verwijderd");
+        setWaarschuwing(null);
         localStorage.setItem("unsubscribedEmail", email);
         return true;
       } else if (unsubscribeResponse.status === 404) {
-        console.log("Subscriber not found");
-        setWarning(
+        console.log("Abonnee niet gevonden");
+        setWaarschuwing(
           <div>
             <p className={styles.warningText}>Vul een geldige email in</p>
           </div>
         );
         return false;
       } else if (unsubscribeResponse.status === 400) {
-        console.log("Failed to unsubscribe");
+        console.log("Uitschrijven mislukt");
         return false;
       } else {
-        console.log("Unexpected error during unsubscribe");
+        console.log("Er is iets misgegaan tijdens het uitschrijven");
         return false;
       }
     } catch (error) {
-      console.error("Error during unsubscribe:", error);
+      console.error("Error tijdens uitschrijven:", error);
       return false;
     }
   };
@@ -109,7 +109,7 @@ export default function UitschrijfForm({}) {
   // Reden van uitschrijven toevoegen aan de database
   const handleReasonSubmit = async () => {
     const geselecteerdeReden =
-      reden === "Anders" ? customReason : reden === "" ? null : reden;
+      reden === "Anders" ? eigenReden : reden === "" ? null : reden;
 
     try {
       const reasonResponse = await fetch("http://localhost:3001/reason", {
@@ -121,14 +121,14 @@ export default function UitschrijfForm({}) {
       });
 
       if (reasonResponse.status === 200) {
-        console.log("Reason added");
+        console.log("Reden toegevoegd");
         return true;
       } else {
-        console.log("Failed to add reason");
+        console.log("Het toevoegen van de reden is mislukt");
         return false;
       }
     } catch (error) {
-      console.error("Error during reason submission:", error);
+      console.error("Error tijdens toevoegen reden:", error);
     }
   };
 
@@ -136,20 +136,20 @@ export default function UitschrijfForm({}) {
   const getAbonnementen = async (e) => {
     e.preventDefault();
     if (!email) {
-      console.error("Email is required");
+      console.error("Email is verplicht");
       return;
     }
     try {
       fetch(`http://localhost:3001/${email}/subs`)
         .then((response) => {
           if (!response.ok) {
-            setWarning(
+            setWaarschuwing(
               <div>
                 <p className={styles.warningText}>Vul een geldige email in</p>
               </div>
             );
             throw new Error(
-              `Failed to fetch abonnementen: ${response.status} ${response.statusText}`
+              `Er ging iets mist met het ophalen van de abonnementen: ${response.status} ${response.statusText}`
             );
           }
           return response.json();
@@ -164,7 +164,7 @@ export default function UitschrijfForm({}) {
           console.error(error);
         });
     } catch (error) {
-      console.error("Error during subscriber retrieval:", error);
+      console.error("Error tijdens het ophalen van abonnementen:", error);
     }
   };
 
@@ -188,19 +188,19 @@ export default function UitschrijfForm({}) {
     setReden(selectedReason);
 
     if (selectedReason === "Anders") {
-      setCustomReason("");
+      setEigenReden("");
     }
   };
 
-  const handleCustomReasonChange = (e) => {
-    setCustomReason(e.target.value);
+  const handleeigenRedenChange = (e) => {
+    setEigenReden(e.target.value);
   };
 
   // Hierin worden alle functies op zijn eigen tijd aangeroepen
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (geselecteerdeAbonnementen.length === 0 || reden === "") {
-      setWarning(
+      setWaarschuwing(
         <div>
           <p className={styles.warningText}>
             Selecteer ten minste één abonnement en een reden
@@ -214,7 +214,6 @@ export default function UitschrijfForm({}) {
           if (complete) {
             const reason = await handleReasonSubmit();
             if (reason) {
-              console.log("Reason added");
               localStorage.setItem(
                 "unsubscribedSubs",
                 JSON.stringify(geselecteerdeAbonnementen)
@@ -227,7 +226,6 @@ export default function UitschrijfForm({}) {
           if (sub) {
             const reason = await handleReasonSubmit();
             if (reason) {
-              console.log("Reason added");
               localStorage.setItem(
                 "unsubscribedSubs",
                 JSON.stringify(geselecteerdeAbonnementen)
@@ -237,7 +235,7 @@ export default function UitschrijfForm({}) {
           }
         }
       } catch (error) {
-        console.error("Error during form submission:", error);
+        console.error("Error:", error);
       }
     }
   };
@@ -268,8 +266,8 @@ export default function UitschrijfForm({}) {
                         type="text"
                         className="form-control"
                         placeholder="Typ hier uw reden"
-                        value={customReason}
-                        onChange={handleCustomReasonChange}
+                        value={eigenReden}
+                        onChange={handleeigenRedenChange}
                       />
                     </div>
                   )}
@@ -293,7 +291,7 @@ export default function UitschrijfForm({}) {
   return (
     <div className="d-flex align-items-center flex-column">
       <h1 className="mb-4 mt-3">Uitschrijven</h1>
-      {warning}
+      {waarschuwing}
       <form>
         <label className="form-label">Email-adres</label>
         <div className="mb-3 d-flex justify-content-row">

@@ -6,7 +6,7 @@ import styles from "./resubscribeComponent.module.css";
 
 export default function resubscribe({}) {
   const router = useRouter();
-  const [warning, setWarning] = useState(null);
+  const [waarschuwing, setWaarschuwing] = useState(null);
 
   const handleUndo = async () => {
     const unsubscribedEmail = localStorage.getItem("unsubscribedEmail");
@@ -20,16 +20,18 @@ export default function resubscribe({}) {
         localStorage.removeItem("unsubscribedSubs");
         router.push("/thuispagina");
       } else {
-        setWarning(
+        setWaarschuwing(
           <div className="d-flex justify-content-center">
-            <p className={styles.warningText}>Failed to resubscribe</p>
+            <p className={styles.warningText}>
+              Er ging iets mis met het herinschrijven
+            </p>
           </div>
         );
       }
     } else {
-      setWarning(
+      setWaarschuwing(
         <div className="d-flex justify-content-center">
-          <p className={styles.warningText}>Enter a valid email</p>
+          <p className={styles.warningText}>Voer een geldige email in</p>
         </div>
       );
     }
@@ -49,14 +51,14 @@ export default function resubscribe({}) {
       );
 
       if (reasonResponse.status === 200) {
-        console.log("You have been resubscribed");
+        console.log("U bent weer ingeschreven");
         return true;
       } else {
-        console.log("Failed to resubscribe");
+        console.log("Er is iets misgegaan met het herinschrijven");
         return false;
       }
     } catch (error) {
-      console.error("Error during resubscription:", error);
+      console.error("Error tijdens inschrijven:", error);
       return false;
     }
   };
@@ -79,7 +81,7 @@ export default function resubscribe({}) {
           Klik hier om u weer in te schrijven
         </button>
       </div>
-      {warning}
+      {waarschuwing}
     </div>
   );
 }

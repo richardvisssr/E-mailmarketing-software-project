@@ -1,4 +1,4 @@
-import UitschrijfForm from "@/components/uitschrijfForm.js";
+import UitschrijfForm from "@/components/UitschrijfForm.js";
 
 export default function Page() {
   return (
