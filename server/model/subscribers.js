@@ -29,7 +29,7 @@ const Unsubscriber = mongoose.model("Unsubscribe", unsubscribe);
 // const sub = new Subscriber({
 //   email: "befibu@jfc.nl",
 //   naam: "Bert",
-//   abonnement: ["Nieuwsbrief", "Kortingen"],
+//   abonnement: ["Nieuwsbrief", "CMD"],
 // });
 
 // sub.save();

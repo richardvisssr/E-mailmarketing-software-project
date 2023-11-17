@@ -43,7 +43,7 @@ function MailLijstenSelecteren() {
         .then(([subscribersData, emailData]) => {
           // Set subscribers and email data
           setSubscribers(subscribersData);
-          setHtml(emailData);
+          setHtml(emailData.html);
         })
         .catch((error) => console.error("Error in Promise.all:", error));
     }
@@ -61,6 +61,10 @@ function MailLijstenSelecteren() {
   };
 
   const handleSendEmailClick = async () => {
+    subscribers.forEach((subscriber) => {
+      console.log(subscriber.email);
+    });
+
     if (selectedMailLijst.length > 0) {
       try {
         const response = await fetch("/api/sendEmail", {
