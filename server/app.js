@@ -26,6 +26,7 @@ const sessionParser = session({
 });
 app.use(sessionParser);
 app.use(express.json());
+app.use('/', require('./routes/templateRoutes'));
 
 // Hier komen de app.use voor routes
 
