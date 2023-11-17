@@ -63,4 +63,17 @@ router.post('/sendEmail', async (req, res) => {
   }
 });
 
+router.get('/getEmail/:id', async (req, res) => {
+  try {
+    const email = await Email.findOne({ id: req.params.id });
+    res.json(email);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+  
+
+
 module.exports = router;

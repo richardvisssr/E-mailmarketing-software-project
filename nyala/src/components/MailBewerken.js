@@ -98,10 +98,10 @@ const MailBewerken = ({ id }) => {
       </div>
       <div className="p-2 gap-3 d-flex justify-content-center">
         <button onClick={saveDesign} className="btn btn-primary">
-          Save Design
+          Design Opslaan
         </button>
         <button onClick={sendEmail} className="btn btn-primary">
-          Send Email
+          Email Versturen
         </button>
       </div>
 
