@@ -53,5 +53,5 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| 3 uur | https://github.com/HANICA-DWA/project-sep23-nyala/issues/48 | | Puntjes op de i voor deze user story |👍: | https://github.com/HANICA-DWA/project-sep23-nyala/commit/399d7def7b33f0f91473db24a44764ca7f569306 |
+| 7 uur | https://github.com/HANICA-DWA/project-sep23-nyala/issues/48 | | Puntjes op de i voor deze user story, reviewen code Mark, code update naar review |👍: | https://github.com/HANICA-DWA/project-sep23-nyala/commit/399d7def7b33f0f91473db24a44764ca7f569306 |
 | | | | | | |
