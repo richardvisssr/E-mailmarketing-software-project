@@ -39,7 +39,22 @@ const MailBewerken = ({ id }) => {
 
   const sendEmail = () => {
     editorRef.current.exportHtml(async (data) => {
-      const { html } = data;
+      const { design, html } = data;
+      console.log("exportHtml", html);
+      try {
+        const response = await fetch("http://localhost:3001/mail/sendEmail", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ html: html, id: id }),
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+      } catch (error) {
+        console.error("Error sending email:", error);
+      }
       handleShow();
     });
   };

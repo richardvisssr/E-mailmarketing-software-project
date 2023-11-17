@@ -44,7 +44,7 @@ router.post("/saveImage", async (req, res) => {
   }
 });
 
-router.post('/sendEmail', async (req, res) => {
+router.put('/sendEmail', async (req, res) => {
   const id = req.body.id;
   const html = req.body.html;
 
