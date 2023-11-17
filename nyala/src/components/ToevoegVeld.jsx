@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./ToevoegVeld.module.css";
 import AbonnementenFormulier from "./categorieeënComponent";
 
-export default function ToevoegVeld(props) {
+export default function ToevoegVeld() {
   const [data, setData] = useState({ email: undefined, lijst: [] });
   const [status, setStatus] = useState(false);
   const [lijsten, setLijsten] = useState([]);
