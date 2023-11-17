@@ -5,7 +5,7 @@ import AbonnementenFormulier from "./categorieeënComponent";
 export default function ToevoegVeld(props) {
   const [data, setData] = useState({ email: undefined, lijst: [] });
   const [status, setStatus] = useState(false);
-  const [lijsten, setLijsten] = useState(["hoi", "doei"]);
+  const [lijsten, setLijsten] = useState([]);
   const [toevoegen, setToevoegen] = useState(false);
   const [melding, setMelding] = useState({ type: "", bericht: "" });
   const [lijst, setLijst] = useState("");
@@ -80,7 +80,7 @@ export default function ToevoegVeld(props) {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              name: lijsten,
+              name: lijst,
             }),
           });
           if (response.ok) {
@@ -89,7 +89,6 @@ export default function ToevoegVeld(props) {
               bericht: "De lijst is succesvol toegevoegd",
             });
           } else if (!response.ok) {
-            console.log("Eerste foute");
             setMelding({
               type: "foutmelding",
               bericht:
@@ -97,7 +96,6 @@ export default function ToevoegVeld(props) {
             });
           }
         } catch (error) {
-          console.log("Tweede foute");
           setMelding({
             type: "foutmelding",
             bericht:

@@ -1,6 +1,5 @@
 const mongoose = require("../utils/connection");
 
-// Define schema for mailing list schedule
 const mailLijstSchema = new mongoose.Schema({
   mailLijst: {
     type: [String],
