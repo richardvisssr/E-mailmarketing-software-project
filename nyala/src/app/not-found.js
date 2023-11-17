@@ -7,7 +7,7 @@ export default function page() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("thuispagina");
+    router.push("/404");
   }, []);
 
   return <></>;

@@ -1,23 +1,29 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { Modal, Button, Placeholder } from "react-bootstrap";
+import AbonnementSelecteren from "./MailVersturen";
 
 // Use dynamic import to load the EmailEditor component only on the client side
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
-const MailBewerken = () => {
+const MailBewerken = ({ id }) => {
   const editorRef = useRef(null);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const saveDesign = () => {
     editorRef.current.saveDesign(async (design) => {
       try {
         const response = await fetch("http://localhost:3001/mail/saveDesign", {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(design),
         });
+
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -26,29 +32,23 @@ const MailBewerken = () => {
       } catch (error) {
         console.error("Error saving design:", error);
       }
+
+      console.log(design);
     });
   };
 
   const sendEmail = () => {
-    editorRef.current.exportHtml((data) => {
-      const { design, html } = data;
-      console.log("exportHtml", html);
+    editorRef.current.exportHtml(async (data) => {
+      const { html } = data;
+      handleShow();
     });
   };
 
   const onReady = () => {
     // editor is ready
     console.log("onReady");
+    onLoad(editorRef.current);
   };
-
-  // const onLoad = (editor) => {
-  //   // Set the editor instance to the ref
-  //   // editor instance is created
-  //   // you can load your template here;
-  //   // const templateJson = {};
-  //   // emailEditorRef.current.loadDesign(templateJson);
-  //   editorRef.current = editor;
-  // };
 
   const onLoad = async (editor) => {
     try {
@@ -65,7 +65,7 @@ const MailBewerken = () => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-console.log("response", response);
+
       const design = await response.json();
 
       editorRef.current.loadDesign(design);
@@ -104,6 +104,24 @@ console.log("response", response);
           Send Email
         </button>
       </div>
+
+      {/* Place the Modal here */}
+      <Modal show={show} onHide={handleClose} size="xl">
+        <Modal.Header closeButton>
+          <Modal.Title>Wil je '{}' versturen?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Placeholder as={Modal.Body} animation="glow">
+            <AbonnementSelecteren/>
+          </Placeholder>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Annuleren
+          </Button>
+          <Button>Versturen</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

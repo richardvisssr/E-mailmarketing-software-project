@@ -1,23 +1,41 @@
-const mongoose = require("../utils/connection");
+const mongoose = require('../utils/connection');
 
 const imageSchema = new mongoose.Schema({
-  dataUrl: String,
-});
+    dataUrl: String,
+  });
+
 
 const designSchema = new mongoose.Schema({
   id: {
     type: String,
     required: true,
-    unique: true,
+    // unique: true
   },
   design: {
     type: Object,
+    required: true
+  }
+});
+
+const emailSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  html: {
+    type: String, // Verander naar String omdat HTML een tekstuele representatie is
     required: true,
   },
 });
 
-const Design = mongoose.model("Design", designSchema);
+const Email = mongoose.model('Email', emailSchema);
 
-const Image = mongoose.model("Image", imageSchema);
+const Design = mongoose.model('Design', designSchema);
 
-module.exports = { Image, Design };
+
+const Image = mongoose.model('Image', imageSchema);
+
+module.exports = { Image, Design, Email };
+
+

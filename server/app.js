@@ -14,6 +14,7 @@ const port = process.env.PORT || 3001;
 // Hier komen de requires voor de routes
 const subscriberRouter = require("./routes/subscribers");
 const emailEditorRouter = require("./routes/emailEditor");
+const mailLijstRouter = require("./utils/mailLijsten");
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(express.json());
 // Hier komen de app.use voor routes
 app.use("/", subscriberRouter);
 app.use("/mail", emailEditorRouter);
+app.use("/mail", mailLijstRouter);
 
 const httpServer = http.createServer(app);
 const webSocketServer = new ws.Server({ noServer: true, path: "/socket" });

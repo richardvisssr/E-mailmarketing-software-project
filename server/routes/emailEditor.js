@@ -1,10 +1,11 @@
 const express = require("express");
-const { Image, Design } = require("../model/emailEditor");
+const { Image, Design, Email } = require("../model/emailEditor");
 const router = express.Router();
 
 router.get("/loadDesign/:id", async (req, res) => {
   try {
-    const design = await Design.findById(req.params.id); // Get the design with the specified ID
+    const design = await Design.findOne({ id: req.params.id });
+
     res.json(design.design);
   } catch (error) {
     console.error("Error loading design:", error);
@@ -13,13 +14,17 @@ router.get("/loadDesign/:id", async (req, res) => {
 });
 
 router.post("/saveDesign", async (req, res) => {
-  const design = new Design({
-    id: req.body.body.id,
-    design: req.body,
-  });
+  const id = req.body.id;
+  const design = req.body.design;
 
   try {
-    await design.save();
+    // Zoek naar het bestaande e-mailontwerp met de opgegeven id
+    const existingDesign = await Design.findOneAndUpdate(
+      { id },
+      { design },
+      { upsert: true, new: true } // upsert: true maakt een nieuw ontwerp aan als het niet bestaat
+    );
+
     res.status(200).send("Design saved successfully");
   } catch (error) {
     console.error("Error saving design:", error);
@@ -36,6 +41,25 @@ router.post("/saveImage", async (req, res) => {
   } catch (error) {
     console.error("Fout bij opslaan van de afbeelding:", error);
     res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+});
+
+router.post('/sendEmail', async (req, res) => {
+  const id = req.body.id;
+  const html = req.body.html;
+
+  try {
+    // Zoek naar het bestaande e-mailontwerp met de opgegeven id
+    const existingHtml = await Email.findOneAndUpdate(
+      { id },
+      { html },
+      { upsert: true, new: true } // upsert: true maakt een nieuw ontwerp aan als het niet bestaat
+    );
+
+    res.status(200).send("Design saved successfully");
+  } catch (error) {
+    console.error("Error saving design:", error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
