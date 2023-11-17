@@ -18,8 +18,21 @@ export default function ToevoegVeld(props) {
   useEffect(() => {
     const fetchLijsten = async () => {
       const response = await fetch("http://localhost:3001/lijsten/add");
-    }
+      if (response.ok) {
+        setMelding({
+          type: "succes",
+          bericht: "De lijst is succesvol toegevoegd",
+        });
+      } else {
+        setMelding({
+          type: "foutmelding",
+          bericht:
+            "Er heeft zich een fout opgetreden tijdens het toevoegen van de lijst.",
+        });
+      }
+    };
     fetchLijsten();
+
     if (status) {
       const postEmail = async () => {
         try {
@@ -48,14 +61,15 @@ export default function ToevoegVeld(props) {
             setMelding({
               type: "foutmelding",
               bericht:
-                "Er heeft zich een fout opgetreden tijdens het toevoegen.",
+                "Er heeft zich een fout opgetreden tijdens het toevoegen van de mail.",
             });
             setSucces(false);
           }
         } catch (error) {
           setMelding({
             type: "foutmelding",
-            bericht: "Er heeft zich een fout opgetreden tijdens het toevoegen.",
+            bericht:
+              "Er heeft zich een fout opgetreden tijdens het toevoegen van de mail.",
           });
           setSucces(false);
         }
@@ -67,8 +81,7 @@ export default function ToevoegVeld(props) {
   useEffect(() => {
     const postLijsten = async () => {
       try {
-        const response = await fetch("",
-        {
+        const response = await fetch("", {
           method: "POST",
           headers: {
             Accept: "application/json",
@@ -78,10 +91,8 @@ export default function ToevoegVeld(props) {
             lijst: data.email,
           }),
         });
-      } catch (error) {
-
-      }
-    }
+      } catch (error) {}
+    };
     postLijsten();
   }, [lijsten]);
 
@@ -96,10 +107,6 @@ export default function ToevoegVeld(props) {
     } else {
       setLijsten([...lijsten, lijst]);
       setToevoegen(false);
-      setMelding({
-        type: "succes",
-        bericht: "De lijst is succesvol toegevoegd",
-      });
     }
   };
 
