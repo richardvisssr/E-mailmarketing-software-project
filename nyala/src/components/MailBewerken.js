@@ -13,6 +13,8 @@ const MailBewerken = ({ id }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  console.log(id);
+
   const saveDesign = () => {
     editorRef.current.saveDesign(async (design) => {
       try {
@@ -21,7 +23,7 @@ const MailBewerken = ({ id }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(design),
+          body: JSON.stringify({ design, id }),
         });
 
         if (!response.ok) {

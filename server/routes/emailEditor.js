@@ -13,19 +13,23 @@ router.get("/loadDesign/:id", async (req, res) => {
   }
 });
 
-router.post("/saveDesign", async (req, res) => {
+router.put("/saveDesign", async (req, res) => {
   const id = req.body.id;
   const design = req.body.design;
 
   try {
-    // Zoek naar het bestaande e-mailontwerp met de opgegeven id
-    const existingDesign = await Design.findOneAndUpdate(
-      { id },
-      { design },
-      { upsert: true, new: true } // upsert: true maakt een nieuw ontwerp aan als het niet bestaat
-    );
-
-    res.status(200).send("Design saved successfully");
+    const existingDesign = await Design.findOne({ id });
+    if (existingDesign) {
+      // Update existing design
+      existingDesign.design = design;
+      await existingDesign.save();
+      res.status(200).send("Design updated successfully");
+    } else {
+      // Create a new design
+      const newDesign = new Design({ id, design });
+      await newDesign.save();
+      res.status(200).send("Design saved successfully");
+    }
   } catch (error) {
     console.error("Error saving design:", error);
     res.status(500).send("Internal Server Error");
@@ -44,7 +48,7 @@ router.post("/saveImage", async (req, res) => {
   }
 });
 
-router.put('/sendEmail', async (req, res) => {
+router.put("/sendEmail", async (req, res) => {
   const id = req.body.id;
   const html = req.body.html;
 
@@ -63,17 +67,14 @@ router.put('/sendEmail', async (req, res) => {
   }
 });
 
-router.get('/getEmail/:id', async (req, res) => {
+router.get("/getEmail/:id", async (req, res) => {
   try {
     const email = await Email.findOne({ id: req.params.id });
     res.json(email);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 });
-
-  
-
 
 module.exports = router;
