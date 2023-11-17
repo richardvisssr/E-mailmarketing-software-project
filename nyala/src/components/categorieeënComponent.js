@@ -3,7 +3,7 @@ import styles from "./categorieeënComponent.module.css";
 const AbonnementenFormulier = ({ abonnees, setValue }) => {
   return (
     <div className="mb-3">
-      <label className="form-label">Abonnementen</label>
+      <label className="form-label">mailLijsten</label>
       <ul>
         {abonnees.map((abonnement, index) => (
           <li key={index} className={`mb-2 ${styles.customList}`}>
