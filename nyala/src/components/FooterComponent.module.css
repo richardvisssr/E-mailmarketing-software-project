@@ -1,0 +1,20 @@
+/* a:hover {
+    transition-duration: 1s;
+    transition: color #E800E9, font-size 120%;
+} */
+
+.space {
+    margin-left: 0.5vh
+}
+
+.linky i, .linky a {
+    color: black;
+    font-size: 100%;
+    transition: color 0.25s, font-size 0.25s;
+}
+
+.linky:hover i, .linky:hover a {
+    font-size: 105%;
+    color: #E800E9;
+    transition: font-size 0.5s, color 0.5s;
+}

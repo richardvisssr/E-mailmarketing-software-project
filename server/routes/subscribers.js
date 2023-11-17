@@ -4,6 +4,20 @@ const express = require("express");
 const { Subscriber, Unsubscriber } = require("../model/subscribers");
 const router = express.Router();
 
+router.get("/getSubscribers", async (req, res) => {
+  const selectedMailLijst = req.query.selectedMailLijst; // Use req.query to retrieve query parameters
+
+  try {
+    // Find subscribers where the abonnement field contains the selected mailLijst
+    const subscribers = await Subscriber.find({ abonnement: selectedMailLijst });
+
+    res.json(subscribers);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 router.delete("/unsubscribe", async (req, res) => {
   const { email } = req.body;
   try {
