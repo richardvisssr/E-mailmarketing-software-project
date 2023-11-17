@@ -1,6 +1,5 @@
 "use strict";
 
-const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
@@ -66,7 +65,6 @@ httpServer.listen(port, () =>
 
 const server = app.listen(port, host, async () => {
   console.log("> connecting");
-  await mongoose.connect(`mongodb://${host}:27017/nyala`);
   console.log("> connected");
 
   const serverInfo = server.address();

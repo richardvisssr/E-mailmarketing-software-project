@@ -17,26 +17,36 @@ export default function ToevoegVeld(props) {
   useEffect(() => {
     if (status) {
       const postEmail = async () => {
-        setSucces(false);
-        const response = await fetch(`http://localhost:3001/subscribers/add`, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: data.email,
-            abonnement: data.lijst,
-          }),
-        });
-        if (response.ok) {
-          setData({ email: undefined, lijst: undefined });
-          setStatus(false);
-          setSucces(true);
-          console.log("succes!");
-        } else if (!response.ok) {
+        try {
+          const response = await fetch(
+            `http://localhost:3001/subscribers/add`,
+            {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: data.email,
+                abonnement: data.lijst,
+              }),
+            }
+          );
+          if (response.ok) {
+            setData({ email: undefined, lijst: [] });
+            setStatus(false);
+            setSucces(true);
+          } else if (!response.ok) {
+            setFoutmelding(
+              "Er heeft zich een fout opgetreden tijdens het toevoegen."
+            );
+            setSucces(false);
+          }
+        } catch (error) {
+          setFoutmelding(
+            "Er heeft zich een fout opgetreden tijdens het toevoegen."
+          );
           setSucces(false);
-          console.log("fout gegaan!");
         }
       };
       postEmail();
@@ -46,7 +56,10 @@ export default function ToevoegVeld(props) {
   const melding = !succes ? (
     <></>
   ) : (
-    <div className="alert alert-success d-flex justify-content-around" role="alert">
+    <div
+      className="alert alert-success d-flex justify-content-around"
+      role="alert"
+    >
       <p>Email succesvol toegevoegd.</p>
       <i className="bi bi-check"></i>
     </div>
@@ -85,20 +98,27 @@ export default function ToevoegVeld(props) {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
       setFoutmelding("Het emailadres is geen valide formaat!");
     } else if (data.lijst.length === 0) {
-      setFoutmelding("De mailinglijst is niet ingevuld.");
+      setFoutmelding("Er is geen mailinglijst gekozen.");
+    } else if (data.lijst.length > lijsten.length) {
+      setFoutmelding("Er zijn te veel mailinglijsten gekozen!");
     } else if (inLijsten === false) {
       setFoutmelding("De gekozen mailinglijst bestaat niet.");
     } else {
-      setSucces(true);
       setStatus(true);
     }
   };
 
   const handleEmailChange = (event) => {
+    if (succes) {
+      setSucces(false);
+    }
     setData({ ...data, email: event.target.value });
   };
 
   const handleCheckboxChange = (event) => {
+    if (succes) {
+      setSucces(false);
+    }
     const listName = event.target.value;
     console.log(listName);
     const isSelected = data.lijst.includes(listName);
@@ -132,11 +152,12 @@ export default function ToevoegVeld(props) {
               placeholder="Email"
               aria-describedby="basic-addon1"
               onChange={handleEmailChange}
+              value={data.email || ""}
             />
-              <AbonnementenFormulier
-                abonnees={lijsten}
-                setValue={handleCheckboxChange}
-              />
+            <AbonnementenFormulier
+              abonnees={lijsten}
+              setValue={handleCheckboxChange}
+            />
             <div className={`${styles.selectContainer}`}></div>
           </div>
           <input
@@ -146,9 +167,6 @@ export default function ToevoegVeld(props) {
           />
         </form>
       </div>
-      {data.lijst.map((lijst) => {
-        <p>{lijst}</p>;
-      })}
     </div>
   );
 }

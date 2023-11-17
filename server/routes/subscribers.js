@@ -39,6 +39,22 @@ router.post("/reason", async (req, res) => {
 router.post("/subscribers/add", async (req, res) => {
   try {
     const { email, abonnement } = req.body;
+
+    if (!email || !abonnement || !Array.isArray(abonnement)) {
+      return res.status(400).json({ message: "Bad Request: Invalid input" });
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ message: "Bad Request: Invalid email format" });
+    }
+
+    // const validAbonnements = Haal hier de lijsten op met de model.
+    // const invalidAbonnement = abonnement.find(a => !validAbonnements.includes(a));
+
+    // if (invalidAbonnement) {
+    //   return res.status(400).json({ message: `Bad Request: Invalid abonnement - ${invalidAbonnement}` });
+    // }
+
     const subscriber = {
       email,
       abonnement,
