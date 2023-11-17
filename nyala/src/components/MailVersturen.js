@@ -1,38 +1,42 @@
+// AbonnementSelecteren.js
 "use client";
 import React, { useState, useEffect } from "react";
+import MultiSelect from "./MultiSelect"; // Update the path accordingly
 
 function AbonnementSelecteren({ html }) {
-  const [subscriptions, setSubscriptions] = useState([]);
-  const [selectedSubscription, setSelectedSubscription] = useState(null);
+  const [mailLijsten, setMailLijsten] = useState([]);
+  const [selectedMailLijst, setSelectedMailLijst] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
 
-  console.log("html", html);
   useEffect(() => {
     // Fetch the list of available subscriptions from the server using an HTTP request.
-    fetch("/api/subscriptions")
+    fetch("http://localhost:3001/mail/getList")
       .then((response) => response.json())
-      .then((data) => setSubscriptions(data))
+      .then((data) => setMailLijsten(data))
       .catch((error) => console.error(error));
   }, []);
 
   useEffect(() => {
-    if (selectedSubscription) {
-      // Fetch the list of subscribers for the selected subscription using another HTTP request.
-      fetch(`/api/subscriptions/${selectedSubscription.id}/subscribers`)
+    if (selectedMailLijst.length > 0) {
+      // Fetch the list of subscribers for the selected subscriptions using another HTTP request.
+      fetch(`http://localhost:3001/getSubscribers?selectedMailLijst=${selectedMailLijst.join(',')}`)
         .then((response) => response.json())
         .then((data) => setSubscribers(data))
         .catch((error) => console.error(error));
     }
-  }, [selectedSubscription]);
+  }, [selectedMailLijst]);
 
-  const handleSubscriptionChange = (event) => {
-    const subscriptionId = event.target.value;
-    const subscription = subscriptions.find((s) => s.id === subscriptionId);
-    setSelectedSubscription(subscription);
+  const handleMailLijstChange = (event) => {
+    const value = event.target.value;
+    if (selectedMailLijst.includes(value)) {
+      setSelectedMailLijst(selectedMailLijst.filter(mail => mail !== value));
+    } else {
+      setSelectedMailLijst([...selectedMailLijst, value]);
+    }
   };
 
   const handleSendEmailClick = async () => {
-    if (selectedSubscription) {
+    if (selectedMailLijst.length > 0) {
       try {
         const response = await fetch("/api/sendEmail", {
           method: "POST",
@@ -54,22 +58,19 @@ function AbonnementSelecteren({ html }) {
   };
 
   return (
-    <div>
-      <label htmlFor="subscription">Select a subscription:</label>
-      <select id="subscription" onChange={handleSubscriptionChange}>
-        <option value="">-- Select a subscription --</option>
-        {subscriptions.map((subscription) => (
-          <option key={subscription.id} value={subscription.id}>
-            {subscription.name}
-          </option>
-        ))}
-      </select>
+    <div className="container mt-4">
+      <label className="form-label">Select subscriptions:</label>
+      <MultiSelect
+        options={mailLijsten[0]?.mailLijst || []}
+        selectedOptions={selectedMailLijst}
+        onChange={handleMailLijstChange}
+      />
 
-      {selectedSubscription && (
-        <div>
-          <h2>Subscribers of {selectedSubscription.name}:</h2>
-          <table>
-            <thead>
+      {selectedMailLijst.length > 0 && (
+        <div className="mt-4">
+          <h2 className="h4">Subscribers of Selected Subscriptions:</h2>
+          <table className="table table-bordered">
+            <thead className="table-dark">
               <tr>
                 <th>Name</th>
                 <th>Email</th>
@@ -85,7 +86,9 @@ function AbonnementSelecteren({ html }) {
             </tbody>
           </table>
 
-          <button onClick={handleSendEmailClick}>Verstuur Mail</button>
+          <button className="btn btn-primary" onClick={handleSendEmailClick}>
+            Verstuur Mail
+          </button>
         </div>
       )}
     </div>
