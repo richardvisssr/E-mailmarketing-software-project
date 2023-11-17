@@ -4,8 +4,9 @@ const router = express.Router();
 
 router.get('/getList', async (req, res) => {
     try {
-      const subscriptions = await mailLijst.find();
+      const subscriptions = await mailLijst.find({});
       res.json(subscriptions);
+      console.log(subscriptions);
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'Internal server error' });
@@ -13,14 +14,15 @@ router.get('/getList', async (req, res) => {
   });
 
 router.put('/addList', async (req, res) => {
-    const { name } = req.body;
-  try {
-    const subscription = await mailLijst.collection('mailLijst').insertOne({ name });
-    res.json(subscription);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Internal server error' });
-  }
+    const { mailLijsten } = req.body;
+
+    try {
+      const subscription = await mailLijst.create({ mailLijsten });
+      res.json(subscription);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Internal server error' });
+    }
 });	
 
 module.exports = router;

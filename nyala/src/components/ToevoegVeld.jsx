@@ -5,21 +5,24 @@ import AbonnementenFormulier from "./categorieeënComponent";
 export default function ToevoegVeld(props) {
   const [data, setData] = useState({ email: undefined, lijst: [] });
   const [status, setStatus] = useState(false);
-  const [lijsten, setLijsten] = useState([
-    "ICT",
-    "CMD",
-    "Leden",
-    "Nieuwsbrief",
-  ]);
+  const [lijsten, setLijsten] = useState(["hoi", "doei"]);
   const [toevoegen, setToevoegen] = useState(false);
   const [melding, setMelding] = useState({ type: "", bericht: "" });
   const [lijst, setLijst] = useState("");
 
   useEffect(() => {
     const fetchLijsten = async () => {
-      const response = await fetch("http://localhost:3001/lijsten/add");
+      const response = await fetch("http://localhost:3001/mail/getList");
+      const body = await response.json();
+      if (!response.ok) {
+        setMelding({
+          type: "foutmelding",
+          bericht: "Er is iets foutgegaan tijdens het ophalen",
+        });
+      }
+      setLijsten(body[0].mailLijst);
     };
-    // fetchLijsten();
+    fetchLijsten();
 
     if (status) {
       const postEmail = async () => {
@@ -67,44 +70,48 @@ export default function ToevoegVeld(props) {
   }, [status]);
 
   useEffect(() => {
-    const postLijsten = async () => {
-      try {
-        const response = await fetch("", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            lijst: lijsten,
-          }),
-        });
-        if (response.ok) {
-          setMelding({
-            type: "succes",
-            bericht: "De lijst is succesvol toegevoegd",
+    if (lijst !== "") {
+      const postLijsten = async () => {
+        try {
+          const response = await fetch("http://localhost:3001/mail/addList", {
+            method: "PUT",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: lijsten,
+            }),
           });
-        } else {
+          if (response.ok) {
+            setMelding({
+              type: "succes",
+              bericht: "De lijst is succesvol toegevoegd",
+            });
+          } else if (!response.ok) {
+            console.log("Eerste foute");
+            setMelding({
+              type: "foutmelding",
+              bericht:
+                "Er heeft zich een fout opgetreden tijdens het toevoegen van de lijst.",
+            });
+          }
+        } catch (error) {
+          console.log("Tweede foute");
           setMelding({
             type: "foutmelding",
             bericht:
               "Er heeft zich een fout opgetreden tijdens het toevoegen van de lijst.",
           });
         }
-      } catch (error) {
-        setMelding({
-          type: "foutmelding",
-          bericht:
-            "Er heeft zich een fout opgetreden tijdens het toevoegen van de lijst.",
-        });
-      }
-    };
-    // postLijsten();
+      };
+      postLijsten();
+    }
   }, [lijsten]);
 
   const handleLijstToevoegen = (event) => {
     event.preventDefault();
-    console.log("Sup");
+
     if (lijst === "") {
       setMelding({
         type: "foutmelding",
@@ -162,14 +169,14 @@ export default function ToevoegVeld(props) {
   };
 
   const handleEmailChange = (event) => {
-    if (succes) {
+    if (melding.type === "succes") {
       setMelding({ type: "", bericht: "" });
     }
     setData({ ...data, email: event.target.value });
   };
 
   const handleCheckboxChange = (event) => {
-    if (succes) {
+    if (melding.type === "succes") {
       setMelding({ type: "", bericht: "" });
     }
     const listName = event.target.value;
@@ -231,10 +238,14 @@ export default function ToevoegVeld(props) {
               value={data.email || ""}
             />
             <div>
-              <AbonnementenFormulier
-                abonnees={lijsten}
-                setValue={handleCheckboxChange}
-              />
+              {lijsten.length > 0 ? (
+                <AbonnementenFormulier
+                  abonnees={lijsten}
+                  setValue={handleCheckboxChange}
+                />
+                ) : (
+                  <></>
+                )}
               {toevoegen ? (
                 <div
                   className={`input-group ${styles.vorm} d-flex justify-items-center align-content-center`}
