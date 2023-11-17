@@ -95,11 +95,6 @@ export default function UitschrijfForm({}) {
         return false;
       } else if (unsubscribeResponse.status === 400) {
         console.log("Failed to unsubscribe");
-        setWarning(
-          <div>
-            <p className={styles.warningText}>Failed to unsubscribe</p>
-          </div>
-        );
         return false;
       } else {
         console.log("Unexpected error during unsubscribe");
@@ -107,11 +102,6 @@ export default function UitschrijfForm({}) {
       }
     } catch (error) {
       console.error("Error during unsubscribe:", error);
-      setWarning(
-        <div>
-          <p className={styles.warningText}>Error during unsubscribe</p>
-        </div>
-      );
       return false;
     }
   };
@@ -153,6 +143,11 @@ export default function UitschrijfForm({}) {
       fetch(`http://localhost:3001/${email}/subs`)
         .then((response) => {
           if (!response.ok) {
+            setWarning(
+              <div>
+                <p className={styles.warningText}>Vul een geldige email in</p>
+              </div>
+            );
             throw new Error(
               `Failed to fetch abonnementen: ${response.status} ${response.statusText}`
             );
@@ -204,32 +199,45 @@ export default function UitschrijfForm({}) {
   // Hierin worden alle functies op zijn eigen tijd aangeroepen
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(subs);
-    if (subs.length === geselecteerdeAbonnementen.length) {
-      const complete = await handleCompleteUnsubscribe();
-      if (complete) {
-        const reason = await handleReasonSubmit();
-        if (reason) {
-          console.log("Reason added");
-          localStorage.setItem(
-            "unsubscribedSubs",
-            JSON.stringify(geselecteerdeAbonnementen)
-          );
-          router.push("../uitgeschreven");
-        }
-      }
+    if (geselecteerdeAbonnementen.length === 0 || reden === "") {
+      setWarning(
+        <div>
+          <p className={styles.warningText}>
+            Selecteer ten minste één abonnement en een reden
+          </p>
+        </div>
+      );
     } else {
-      const sub = await handleUnsubscribe();
-      if (sub) {
-        const reason = await handleReasonSubmit();
-        if (reason) {
-          console.log("Reason added");
-          localStorage.setItem(
-            "unsubscribedSubs",
-            JSON.stringify(geselecteerdeAbonnementen)
-          );
-          router.push("../uitgeschreven");
+      try {
+        if (subs.length === geselecteerdeAbonnementen.length) {
+          const complete = await handleCompleteUnsubscribe();
+          if (complete) {
+            const reason = await handleReasonSubmit();
+            if (reason) {
+              console.log("Reason added");
+              localStorage.setItem(
+                "unsubscribedSubs",
+                JSON.stringify(geselecteerdeAbonnementen)
+              );
+              router.push("../uitgeschreven");
+            }
+          }
+        } else {
+          const sub = await handleUnsubscribe();
+          if (sub) {
+            const reason = await handleReasonSubmit();
+            if (reason) {
+              console.log("Reason added");
+              localStorage.setItem(
+                "unsubscribedSubs",
+                JSON.stringify(geselecteerdeAbonnementen)
+              );
+              router.push("../uitgeschreven");
+            }
+          }
         }
+      } catch (error) {
+        console.error("Error during form submission:", error);
       }
     }
   };
