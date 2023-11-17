@@ -241,9 +241,9 @@ export default function ToevoegVeld(props) {
                   abonnees={lijsten}
                   setValue={handleCheckboxChange}
                 />
-                ) : (
-                  <></>
-                )}
+              ) : (
+                <></>
+              )}
               {toevoegen ? (
                 <div
                   className={`input-group ${styles.vorm} d-flex justify-items-center align-content-center`}
@@ -262,7 +262,7 @@ export default function ToevoegVeld(props) {
                     <div className={`${styles.eromheen} input-group-prepend`}>
                       <input
                         type="submit"
-                        className={`btn ${styles.knop} rounded p-2`}
+                        className={`btn ${styles.knopPrimary} rounded p-2`}
                         value="Lijst toevoegen"
                         onClick={handleLijstToevoegen}
                       />
@@ -271,7 +271,7 @@ export default function ToevoegVeld(props) {
                 </div>
               ) : (
                 <button
-                  className={`btn ${styles.knop} rounded`}
+                  className={`btn ${styles.knopPrimary} rounded`}
                   onClick={() => {
                     setToevoegen(true);
                   }}
@@ -285,7 +285,7 @@ export default function ToevoegVeld(props) {
           </div>
           <input
             type="submit"
-            className={`btn ${styles.knop} rounded mt-4`}
+            className={`btn ${styles.knopPrimary} rounded mt-4`}
             value="Lid toevoegen"
           />
         </form>
