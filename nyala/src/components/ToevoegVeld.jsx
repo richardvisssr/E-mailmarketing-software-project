@@ -5,16 +5,21 @@ import AbonnementenFormulier from "./categorieeënComponent";
 export default function ToevoegVeld(props) {
   const [data, setData] = useState({ email: undefined, lijst: [] });
   const [status, setStatus] = useState(false);
-  const [foutmelding, setFoutmelding] = useState("");
-  const [succes, setSucces] = useState(false);
   const [lijsten, setLijsten] = useState([
     "ICT",
     "CMD",
     "Leden",
     "Nieuwsbrief",
   ]);
+  const [toevoegen, setToevoegen] = useState(false);
+  const [melding, setMelding] = useState({ type: "", bericht: "" });
+  const [lijst, setLijst] = useState("");
 
   useEffect(() => {
+    const fetchLijsten = async () => {
+      const response = await fetch("http://localhost:3001/lijsten/add");
+    }
+    fetchLijsten();
     if (status) {
       const postEmail = async () => {
         try {
@@ -35,17 +40,23 @@ export default function ToevoegVeld(props) {
           if (response.ok) {
             setData({ email: undefined, lijst: [] });
             setStatus(false);
-            setSucces(true);
+            setMelding({
+              type: "succes",
+              bericht: "Email succesvol toegevoegd.",
+            });
           } else if (!response.ok) {
-            setFoutmelding(
-              "Er heeft zich een fout opgetreden tijdens het toevoegen."
-            );
+            setMelding({
+              type: "foutmelding",
+              bericht:
+                "Er heeft zich een fout opgetreden tijdens het toevoegen.",
+            });
             setSucces(false);
           }
         } catch (error) {
-          setFoutmelding(
-            "Er heeft zich een fout opgetreden tijdens het toevoegen."
-          );
+          setMelding({
+            type: "foutmelding",
+            bericht: "Er heeft zich een fout opgetreden tijdens het toevoegen.",
+          });
           setSucces(false);
         }
       };
@@ -53,30 +64,44 @@ export default function ToevoegVeld(props) {
     }
   }, [status]);
 
-  const melding = !succes ? (
-    <></>
-  ) : (
-    <div
-      className="alert alert-success d-flex justify-content-around"
-      role="alert"
-    >
-      <p>Email succesvol toegevoegd.</p>
-      <i className="bi bi-check"></i>
-    </div>
-  );
+  useEffect(() => {
+    const postLijsten = async () => {
+      try {
+        const response = await fetch("",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            lijst: data.email,
+          }),
+        });
+      } catch (error) {
 
-  const err =
-    foutmelding === "" ? (
-      <></>
-    ) : (
-      <div
-        className="alert alert-danger d-flex justify-content-around"
-        role="alert"
-      >
-        <p>{foutmelding}</p>
-        <i className="bi bi-exclamation-triangle"></i>
-      </div>
-    );
+      }
+    }
+    postLijsten();
+  }, [lijsten]);
+
+  const handleLijstToevoegen = (event) => {
+    event.preventDefault();
+    console.log("Sup");
+    if (lijst === "") {
+      setMelding({
+        type: "foutmelding",
+        bericht: "De lijst is niet ingevuld.",
+      });
+    } else {
+      setLijsten([...lijsten, lijst]);
+      setToevoegen(false);
+      setMelding({
+        type: "succes",
+        bericht: "De lijst is succesvol toegevoegd",
+      });
+    }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -94,15 +119,30 @@ export default function ToevoegVeld(props) {
     }
 
     if (data.email === "") {
-      setFoutmelding("Het emailadres is niet ingevuld.");
+      setMelding({
+        type: "foutmelding",
+        bericht: "Het emailadres is niet ingevuld.",
+      });
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-      setFoutmelding("Het emailadres is geen valide formaat!");
+      setMelding({
+        type: "foutmelding",
+        bericht: "Het emailadres is geen valide formaat.",
+      });
     } else if (data.lijst.length === 0) {
-      setFoutmelding("Er is geen mailinglijst gekozen.");
+      setMelding({
+        type: "foutmelding",
+        bericht: "Er is geen mailinglijst gekozen.",
+      });
     } else if (data.lijst.length > lijsten.length) {
-      setFoutmelding("Er zijn te veel mailinglijsten gekozen!");
+      setMelding({
+        type: "foutmelding",
+        bericht: "Er zijn te veel mailinglijsten gekozen.",
+      });
     } else if (inLijsten === false) {
-      setFoutmelding("De gekozen mailinglijst bestaat niet.");
+      setMelding({
+        type: "foutmelding",
+        bericht: "De gekozen mailinglijst bestaat niet.",
+      });
     } else {
       setStatus(true);
     }
@@ -110,17 +150,16 @@ export default function ToevoegVeld(props) {
 
   const handleEmailChange = (event) => {
     if (succes) {
-      setSucces(false);
+      setMelding({ type: "", bericht: "" });
     }
     setData({ ...data, email: event.target.value });
   };
 
   const handleCheckboxChange = (event) => {
     if (succes) {
-      setSucces(false);
+      setMelding({ type: "", bericht: "" });
     }
     const listName = event.target.value;
-    console.log(listName);
     const isSelected = data.lijst.includes(listName);
 
     if (isSelected) {
@@ -136,8 +175,32 @@ export default function ToevoegVeld(props) {
   return (
     <div className="d-flex justify-content-center align-items-center py-5">
       <div>
-        <div>{melding}</div>
-        <div>{err}</div>
+        <div>
+          {melding.type !== "succes" ? (
+            <></>
+          ) : (
+            <div
+              className="alert alert-success d-flex justify-content-around"
+              role="alert"
+            >
+              <p>{melding.bericht}</p>
+              <i className="bi bi-check"></i>
+            </div>
+          )}
+        </div>
+        <div>
+          {melding.type !== "foutmelding" ? (
+            <></>
+          ) : (
+            <div
+              className="alert alert-danger d-flex justify-content-around"
+              role="alert"
+            >
+              <p>{melding.bericht}</p>
+              <i className="bi bi-exclamation-triangle"></i>
+            </div>
+          )}
+        </div>
         <form
           className={`input-group ${styles.vorm} d-flex flex-column`}
           onSubmit={handleSubmit}
@@ -154,16 +217,54 @@ export default function ToevoegVeld(props) {
               onChange={handleEmailChange}
               value={data.email || ""}
             />
-            <AbonnementenFormulier
-              abonnees={lijsten}
-              setValue={handleCheckboxChange}
-            />
+            <div>
+              <AbonnementenFormulier
+                abonnees={lijsten}
+                setValue={handleCheckboxChange}
+              />
+              {toevoegen ? (
+                <div
+                  className={`input-group ${styles.vorm} d-flex justify-items-center align-content-center`}
+                >
+                  <div className="input-group mb-3">
+                    <input
+                      type="text"
+                      className={`form-control ${styles.invoer} p-2`}
+                      placeholder="Lijst"
+                      aria-describedby="basic-addon1"
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setLijst(value);
+                      }}
+                    />
+                    <div className={`${styles.eromheen} input-group-prepend`}>
+                      <input
+                        type="submit"
+                        className={`btn ${styles.knop} rounded p-2`}
+                        value="Lijst toevoegen"
+                        onClick={handleLijstToevoegen}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  className={`btn ${styles.knop} rounded`}
+                  onClick={() => {
+                    setToevoegen(true);
+                  }}
+                >
+                  Lijst aanmaken
+                </button>
+              )}
+            </div>
+
             <div className={`${styles.selectContainer}`}></div>
           </div>
           <input
             type="submit"
-            className={`btn ${styles.knop} rounded`}
-            value="Toevoegen"
+            className={`btn ${styles.knop} rounded mt-4`}
+            value="Lid toevoegen"
           />
         </form>
       </div>

@@ -1,8 +1,12 @@
 .knop {
     background-color: #E800E9;
     color: white;
-    width: 30%;
+    width: 40%;
     align-self: center;
+}
+
+.eromheen .knop {
+    width: 100%;
 }
 
 .vorm, .laber {
