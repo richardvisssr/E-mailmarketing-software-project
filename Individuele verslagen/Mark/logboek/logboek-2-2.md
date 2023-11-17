@@ -1,16 +1,6 @@
 # Logboek OW 2-2
 
-## Opmerkingen
-
-> [Hier is een Markdown Guide van GitHub](https://guides.github.com/features/mastering-markdown/)
-
-> [Gebruik eventueel deze handige table editor om de individuele tabellen te bewerken](https://www.tablesgenerator.com/markdown_tables)
-
-> [Hier is een lijstje met alle GitHub emojis](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md)
-
 ## Maandag 13 november
-
-> Eventueel informatieve algemene opmerkingen over deze dag.
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
@@ -20,8 +10,6 @@
 
 ## Dinsdag 14 november
 
-> Eventueel informatieve algemene opmerkingen over deze dag.
-
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
 | 3u | [Header/footer maken](https://github.com/link-naar-de-taak) | - | - | :satisfied: |[Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/36a1a4cb27dac4b77c5908ee3c1bc66bebf69f8a) |
@@ -30,8 +18,6 @@
 
 ## Woensdag 15 november
 
-> Eventueel informatieve algemene opmerkingen over deze dag.
-
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
 | 2u | [Front-end toevoeg formulier](https://github.com/HANICA-DWA/project-sep23-nyala/issues/27) | - | - | :satisfied: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/941f018ae37a1734b93f9a202f1c938437ea2001) | 
@@ -39,20 +25,16 @@
 
 ## Donderdag 16 november
 
-> Eventueel informatieve algemene opmerkingen over deze dag.
+> Door een assessment met Pim Haenen minder tijd gehad voor coderen.
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
-| | | | | | |
-
-
+| 1u | [Header/footer maken](https://github.com/HANICA-DWA/project-sep23-nyala/issues/40) | Richard heeft extra aandachtspunten gegeven en uitleg over emaillinks gegeven | Email href | :satisfied: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/499f625e712f2951c2a71cbc4e2696c124e5b415) |
+| 3u | [Front-end toevoeg formulieer](https://github.com/HANICA-DWA/project-sep23-nyala/issues/27) | - | - | :satisfied: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/cb2f995f086d4357460c1555f463f7251c4630d4) |
 
 ## Vrijdag 17 november
 
-> Eventueel informatieve algemene opmerkingen over deze dag.
-
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 0,5u | [README aanmaken in root project](https://github.com/HANICA-DWA/project-sep23-nyala/issues/13) | - | Beetje onduidelijk voor ons dat dit uberhaupt moest, waardoor we bijna te laat waren.  | :expressionless: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/c240e791f3768362a6761d6120555f1a855e34ca) |
 | | | | | | |
