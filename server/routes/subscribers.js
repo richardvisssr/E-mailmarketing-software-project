@@ -38,9 +38,10 @@ router.post("/reason", async (req, res) => {
 
 router.post("/subscribers/add", async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, abonnement } = req.body;
     const subscriber = {
       email,
+      abonnement,
     };
 
     const newSubscriber = new Subscriber(subscriber);

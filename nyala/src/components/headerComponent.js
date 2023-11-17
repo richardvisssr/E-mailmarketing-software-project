@@ -45,7 +45,7 @@ export default function HeaderComponent() {
         <span className="fs-4 text-dark">|</span>
         <li className="nav-item">
           <Link
-            href="/"
+            href="/beheerder/handmatigToevoegen"
             className={`${styles.linky} nav-link`}
             aria-current="page"
           >

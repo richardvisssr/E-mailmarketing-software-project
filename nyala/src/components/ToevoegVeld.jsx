@@ -17,25 +17,27 @@ export default function ToevoegVeld(props) {
   useEffect(() => {
     if (status) {
       const postEmail = async () => {
-        // const response = await fetch(`http://localhost:3001/subscribers/add`, {
-        //   method: "POST",
-        //   headers: {
-        //     Accept: "application/json",
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({
-        //     email: data.email,
-        //     lijst: data.lijst,
-        //   }),
-        // });
-        // if (response.ok) {
-        //   setData({ email: undefined, lijst: undefined });
-        //   setStatus(false);
-        //   setSucces(true);
-        // } else if (!response.ok) {
-        //   setSucces(false);
-        // }
-        console.log(data);
+        setSucces(false);
+        const response = await fetch(`http://localhost:3001/subscribers/add`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: data.email,
+            abonnement: data.lijst,
+          }),
+        });
+        if (response.ok) {
+          setData({ email: undefined, lijst: undefined });
+          setStatus(false);
+          setSucces(true);
+          console.log("succes!");
+        } else if (!response.ok) {
+          setSucces(false);
+          console.log("fout gegaan!");
+        }
       };
       postEmail();
     }
@@ -46,7 +48,7 @@ export default function ToevoegVeld(props) {
   ) : (
     <div className="alert alert-success d-flex justify-content-around" role="alert">
       <p>Email succesvol toegevoegd.</p>
-      <i class="bi bi-check"></i>
+      <i className="bi bi-check"></i>
     </div>
   );
 
