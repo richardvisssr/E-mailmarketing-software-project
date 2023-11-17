@@ -1,21 +1,24 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./uitschrijfForm.module.css";
 import AbonnementenFormulier from "./categorieeënComponent";
 
+// Hoofdcomponent voor het uitschrijfformulier
 export default function UitschrijfForm({}) {
+  // Initialisatie van React-hooks
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [reden, setReden] = useState("");
   const [customReason, setCustomReason] = useState("");
   const [warning, setWarning] = useState(null);
-  const [abonnementen, setAbonnementen] = useState([]);
   const [abbonementenLijst, setAbonnementenLijst] = useState();
   const [geselecteerdeAbonnementen, setGeselecteerdeAbonnementen] = useState(
     []
   );
+  const [subs, setSubs] = useState([]);
 
+  // Dit zijn de redenen gekregen van de PO
   const reasons = [
     "Te veel e-mails",
     "Irrelevantie",
@@ -24,6 +27,7 @@ export default function UitschrijfForm({}) {
     "Anders",
   ];
 
+  // Wanneer de gebruiker zich overal voor wilt uitschrijven en zichzelf wilt verwijderen uit de database
   const handleCompleteUnsubscribe = async () => {
     try {
       const unsubscribeResponse = await fetch(
@@ -59,6 +63,7 @@ export default function UitschrijfForm({}) {
     }
   };
 
+  // Wanneer de gebruiker een aantal abonnementen wilt verwijderen
   const handleUnsubscribe = async () => {
     try {
       const unsubscribeResponse = await fetch(
@@ -70,7 +75,7 @@ export default function UitschrijfForm({}) {
           },
           body: JSON.stringify({
             email: email,
-            abonnementen: geselecteerdeAbonnementen,
+            abonnement: geselecteerdeAbonnementen,
           }),
         }
       );
@@ -88,15 +93,30 @@ export default function UitschrijfForm({}) {
           </div>
         );
         return false;
-      } else {
+      } else if (unsubscribeResponse.status === 400) {
         console.log("Failed to unsubscribe");
+        setWarning(
+          <div>
+            <p className={styles.warningText}>Failed to unsubscribe</p>
+          </div>
+        );
+        return false;
+      } else {
+        console.log("Unexpected error during unsubscribe");
         return false;
       }
     } catch (error) {
       console.error("Error during unsubscribe:", error);
+      setWarning(
+        <div>
+          <p className={styles.warningText}>Error during unsubscribe</p>
+        </div>
+      );
+      return false;
     }
   };
 
+  // Reden van uitschrijven toevoegen aan de database
   const handleReasonSubmit = async () => {
     const geselecteerdeReden =
       reden === "Anders" ? customReason : reden === "" ? null : reden;
@@ -122,19 +142,32 @@ export default function UitschrijfForm({}) {
     }
   };
 
+  // Ophalen van abonnementen van de gebruiker
   const getAbonnementen = async (e) => {
     e.preventDefault();
     if (!email) {
       console.error("Email is required");
       return;
     }
-
     try {
-      const response = await fetch(`http://localhost:3001/${email}/subs`);
-      const abonnees = await response.json();
-      setAbonnementenLijst(
-        <AbonnementenFormulier abonnees={abonnees} setValue={changeValue} />
-      );
+      fetch(`http://localhost:3001/${email}/subs`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Failed to fetch abonnementen: ${response.status} ${response.statusText}`
+            );
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setSubs(data);
+          setAbonnementenLijst(
+            <AbonnementenFormulier abonnees={data} setValue={changeValue} />
+          );
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     } catch (error) {
       console.error("Error during subscriber retrieval:", error);
     }
@@ -142,9 +175,7 @@ export default function UitschrijfForm({}) {
 
   const changeValue = (event) => {
     const { value, checked } = event.target;
-
     setGeselecteerdeAbonnementen((prevSelection) => {
-      // Hier worden onderscheid gemaakt of de select al geselecteerd is of niet
       if (checked) {
         return [...prevSelection, value];
       } else {
@@ -170,14 +201,20 @@ export default function UitschrijfForm({}) {
     setCustomReason(e.target.value);
   };
 
+  // Hierin worden alle functies op zijn eigen tijd aangeroepen
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (abbonementenLijst.length === geselecteerdeAbonnementen.length) {
+    console.log(subs);
+    if (subs.length === geselecteerdeAbonnementen.length) {
       const complete = await handleCompleteUnsubscribe();
       if (complete) {
         const reason = await handleReasonSubmit();
         if (reason) {
           console.log("Reason added");
+          localStorage.setItem(
+            "unsubscribedSubs",
+            JSON.stringify(geselecteerdeAbonnementen)
+          );
           router.push("../uitgeschreven");
         }
       }
@@ -187,34 +224,19 @@ export default function UitschrijfForm({}) {
         const reason = await handleReasonSubmit();
         if (reason) {
           console.log("Reason added");
+          localStorage.setItem(
+            "unsubscribedSubs",
+            JSON.stringify(geselecteerdeAbonnementen)
+          );
           router.push("../uitgeschreven");
         }
       }
     }
   };
 
-  console.log(geselecteerdeAbonnementen);
-
-  return (
-    <div className="d-flex align-items-center flex-column">
-      <h1 className="mb-4 mt-3">Uitschrijven</h1>
-      <form>
-        <label className="form-label">Email-adres</label>
-        <div className="mb-3 d-flex justify-content-row">
-          <input
-            type="email"
-            className="form-control w-150"
-            onChange={changeEmail}
-          />
-          <button
-            onClick={getAbonnementen}
-            className={`ms-4 btn ${styles.knopPrimary}`}
-          >
-            Ophalen
-          </button>
-        </div>
-        {warning}
-        {abbonementenLijst}
+  const showRedenen = () => {
+    if (abbonementenLijst) {
+      return (
         <div className="mb-3">
           <label className="form-label">Selecteer uw reden</label>
           <ul>
@@ -229,7 +251,7 @@ export default function UitschrijfForm({}) {
                     name="unsubscribeReason"
                     value={reason}
                     onChange={() => changeReason(reason)}
-                    className={` me-2 control ${styles.customRadio}`}
+                    className={`me-2 control ${styles.customRadio}`}
                   />
                   {reason === "Anders" && (
                     <div className="d-flex align-items-center">
@@ -248,10 +270,39 @@ export default function UitschrijfForm({}) {
               </li>
             ))}
           </ul>
+          <button
+            onClick={handleSubmit}
+            className={`btn ${styles.knopPrimary}`}
+          >
+            Schrijf uit
+          </button>
         </div>
-        <button onClick={handleSubmit} className={`btn ${styles.knopPrimary}`}>
-          Schrijf uit
-        </button>
+      );
+    } else {
+    }
+  };
+
+  return (
+    <div className="d-flex align-items-center flex-column">
+      <h1 className="mb-4 mt-3">Uitschrijven</h1>
+      {warning}
+      <form>
+        <label className="form-label">Email-adres</label>
+        <div className="mb-3 d-flex justify-content-row">
+          <input
+            type="email"
+            className="form-control w-150"
+            onChange={changeEmail}
+          />
+          <button
+            onClick={getAbonnementen}
+            className={`ms-4 btn ${styles.knopPrimary}`}
+          >
+            Ophalen
+          </button>
+        </div>
+        {abbonementenLijst}
+        {showRedenen()}
       </form>
     </div>
   );

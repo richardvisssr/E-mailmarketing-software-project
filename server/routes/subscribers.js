@@ -36,16 +36,18 @@ router.post("/reason", async (req, res) => {
   }
 });
 
-router.post("/subscribers/add", async (req, res) => {
+router.put("/subscribers/add", async (req, res) => {
+  const { email, abonnementen } = req.body;
   try {
-    const { email } = req.body;
-    const subscriber = {
-      email,
-    };
+    // Check if the subscriber already exists
 
-    const newSubscriber = new Subscriber(subscriber);
-    await newSubscriber.save();
-    res.status(200).json({ message: "Subscriber added" });
+    await Subscriber.findOneAndUpdate(
+      { email: email },
+      { $addToSet: { abonnement: abonnementen } },
+      { upsert: true }
+    );
+
+    res.status(200).json({ message: "Subscriber updated" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal Server Error" });
@@ -68,18 +70,18 @@ router.delete("/unsubscribe", async (req, res) => {
 });
 
 router.delete("/unsubscribe/subs", async (req, res) => {
-  const { email, abonnementen } = req.body;
+  const { email, abonnement } = req.body;
 
   try {
-    const subscriber = await Subscriber.findOne({ email });
+    const subscriber = await Subscriber.findOne({ email: email });
 
     if (!subscriber) {
       return res.status(404).send({ message: "Subscriber not found" });
     }
 
-    if (abonnementen && abonnementen.length > 0) {
-      subscriber.abonnementen = subscriber.abonnementen.filter(
-        (subscription) => !abonnementen.includes(subscription)
+    if (abonnement && abonnement.length > 0) {
+      subscriber.abonnement = subscriber.abonnement.filter(
+        (subscription) => !abonnement.includes(subscription)
       );
     }
 

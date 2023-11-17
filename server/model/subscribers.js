@@ -29,7 +29,7 @@ const Unsubscriber = mongoose.model("Unsubscribe", unsubscribe);
 // const mat = new Subscriber({
 //   email: "Mat@mat.nl",
 //   naam: "Mat",
-//   abonnement: ["NRC", "Volkskrant"],
+//   abonnement: ["NRC", "Volkskrant", "iuebfgebvf"],
 // });
 
 // mat.save();
