@@ -1,7 +1,7 @@
 // AbonnementSelecteren.js
 "use client";
 import React, { useState, useEffect } from "react";
-import MultiSelect from "./MultiSelect"; // Update the path accordingly
+import AbonnementenFormulier from "./categorieeënComponent";
 
 function AbonnementSelecteren({ html }) {
   const [mailLijsten, setMailLijsten] = useState([]);
@@ -19,7 +19,11 @@ function AbonnementSelecteren({ html }) {
   useEffect(() => {
     if (selectedMailLijst.length > 0) {
       // Fetch the list of subscribers for the selected subscriptions using another HTTP request.
-      fetch(`http://localhost:3001/getSubscribers?selectedMailLijst=${selectedMailLijst.join(',')}`)
+      fetch(
+        `http://localhost:3001/getSubscribers?selectedMailLijst=${selectedMailLijst.join(
+          ","
+        )}`
+      )
         .then((response) => response.json())
         .then((data) => setSubscribers(data))
         .catch((error) => console.error(error));
@@ -27,12 +31,14 @@ function AbonnementSelecteren({ html }) {
   }, [selectedMailLijst]);
 
   const handleMailLijstChange = (event) => {
-    const value = event.target.value;
-    if (selectedMailLijst.includes(value)) {
-      setSelectedMailLijst(selectedMailLijst.filter(mail => mail !== value));
-    } else {
-      setSelectedMailLijst([...selectedMailLijst, value]);
-    }
+    const { checked, value } = event.target;
+    setSelectedMailLijst((prevSelected) => {
+      if (checked) {
+        return [...prevSelected, value];
+      } else {
+        return prevSelected.filter((item) => item !== value);
+      }
+    });
   };
 
   const handleSendEmailClick = async () => {
@@ -60,10 +66,9 @@ function AbonnementSelecteren({ html }) {
   return (
     <div className="container mt-4">
       <label className="form-label">Select subscriptions:</label>
-      <MultiSelect
-        options={mailLijsten[0]?.mailLijst || []}
-        selectedOptions={selectedMailLijst}
-        onChange={handleMailLijstChange}
+      <AbonnementenFormulier
+        abonnees={mailLijsten[0]?.mailLijst || []}
+        setValue={handleMailLijstChange}
       />
 
       {selectedMailLijst.length > 0 && (
