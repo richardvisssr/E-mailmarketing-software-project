@@ -11,12 +11,12 @@ export default function UitschrijfForm({}) {
   const [email, setEmail] = useState("");
   const [reden, setReden] = useState("");
   const [customReason, setCustomReason] = useState("");
-  const [warning, setWarning] = useState(null);
   const [abbonementenLijst, setAbonnementenLijst] = useState();
   const [geselecteerdeAbonnementen, setGeselecteerdeAbonnementen] = useState(
     []
   );
   const [subs, setSubs] = useState([]);
+  const [melding, setMelding] = useState({ type: "", bericht: "" });
 
   // Dit zijn de redenen gekregen van de PO
   const reasons = [
@@ -43,16 +43,14 @@ export default function UitschrijfForm({}) {
 
       if (unsubscribeResponse.status === 200) {
         console.log("Subscriber removed");
-        setWarning(null);
         localStorage.setItem("unsubscribedEmail", email);
         return true;
       } else if (unsubscribeResponse.status === 404) {
         console.log("Subscriber not found");
-        setWarning(
-          <div>
-            <p className={styles.warningText}>Vul een geldige email in</p>
-          </div>
-        );
+        setMelding({
+          type: "foutmelding",
+          bericht: "Email niet gevonden.",
+        });
         return false;
       } else {
         console.log("Failed to unsubscribe");
@@ -82,24 +80,17 @@ export default function UitschrijfForm({}) {
 
       if (unsubscribeResponse.status === 200) {
         console.log("Subscriber removed");
-        setWarning(null);
         localStorage.setItem("unsubscribedEmail", email);
         return true;
       } else if (unsubscribeResponse.status === 404) {
         console.log("Subscriber not found");
-        setWarning(
-          <div>
-            <p className={styles.warningText}>Vul een geldige email in</p>
-          </div>
-        );
+        setMelding({
+          type: "foutmelding",
+          bericht: "Email niet gevonden.",
+        });
         return false;
       } else if (unsubscribeResponse.status === 400) {
         console.log("Failed to unsubscribe");
-        setWarning(
-          <div>
-            <p className={styles.warningText}>Failed to unsubscribe</p>
-          </div>
-        );
         return false;
       } else {
         console.log("Unexpected error during unsubscribe");
@@ -107,11 +98,10 @@ export default function UitschrijfForm({}) {
       }
     } catch (error) {
       console.error("Error during unsubscribe:", error);
-      setWarning(
-        <div>
-          <p className={styles.warningText}>Error during unsubscribe</p>
-        </div>
-      );
+      setMelding({
+        type: "foutmelding",
+        bericht: "Er is iets misgegaan met uitschrijven.",
+      });
       return false;
     }
   };
