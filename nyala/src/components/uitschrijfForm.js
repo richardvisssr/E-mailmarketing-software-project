@@ -284,8 +284,33 @@ export default function UitschrijfForm({}) {
 
   return (
     <div className="d-flex align-items-center flex-column">
+      <div>
+        {melding.type !== "succes" ? (
+          <></>
+        ) : (
+          <div
+            className="alert alert-success d-flex justify-content-around"
+            role="alert"
+          >
+            <p>{melding.bericht}</p>
+            <i className="bi bi-check"></i>
+          </div>
+        )}
+      </div>
+      <div>
+        {melding.type !== "foutmelding" ? (
+          <></>
+        ) : (
+          <div
+            className="alert alert-danger d-flex justify-content-around"
+            role="alert"
+          >
+            <p>{melding.bericht}</p>
+            <i className="bi bi-exclamation-triangle"></i>
+          </div>
+        )}
+      </div>
       <h1 className="mb-4 mt-3">Uitschrijven</h1>
-      {warning}
       <form>
         <label className="form-label">Email-adres</label>
         <div className="mb-3 d-flex justify-content-row">
