@@ -10,13 +10,13 @@ export default function UitschrijfForm({}) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [reden, setReden] = useState("");
-  const [eigenReden, setEigenReden] = useState("");
-  const [waarschuwing, setWaarschuwing] = useState(null);
+  const [customReason, setCustomReason] = useState("");
   const [abbonementenLijst, setAbonnementenLijst] = useState();
   const [geselecteerdeAbonnementen, setGeselecteerdeAbonnementen] = useState(
     []
   );
   const [subs, setSubs] = useState([]);
+  const [melding, setMelding] = useState({ type: "", bericht: "" });
 
   // Dit zijn de redenen gekregen van de PO
   const reasons = [
@@ -42,17 +42,15 @@ export default function UitschrijfForm({}) {
       );
 
       if (unsubscribeResponse.status === 200) {
-        console.log("Abonee verwijderd");
-        setWaarschuwing(null);
+        console.log("Subscriber removed");
         localStorage.setItem("unsubscribedEmail", email);
         return true;
       } else if (unsubscribeResponse.status === 404) {
-        console.log("Kon de abonnee niet vinden");
-        setWaarschuwing(
-          <div>
-            <p className={styles.warningText}>Vul een geldige email in</p>
-          </div>
-        );
+        console.log("Subscriber not found");
+        setMelding({
+          type: "foutmelding",
+          bericht: "Email niet gevonden.",
+        });
         return false;
       } else {
         console.log("Uitschrijven mislukt");
@@ -81,27 +79,29 @@ export default function UitschrijfForm({}) {
       );
 
       if (unsubscribeResponse.status === 200) {
-        console.log("Inschrijvingen verwijderd");
-        setWaarschuwing(null);
+        console.log("Subscriber removed");
         localStorage.setItem("unsubscribedEmail", email);
         return true;
       } else if (unsubscribeResponse.status === 404) {
-        console.log("Abonnee niet gevonden");
-        setWaarschuwing(
-          <div>
-            <p className={styles.warningText}>Vul een geldige email in</p>
-          </div>
-        );
+        console.log("Subscriber not found");
+        setMelding({
+          type: "foutmelding",
+          bericht: "Email niet gevonden.",
+        });
         return false;
       } else if (unsubscribeResponse.status === 400) {
-        console.log("Uitschrijven mislukt");
+        console.log("Failed to unsubscribe");
         return false;
       } else {
         console.log("Er is iets misgegaan tijdens het uitschrijven");
         return false;
       }
     } catch (error) {
-      console.error("Error tijdens uitschrijven:", error);
+      console.error("Error during unsubscribe:", error);
+      setMelding({
+        type: "foutmelding",
+        bericht: "Er is iets misgegaan met uitschrijven.",
+      });
       return false;
     }
   };
@@ -290,8 +290,33 @@ export default function UitschrijfForm({}) {
 
   return (
     <div className="d-flex align-items-center flex-column">
+      <div>
+        {melding.type !== "succes" ? (
+          <></>
+        ) : (
+          <div
+            className="alert alert-success d-flex justify-content-around"
+            role="alert"
+          >
+            <p>{melding.bericht}</p>
+            <i className="bi bi-check"></i>
+          </div>
+        )}
+      </div>
+      <div>
+        {melding.type !== "foutmelding" ? (
+          <></>
+        ) : (
+          <div
+            className="alert alert-danger d-flex justify-content-around"
+            role="alert"
+          >
+            <p>{melding.bericht}</p>
+            <i className="bi bi-exclamation-triangle"></i>
+          </div>
+        )}
+      </div>
       <h1 className="mb-4 mt-3">Uitschrijven</h1>
-      {waarschuwing}
       <form>
         <label className="form-label">Email-adres</label>
         <div className="mb-3 d-flex justify-content-row">

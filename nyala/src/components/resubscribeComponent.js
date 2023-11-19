@@ -6,7 +6,7 @@ import styles from "./resubscribeComponent.module.css";
 
 export default function resubscribe({}) {
   const router = useRouter();
-  const [waarschuwing, setWaarschuwing] = useState(null);
+  const [melding, setMelding] = useState({ type: "", bericht: "" });
 
   const handleUndo = async () => {
     const unsubscribedEmail = localStorage.getItem("unsubscribedEmail");
@@ -20,20 +20,16 @@ export default function resubscribe({}) {
         localStorage.removeItem("unsubscribedSubs");
         router.push("/thuispagina");
       } else {
-        setWaarschuwing(
-          <div className="d-flex justify-content-center">
-            <p className={styles.warningText}>
-              Er ging iets mis met het herinschrijven
-            </p>
-          </div>
-        );
+        setMelding({
+          type: "foutmelding",
+          bericht: "Er is iets misgegaan met het herinschrijven.",
+        });
       }
     } else {
-      setWaarschuwing(
-        <div className="d-flex justify-content-center">
-          <p className={styles.warningText}>Voer een geldige email in</p>
-        </div>
-      );
+      setMelding({
+        type: "foutmelding",
+        bericht: "Schrijf je eerst uit met je email voordat je hier kom.",
+      });
     }
   };
 
@@ -66,6 +62,32 @@ export default function resubscribe({}) {
   return (
     <div>
       <div className="mt-3 d-flex justify-content-center">
+        <div>
+          {melding.type !== "succes" ? (
+            <></>
+          ) : (
+            <div
+              className="alert alert-success d-flex justify-content-around"
+              role="alert"
+            >
+              <p>{melding.bericht}</p>
+              <i className="bi bi-check"></i>
+            </div>
+          )}
+        </div>
+        <div>
+          {melding.type !== "foutmelding" ? (
+            <></>
+          ) : (
+            <div
+              className="alert alert-danger d-flex justify-content-around"
+              role="alert"
+            >
+              <p>{melding.bericht}</p>
+              <i className="bi bi-exclamation-triangle"></i>
+            </div>
+          )}
+        </div>
         <p className={`${styles.succesText}`}>
           U bent succesvol uitgeschreven{" "}
         </p>
@@ -81,7 +103,6 @@ export default function resubscribe({}) {
           Klik hier om u weer in te schrijven
         </button>
       </div>
-      {waarschuwing}
     </div>
   );
 }
