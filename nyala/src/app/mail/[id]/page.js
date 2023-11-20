@@ -1,12 +1,12 @@
 import React from "react";
-import HeaderComponent from "@/components/headerComponent";
-import MailBewerken from "@/components/MailBewerken";
+import HeaderComponent from "@/components/HeaderComponent";
+import MailEditor from "@/components/MailEditor";
 
 export default function Page({ params }) {
   return (
     <div>
       <HeaderComponent />
-      <MailBewerken id={params.id} />
+      <MailEditor id={params.id} />
     </div>
   );
 }

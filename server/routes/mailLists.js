@@ -1,10 +1,10 @@
 const express = require("express");
-const mailLijst = require("../model/mailLijsten");
+const mailList = require("../model/mailingList");
 const router = express.Router();
 
 router.get('/getList', async (req, res) => {
     try {
-      const subscriptions = await mailLijst.find();
+      const subscriptions = await mailList.find();
       res.json(subscriptions);
     } catch (err) {
       console.error(err);
@@ -15,7 +15,7 @@ router.get('/getList', async (req, res) => {
 router.put('/addList', async (req, res) => {
     const { name } = req.body;
   try {
-    const subscription = await mailLijst.collection('mailLijst').insertOne({ name });
+    const subscription = await mailList.collection('mailList').insertOne({ name });
     res.json(subscription);
   } catch (err) {
     console.error(err);

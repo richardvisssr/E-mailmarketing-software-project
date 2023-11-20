@@ -4,12 +4,10 @@ const imageSchema = new mongoose.Schema({
     dataUrl: String,
   });
 
-
 const designSchema = new mongoose.Schema({
   id: {
     type: String,
     required: true,
-    // unique: true
   },
   design: {
     type: Object,
@@ -24,7 +22,7 @@ const emailSchema = new mongoose.Schema({
     unique: true,
   },
   html: {
-    type: String, // Verander naar String omdat HTML een tekstuele representatie is
+    type: String,
     required: true,
   },
 });

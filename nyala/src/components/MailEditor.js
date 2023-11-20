@@ -2,18 +2,15 @@
 import React, { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { Modal, Button, Placeholder } from "react-bootstrap";
-import AbonnementSelecteren from "./MailVersturen";
+import SelectMailingLists from "./SendMail";
 
-// Use dynamic import to load the EmailEditor component only on the client side
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
-const MailBewerken = ({ id }) => {
+const MailEditor = ({ id }) => {
   const editorRef = useRef(null);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  console.log(id);
 
   const saveDesign = () => {
     editorRef.current.saveDesign(async (design) => {
@@ -25,24 +22,19 @@ const MailBewerken = ({ id }) => {
           },
           body: JSON.stringify({ design, id }),
         });
-
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-
         console.log("Design saved successfully");
       } catch (error) {
         console.error("Error saving design:", error);
       }
-
-      console.log(design);
     });
   };
 
   const sendEmail = () => {
     editorRef.current.exportHtml(async (data) => {
       const { design, html } = data;
-      console.log("exportHtml", html);
       try {
         const response = await fetch("http://localhost:3001/mail/sendEmail", {
           method: "PUT",
@@ -62,8 +54,6 @@ const MailBewerken = ({ id }) => {
   };
 
   const onReady = () => {
-    // editor is ready
-    console.log("onReady");
     onLoad(editorRef.current);
   };
 
@@ -125,22 +115,22 @@ const MailBewerken = ({ id }) => {
       {/* Place the Modal here */}
       <Modal show={show} onHide={handleClose} size="xl">
         <Modal.Header closeButton>
-          <Modal.Title>Wil je '{}' versturen?</Modal.Title>
+          <Modal.Title>Wil je '{id}' verturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Placeholder as={Modal.Body} animation="glow">
-            <AbonnementSelecteren/>
+            <SelectMailingLists />
           </Placeholder>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Annuleren
           </Button>
-          <Button>Versturen</Button>
         </Modal.Footer>
       </Modal>
     </div>
   );
+  
 };
 
-export default MailBewerken;
+export default MailEditor;

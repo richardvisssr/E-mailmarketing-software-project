@@ -1,30 +1,27 @@
-// AbonnementSelecteren.js
 "use client";
 import React, { useState, useEffect } from "react";
-import AbonnementenFormulier from "./categorieeënComponent";
+import SubscriptionForm from "./CategoriesComponent";
 import { useParams } from "next/navigation";
 
-function MailLijstenSelecteren() {
-  const [mailLijsten, setMailLijsten] = useState([]);
-  const [selectedMailLijst, setSelectedMailLijst] = useState([]);
+function SelectMailingLists() {
+  const [mailingList, setMailingLists] = useState([]);
+  const [selectedMailingList, setSelectedMailingList] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
   const [html, setHtml] = useState("");
   const { id } = useParams();
 
   useEffect(() => {
-    // Fetch the list of available subscriptions from the server using an HTTP request.
     fetch("http://localhost:3001/mail/getList")
       .then((response) => response.json())
-      .then((data) => setMailLijsten(data))
+      .then((data) => setMailingLists(data))
       .catch((error) => console.error(error));
   }, []);
 
   useEffect(() => {
-    if (selectedMailLijst.length > 0) {
-      // Use Promise.all to make parallel requests
+    if (selectedMailingList.length > 0) {
       Promise.all([
         fetch(
-          `http://localhost:3001/getSubscribers?selectedMailLijst=${selectedMailLijst.join(
+          `http://localhost:3001/getSubscribers?selectedMailingList=${selectedMailingList.join(
             ","
           )}`
         )
@@ -41,17 +38,16 @@ function MailLijstenSelecteren() {
           }),
       ])
         .then(([subscribersData, emailData]) => {
-          // Set subscribers and email data
           setSubscribers(subscribersData);
           setHtml(emailData.html);
         })
         .catch((error) => console.error("Error in Promise.all:", error));
     }
-  }, [selectedMailLijst, id]);
+  }, [selectedMailingList, id]);
 
-  const handleMailLijstChange = (event) => {
+  const handleMailingChange = (event) => {
     const { checked, value } = event.target;
-    setSelectedMailLijst((prevSelected) => {
+    setSelectedMailingList((prevSelected) => {
       if (checked) {
         return [...prevSelected, value];
       } else {
@@ -61,13 +57,9 @@ function MailLijstenSelecteren() {
   };
 
   const handleSendEmailClick = async () => {
-    subscribers.forEach((subscriber) => {
-      console.log(subscriber.email);
-    });
-
-    if (selectedMailLijst.length > 0) {
+    if (selectedMailingList.length > 0) {
       try {
-        const response = await fetch("/api/sendEmail", {
+        const response = await fetch(" http://localhost:3001/sendMail/sendEmail", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -88,15 +80,15 @@ function MailLijstenSelecteren() {
 
   return (
     <div className="container mt-4">
-      <label className="form-label">selecteer maillijsten:</label>
-      <AbonnementenFormulier
-        abonnees={mailLijsten[0]?.mailLijst || []}
-        setValue={handleMailLijstChange}
+      <label className="form-label">Selecteer Mailinglijst</label>
+      <SubscriptionForm
+        subscribers={mailingList[0]?.mailList || []}
+        setValue={handleMailingChange}
       />
 
-      {selectedMailLijst.length > 0 && (
+      {selectedMailingList.length > 0 && (
         <div className="mt-4">
-          <h2 className="h4">Subscribers van geselecteerde maillijst:</h2>
+          <h2 className="h4">Abonnees van geselecteerde mailinglijst:</h2>
           <table className="table table-bordered">
             <thead className="table-dark">
               <tr>
@@ -115,7 +107,7 @@ function MailLijstenSelecteren() {
           </table>
 
           <button className="btn btn-primary" onClick={handleSendEmailClick}>
-            Verstuur Mail
+            Mail Versturen
           </button>
         </div>
       )}
@@ -123,4 +115,4 @@ function MailLijstenSelecteren() {
   );
 }
 
-export default MailLijstenSelecteren;
+export default SelectMailingLists;

@@ -16,16 +16,13 @@ router.get("/loadDesign/:id", async (req, res) => {
 router.put("/saveDesign", async (req, res) => {
   const id = req.body.id;
   const design = req.body.design;
-
   try {
     const existingDesign = await Design.findOne({ id });
     if (existingDesign) {
-      // Update existing design
       existingDesign.design = design;
       await existingDesign.save();
       res.status(200).send("Design updated successfully");
     } else {
-      // Create a new design
       const newDesign = new Design({ id, design });
       await newDesign.save();
       res.status(200).send("Design saved successfully");
@@ -39,11 +36,10 @@ router.put("/saveDesign", async (req, res) => {
 router.post("/saveImage", async (req, res) => {
   try {
     const { image } = req.body;
-    // Sla de afbeelding op in de database
     const savedImage = await Image.create({ dataUrl: image });
     res.json({ success: true, savedImage });
   } catch (error) {
-    console.error("Fout bij opslaan van de afbeelding:", error);
+    console.error("Error while saving the image:", error);
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 });
@@ -51,15 +47,12 @@ router.post("/saveImage", async (req, res) => {
 router.put("/sendEmail", async (req, res) => {
   const id = req.body.id;
   const html = req.body.html;
-
   try {
-    // Zoek naar het bestaande e-mailontwerp met de opgegeven id
     const existingHtml = await Email.findOneAndUpdate(
       { id },
       { html },
-      { upsert: true, new: true } // upsert: true maakt een nieuw ontwerp aan als het niet bestaat
+      { upsert: true, new: true }
     );
-
     res.status(200).send("Design saved successfully");
   } catch (error) {
     console.error("Error saving design:", error);
