@@ -5,5 +5,12 @@
     "express-session": "^1.17.3",
     "mongoose": "^8.0.0",
     "ws": "^8.14.2"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
   }
 }

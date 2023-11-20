@@ -26,8 +26,6 @@ function Page() {
             title: `Template ${bodyId}`,
           };
         });
-
-        console.log(templateObject);
         setTemplates(templateObject);
       } catch (error) {
         console.error('Error fetching data:', error);
