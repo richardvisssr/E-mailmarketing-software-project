@@ -33,6 +33,7 @@ router.delete("/unsubscribe", async (req, res) => {
   }
 });
 
+<<<<<<< Updated upstream
 router.post("/reason", async (req, res) => {
   const { reden } = req.body;
 
@@ -42,6 +43,60 @@ router.post("/reason", async (req, res) => {
     });
     await unsubscriber.save();
     return res.status(200).send({ message: "Reason added" });
+=======
+router.put("/subscribers/add", async (req, res) => {
+  const { email, abonnementen } = req.body;
+  try {
+    await Subscriber.findOneAndUpdate(
+      { email: email },
+      { $addToSet: { abonnement: abonnementen } },
+      { upsert: true }
+    );
+
+    res.status(200).json({ message: "Subscriber updated" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.delete("/unsubscribe", async (req, res) => {
+  const { email } = req.body;
+  try {
+    const subscriber = await Subscriber.findOneAndDelete({
+      email: email,
+    });
+    if (!subscriber) {
+      return res.status(404).send({ message: "Subscriber not found" });
+    }
+    return res.status(200).send({ message: "Subscriber removed" });
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
+router.delete("/unsubscribe/subs", async (req, res) => {
+  const { email, abonnement } = req.body;
+
+  try {
+    const subscriber = await Subscriber.findOne({ email: email });
+
+    if (!subscriber) {
+      return res.status(404).send({ message: "Subscriber not found" });
+    }
+
+    if (abonnement && abonnement.length > 0) {
+      subscriber.abonnement = subscriber.abonnement.filter(
+        (subscription) => !abonnement.includes(subscription)
+      );
+    }
+
+    await subscriber.save();
+
+    return res
+      .status(200)
+      .send({ message: "Abonnementen removed successfully" });
+>>>>>>> Stashed changes
   } catch (error) {
     return res.status(500).send(error);
   }
