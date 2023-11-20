@@ -11,7 +11,6 @@ export default function ResubscribeComponent({}) {
   const handleUndo = async () => {
     const unsubscribedEmail = localStorage.getItem("unsubscribedEmail");
     const unsubscribedSubs = localStorage.getItem("unsubscribedSubs");
-    console.log(unsubscribedEmail, unsubscribedSubs);
     if (unsubscribedEmail && unsubscribedSubs) {
       const subsArray = JSON.parse(unsubscribedSubs);
       const success = await resubscribe(unsubscribedEmail, subsArray);
@@ -26,10 +25,6 @@ export default function ResubscribeComponent({}) {
         });
       }
     } else {
-      setWarning({
-        type: "wrong",
-        bericht: "Schrijf je eerst uit met je email voordat je hier kom.",
-      });
     }
   };
 

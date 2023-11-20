@@ -195,13 +195,10 @@ export default function UnsubscribeForm({}) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedSubs.length === 0 || reason === "") {
-      setWarning(
-        <div>
-          <p className={styles.warningText}>
-            Selecteer ten minste één abonnement en een reden
-          </p>
-        </div>
-      );
+      setWarning({
+        type: "wrong",
+        bericht: "Selecteer minstens een abonnement en een reden.",
+      });
     } else {
       try {
         if (subs.length === selectedSubs.length) {
