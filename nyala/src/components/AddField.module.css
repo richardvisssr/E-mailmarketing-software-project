@@ -1,11 +1,11 @@
-.knop {
+.button {
   background-color: #e800e9;
   color: white;
   width: 40%;
   align-self: center;
 }
 
-.knopSecondary {
+.buttonSecondary {
   --bs-btn-color: #fff;
   --bs-btn-bg: #779bef;
   --bs-btn-border-color: #779bef;
@@ -14,7 +14,7 @@
   --bs-btn-hover-border-color: #62b1ed;
 }
 
-.knopPrimary {
+.buttonPrimary {
   --bs-btn-color: #fff;
   --bs-btn-bg: #a66cf2;
   --bs-btn-border-color: #a66cf2;
@@ -23,16 +23,16 @@
   --bs-btn-hover-border-color: #c150f3;
 }
 
-.eromheen .knop {
+.around .button {
   width: 100%;
 }
 
-.vorm,
-.laber {
+.form,
+.label {
   width: 100%;
 }
 
-.invoer {
+.entry {
   border-style: solid;
   border-color: #e800e9;
   width: 100%;

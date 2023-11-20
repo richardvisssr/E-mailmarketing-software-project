@@ -1,28 +1,29 @@
 import { useEffect, useState } from "react";
-import styles from "./ToevoegVeld.module.css";
+import styles from "./AddField.module.css";
 import AbonnementenFormulier from "./categorieeënComponent";
 
 export default function ToevoegVeld() {
-  const [data, setData] = useState({ email: undefined, lijst: [] });
+  const [data, setData] = useState({ email: undefined, list: [] });
   const [status, setStatus] = useState(false);
-  const [lijsten, setLijsten] = useState([]);
-  const [toevoegen, setToevoegen] = useState(false);
-  const [melding, setMelding] = useState({ type: "", bericht: "" });
-  const [lijst, setLijst] = useState("");
+  const [lists, setLists] = useState([]);
+  const [add, setAdd] = useState(false);
+  const [notification, setNotification] = useState({ type: "", message: "" });
+  const [list, setList] = useState("");
 
   useEffect(() => {
-    const fetchLijsten = async () => {
-      const response = await fetch("http://localhost:3001/mail/getList");
+    const fetchlists = async () => {
+      const response = await fetch("http://localhost:3001/mail/getlist");
       const body = await response.json();
       if (!response.ok) {
-        setMelding({
-          type: "foutmelding",
-          bericht: "Er is iets foutgegaan tijdens het ophalen",
+        setNotification({
+          type: "error",
+          message: "Er is iets foutgegaan tijdens het ophalen",
         });
+      } else {
+        setLists(body[0].mailLijst);
       }
-      setLijsten(body[0].mailLijst);
     };
-    fetchLijsten();
+    fetchlists();
 
     if (status) {
       const postEmail = async () => {
@@ -37,29 +38,29 @@ export default function ToevoegVeld() {
               },
               body: JSON.stringify({
                 email: data.email,
-                abonnement: data.lijst,
+                abonnement: data.list,
               }),
             }
           );
           if (response.ok) {
-            setData({ email: undefined, lijst: [] });
+            setData({ email: undefined, list: [] });
             setStatus(false);
-            setMelding({
+            setNotification({
               type: "succes",
-              bericht: "Email succesvol toegevoegd.",
+              message: "Email succesvol toegevoegd.",
             });
           } else if (!response.ok) {
-            setMelding({
-              type: "foutmelding",
-              bericht:
+            setNotification({
+              type: "error",
+              message:
                 "Er heeft zich een fout opgetreden tijdens het toevoegen van de mail.",
             });
             setSucces(false);
           }
         } catch (error) {
-          setMelding({
-            type: "foutmelding",
-            bericht:
+          setNotification({
+            type: "error",
+            message:
               "Er heeft zich een fout opgetreden tijdens het toevoegen van de mail.",
           });
           setSucces(false);
@@ -70,96 +71,96 @@ export default function ToevoegVeld() {
   }, [status]);
 
   useEffect(() => {
-    if (lijst !== "") {
-      const postLijsten = async () => {
+    if (list !== "") {
+      const postList = async () => {
         try {
-          const response = await fetch("http://localhost:3001/mail/addList", {
+          const response = await fetch("http://localhost:3001/mail/addlist", {
             method: "PUT",
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              name: lijst,
+              name: list,
             }),
           });
           if (response.ok) {
-            setMelding({
+            setNotification({
               type: "succes",
-              bericht: "De lijst is succesvol toegevoegd",
+              message: "De list is succesvol toegevoegd",
             });
           } else if (!response.ok) {
-            setMelding({
-              type: "foutmelding",
-              bericht:
-                "Er heeft zich een fout opgetreden tijdens het toevoegen van de lijst.",
+            setNotification({
+              type: "error",
+              message:
+                "Er heeft zich een fout opgetreden tijdens het add van de list.",
             });
           }
         } catch (error) {
-          setMelding({
-            type: "foutmelding",
-            bericht:
-              "Er heeft zich een fout opgetreden tijdens het toevoegen van de lijst.",
+          setNotification({
+            type: "error",
+            message:
+              "Er heeft zich een fout opgetreden tijdens het add van de list.",
           });
         }
       };
-      postLijsten();
+      postList();
     }
-  }, [lijsten]);
+  }, [lists]);
 
-  const handleLijstToevoegen = (event) => {
+  const handleListAdd = (event) => {
     event.preventDefault();
 
-    if (lijst === "") {
-      setMelding({
-        type: "foutmelding",
-        bericht: "De lijst is niet ingevuld.",
+    if (list === "") {
+      setNotification({
+        type: "error",
+        message: "De list is niet ingevuld.",
       });
     } else {
-      setLijsten([...lijsten, lijst]);
-      setToevoegen(false);
+      setLists([...lists, list]);
+      setAdd(false);
     }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    let inLijsten = true;
+    let inLists = true;
 
-    if (data.lijst.length === 0) {
-      inLijsten = false;
+    if (data.list.length === 0) {
+      inLists = false;
     } else {
-      data.lijst.forEach((lijst) => {
-        if (!lijsten.includes(lijst)) {
-          inLijsten = false;
+      data.list.forEach((list) => {
+        if (!lists.includes(list)) {
+          inLists = false;
         }
       });
     }
 
     if (data.email === "") {
-      setMelding({
-        type: "foutmelding",
-        bericht: "Het emailadres is niet ingevuld.",
+      setNotification({
+        type: "error",
+        message: "Het emailadres is niet ingevuld.",
       });
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-      setMelding({
-        type: "foutmelding",
-        bericht: "Het emailadres is geen valide formaat.",
+      setNotification({
+        type: "error",
+        message: "Het emailadres is geen valide formaat.",
       });
-    } else if (data.lijst.length === 0) {
-      setMelding({
-        type: "foutmelding",
-        bericht: "Er is geen mailinglijst gekozen.",
+    } else if (data.list.length === 0) {
+      setNotification({
+        type: "error",
+        message: "Er is geen mailinglist gekozen.",
       });
-    } else if (data.lijst.length > lijsten.length) {
-      setMelding({
-        type: "foutmelding",
-        bericht: "Er zijn te veel mailinglijsten gekozen.",
+    } else if (data.list.length > lists.length) {
+      setNotification({
+        type: "error",
+        message: "Er zijn te veel mailinglists gekozen.",
       });
-    } else if (inLijsten === false) {
-      setMelding({
-        type: "foutmelding",
-        bericht: "De gekozen mailinglijst bestaat niet.",
+    } else if (inlists === false) {
+      setNotification({
+        type: "error",
+        message: "De gekozen mailinglist bestaat niet.",
       });
     } else {
       setStatus(true);
@@ -167,26 +168,26 @@ export default function ToevoegVeld() {
   };
 
   const handleEmailChange = (event) => {
-    if (melding.type === "succes") {
-      setMelding({ type: "", bericht: "" });
+    if (notification.type === "succes") {
+      setNotification({ type: "", message: "" });
     }
     setData({ ...data, email: event.target.value });
   };
 
   const handleCheckboxChange = (event) => {
-    if (melding.type === "succes") {
-      setMelding({ type: "", bericht: "" });
+    if (notification.type === "succes") {
+      setNotification({ type: "", message: "" });
     }
     const listName = event.target.value;
-    const isSelected = data.lijst.includes(listName);
+    const isSelected = data.list.includes(listName);
 
     if (isSelected) {
       setData({
         ...data,
-        lijst: [...data.lijst.filter((list) => list !== listName)],
+        list: [...data.list.filter((list) => list !== listName)],
       });
     } else {
-      setData({ ...data, lijst: [...data.lijst, listName] });
+      setData({ ...data, list: [...data.list, listName] });
     }
   };
 
@@ -194,86 +195,86 @@ export default function ToevoegVeld() {
     <div className="d-flex justify-content-center align-items-center py-5">
       <div>
         <div>
-          {melding.type !== "succes" ? (
+          {notification.type !== "succes" ? (
             <></>
           ) : (
             <div
               className="alert alert-success d-flex justify-content-around"
               role="alert"
             >
-              <p>{melding.bericht}</p>
+              <p>{notification.message}</p>
               <i className="bi bi-check"></i>
             </div>
           )}
         </div>
         <div>
-          {melding.type !== "foutmelding" ? (
+          {notification.type !== "error" ? (
             <></>
           ) : (
             <div
               className="alert alert-danger d-flex justify-content-around"
               role="alert"
             >
-              <p>{melding.bericht}</p>
+              <p>{notification.message}</p>
               <i className="bi bi-exclamation-triangle"></i>
             </div>
           )}
         </div>
         <form
-          className={`input-group ${styles.vorm} d-flex flex-column`}
+          className={`input-group ${styles.form} d-flex flex-column`}
           onSubmit={handleSubmit}
         >
-          <label htmlFor="vorm" className={`${styles.label} mb-2 rounded`}>
+          <label htmlFor="form" className={`${styles.label} mb-2 rounded`}>
             Vul een email in, om toe te voegen aan een emaillijst
           </label>
-          <div id="vorm">
+          <div id="form">
             <input
               type="text"
-              className={`form-control ${styles.invoer} p-2 mb-3`}
+              className={`form-control ${styles.entry} p-2 mb-3`}
               placeholder="Email"
               aria-describedby="basic-addon1"
               onChange={handleEmailChange}
               value={data.email || ""}
             />
             <div>
-              {lijsten.length > 0 ? (
+              {Array.isArray(lists) && lists.length > 0 ? (
                 <AbonnementenFormulier
-                  abonnees={lijsten}
+                  abonnees={lists}
                   setValue={handleCheckboxChange}
                 />
               ) : (
-                <></>
+                <p>Er zijn geen maillijsten.</p>
               )}
-              {toevoegen ? (
+              {add ? (
                 <div
-                  className={`input-group ${styles.vorm} d-flex justify-items-center align-content-center`}
+                  className={`input-group ${styles.form} d-flex justify-items-center align-content-center`}
                 >
                   <div className="input-group mb-3">
                     <input
                       type="text"
-                      className={`form-control ${styles.invoer} p-2`}
-                      placeholder="Lijst"
+                      className={`form-control ${styles.entry} p-2`}
+                      placeholder="list"
                       aria-describedby="basic-addon1"
                       onChange={(e) => {
                         const value = e.target.value;
-                        setLijst(value);
+                        setList(value);
                       }}
                     />
-                    <div className={`${styles.eromheen} input-group-prepend`}>
+                    <div className={`${styles.around} input-group-prepend`}>
                       <input
                         type="submit"
-                        className={`btn ${styles.knopPrimary} rounded p-2`}
-                        value="Lijst toevoegen"
-                        onClick={handleLijstToevoegen}
+                        className={`btn ${styles.buttonPrimary} rounded p-2`}
+                        value="list add"
+                        onClick={handleListAdd}
                       />
                     </div>
                   </div>
                 </div>
               ) : (
                 <button
-                  className={`btn ${styles.knopPrimary} rounded`}
+                  className={`btn ${styles.buttonPrimary} rounded`}
                   onClick={() => {
-                    setToevoegen(true);
+                    setAdd(true);
                   }}
                 >
                   Lijst aanmaken
@@ -285,8 +286,8 @@ export default function ToevoegVeld() {
           </div>
           <input
             type="submit"
-            className={`btn ${styles.knopPrimary} rounded mt-4`}
-            value="Lid toevoegen"
+            className={`btn ${styles.buttonPrimary} rounded mt-4`}
+            value="Email toevoegen"
           />
         </form>
       </div>
