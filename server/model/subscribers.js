@@ -6,18 +6,18 @@ const subscribers = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  naam: {
+  name: {
     type: String,
     required: false,
   },
-  abonnement: {
+  subscription: {
     type: [String],
     required: true,
   },
 });
 
 const unsubscribe = new mongoose.Schema({
-  reden: {
+  reason: {
     type: String,
     required: false,
   },
