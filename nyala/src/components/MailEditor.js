@@ -112,7 +112,6 @@ const MailEditor = ({ id }) => {
         </button>
       </div>
 
-      {/* Place the Modal here */}
       <Modal show={show} onHide={handleClose} size="xl">
         <Modal.Header closeButton>
           <Modal.Title>Wil je '{id}' verturen?</Modal.Title>
@@ -130,7 +129,6 @@ const MailEditor = ({ id }) => {
       </Modal>
     </div>
   );
-  
 };
 
 export default MailEditor;

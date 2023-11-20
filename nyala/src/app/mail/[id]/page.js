@@ -5,7 +5,6 @@ import MailEditor from "@/components/MailEditor";
 export default function Page({ params }) {
   return (
     <div>
-      <HeaderComponent />
       <MailEditor id={params.id} />
     </div>
   );
