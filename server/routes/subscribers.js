@@ -40,7 +40,6 @@ router.get("/:subscriber/subs", async (req, res) => {
   }
 });
 
-<<<<<<< Updated upstream
 router.post("/reason", async (req, res) => {
   const { reden } = req.body;
 
@@ -50,17 +49,6 @@ router.post("/reason", async (req, res) => {
     });
     await unsubscriber.save();
     return res.status(200).send({ message: "Reason added" });
-=======
-router.put("/subscribers/add", async (req, res) => {
-  const { email, abonnementen } = req.body;
-  try {
-    await Subscriber.findOneAndUpdate(
-      { email: email },
-      { $addToSet: { abonnement: abonnementen } },
-      { upsert: true }
-    );
-
-    res.status(200).json({ message: "Subscriber updated" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal Server Error" });
