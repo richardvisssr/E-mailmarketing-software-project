@@ -1,22 +1,18 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import styles from "./uitschrijfForm.module.css";
-import AbonnementenFormulier from "./CategorieeënComponent";
+import styles from "./UnsubscribeForm.module.css";
+import AbonnementenFormulier from "./CategoriesComponent";
 
-// Hoofdcomponent voor het uitschrijfformulier
-export default function UitschrijfForm({}) {
-  // Initialisatie van React-hooks
+export default function UnsubscribeForm({}) {
   const router = useRouter();
   const [email, setEmail] = useState("");
-  const [reden, setReden] = useState("");
+  const [reason, setReason] = useState("");
   const [customReason, setCustomReason] = useState("");
-  const [abbonementenLijst, setAbonnementenLijst] = useState();
-  const [geselecteerdeAbonnementen, setGeselecteerdeAbonnementen] = useState(
-    []
-  );
+  const [subscribersList, setSubscribersList] = useState();
+  const [selectedSubs, setSelectedSubs] = useState([]);
   const [subs, setSubs] = useState([]);
-  const [melding, setMelding] = useState({ type: "", bericht: "" });
+  const [warning, setWarning] = useState({ type: "", bericht: "" });
 
   // Dit zijn de redenen gekregen van de PO
   const reasons = [
@@ -47,17 +43,17 @@ export default function UitschrijfForm({}) {
         return true;
       } else if (unsubscribeResponse.status === 404) {
         console.log("Subscriber not found");
-        setMelding({
-          type: "foutmelding",
-          bericht: "Email niet gevonden.",
+        setWarning({
+          type: "wrong",
+          bericht: "Vul een geldige email in.",
         });
         return false;
       } else {
-        console.log("Uitschrijven mislukt");
+        console.log("Something went wrong during unsubscribe");
         return false;
       }
     } catch (error) {
-      console.error("Error tijdens uitschrijven:", error);
+      console.error("Error while unsubscribing:", error);
     }
   };
 
@@ -73,7 +69,7 @@ export default function UitschrijfForm({}) {
           },
           body: JSON.stringify({
             email: email,
-            abonnement: geselecteerdeAbonnementen,
+            abonnement: selectedSubs,
           }),
         }
       );
@@ -84,23 +80,23 @@ export default function UitschrijfForm({}) {
         return true;
       } else if (unsubscribeResponse.status === 404) {
         console.log("Subscriber not found");
-        setMelding({
-          type: "foutmelding",
-          bericht: "Email niet gevonden.",
+        setWarning({
+          type: "wrong",
+          bericht: "Vul een geldige email in.",
         });
         return false;
       } else if (unsubscribeResponse.status === 400) {
         console.log("Failed to unsubscribe");
         return false;
       } else {
-        console.log("Er is iets misgegaan tijdens het uitschrijven");
+        console.log("Something went wrong during unsubscribing");
         return false;
       }
     } catch (error) {
       console.error("Error during unsubscribe:", error);
-      setMelding({
-        type: "foutmelding",
-        bericht: "Er is iets misgegaan met uitschrijven.",
+      setWarning({
+        type: "wrong",
+        bericht: "Er ging iets mis met het uitschrijven.",
       });
       return false;
     }
@@ -109,7 +105,7 @@ export default function UitschrijfForm({}) {
   // Reden van uitschrijven toevoegen aan de database
   const handleReasonSubmit = async () => {
     const geselecteerdeReden =
-      reden === "Anders" ? eigenReden : reden === "" ? null : reden;
+      reason === "Anders" ? customReason : reason === "" ? null : reason;
 
     try {
       const reasonResponse = await fetch("http://localhost:3001/reason", {
@@ -121,14 +117,14 @@ export default function UitschrijfForm({}) {
       });
 
       if (reasonResponse.status === 200) {
-        console.log("Reden toegevoegd");
+        console.log("Reason added");
         return true;
       } else {
-        console.log("Het toevoegen van de reden is mislukt");
+        console.log("Something went wrong during adding reason");
         return false;
       }
     } catch (error) {
-      console.error("Error tijdens toevoegen reden:", error);
+      console.error("Error while adding reason:", error);
     }
   };
 
@@ -136,27 +132,26 @@ export default function UitschrijfForm({}) {
   const getAbonnementen = async (e) => {
     e.preventDefault();
     if (!email) {
-      console.error("Email is verplicht");
+      console.error("Email is required");
       return;
     }
     try {
       fetch(`http://localhost:3001/${email}/subs`)
         .then((response) => {
           if (!response.ok) {
-            setWaarschuwing(
-              <div>
-                <p className={styles.warningText}>Vul een geldige email in</p>
-              </div>
-            );
+            setWarning({
+              type: "foutmelding",
+              bericht: "Vul een geldige email in.",
+            });
             throw new Error(
-              `Er ging iets mist met het ophalen van de abonnementen: ${response.status} ${response.statusText}`
+              `Something went wrong with fetching the subs: ${response.status} ${response.statusText}`
             );
           }
           return response.json();
         })
         .then((data) => {
           setSubs(data);
-          setAbonnementenLijst(
+          setSubscribersList(
             <AbonnementenFormulier abonnees={data} setValue={changeValue} />
           );
         })
@@ -164,13 +159,13 @@ export default function UitschrijfForm({}) {
           console.error(error);
         });
     } catch (error) {
-      console.error("Error tijdens het ophalen van abonnementen:", error);
+      console.error("Error while fetching the data:", error);
     }
   };
 
   const changeValue = (event) => {
     const { value, checked } = event.target;
-    setGeselecteerdeAbonnementen((prevSelection) => {
+    setSelectedSubs((prevSelection) => {
       if (checked) {
         return [...prevSelection, value];
       } else {
@@ -185,22 +180,22 @@ export default function UitschrijfForm({}) {
   };
 
   const changeReason = (selectedReason) => {
-    setReden(selectedReason);
+    setReason(selectedReason);
 
     if (selectedReason === "Anders") {
-      setEigenReden("");
+      setCustomReason("");
     }
   };
 
   const handleeigenRedenChange = (e) => {
-    setEigenReden(e.target.value);
+    setCustomReason(e.target.value);
   };
 
   // Hierin worden alle functies op zijn eigen tijd aangeroepen
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (geselecteerdeAbonnementen.length === 0 || reden === "") {
-      setWaarschuwing(
+    if (selectedSubs.length === 0 || reason === "") {
+      setWarning(
         <div>
           <p className={styles.warningText}>
             Selecteer ten minste één abonnement en een reden
@@ -209,14 +204,14 @@ export default function UitschrijfForm({}) {
       );
     } else {
       try {
-        if (subs.length === geselecteerdeAbonnementen.length) {
+        if (subs.length === selectedSubs.length) {
           const complete = await handleCompleteUnsubscribe();
           if (complete) {
             const reason = await handleReasonSubmit();
             if (reason) {
               localStorage.setItem(
                 "unsubscribedSubs",
-                JSON.stringify(geselecteerdeAbonnementen)
+                JSON.stringify(selectedSubs)
               );
               router.push("../uitgeschreven");
             }
@@ -228,7 +223,7 @@ export default function UitschrijfForm({}) {
             if (reason) {
               localStorage.setItem(
                 "unsubscribedSubs",
-                JSON.stringify(geselecteerdeAbonnementen)
+                JSON.stringify(selectedSubs)
               );
               router.push("../uitgeschreven");
             }
@@ -241,7 +236,7 @@ export default function UitschrijfForm({}) {
   };
 
   const showRedenen = () => {
-    if (abbonementenLijst) {
+    if (subscribersList) {
       return (
         <div className="mb-3">
           <label className="form-label">Selecteer uw reden</label>
@@ -266,7 +261,7 @@ export default function UitschrijfForm({}) {
                         type="text"
                         className="form-control"
                         placeholder="Typ hier uw reden"
-                        value={eigenReden}
+                        value={customReason}
                         onChange={handleeigenRedenChange}
                       />
                     </div>
@@ -291,39 +286,40 @@ export default function UitschrijfForm({}) {
   return (
     <div className="d-flex align-items-center flex-column">
       <div>
-        {melding.type !== "succes" ? (
+        {warning.type !== "succes" ? (
           <></>
         ) : (
           <div
             className="alert alert-success d-flex justify-content-around"
             role="alert"
           >
-            <p>{melding.bericht}</p>
-            <i className="bi bi-check"></i>
+            <p>{warning.bericht}</p>
+            <i className="ms-2 bi bi-check"></i>
           </div>
         )}
       </div>
       <div>
-        {melding.type !== "foutmelding" ? (
+        {warning.type !== "wrong" ? (
           <></>
         ) : (
           <div
             className="alert alert-danger d-flex justify-content-around"
             role="alert"
           >
-            <p>{melding.bericht}</p>
-            <i className="bi bi-exclamation-triangle"></i>
+            <p>{warning.bericht}</p>
+            <i className="ms-2 bi bi-exclamation-triangle"></i>
           </div>
         )}
       </div>
       <h1 className="mb-4 mt-3">Uitschrijven</h1>
       <form>
         <label className="form-label">Email-adres</label>
-        <div className="mb-3 d-flex justify-content-row">
+        <div className={`mb-3 d-flex justify-content-row `}>
           <input
             type="email"
-            className="form-control w-150"
+            className={`form-control w-150`}
             onChange={changeEmail}
+            required={true}
           />
           <button
             onClick={getAbonnementen}
@@ -332,7 +328,7 @@ export default function UitschrijfForm({}) {
             Ophalen
           </button>
         </div>
-        {abbonementenLijst}
+        {subscribersList}
         {showRedenen()}
       </form>
     </div>

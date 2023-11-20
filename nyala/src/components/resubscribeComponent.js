@@ -4,9 +4,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import styles from "./resubscribeComponent.module.css";
 
-export default function resubscribe({}) {
+export default function ResubscribeComponent({}) {
   const router = useRouter();
-  const [melding, setMelding] = useState({ type: "", bericht: "" });
+  const [warning, setWarning] = useState({ type: "", bericht: "" });
 
   const handleUndo = async () => {
     const unsubscribedEmail = localStorage.getItem("unsubscribedEmail");
@@ -20,14 +20,14 @@ export default function resubscribe({}) {
         localStorage.removeItem("unsubscribedSubs");
         router.push("/thuispagina");
       } else {
-        setMelding({
-          type: "foutmelding",
+        setWarning({
+          type: "wrong",
           bericht: "Er is iets misgegaan met het herinschrijven.",
         });
       }
     } else {
-      setMelding({
-        type: "foutmelding",
+      setWarning({
+        type: "wrong",
         bericht: "Schrijf je eerst uit met je email voordat je hier kom.",
       });
     }
@@ -63,27 +63,27 @@ export default function resubscribe({}) {
     <div>
       <div className="mt-3 d-flex justify-content-center">
         <div>
-          {melding.type !== "succes" ? (
+          {warning.type !== "succes" ? (
             <></>
           ) : (
             <div
               className="alert alert-success d-flex justify-content-around"
               role="alert"
             >
-              <p>{melding.bericht}</p>
+              <p>{warning.bericht}</p>
               <i className="bi bi-check"></i>
             </div>
           )}
         </div>
         <div>
-          {melding.type !== "foutmelding" ? (
+          {warning.type !== "wrong" ? (
             <></>
           ) : (
             <div
               className="alert alert-danger d-flex justify-content-around"
               role="alert"
             >
-              <p>{melding.bericht}</p>
+              <p>{warning.bericht}</p>
               <i className="bi bi-exclamation-triangle"></i>
             </div>
           )}
