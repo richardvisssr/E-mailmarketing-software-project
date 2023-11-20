@@ -69,7 +69,7 @@ export default function UnsubscribeForm({}) {
           },
           body: JSON.stringify({
             email: email,
-            abonnement: selectedSubs,
+            subscriptions: selectedSubs,
           }),
         }
       );

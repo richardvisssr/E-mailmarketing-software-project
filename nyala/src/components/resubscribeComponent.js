@@ -31,17 +31,18 @@ export default function ResubscribeComponent({}) {
   const resubscribe = async (email, subs) => {
     try {
       const reasonResponse = await fetch(
-        "http://localhost:3001/subscribers/add", // Add "/api" to the endpoint path
+        "http://localhost:3001/subscribers/add",
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email: email, abonnementen: subs }), // Fix the property name here
+          body: JSON.stringify({ email: email, subscriptions: subs }),
         }
       );
 
       if (reasonResponse.status === 200) {
+        console.log(subs);
         console.log("U bent weer ingeschreven");
         return true;
       } else {
