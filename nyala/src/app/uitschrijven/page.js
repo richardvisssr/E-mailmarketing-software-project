@@ -1,4 +1,4 @@
-import UitschrijfForm from "@/components/UitschrijfForm";
+import UitschrijfForm from "@/components/uitschrijfForm";
 export default function Page() {
   return (
     <div>
