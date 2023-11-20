@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./UnsubscribeForm.module.css";
-import AbonnementenFormulier from "./CategoriesComponent";
+import SubscriptionForm from "./CategoriesComponent";
 
 export default function UnsubscribeForm({}) {
   const router = useRouter();
@@ -140,7 +140,7 @@ export default function UnsubscribeForm({}) {
         .then((response) => {
           if (!response.ok) {
             setWarning({
-              type: "foutmelding",
+              type: "wrong",
               bericht: "Vul een geldige email in.",
             });
             throw new Error(
@@ -150,9 +150,10 @@ export default function UnsubscribeForm({}) {
           return response.json();
         })
         .then((data) => {
+          console.log(data);
           setSubs(data);
           setSubscribersList(
-            <AbonnementenFormulier abonnees={data} setValue={changeValue} />
+            <SubscriptionForm subscribers={data} setValue={changeValue} />
           );
         })
         .catch((error) => {
