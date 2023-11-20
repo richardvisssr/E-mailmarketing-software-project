@@ -1,6 +1,5 @@
 "use strict";
 
-const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
@@ -13,12 +12,10 @@ const host = process.env.HOST || "127.0.0.1";
 const port = process.env.PORT || 3001;
 
 // Hier komen de requires voor de routes
-<<<<<<< Updated upstream
-=======
 const subscriberRouter = require("./routes/subscribers");
 const emailEditorRouter = require("./routes/emailEditor");
-const mailLijstRouter = require("./utils/mailLijsten");
->>>>>>> Stashed changes
+const mailListRouter = require("./routes/mailLists");
+const sendMailRouter = require("./routes/sendEmail");
 
 const app = express();
 
@@ -34,12 +31,10 @@ app.use(sessionParser);
 app.use(express.json());
 
 // Hier komen de app.use voor routes
-<<<<<<< Updated upstream
-=======
 app.use("/", subscriberRouter);
 app.use("/mail", emailEditorRouter);
-app.use("/mail", mailLijstRouter);
->>>>>>> Stashed changes
+app.use("/mail", mailListRouter);
+app.use("/sendMail", sendMailRouter);
 
 const httpServer = http.createServer(app);
 const webSocketServer = new ws.Server({ noServer: true, path: "/socket" });
@@ -76,7 +71,6 @@ httpServer.listen(port, () =>
 
 const server = app.listen(port, host, async () => {
   console.log("> connecting");
-  await mongoose.connect(`mongodb://${host}:27017/nyala`);
   console.log("> connected");
 
   const serverInfo = server.address();

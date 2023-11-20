@@ -5,11 +5,11 @@ const { Subscriber, Unsubscriber } = require("../model/subscribers");
 const router = express.Router();
 
 router.get("/getSubscribers", async (req, res) => {
-  const selectedMailLijst = req.query.selectedMailLijst; // Use req.query to retrieve query parameters
-
+  const selectedMailingList = req.query.selectedMailingList;
   try {
-    // Find subscribers where the abonnement field contains the selected mailLijst
-    const subscribers = await Subscriber.find({ abonnement: selectedMailLijst });
+    const subscribers = await Subscriber.find({
+      abonnement: selectedMailingList,
+    });
 
     res.json(subscribers);
   } catch (err) {
