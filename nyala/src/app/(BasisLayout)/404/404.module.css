@@ -1,16 +1,16 @@
-.customContainer .knop {
+.customContainer .button {
   background-color: #e800e9;
   color: white;
   transform: scale(1, 1);
   transition: transform 0.25s, color 0.25s, background-color 0.25s;
 }
 
-.customContainer .knop:hover {
+.customContainer .button:hover {
   transform: scale(1.1, 1.1);
   background-color: #e800e9;
   color: white;
 }
 
-.h span {
+.head span {
   text-decoration:underline;
 }

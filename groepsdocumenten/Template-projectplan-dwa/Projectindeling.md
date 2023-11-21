@@ -10,7 +10,7 @@ Hierbij alle groepsleden en de daarbij gegeven taken.
 
 - Mark: Kwaliteitbeheer
 
-- Matthias: Planner
+- Matthias: Planner, Notulist
 
 ## Afspraken
 
@@ -18,4 +18,6 @@ Hierbij alle groepsleden en de daarbij gegeven taken.
 
 ## Ontwikkelmethoden
 
-- Bootstrap styling
+- Next.js
+- React.js
+
