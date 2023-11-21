@@ -38,11 +38,14 @@ describe("Subscribers routes test", () => {
     await mongoose.disconnect();
   });
 
-  test("Get subs of subscriber", async () => {
-    const response = await request(app).get(`/${subscriberEmail.email}/subs`);
+  test("Get subscribers with selected mailing list - 200", async () => {
+    const selectedMailingList = "Nieuwsbrief";
+    const response = await request(app)
+      .get("/getSubscribers")
+      .query({ selectedMailingList });
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(subscribersSubscriptions);
+    expect(response.body).toEqual(expect.any(Array));
   });
 
   test("Get subs of subscriber that doesn't exist", async () => {
@@ -50,6 +53,36 @@ describe("Subscribers routes test", () => {
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Subscriber not found" });
+  });
+
+  test("Internal server error test", async () => {
+    jest.spyOn(Subscriber, "find").mockImplementationOnce(() => {
+      throw new Error("Internal server error");
+    });
+
+    const selectedMailingList = "Nieuwsbrief";
+    const response = await request(app)
+      .get("/getSubscribers")
+      .query({ selectedMailingList });
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: "Internal server error" });
+  });
+
+  test("Internal server error when adding a subscriber", async () => {
+    jest.spyOn(Subscriber.prototype, "save").mockImplementationOnce(() => {
+      throw new Error("Internal server error");
+    });
+
+    const response = await request(app)
+      .post("/subscribers/add")
+      .send({
+        email: "test@example.com",
+        subscription: ["Newsletter"],
+      });
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: "Internal Server Error" });
   });
 
   test("Adding reason to unsubscribe", async () => {
@@ -71,6 +104,13 @@ describe("Subscribers routes test", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ message: "Subscriber updated" });
+  });
+
+  test("Getting the subscribtions of an subscriber", async () => {
+    const response = await request(app).get(`/${subscriberEmail.email}/subs`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(subscribersSubscriptions);
   });
 
   test("Removing an user from the database", async () => {
