@@ -8,7 +8,8 @@ import { useEffect, useState, useRef } from "react";
 import { Placeholder } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import * as htmlToImage from "html-to-image";
-import { toPng, toJpeg, toBlob, toPixelData, toSvg } from "html-to-image";
+import { toPng, toJpeg, toBlob, toPixelData, toSvg, toCanvas } from "html-to-image";
+import SelectMailingLists from "./SendMail";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
@@ -82,7 +83,6 @@ function TemplateCard(props) {
     fetchHtmlContent();
   }, [template.id]);
 
-
   const handleNavigate = () => {
     router.push(`/mail/${template.id}`);
   };
@@ -126,8 +126,7 @@ function TemplateCard(props) {
         </Modal.Header>
         <Modal.Body>
           <Placeholder as={Modal.Body} animation="glow">
-            <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />{" "}
-            <Placeholder xs={6} /> <Placeholder xs={8} />
+            <SelectMailingLists />
           </Placeholder>
         </Modal.Body>
         <Modal.Footer>
@@ -138,7 +137,6 @@ function TemplateCard(props) {
           >
             Annuleren
           </Button>
-          <Button className={`${styles.knopPrimary}`}>Versturen</Button>
         </Modal.Footer>
       </Modal>
     </>
