@@ -13,16 +13,13 @@ export default function ToevoegVeld() {
   useEffect(() => {
     const fetchlists = async () => {
       const response = await fetch("http://localhost:3001/mail/getList");
-      // console.log(response);
       const body = await response.json();
-      // console.log(body);
       if (!response.ok) {
         setNotification({
           type: "error",
           message: "Er is iets foutgegaan tijdens het ophalen",
         });
       } else if (response.ok) {
-        console.log(body[0].mailList);
         setLists(body[0].mailList);
       }
     };
@@ -45,7 +42,6 @@ export default function ToevoegVeld() {
               }),
             }
           );
-          console.log(response);
           if (response.ok) {
             setData({ email: undefined, list: [] });
             setStatus(false);
