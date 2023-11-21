@@ -16,6 +16,7 @@ const subscriberRouter = require("./routes/subscribers");
 const emailEditorRouter = require("./routes/emailEditor");
 const mailListRouter = require("./routes/mailLists");
 const sendMailRouter = require("./routes/sendEmail");
+const adminpanelRouter = require('./routes/templateRoutes');
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use(express.json());
 
 // Hier komen de app.use voor routes
 app.use("/", subscriberRouter);
+app.use('/', adminpanelRouter);
 app.use("/mail", emailEditorRouter);
 app.use("/mail", mailListRouter);
 app.use("/sendMail", sendMailRouter);

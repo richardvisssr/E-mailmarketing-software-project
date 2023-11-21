@@ -30,19 +30,24 @@
 
 
 .knopSecondary {
-  --bs-btn-color: #fff;
-  --bs-btn-bg: #779BEF;
-  --bs-btn-border-color: #779BEF;
-  --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #62B1ED;
-  --bs-btn-hover-border-color: #62B1ED;
+  --bs-btn-color: #fff !important;
+  --bs-btn-bg: #779BEF !important;
+  --bs-btn-border-color: #779BEF !important;
+  --bs-btn-hover-color: #fff !important;
+  --bs-btn-hover-bg: #62B1ED !important;
+  --bs-btn-hover-border-color: #62B1ED !important;
 }
 
 .knopPrimary {
-  --bs-btn-color: #fff;
-  --bs-btn-bg: #A66CF2;
-  --bs-btn-border-color: #A66CF2;
-  --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #C150F3;
-  --bs-btn-hover-border-color: #C150F3;
+  --bs-btn-color: #fff !important; 
+  --bs-btn-bg: #A66CF2 !important;
+  --bs-btn-border-color: #A66CF2 !important;
+  --bs-btn-hover-color: #fff !important;
+  --bs-btn-hover-bg: #C150F3 !important;
+  --bs-btn-hover-border-color: #C150F3 !important;
+}
+
+.knopSize {
+  --bs-btn-padding-x: 0.75rem !important;
+  --bs-btn-padding-y: 0.375rem !important;
 }
