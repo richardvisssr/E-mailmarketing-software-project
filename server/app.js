@@ -78,3 +78,5 @@ const server = app.listen(port, host, async () => {
   const portInfo = serverInfo.port;
   console.log(`Database started on http://${addressInfo}:${portInfo}`);
 });
+
+module.exports = {app, server, httpServer};
