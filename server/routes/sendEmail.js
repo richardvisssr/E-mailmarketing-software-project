@@ -30,7 +30,6 @@ router.post('/sendEmail', async (req, res) => {
 
         res.status(200).json({ success: true });
     } catch (error) {
-        console.error('Error sending email:', error);
         res.status(500).json({ error: 'Error sending email' });
     }
 });

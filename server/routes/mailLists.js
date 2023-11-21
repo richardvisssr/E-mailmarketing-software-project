@@ -7,7 +7,6 @@ router.get('/getList', async (req, res) => {
       const subscriptions = await mailList.find();
       res.json(subscriptions);
     } catch (err) {
-      console.error(err);
       res.status(500).json({ message: 'Internal server error' });
     }
   });
@@ -18,7 +17,6 @@ router.put('/addList', async (req, res) => {
     const subscription = await mailList.collection('mailList').insertOne({ name });
     res.json(subscription);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: 'Internal server error' });
   }
 });	
