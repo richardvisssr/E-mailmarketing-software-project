@@ -5,17 +5,19 @@ import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import FilterPanel from "@/components/adminpanel/FilterComponent";
 import CardList from "@/components/adminpanel/CardListComponent";
-
+import Alert from "react-bootstrap/Alert";
+import Button from "react-bootstrap/Button";
+import Link from "next/link";
 
 function Page() {
   const [templates, setTemplates] = useState({});
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:3001/templates');
+        const response = await fetch("http://127.0.0.1:3001/templates");
         const jsonData = await response.json();
-        console.log('Fetched data:', jsonData);
         const templateObject = {};
 
         jsonData.forEach((template, index) => {
@@ -28,10 +30,10 @@ function Page() {
         });
         setTemplates(templateObject);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        setError(true);
       }
     };
-  
+
     fetchData();
   }, []);
 
@@ -42,7 +44,12 @@ function Page() {
           <FilterPanel />
         </Col>
         <Col md={8}>
-          <CardList templates={templates}/>
+          {error && (
+            <Alert key="danger" variant="danger">
+              Er is een fout opgetreden bij het ophalen van de templates...
+            </Alert>
+          )}
+          <CardList templates={templates} />
         </Col>
       </Row>
     </Container>

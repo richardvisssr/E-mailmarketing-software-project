@@ -8,8 +8,14 @@ import { useEffect, useState, useRef } from "react";
 import { Placeholder } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import * as htmlToImage from "html-to-image";
-import { toPng, toJpeg, toBlob, toPixelData, toSvg, toCanvas } from "html-to-image";
-import SelectMailingLists from "./SendMail";
+import {
+  toPng,
+  toJpeg,
+  toBlob,
+  toPixelData,
+  toSvg,
+  toCanvas,
+} from "html-to-image";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
@@ -17,12 +23,11 @@ function TemplateCard(props) {
   const [show, setShow] = useState(false);
   const [image, setImage] = useState("");
   const [zoomLevel, setZoomLevel] = useState(2);
+  const [error, setError] = useState(false);
   const router = useRouter();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  console.log("Hier in de templateCardComponent");
 
   useEffect(() => {
     console.log("Hier in de useEffect prefetch");
@@ -30,7 +35,6 @@ function TemplateCard(props) {
   }, [router, template.id]);
 
   useEffect(() => {
-    console.log("Hier in de useEffect fetch");
     const fetchHtmlContent = async () => {
       try {
         const response = await fetch(
@@ -49,10 +53,8 @@ function TemplateCard(props) {
           htmlToImage
             .toCanvas(tempDiv)
             .then((canvas) => {
-              // Get the 2D rendering context
               const ctx = canvas.getContext("2d");
 
-              // Apply zoom transformation to the center of the canvas
               const centerX = canvas.width / 2;
               const centerY = canvas.height / 2;
 
@@ -60,7 +62,6 @@ function TemplateCard(props) {
               ctx.scale(zoomLevel, zoomLevel);
               ctx.translate(-centerX, -centerY);
 
-              // Convert the canvas to data URL
               const dataUrl = canvas.toDataURL("image/png");
 
               let img = new Image();
@@ -76,7 +77,7 @@ function TemplateCard(props) {
           throw new Error(data.message);
         }
       } catch (error) {
-        console.error(error);
+        setError(true);
       }
     };
 
@@ -90,6 +91,11 @@ function TemplateCard(props) {
   return (
     <>
       <Col key={template.id} style={{ width: "16rem" }}>
+        {error && (
+          <Alert key="danger" variant="danger">
+            Er is een fout opgetreden bij het ophalen van de preview afbeelding
+          </Alert>
+        )}
         <Card ref={cardRef}>
           <Card.Img
             variant="top"
@@ -125,9 +131,7 @@ function TemplateCard(props) {
           <Modal.Title>Wil je '{template.title}' versturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Placeholder as={Modal.Body} animation="glow">
-            <SelectMailingLists />
-          </Placeholder>
+          <Placeholder as={Modal.Body} animation="glow"></Placeholder>
         </Modal.Body>
         <Modal.Footer>
           <Button
