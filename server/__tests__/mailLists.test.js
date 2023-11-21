@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
-const request = require('supertest');
-const app = require('../app');
+const request = require("supertest");
+const { app, server, httpServer } = require("../app");
 
 const MailList = require("../model/mailingList");
 
 describe("Mail List API", () => {
   beforeAll(async () => {
     if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(`mongodb://127.0.0.1:27017/nyalaTest`, {
+      await mongoose.connect("mongodb://127.0.0.1:27017/nyalaTest", {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       });
@@ -25,17 +25,55 @@ describe("Mail List API", () => {
   });
 
   afterAll(async () => {
+    server.close();
+    httpServer.close();
     await mongoose.disconnect();
   });
 
   test("MailList get test", async () => {
-    const response = await request(app).get('/mail/getList');
-  
+    const response = await request(app).get("/mail/getList");
+
     const expectedResult = ["Nieuwsbrief", "CMD", "ICT", "Leden"];
-  
+
     expect(response.status).toBe(200);
-    expect(response.body[0].mailList).toEqual(expect.arrayContaining(expectedResult));
+    expect(response.body[0].mailList).toEqual(
+      expect.arrayContaining(expectedResult)
+    );
   });
 
-  
+  test("MailList add test 200", async () => {
+    const newName = "NewList";
+    const response = await request(app)
+      .put("/mail/addList")
+      .send({ name: newName });
+
+    expect(response.status).toBe(200);
+    expect(response.body.mailList).toContain(newName);
+  });
+
+  test("MailList add test 404", async () => {
+    const newName = "NewList";
+    await MailList.deleteMany({});
+
+    const response = await request(app)
+      .put("/mail/addList")
+      .send({ name: newName });
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("List not found");
+  });
+
+  test("MailList add test 500", async () => {
+    jest.spyOn(MailList, "findOne").mockImplementationOnce(() => {
+      throw new Error("Simulated internal server error");
+    });
+
+    const newName = "NewList";
+    const response = await request(app)
+      .put("/mail/addList")
+      .send({ name: newName });
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe("Internal server error");
+  });
 });

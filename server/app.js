@@ -79,4 +79,4 @@ const server = app.listen(port, host, async () => {
   console.log(`Database started on http://${addressInfo}:${portInfo}`);
 });
 
-module.exports = app;
+module.exports = {app, server, httpServer};

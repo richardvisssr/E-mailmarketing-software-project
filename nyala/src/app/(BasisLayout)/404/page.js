@@ -6,12 +6,12 @@ export default function page() {
     <div
       className={`d-flex flex-column justify-content-center align-items-center py-5 mt-5`}
     >
-      <h1 className={`${styles.h}`}>
+      <h1 className={`${styles.head}`}>
         <span>404</span> - Pagina niet gevonden
       </h1>
       <p>Sorry, de pagina die je zoekt bestaat niet.</p>
       <Link href="/" replace className={`${styles.customContainer}`}>
-        <button type="button" className={`btn ${styles.knop}`}>
+        <button type="button" className={`btn ${styles.button}`}>
           Ga naar de thuispagina
         </button>
       </Link>

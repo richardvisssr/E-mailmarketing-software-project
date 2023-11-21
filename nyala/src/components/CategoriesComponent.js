@@ -31,7 +31,7 @@ const SubscriptionForm = ({ subscribers, setValue }) => {
     console.error("Error in SubscriptionForm:", error.message);
     return (
       <div className="alert alert-danger" role="alert">
-        Oops! Something went wrong while rendering the subscription form.
+        Oeps! Er is iets foutgegaan met het laten zien van de lijsten.
       </div>
     );
   }
