@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
-import FilterPanel from "@/components/adminpanel/FilterComponent";
+import FilterPanel from "@/components/adminpanel/filterComponent";
 import CardList from "@/components/adminpanel/CardListComponent";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";

@@ -16,6 +16,7 @@ import {
   toSvg,
   toCanvas,
 } from "html-to-image";
+import Alert from "react-bootstrap/Alert";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
@@ -85,7 +86,7 @@ function TemplateCard(props) {
   }, [template.id]);
 
   const handleNavigate = () => {
-    router.push(`/mail/${template.id}`);
+    router.push(`/admin/mail/${template.id}`);
   };
 
   return (
