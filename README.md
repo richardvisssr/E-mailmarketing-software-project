@@ -13,5 +13,15 @@ Uitleg invoegen wanneer dit van toepassing is. (Bijv. een begin maken aan het ei
 ### Contact voor hulp of om bugs aan te geven
 projectgroep-nyala@hotmail.com
 
+#### Contactgegevens opdrachtgever
+Robert Boudewijn
+r.boudewijn@svxtend.nl
+
+#### Groepsgenoten
+ - Richard Visser, 1677755
+ - Mark Evers, 2110802
+ - Matthias Budding, 2368952
+ - Jules Koster, 1653865
+ 
 ### Links naar andere documenten
 [Onze algemene groepsdocumentatie](https://github.com/HANICA-DWA/project-sep23-nyala/tree/main/groepsdocumenten)
