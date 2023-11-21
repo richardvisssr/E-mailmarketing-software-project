@@ -11,10 +11,13 @@
     "test": "jest --verbose --unhandled-rejections=strict --detectOpenHandles"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
     "supertest": "^6.3.3"
   },
   "jest": {
-    "testTimeout": 10000
+    "collectCoverage": true,
+    "coverageReporters": ["lcov", "text"]
   }
 }
