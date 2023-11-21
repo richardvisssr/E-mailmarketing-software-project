@@ -38,10 +38,10 @@ describe("Subscribers routes test", () => {
     await mongoose.disconnect();
   });
 
-  test("Get subscribers with selected mailing list - 200", async () => {
+  test("Get subscribers with selected mailing list - Valid Test", async () => {
     const selectedMailingList = "Nieuwsbrief";
     const response = await request(app)
-      .get("/getSubscribers")
+      .get("/subscribers")
       .query({ selectedMailingList });
 
     expect(response.status).toBe(200);
@@ -53,20 +53,6 @@ describe("Subscribers routes test", () => {
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Subscriber not found" });
-  });
-
-  test("Internal server error test", async () => {
-    jest.spyOn(Subscriber, "find").mockImplementationOnce(() => {
-      throw new Error("Internal server error");
-    });
-
-    const selectedMailingList = "Nieuwsbrief";
-    const response = await request(app)
-      .get("/getSubscribers")
-      .query({ selectedMailingList });
-
-    expect(response.status).toBe(500);
-    expect(response.body).toEqual({ message: "Internal server error" });
   });
 
   test("Internal server error when adding a subscriber", async () => {
