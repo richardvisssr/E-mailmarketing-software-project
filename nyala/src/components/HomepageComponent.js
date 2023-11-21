@@ -2,13 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import styles from "./ThuispaginaComponent.module.css";
+import styles from "./HomepageComponent.module.css";
 
 export default function ThuispaginaComponent() {
   const router = useRouter();
 
   useEffect(() => {
-    router.prefetch("../../beheerder");
+    router.prefetch("../../admin");
   }, []);
 
   return (
@@ -22,9 +22,9 @@ export default function ThuispaginaComponent() {
         </h5>
         <button
           type="button"
-          className={`btn ${styles.knop}`}
+          className={`btn ${styles.button}`}
           onClick={() => {
-            router.push("../../beheerder");
+            router.push("../../admin");
           }}
         >
           Ga naar de beheerspagina

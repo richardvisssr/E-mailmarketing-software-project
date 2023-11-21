@@ -6,5 +6,15 @@
     "mongoose": "^8.0.0",
     "nodemailer": "^6.9.7",
     "ws": "^8.14.2"
+  },
+  "scripts": {
+    "test": "jest --verbose --unhandled-rejections=strict --detectOpenHandles"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  },
+  "jest": {
+    "testTimeout": 10000
   }
 }

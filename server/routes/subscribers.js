@@ -10,11 +10,43 @@ router.get("/getSubscribers", async (req, res) => {
     const subscribers = await Subscriber.find({
       subscription: selectedMailingList,
     });
+  } catch (error) {
+    console.log("Oops");
+  }
+});
 
-    res.json(subscribers);
+router.post("/subscribers/add", async (req, res) => {
+  try {
+    const { email, subscription } = req.body;
+
+    if (!email || !subscription || !Array.isArray(subscription)) {
+      return res.status(400).json({ message: "Bad Request: Invalid input" });
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res
+        .status(400)
+        .json({ message: "Bad Request: Invalid email format" });
+    }
+
+    // const validsubscriptions = Haal hier de lijsten op met de model.
+    // const invalidsubscription = subscription.find(a => !validsubscriptions.includes(a));
+
+    // if (invalidsubscription) {
+    //   return res.status(400).json({ message: `Bad Request: Invalid subscription - ${invalidsubscription}` });
+    // }
+
+    const subscriber = {
+      email,
+      subscription,
+    };
+
+    const newSubscriber = new Subscriber(subscriber);
+    await newSubscriber.save();
+    res.status(200).json({ message: "Subscriber added" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 

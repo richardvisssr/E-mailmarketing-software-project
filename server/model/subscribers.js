@@ -6,7 +6,7 @@ const subscribers = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  naam: {
+  name: {
     type: String,
     required: false,
   },
@@ -17,7 +17,7 @@ const subscribers = new mongoose.Schema({
 });
 
 const unsubscribe = new mongoose.Schema({
-  reden: {
+  reason: {
     type: String,
     required: false,
   },
@@ -28,7 +28,7 @@ const Unsubscriber = mongoose.model("Unsubscribe", unsubscribe);
 
 // const sub = new Subscriber({
 //   email: "befibu@jfc.nl",
-//   naam: "Bert",
+//   name: "Bert",
 //   subscription: ["Nieuwsbrief", "CMD"],
 // });
 
