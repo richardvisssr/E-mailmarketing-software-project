@@ -16,10 +16,15 @@ export default function FooterComponent() {
             Ruitenberglaan 26, Arnhem
           </a>
         </div>
-
-        <div className="d-flex justify-content-around py-0 mt-0">
-          <i className="bi bi-envelope-fill "></i>
-          <p className={`${styles.space} mr-3`}>info@svxtend.nl</p>
+        
+        <div className={`${styles.linky}`}>
+        <i className="bi bi-envelope-fill "></i>
+          <a
+            className={`link-underline link-underline-opacity-0 ${styles.space}`}
+            href="mailto: info@svxtend.nl"
+          >
+            info@svxtend.nl
+          </a>
         </div>
 
         <ul className="list-unstyled d-flex">

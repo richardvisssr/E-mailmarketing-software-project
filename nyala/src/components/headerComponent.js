@@ -21,25 +21,16 @@ export default function HeaderComponent() {
           className={`${styles.logo}`}
         />
       </a>
-
-      <ul className="nav nav-pills">
+    <div class="d-flex justify-content-between align-items-center">
+      <ul className="nav nav-pills ">
+        <span className="fs-4 text-dark">|</span>
         <li className="nav-item">
           <Link
-            href="/"
+            href="/admin"
             className={`${styles.linky} nav-link`}
             aria-current="page"
           >
             Home
-          </Link>
-        </li>
-        <span className="fs-4 text-dark">|</span>
-        <li className="nav-item">
-          <Link
-            href="/"
-            className={`${styles.linky} nav-link`}
-            aria-current="page"
-          >
-            Templates
           </Link>
         </li>
         <span className="fs-4 text-dark">|</span>
@@ -59,10 +50,17 @@ export default function HeaderComponent() {
             className={`${styles.linky} nav-link`}
             aria-current="page"
           >
-            Analyse
+            Uitloggen
           </Link>
         </li>
+        <span className="fs-4 text-dark">|</span>
       </ul>
+      {/* <Link href="/" className={`${styles.linky} ${styles.customContainer}`} aria-current="page">
+        <button type="button" className={`btn ${styles.knop}`}>
+          Uitloggen
+        </button>
+      </Link> */}
+      </div>
     </header>
   );
 }
