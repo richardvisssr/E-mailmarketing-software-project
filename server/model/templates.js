@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+const mongoose = require("../utils/connection");
 
-const templates = new mongoose.schema({});
+const templates = new mongoose.Schema({});
 
 const Templates = mongoose.model("Templates", templates);
 
