@@ -1,8 +1,5 @@
 const mongoose = require('../utils/connection');
 
-const imageSchema = new mongoose.Schema({
-    dataUrl: String,
-  });
 
 const designSchema = new mongoose.Schema({
   id: {
@@ -32,8 +29,6 @@ const Email = mongoose.model('Email', emailSchema);
 const Design = mongoose.model('Design', designSchema);
 
 
-const Image = mongoose.model('Image', imageSchema);
-
-module.exports = { Image, Design, Email };
+module.exports = { Design, Email };
 
 
