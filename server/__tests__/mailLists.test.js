@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const request = require("supertest");
-const { app, server, httpServer} = require("../app");
+const { app, server, httpServer } = require("../app");
 
 const MailList = require("../model/mailingList");
 
@@ -41,7 +41,7 @@ describe("Mail List API", () => {
     );
   });
 
-  test("MailList add test", async () => {
+  test("MailList add test 200", async () => {
     const newName = "NewList";
     const response = await request(app)
       .put("/mail/addList")
@@ -49,5 +49,31 @@ describe("Mail List API", () => {
 
     expect(response.status).toBe(200);
     expect(response.body.mailList).toContain(newName);
+  });
+
+  test("MailList add test 404", async () => {
+    const newName = "NewList";
+    await MailList.deleteMany({});
+
+    const response = await request(app)
+      .put("/mail/addList")
+      .send({ name: newName });
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("List not found");
+  });
+
+  test("MailList add test 500", async () => {
+    jest.spyOn(MailList, "findOne").mockImplementationOnce(() => {
+      throw new Error("Simulated internal server error");
+    });
+
+    const newName = "NewList";
+    const response = await request(app)
+      .put("/mail/addList")
+      .send({ name: newName });
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe("Internal server error");
   });
 });
