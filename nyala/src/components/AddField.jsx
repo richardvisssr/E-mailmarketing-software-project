@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./AddField.module.css";
-import AbonnementenFormulier from "./categorieeënComponent";
+import SubscriptionForm from "./CategoriesComponent";
 
 export default function ToevoegVeld() {
   const [data, setData] = useState({ email: undefined, list: [] });
@@ -12,15 +12,18 @@ export default function ToevoegVeld() {
 
   useEffect(() => {
     const fetchlists = async () => {
-      const response = await fetch("http://localhost:3001/mail/getlist");
+      const response = await fetch("http://localhost:3001/mail/getList");
+      // console.log(response);
       const body = await response.json();
+      // console.log(body);
       if (!response.ok) {
         setNotification({
           type: "error",
           message: "Er is iets foutgegaan tijdens het ophalen",
         });
-      } else {
-        setLists(body[0].mailLijst);
+      } else if (response.ok) {
+        console.log(body[0].mailList);
+        setLists(body[0].mailList);
       }
     };
     fetchlists();
@@ -31,17 +34,18 @@ export default function ToevoegVeld() {
           const response = await fetch(
             `http://localhost:3001/subscribers/add`,
             {
-              method: "POST",
+              method: "PUT",
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
                 email: data.email,
-                abonnement: data.list,
+                subscriptions: data.list,
               }),
             }
           );
+          console.log(response);
           if (response.ok) {
             setData({ email: undefined, list: [] });
             setStatus(false);
@@ -55,7 +59,6 @@ export default function ToevoegVeld() {
               message:
                 "Er heeft zich een fout opgetreden tijdens het toevoegen van de mail.",
             });
-            setSucces(false);
           }
         } catch (error) {
           setNotification({
@@ -63,7 +66,6 @@ export default function ToevoegVeld() {
             message:
               "Er heeft zich een fout opgetreden tijdens het toevoegen van de mail.",
           });
-          setSucces(false);
         }
       };
       postEmail();
@@ -157,7 +159,7 @@ export default function ToevoegVeld() {
         type: "error",
         message: "Er zijn te veel mailinglists gekozen.",
       });
-    } else if (inlists === false) {
+    } else if (inLists === false) {
       setNotification({
         type: "error",
         message: "De gekozen mailinglist bestaat niet.",
@@ -238,8 +240,8 @@ export default function ToevoegVeld() {
             />
             <div>
               {Array.isArray(lists) && lists.length > 0 ? (
-                <AbonnementenFormulier
-                  abonnees={lists}
+                <SubscriptionForm
+                  subscribers={lists}
                   setValue={handleCheckboxChange}
                 />
               ) : (
@@ -253,7 +255,7 @@ export default function ToevoegVeld() {
                     <input
                       type="text"
                       className={`form-control ${styles.entry} p-2`}
-                      placeholder="list"
+                      placeholder="Lijst"
                       aria-describedby="basic-addon1"
                       onChange={(e) => {
                         const value = e.target.value;
@@ -264,7 +266,7 @@ export default function ToevoegVeld() {
                       <input
                         type="submit"
                         className={`btn ${styles.buttonPrimary} rounded p-2`}
-                        value="list add"
+                        value="Lijst toevoegen"
                         onClick={handleListAdd}
                       />
                     </div>

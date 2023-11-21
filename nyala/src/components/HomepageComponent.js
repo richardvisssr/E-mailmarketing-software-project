@@ -8,7 +8,7 @@ export default function ThuispaginaComponent() {
   const router = useRouter();
 
   useEffect(() => {
-    router.prefetch("../../beheerder");
+    router.prefetch("../../admin");
   }, []);
 
   return (

@@ -14,11 +14,18 @@ router.get("/getList", async (req, res) => {
 
 router.put("/addList", async (req, res) => {
   const { name } = req.body;
+  console.log(name);
   try {
-    const subscription = await mailList
-      .collection("mailList")
-      .insertOne({ name });
-    res.json(subscription);
+    const existingList = await mailList.findOne();
+    
+    if (!existingList) {
+      return res.status(404).json({ message: "List not found" });
+    }
+
+    existingList.mailList.push(name);
+    const updatedList = await existingList.save();
+
+    res.json(updatedList);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });

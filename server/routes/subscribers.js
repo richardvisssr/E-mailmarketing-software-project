@@ -88,6 +88,7 @@ router.post("/reason", async (req, res) => {
 
 router.put("/subscribers/add", async (req, res) => {
   const { email, subscriptions } = req.body;
+  console.log(email + " + " + subscriptions);
   try {
     await Subscriber.findOneAndUpdate(
       { email: email },
