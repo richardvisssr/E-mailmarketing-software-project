@@ -33,7 +33,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 4 uur | https://github.com/HANICA-DWA/project-sep23-nyala/issues/33 | | Begonnen aan het herschrijven en hoe ga ik email opslaan voor volgende pagina | 💊: | https://github.com/HANICA-DWA/project-sep23-nyala/commit/3deef7bc24b5e9c786080e71ccad8ae1eaa5900f |
 | | | | | | |
 
 ## Donderdag 16 november
@@ -42,7 +42,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 5 uur | https://github.com/HANICA-DWA/project-sep23-nyala/issues/48 <br> https://github.com/HANICA-DWA/project-sep23-nyala/issues/33 | | Frustraties over domme errors, was geen prductieve dag | 😱: | https://github.com/HANICA-DWA/project-sep23-nyala/commit/2fd04d1cf942a68ee97e368bf43ac95de00748fb |
 | | | | | | |
 
 
@@ -53,5 +53,5 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 7 uur | https://github.com/HANICA-DWA/project-sep23-nyala/issues/48 | | Puntjes op de i voor deze user story, reviewen code Mark, code update naar review |👍: | https://github.com/HANICA-DWA/project-sep23-nyala/commit/399d7def7b33f0f91473db24a44764ca7f569306 |
 | | | | | | |

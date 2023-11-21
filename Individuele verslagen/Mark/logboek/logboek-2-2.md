@@ -36,5 +36,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| 0,5u | [README aanmaken in root project](https://github.com/HANICA-DWA/project-sep23-nyala/issues/13) | - | Beetje onduidelijk voor ons dat dit uberhaupt moest, waardoor we bijna te laat waren.  | :expressionless: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/c240e791f3768362a6761d6120555f1a855e34ca) |
-| | | | | | |
+| 0,5u | [README aanmaken in root project](https://github.com/HANICA-DWA/project-sep23-nyala/issues/13) | - | Beetje onduidelijk voor ons dat dit uberhaupt moest, waardoor we bijna te laat waren  | :expressionless: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/c240e791f3768362a6761d6120555f1a855e34ca) |
+| 0,5u | [Back-end Toevoegen persoon aan database](https://github.com/HANICA-DWA/project-sep23-nyala/issues/28) | - | - | :grinning: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/6f951d8a07bd1eae2d3fb2aa14edcb8296ef25bf) |
+| 1u | [Frontend aanpassen met knop en form om category toe te voegen](https://github.com/HANICA-DWA/project-sep23-nyala/issues/55) | - | Bootstrap input append eindelijk uitgevogeld | :satisfied: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/5b429f3a0a980d2344696018e35ae15dff1e3bd0) |
+| 4u | [Backend om lijst toe te voegen](https://github.com/HANICA-DWA/project-sep23-nyala/issues/56) | Richard heeft geholpen met wat problemen | Niks perse nieuws ontdekt, zat gewoon een beetje ingewikkeld in elkaar | :neutral_face: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/1e2d3282a6ea3c255c8345cbd11ba20a1bbf21de) |

@@ -32,7 +32,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| 2u | [Front-end Email templates](https://github.com/HANICA-DWA/project-sep23-nyala/issues/25) | n.v.t. | - |🏎️| link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/e605c65694b419136dba6afcf6a387b3a7dc4221) |
+| 2u | [Front-end Email templates](https://github.com/HANICA-DWA/project-sep23-nyala/issues/25) | n.v.t. | - |🏎️| [link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/e605c65694b419136dba6afcf6a387b3a7dc4221) |
 
 ## Donderdag 16 november
 
@@ -50,5 +50,5 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
-| | | | | | |
+| 3u | [Front-end Email templates](https://github.com/HANICA-DWA/project-sep23-nyala/issues/25) | Overlegd met Richard | Front-end voor nu afgemaakt, alleen nog de back-end maken en dan de front-end aanpassen zodat het allemaal straks goed werkt | 🐿️ | [link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/e605c65694b419136dba6afcf6a387b3a7dc4221) |
+| 4u | [Back-end Templates ophalen](https://github.com/HANICA-DWA/project-sep23-nyala/issues/26) | n.v.t. | Back-end gemaakt voor het ophalen van de gegevens van email templates en die naar de front-end sturen. Front-end aangepast zodat het daar goed weergegeven wordt | 🦍 | [link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/3429c827b47e39c646139a8d41fc1ef33b1afcfe) |
