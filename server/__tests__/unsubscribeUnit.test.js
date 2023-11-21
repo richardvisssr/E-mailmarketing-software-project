@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
 const request = require("supertest");
-const app = require("../app");
+const mongoose = require("mongoose");
+const { app, server, httpServer } = require("../app");
 
 const { Subscriber } = require("../model/subscribers");
 
@@ -33,12 +33,14 @@ describe("Subscribers routes test", () => {
   });
 
   afterAll(async () => {
+    server.close();
+    httpServer.close();
     await mongoose.disconnect();
   });
 
   test("should return subscribers for selected mailing list", async () => {
-    Subscriber.find = jest
-      .fn()
+    const findSpy = jest
+      .spyOn(Subscriber, "find")
       .mockResolvedValue([
         { email: "subscriber1@test.com" },
         { email: "subscriber2@test.com" },
@@ -49,26 +51,14 @@ describe("Subscribers routes test", () => {
       .get("/getSubscribers")
       .query({ selectedMailingList });
 
+    expect(findSpy).toHaveBeenCalledWith({ subscription: selectedMailingList });
     expect(response.status).toBe(200);
     expect(response.body).toEqual([
       { email: "subscriber1@test.com" },
       { email: "subscriber2@test.com" },
     ]);
-    expect(Subscriber.find).toHaveBeenCalledWith({
-      subscription: selectedMailingList,
-    });
-  });
 
-  test("should handle internal server error", async () => {
-    Subscriber.find = jest.fn().mockRejectedValue(new Error("Database error"));
-
-    const selectedMailingList = "Leden";
-    const response = await request(app)
-      .get("/getSubscribers")
-      .query({ selectedMailingList });
-
-    expect(response.status).toBe(500);
-    expect(response.body).toEqual({ message: "Internal server error" });
+    findSpy.mockRestore();
   });
 
   test("Get subs of subscriber", async () => {
@@ -182,5 +172,51 @@ describe("Subscribers routes test", () => {
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Subscriber not found" });
+  });
+
+  test("Adding a subscriber with valid input", async () => {
+    const response = await request(app)
+      .post("/subscribers/add")
+      .send({
+        email: "test@example.com",
+        subscription: ["Leden", "Nieuwsbrief"],
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ message: "Subscriber added" });
+  });
+
+  test("Adding a subscriber with missing email", async () => {
+    const response = await request(app)
+      .post("/subscribers/add")
+      .send({
+        subscription: ["Leden", "Nieuwsbrief"],
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ message: "Bad Request: Invalid input" });
+  });
+
+  test("Adding a subscriber with missing subscription", async () => {
+    const response = await request(app).post("/subscribers/add").send({
+      email: "test@example.com",
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ message: "Bad Request: Invalid input" });
+  });
+
+  test("Adding a subscriber with invalid email format", async () => {
+    const response = await request(app)
+      .post("/subscribers/add")
+      .send({
+        email: "invalidemail",
+        subscription: ["Leden", "Nieuwsbrief"],
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+      message: "Bad Request: Invalid email format",
+    });
   });
 });

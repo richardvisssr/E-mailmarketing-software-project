@@ -10,8 +10,9 @@ router.get("/getSubscribers", async (req, res) => {
     const subscribers = await Subscriber.find({
       subscription: selectedMailingList,
     });
+    res.status(200).send(subscribers);
   } catch (error) {
-    console.log("Oops");
+    res.status(500).send({ message: "Internal server error" });
   }
 });
 
@@ -28,13 +29,6 @@ router.post("/subscribers/add", async (req, res) => {
         .status(400)
         .json({ message: "Bad Request: Invalid email format" });
     }
-
-    // const validsubscriptions = Haal hier de lijsten op met de model.
-    // const invalidsubscription = subscription.find(a => !validsubscriptions.includes(a));
-
-    // if (invalidsubscription) {
-    //   return res.status(400).json({ message: `Bad Request: Invalid subscription - ${invalidsubscription}` });
-    // }
 
     const subscriber = {
       email,
