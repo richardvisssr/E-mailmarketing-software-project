@@ -55,42 +55,6 @@ router.post("/reason", async (req, res) => {
   }
 });
 
-router.get("/:subscriber/subs", async (req, res) => {
-  const { subscriber } = req.params;
-
-  try {
-    const sub = await Subscriber.findOne(
-      {
-        email: subscriber,
-      },
-      { subscription: 1 }
-    );
-
-    if (!sub) {
-      return res.status(404).send({ message: "Subscriber not found" });
-    }
-
-    return res.status(200).send(sub.subscription);
-  } catch (error) {
-    console.error("Error fetching subscriber:", error);
-    return res.status(500).send({ message: "Internal server error" });
-  }
-});
-
-router.post("/reason", async (req, res) => {
-  const { reden } = req.body;
-
-  try {
-    const unsubscriber = new Unsubscriber({
-      reden: reden,
-    });
-    await unsubscriber.save();
-    return res.status(200).send({ message: "Reason added" });
-  } catch (error) {
-    return res.status(500).send(error);
-  }
-});
-
 router.put("/subscribers/add", async (req, res) => {
   const { email, subscriptions } = req.body;
   try {
@@ -136,6 +100,8 @@ router.delete("/unsubscribe/subs", async (req, res) => {
       subscriber.subscription = subscriber.subscription.filter(
         (subscription) => !subscriptions.includes(subscription)
       );
+    } else {
+      return res.status(400).send({ message: "No subscriptions provided" });
     }
 
     await subscriber.save();

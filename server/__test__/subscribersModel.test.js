@@ -8,7 +8,7 @@ describe("Subscriber Model Tests", () => {
 
   beforeAll(async () => {
     if (mongoose.connection.readyState === 0) {
-      await mongoose.connect("mongodb://127.0.0.1:27017/Nyala", {
+      await mongoose.connect("mongodb://127.0.0.1:27017/nyalaTest", {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       });
@@ -16,7 +16,7 @@ describe("Subscriber Model Tests", () => {
   });
 
   beforeEach(async () => {
-    await Subscriber.create({ email: testMail, abonnement: ["CMD"] });
+    await Subscriber.create({ email: testMail, subscription: ["CMD"] });
   });
 
   afterEach(async () => {
@@ -33,13 +33,13 @@ describe("Subscriber Model Tests", () => {
     });
     const abonnementToAdd = "ICT";
     await testSubscriber.updateOne({
-      $addToSet: { abonnement: abonnementToAdd },
+      $addToSet: { subscription: abonnementToAdd },
     });
     const resultSubscriber = await Subscriber.findOne({
       email: testMail,
     });
     const expectedAbonnement = ["CMD", abonnementToAdd];
-    expect(resultSubscriber.abonnement).toEqual(expectedAbonnement);
+    expect(resultSubscriber.subscription).toEqual(expectedAbonnement);
   });
 
   test("abonnement can be removed", async () => {
@@ -48,14 +48,14 @@ describe("Subscriber Model Tests", () => {
     });
     const abonnementToRemove = "CMD";
     await testSubscriber.updateOne({
-      $pull: { abonnement: abonnementToRemove },
+      $pull: { subscription: abonnementToRemove },
     });
 
     const resultSubscriber = await Subscriber.findOne({
       email: testMail,
     });
     const expectedAbonnement = [];
-    expect(resultSubscriber.abonnement).toEqual(expectedAbonnement);
+    expect(resultSubscriber.subscription).toEqual(expectedAbonnement);
   });
 
   test("subscriber can be removed", async () => {

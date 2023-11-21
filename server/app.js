@@ -13,13 +13,9 @@ const port = process.env.PORT || 3001;
 
 // Hier komen de requires voor de routes
 const subscriberRouter = require("./routes/subscribers");
-<<<<<<< Updated upstream
 const emailEditorRouter = require("./routes/emailEditor");
 const mailListRouter = require("./routes/mailLists");
 const sendMailRouter = require("./routes/sendEmail");
-=======
-const reasonRouter = require("./routes/reasons");
->>>>>>> Stashed changes
 
 const app = express();
 
@@ -36,13 +32,9 @@ app.use(express.json());
 
 // Hier komen de app.use voor routes
 app.use("/", subscriberRouter);
-<<<<<<< Updated upstream
 app.use("/mail", emailEditorRouter);
 app.use("/mail", mailListRouter);
 app.use("/sendMail", sendMailRouter);
-=======
-app.use("/", reasonRouter);
->>>>>>> Stashed changes
 
 const httpServer = http.createServer(app);
 const webSocketServer = new ws.Server({ noServer: true, path: "/socket" });
@@ -86,3 +78,5 @@ const server = app.listen(port, host, async () => {
   const portInfo = serverInfo.port;
   console.log(`Database started on http://${addressInfo}:${portInfo}`);
 });
+
+exports = module.exports = app;
