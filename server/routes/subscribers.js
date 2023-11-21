@@ -39,7 +39,6 @@ router.post("/subscribers/add", async (req, res) => {
     await newSubscriber.save();
     res.status(200).json({ message: "Subscriber added" });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -61,7 +60,6 @@ router.get("/:subscriber/subs", async (req, res) => {
 
     return res.status(200).send(sub.subscription);
   } catch (error) {
-    console.error("Error fetching subscriber:", error);
     return res.status(500).send({ message: "Internal server error" });
   }
 });
@@ -76,7 +74,6 @@ router.post("/reason", async (req, res) => {
     await unsubscriber.save();
     return res.status(200).send({ message: "Reason added" });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -92,7 +89,6 @@ router.put("/subscribers/add", async (req, res) => {
 
     res.status(200).json({ message: "Subscriber updated" });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });

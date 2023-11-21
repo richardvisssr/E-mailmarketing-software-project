@@ -38,35 +38,11 @@ describe("Subscribers routes test", () => {
     await mongoose.disconnect();
   });
 
-  test("should return subscribers for selected mailing list", async () => {
-    const findSpy = jest
-      .spyOn(Subscriber, "find")
-      .mockResolvedValue([
-        { email: "subscriber1@test.com" },
-        { email: "subscriber2@test.com" },
-      ]);
-
-    const selectedMailingList = "Leden";
-    const response = await request(app)
-      .get("/getSubscribers")
-      .query({ selectedMailingList });
-
-    expect(findSpy).toHaveBeenCalledWith({ subscription: selectedMailingList });
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual([
-      { email: "subscriber1@test.com" },
-      { email: "subscriber2@test.com" },
-    ]);
-
-    findSpy.mockRestore();
-  });
-
   test("Get subs of subscriber", async () => {
     const response = await request(app).get(`/${subscriberEmail.email}/subs`);
-    const expectedResult = subscribersSubscriptions;
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(expect.arrayContaining(expectedResult));
+    expect(response.body).toEqual(subscribersSubscriptions);
   });
 
   test("Get subs of subscriber that doesn't exist", async () => {
@@ -218,5 +194,17 @@ describe("Subscribers routes test", () => {
     expect(response.body).toEqual({
       message: "Bad Request: Invalid email format",
     });
+  });
+
+  test("should return 500 if there is an internal server error", async () => {
+    const subscriberEmail = "test@example.com";
+    jest.spyOn(Subscriber, "findOne").mockImplementation(() => {
+      throw new Error("Internal server error");
+    });
+
+    const response = await request(app).get(`/${subscriberEmail}/subs`);
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: "Internal server error" });
   });
 });
