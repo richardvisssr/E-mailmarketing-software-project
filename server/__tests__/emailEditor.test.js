@@ -63,41 +63,32 @@ describe("Email Editor Routes", () => {
 
   describe("GET /getEmail/:id", () => {
     it("should return the email with the specified id", async () => {
-      // Create a test email in the test database
       const testEmail = await Email.create({ id: "456", html: "Test Email" });
 
       const response = await request(app).get(`/mail/getEmail/${testEmail.id}`);
       expect(response.status).toBe(200);
       expect(response.body.subject).toBe(testEmail.subject);
-
-      // Clean up the test email from the test database
       await Email.deleteOne({ _id: testEmail._id });
     });
   });
 
   describe("PUT /sendEmail", () => {
     it("should handle errors during email sending", async () => {
-      // Mock the Email model to simulate an error during sending
       jest.spyOn(Email, "findOneAndUpdate").mockImplementationOnce(() => {
         throw new Error("Mocked email loading error");
       });
-  
+
       const response = await request(app)
         .put("/mail/sendEmail")
         .send({ id: "789", html: "<p>Email content</p>" });
-  
+
       expect(response.status).toBe(500);
       expect(response.body).toEqual({ error: "Internal server error" });
-      // Add more assertions to validate the response body or additional behavior
-  
-      // Ensure that the error was logged or handled appropriately
     });
   });
-  
 
   describe("GET /getEmail/:id", () => {
     it("should handle errors during email loading", async () => {
-      // Mock the Email model to simulate an error during loading
       jest.spyOn(Email, "findOne").mockImplementationOnce(() => {
         throw new Error("Mocked email loading error");
       });
@@ -106,9 +97,6 @@ describe("Email Editor Routes", () => {
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({ error: "Internal server error" });
-      // Add more assertions to validate the response body or additional behavior
-
-      // Ensure that the error was logged or handled appropriately
     });
   });
 });
