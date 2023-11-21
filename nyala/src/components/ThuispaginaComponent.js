@@ -8,7 +8,7 @@ export default function ThuispaginaComponent() {
   const router = useRouter();
 
   useEffect(() => {
-    router.prefetch("../../beheerder");
+    router.prefetch("../../admin");
   }, []);
 
   return (
@@ -24,7 +24,7 @@ export default function ThuispaginaComponent() {
           type="button"
           className={`btn ${styles.knop}`}
           onClick={() => {
-            router.push("../../beheerder");
+            router.push("../../admin");
           }}
         >
           Inloggen

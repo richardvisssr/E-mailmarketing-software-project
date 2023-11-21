@@ -26,7 +26,7 @@ export default function HeaderComponent() {
         <span className="fs-4 text-dark">|</span>
         <li className="nav-item">
           <Link
-            href="/beheerder"
+            href="/admin"
             className={`${styles.linky} nav-link`}
             aria-current="page"
           >
@@ -36,23 +36,13 @@ export default function HeaderComponent() {
         <span className="fs-4 text-dark">|</span>
         <li className="nav-item">
           <Link
-            href="/"
+            href="/admin/addMail"
             className={`${styles.linky} nav-link`}
             aria-current="page"
           >
             Lid toevoegen
           </Link>
         </li>
-        {/* <span className="fs-4 text-dark">|</span>
-        <li className="nav-item">
-          <Link
-            href="/"
-            className={`${styles.linky} nav-link`}
-            aria-current="page"
-          >
-            Analyse
-          </Link>
-        </li> */}
         <span className="fs-4 text-dark">|</span>
         <li className="nav-item">
           <Link
