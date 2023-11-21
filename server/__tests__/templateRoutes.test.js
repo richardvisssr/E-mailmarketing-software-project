@@ -46,10 +46,13 @@ describe('GET /templates', () => {
       expect(response.body).toEqual(expect.any(Array));
       expect(response.statusCode).toBe(200);
     }, 10000);
-    it('should respond with an error', async () => {
-      const response = await request(app).get('/templates', async (req, res, next) => {
-        next(new Error('Internal Server Error'));
+    it('should respond with an error when an internal server error occurs', async () => {
+      jest.spyOn(Design, 'find').mockImplementation(() => {
+        throw new Error('Internal Server Error');
       });
+  
+      const response = await request(app).get('/templates');
+      expect(response.statusCode).toBe(500);
       expect(response.body).toEqual({ error: 'Internal Server Error' });
     }, 10000);
   });
@@ -68,12 +71,13 @@ describe('GET /templates', () => {
     }, 10000);
 
     it('should respond with an error when an internal server error occurs', async () => {
-      routes.get('/templates/:id', async (req, res, next) => {
+      jest.spyOn(Email, 'findOne').mockImplementation(() => {
         throw new Error('Internal Server Error');
       });
-  
+
       const response = await request(app).get('/templates/testEmailId');
       expect(response.statusCode).toBe(500);
+      expect(response.body).toEqual({ error: 'Internal Server Error' });
     }, 10000);
   });
   
