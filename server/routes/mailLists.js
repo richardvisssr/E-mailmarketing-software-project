@@ -7,17 +7,15 @@ router.get("/getList", async (req, res) => {
     const subscriptions = await mailList.find();
     res.json(subscriptions);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
 router.put("/addList", async (req, res) => {
   const { name } = req.body;
-  console.log(name);
   try {
     const existingList = await mailList.findOne();
-    
+
     if (!existingList) {
       return res.status(404).json({ message: "List not found" });
     }
@@ -27,7 +25,6 @@ router.put("/addList", async (req, res) => {
 
     res.json(updatedList);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });

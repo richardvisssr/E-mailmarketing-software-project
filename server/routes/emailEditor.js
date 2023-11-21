@@ -1,5 +1,5 @@
 const express = require("express");
-const { Image, Design, Email } = require("../model/emailEditor");
+const { Design, Email } = require("../model/emailEditor");
 const router = express.Router();
 
 router.get("/loadDesign/:id", async (req, res) => {
@@ -8,7 +8,6 @@ router.get("/loadDesign/:id", async (req, res) => {
 
     res.json(design.design);
   } catch (error) {
-    console.error("Error loading design:", error);
     res.status(500).send("Internal Server Error");
   }
 });
@@ -28,19 +27,7 @@ router.put("/saveDesign", async (req, res) => {
       res.status(200).send("Design saved successfully");
     }
   } catch (error) {
-    console.error("Error saving design:", error);
     res.status(500).send("Internal Server Error");
-  }
-});
-
-router.post("/saveImage", async (req, res) => {
-  try {
-    const { image } = req.body;
-    const savedImage = await Image.create({ dataUrl: image });
-    res.json({ success: true, savedImage });
-  } catch (error) {
-    console.error("Error while saving the image:", error);
-    res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 });
 
@@ -55,8 +42,7 @@ router.put("/sendEmail", async (req, res) => {
     );
     res.status(200).send("Design saved successfully");
   } catch (error) {
-    console.error("Error saving design:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -65,8 +51,7 @@ router.get("/getEmail/:id", async (req, res) => {
     const email = await Email.findOne({ id: req.params.id });
     res.json(email);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

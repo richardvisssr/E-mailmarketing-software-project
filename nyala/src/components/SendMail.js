@@ -21,7 +21,7 @@ function SelectMailingLists() {
     if (selectedMailingList.length > 0) {
       Promise.all([
         fetch(
-          `http://localhost:3001/getSubscribers?selectedMailingList=${selectedMailingList.join(
+          `http://localhost:3001/subscribers?selectedMailingList=${selectedMailingList.join(
             ","
           )}`
         )

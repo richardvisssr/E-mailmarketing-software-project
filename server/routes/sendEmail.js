@@ -22,8 +22,7 @@ router.post('/sendEmail', async (req, res) => {
                 from: '"Fred Foo 👻" <foo@example.com>',
                 to: subscriber.email,
                 subject: 'Hello ✔',
-                text: 'Hello world?',
-                html: html
+                html: `${html} <a href="http://localhost:3000/unsubscribe">Uitschrijven</a>`
             };
 
             await transporter.sendMail(mailOptions);
@@ -31,7 +30,6 @@ router.post('/sendEmail', async (req, res) => {
 
         res.status(200).json({ success: true });
     } catch (error) {
-        console.error('Error sending email:', error);
         res.status(500).json({ error: 'Error sending email' });
     }
 });
