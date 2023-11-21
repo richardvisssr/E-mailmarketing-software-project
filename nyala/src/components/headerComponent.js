@@ -55,11 +55,6 @@ export default function HeaderComponent() {
         </li>
         <span className="fs-4 text-dark">|</span>
       </ul>
-      {/* <Link href="/" className={`${styles.linky} ${styles.customContainer}`} aria-current="page">
-        <button type="button" className={`btn ${styles.knop}`}>
-          Uitloggen
-        </button>
-      </Link> */}
       </div>
     </header>
   );
