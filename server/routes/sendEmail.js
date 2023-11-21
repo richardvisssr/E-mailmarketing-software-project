@@ -22,8 +22,8 @@ router.post('/sendEmail', async (req, res) => {
                 from: '"Fred Foo 👻" <foo@example.com>',
                 to: subscriber.email,
                 subject: 'Hello ✔',
-                text: 'Hello world?',
-                html: html
+                html: html,
+                html: '<a href="http://localhost:3000/unsubscribe">Uitschrijven</a>' 
             };
 
             await transporter.sendMail(mailOptions);
