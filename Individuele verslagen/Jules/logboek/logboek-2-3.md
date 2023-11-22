@@ -33,8 +33,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
-| | | | | | |
+| 1u | n.v.t. | n.v.t. | kleine fix gemaakt | :scream: | [link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/3e5271c80b901594ba0d75f2661b62fc4c35ccb5) |
 
 ## Donderdag 23 november
 
