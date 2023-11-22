@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { Modal, Button, Placeholder } from "react-bootstrap";
+import { Modal, Button, Placeholder, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
@@ -9,7 +9,13 @@ const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 const MailEditor = ({ id }) => {
   const editorRef = useRef(null);
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const [designSaved, setDesignSaved] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+
+  const handleClose = () => {
+    setShow(false);
+    setDesignSaved(false);
+  };
   const handleShow = () => setShow(true);
 
   const saveDesign = () => {
@@ -25,6 +31,7 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+        setDesignSaved(true);
         console.log("Design saved successfully");
       } catch (error) {
         console.error("Error saving design:", error);
@@ -34,7 +41,7 @@ const MailEditor = ({ id }) => {
 
   const sendEmail = () => {
     editorRef.current.exportHtml(async (data) => {
-      const { design, html } = data;
+      const { html } = data;
       try {
         const response = await fetch("http://localhost:3001/mail/sendEmail", {
           method: "PUT",
@@ -46,6 +53,7 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+        setEmailSent(true);
       } catch (error) {
         console.error("Error sending email:", error);
       }
@@ -84,10 +92,25 @@ const MailEditor = ({ id }) => {
 
   return (
     <div>
+      {designSaved && (
+        <Alert
+          variant="success"
+          onClose={() => setDesignSaved(false)}
+          dismissible
+        >
+          Design is succesvol opgeslagen!
+        </Alert>
+      )}
       <div>
         <EmailEditor
           options={{
             locale: "nl-NL",
+            translations: {
+              "nl-NL": {
+                "You will lose 1 column. Are you sure?":
+                  "Je verliest 1 kolom. Weet je het zeker?", 
+              },
+            },
             tools: {
               html: {
                 enabled: true,
@@ -118,7 +141,7 @@ const MailEditor = ({ id }) => {
         </Modal.Header>
         <Modal.Body>
           <Placeholder as={Modal.Body} animation="glow">
-            <SelectMailingLists />
+            <SelectMailingLists id={id} />
           </Placeholder>
         </Modal.Body>
         <Modal.Footer>

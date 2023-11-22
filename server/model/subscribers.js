@@ -23,13 +23,13 @@ const unsubscribe = new mongoose.Schema({
   },
 });
 
-const Subscriber = mongoose.model("Subscriber", subscribers);
-const Unsubscriber = mongoose.model("Unsubscribe", unsubscribe);
+// const Subscriber = mongoose.model("Subscriber", subscribers);
+// const Unsubscriber = mongoose.model("Unsubscribe", unsubscribe);
 
 // const sub = new Subscriber({
-//   email: "befibu@jfc.nl",
+//   email: "richard@jfc.nl",
 //   name: "Bert",
-//   subscription: ["Nieuwsbrief", "CMD"],
+//   subscription: ["Leden"],
 // });
 
 // sub.save();

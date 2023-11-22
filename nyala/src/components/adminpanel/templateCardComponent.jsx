@@ -17,6 +17,7 @@ import {
   toCanvas,
 } from "html-to-image";
 import Alert from "react-bootstrap/Alert";
+import SelectMailingLists from "../SendMail";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
@@ -133,6 +134,7 @@ function TemplateCard(props) {
         </Modal.Header>
         <Modal.Body>
           <Placeholder as={Modal.Body} animation="glow"></Placeholder>
+          <SelectMailingLists id={template.id} />
         </Modal.Body>
         <Modal.Footer>
           <Button

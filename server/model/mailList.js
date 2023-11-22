@@ -7,7 +7,7 @@ const mailListSchema = new mongoose.Schema({
   },
 });
 
-const mailList = mongoose.model("mailList", mailListSchema);
+// const mailList = mongoose.model("mailList", mailListSchema);
 
 // const addMailList = new mailList({
 //   mailList: ["Nieuwsbrief", "CMD", "ICT", "Leden"],
