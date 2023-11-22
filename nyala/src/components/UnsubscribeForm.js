@@ -211,7 +211,7 @@ export default function UnsubscribeForm({}) {
                 "unsubscribedSubs",
                 JSON.stringify(selectedSubs)
               );
-              router.push("../uitgeschreven");
+              router.push("../unsubscribed");
             }
           }
         } else {

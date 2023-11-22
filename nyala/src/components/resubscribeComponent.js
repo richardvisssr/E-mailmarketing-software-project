@@ -17,7 +17,7 @@ export default function ResubscribeComponent({}) {
       if (success) {
         localStorage.removeItem("unsubscribedEmail");
         localStorage.removeItem("unsubscribedSubs");
-        router.push("/thuispagina");
+        router.push("/homepage");
       } else {
         setWarning({
           type: "wrong",
