@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import FormGroup from "react-bootstrap/FormGroup";
+import styles from "@/components/adminpanel/button.module.css";
 
 function FilterPanel() {
   const [sortByLastChanged, setSortByLastChanged] = useState(false);
@@ -26,15 +27,10 @@ function FilterPanel() {
   };
 
   const handleClick = () => {
-    // Implement the filtering logic here
-    // The filter object contains the values of the form
-    // You can use the 'filter' object to filter the data
-    // The 'sortByLastChanged' state contains the value of the checkbox
-    // You can use the 'sortByLastChanged' state to sort the data
-    if (filter.title === "" || filter.category === "" ) {
-        alert("Please fill in a title or category");
+    if (filter.title === "" || filter.category === "") {
+      alert("Please fill in a title or category");
     } else {
-        console.log("Filter object: ", filter);
+      console.log("Filter object: ", filter);
     }
   };
 
@@ -85,13 +81,14 @@ function FilterPanel() {
           <div className="row">
             <div className="col-md-6 mb-3">
               <FormGroup>
-                <button
-                  type="button"
-                  className="btn btn-primary btn-sm"
+                <Button
+                  variant="primary"
+                  className={`${styles.knopPrimary}`}
+                  size="sm"
                   onClick={handleClick}
                 >
-                  Submit
-                </button>
+                  Filter
+                </Button>
               </FormGroup>
             </div>
           </div>

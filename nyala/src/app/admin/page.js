@@ -7,7 +7,8 @@ import FilterPanel from "@/components/adminpanel/filterComponent";
 import CardList from "@/components/adminpanel/CardListComponent";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
-import Link from "next/link";
+import styles from "@/components/adminpanel/button.module.css";
+import { nanoid } from "nanoid";
 
 function Page() {
   const [templates, setTemplates] = useState({});
@@ -37,6 +38,16 @@ function Page() {
     fetchData();
   }, []);
 
+  function generateUniqueShortId() {
+    return nanoid(); // Generates a unique short ID
+  }
+
+  const navigateToEditor = () => {
+    const newTemplateId = generateUniqueShortId();
+    console.log(newTemplateId);
+    window.location.href = `/admin/mail/${newTemplateId}`;
+  };
+
   return (
     <Container>
       <Row>
@@ -49,6 +60,9 @@ function Page() {
               Er is een fout opgetreden bij het ophalen van de templates...
             </Alert>
           )}
+          <Col md={{span: 11, offset: 11}} className="text-right mb-3">
+            <Button variant="primary" className={styles.knopPrimary} onClick={navigateToEditor}><i className="bi bi-plus">Nieuwe template</i></Button>
+          </Col>
           <CardList templates={templates} />
         </Col>
       </Row>

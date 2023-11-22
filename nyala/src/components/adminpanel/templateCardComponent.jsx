@@ -32,7 +32,6 @@ function TemplateCard(props) {
   const handleShow = () => setShow(true);
 
   useEffect(() => {
-    console.log("Hier in de useEffect prefetch");
     router.prefetch(`/mail/${template.id}`);
   }, [router, template.id]);
 
@@ -73,7 +72,6 @@ function TemplateCard(props) {
               tempDiv.remove();
             })
             .catch(function (error) {
-              console.error("oops, something went wrong!", error);
             });
         } else {
           throw new Error(data.message);
@@ -93,17 +91,14 @@ function TemplateCard(props) {
   return (
     <>
       <Col key={template.id} style={{ width: "16rem" }}>
-        {error && (
-          <Alert key="danger" variant="danger">
-            Er is een fout opgetreden bij het ophalen van de preview afbeelding
-          </Alert>
-        )}
         <Card ref={cardRef}>
-          <Card.Img
-            variant="top"
-            src={image.src}
-            style={{ width: "100%", height: "auto" }}
-          />
+          {!error && (
+            <Card.Img
+              variant="top"
+              src={image.src}
+              style={{ width: "100%", height: "auto" }}
+            />
+          )}
           <Card.Body>
             <Card.Title>{template.title}</Card.Title>
             <div className="d-flex justify-content-between">
