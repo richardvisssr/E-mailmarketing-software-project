@@ -19,7 +19,12 @@ export default function ToevoegVeld() {
           type: "error",
           message: "Er is iets foutgegaan tijdens het ophalen",
         });
-      } else if (response.ok) {
+      } else if (response.ok && (!body[0] || body[0].mailList === undefined)) {
+        setNotification({
+          type: "error",
+          message: "Er zijn nog geen maillijsten gemaakt.",
+        });
+      } else {
         setLists(body[0].mailList);
       }
     };
@@ -72,7 +77,7 @@ export default function ToevoegVeld() {
     if (list !== "") {
       const postList = async () => {
         try {
-          const response = await fetch("http://localhost:3001/mail/addlist", {
+          const response = await fetch("http://localhost:3001/mail/addList", {
             method: "PUT",
             headers: {
               Accept: "application/json",
@@ -85,14 +90,21 @@ export default function ToevoegVeld() {
           if (response.ok) {
             setNotification({
               type: "succes",
-              message: "De list is succesvol toegevoegd",
+              message: "De lijst is succesvol toegevoegd",
             });
           } else if (!response.ok) {
-            setNotification({
-              type: "error",
-              message:
-                "Er heeft zich een fout opgetreden tijdens het add van de list.",
-            });
+            if (response.code === 404 && response.message === "List not found") {
+              setNotification({
+                type: "error",
+                message: "Er bestaat nog geen collectie voor maillijsten.",
+              });
+            } else {
+              setNotification({
+                type: "error",
+                message:
+                  "Er heeft zich een fout opgetreden tijdens het toevoegen van de lijst.",
+              });
+            }
           }
         } catch (error) {
           setNotification({
@@ -112,7 +124,7 @@ export default function ToevoegVeld() {
     if (list === "") {
       setNotification({
         type: "error",
-        message: "De list is niet ingevuld.",
+        message: "De lijst is niet ingevuld.",
       });
     } else {
       setLists([...lists, list]);
