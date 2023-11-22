@@ -23,8 +23,8 @@ const unsubscribe = new mongoose.Schema({
   },
 });
 
-// const Subscriber = mongoose.model("Subscriber", subscribers);
-// const Unsubscriber = mongoose.model("Unsubscribe", unsubscribe);
+const Subscriber = mongoose.model("Subscriber", subscribers);
+const Unsubscriber = mongoose.model("Unsubscribe", unsubscribe);
 
 // const sub = new Subscriber({
 //   email: "richard@jfc.nl",
