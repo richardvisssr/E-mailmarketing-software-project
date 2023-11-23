@@ -28,7 +28,7 @@ const SubscriptionForm = ({ subscribers, setValue }) => {
       </div>
     );
   } catch (error) {
-    console.error("Error in SubscriptionForm:", error.message);
+    alert("Error in SubscriptionForm:", error.message);
     return (
       <div className="alert alert-danger" role="alert">
         Oeps! Er is iets foutgegaan met het laten zien van de lijsten.

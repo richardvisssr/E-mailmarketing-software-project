@@ -32,9 +32,8 @@ const MailEditor = ({ id }) => {
           throw new Error("Network response was not ok");
         }
         setDesignSaved(true);
-        console.log("Design saved successfully");
       } catch (error) {
-        console.error("Error saving design:", error);
+        alert("Error saving design:", error);
       }
     });
   };
@@ -55,7 +54,7 @@ const MailEditor = ({ id }) => {
         }
         setEmailSent(true);
       } catch (error) {
-        console.error("Error sending email:", error);
+        // alert("Error sending email:", error);
       }
       handleShow();
     });
@@ -85,7 +84,7 @@ const MailEditor = ({ id }) => {
 
       editorRef.current.loadDesign(design);
     } catch (error) {
-      console.error("Error loading design:", error);
+      // alert("Error loading design:", error);
     }
     editorRef.current = editor;
   };
