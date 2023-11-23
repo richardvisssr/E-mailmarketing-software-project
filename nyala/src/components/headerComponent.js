@@ -21,7 +21,7 @@ export default function HeaderComponent() {
           className={`${styles.logo}`}
         />
       </a>
-    <div class="d-flex justify-content-between align-items-center">
+    <div className="d-flex justify-content-between align-items-center">
       <ul className="nav nav-pills ">
         <span className="fs-4 text-dark">|</span>
         <li className="nav-item">
@@ -30,7 +30,7 @@ export default function HeaderComponent() {
             className={`${styles.linky} nav-link`}
             aria-current="page"
           >
-            templates
+            Templates
           </Link>
         </li>
         <span className="fs-4 text-dark">|</span>
