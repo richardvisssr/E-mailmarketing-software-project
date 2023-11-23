@@ -20,12 +20,12 @@
 
 .linky:hover {
     font-size: 105%;
-    color: #E800E9;
+    color: #a66cf2;
     transition: font-size 0.5s, color 0.5s;
 }
 
 .customContainer .knop {
-    background-color: #E800E9;
+    background-color: #a66cf2;
     color: white;
     transform: scale(1, 1);
     transition: transform 0.25s, color 0.25s, background-color 0.25s;
@@ -33,6 +33,6 @@
 
 .customContainer .knop:hover {
     transform: scale(1.1, 1.1);
-    background-color: #E800E9;
+    background-color: #a66cf2;
     color: white;
 }

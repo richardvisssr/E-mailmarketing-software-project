@@ -9,10 +9,22 @@ const mailListSchema = new mongoose.Schema({
 
 const mailList = mongoose.model("mailList", mailListSchema);
 
-// const addMailingList = new mailList({
-//   mailList: ["Nieuwsbrief", "CMD", "ICT", "Leden"],
-// });
+const defaultMailList = ["Nieuwsbrief", "CMD", "ICT", "Leden"];
 
-// addMailingList.save();
+const checkMailList = async () => {
+  try {
+    const count = await mailList.countDocuments({});
+
+    if (count === 0) {
+      const newMailList = new mailList({
+        mailList: defaultMailList,
+      });
+
+      await newMailList.save();
+    }
+  } catch (err) {}
+};
+
+checkMailList();
 
 module.exports = mailList;

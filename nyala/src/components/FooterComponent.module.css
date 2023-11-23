@@ -15,6 +15,6 @@
 
 .linky:hover i, .linky:hover a {
     font-size: 105%;
-    color: #E800E9;
+    color: #a66cf2;
     transition: font-size 0.5s, color 0.5s;
 }
