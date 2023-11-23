@@ -29,7 +29,7 @@ const Unsubscriber = mongoose.model("Unsubscribe", unsubscribe);
 // const sub = new Subscriber({
 //   email: "richard@jfc.nl",
 //   name: "Bert",
-//   subscription: ["Leden"],
+//   subscription: ["Leden", "ICT"],
 // });
 
 // sub.save();
