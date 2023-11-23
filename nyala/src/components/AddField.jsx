@@ -7,7 +7,7 @@ import SubscriptionForm from "./CategoriesComponent";
  * @returns {JSX.Element} The JSX element representing the component.
  */
 export default function ToevoegVeld() {
-  const [data, setData] = useState({ email: undefined, list: [] });
+  const [data, setData] = useState({ email: undefined, name: "", list: [] });
   const [status, setStatus] = useState(false);
   const [lists, setLists] = useState([]);
   const [add, setAdd] = useState(false);
@@ -53,6 +53,7 @@ export default function ToevoegVeld() {
               },
               body: JSON.stringify({
                 email: data.email,
+                name: data.name,
                 subscriptions: data.list,
               }),
             }
@@ -212,6 +213,13 @@ export default function ToevoegVeld() {
     setData({ ...data, email: event.target.value });
   };
 
+  const handleNameChange = (event) => {
+    if (notification.type === "succes") {
+      setNotification({ type: "", message: "" });
+    }
+    setData({ ...data, name: event.target.value });
+  };
+
   /**
    * Function to handle the change in the checkbox for selecting mailing lists.
    * @param {Object} event - The event object.
@@ -278,11 +286,24 @@ export default function ToevoegVeld() {
               onChange={handleEmailChange}
               value={data.email || ""}
             />
+            <label className="form-label">
+              Vul een naam in
+            </label>
+            <input
+              type="text"
+              className={`form-control ${styles.entry} p-2 mb-3`}
+              placeholder="Naam"
+              aria-describedby="basic-addon1"
+              onChange={handleNameChange}
+              value={data.name || ""}
+              id=""
+            />
             <div>
               {Array.isArray(lists) && lists.length > 0 ? (
                 <SubscriptionForm
                   subscribers={lists}
                   setValue={handleCheckboxChange}
+                  list={data.list}
                 />
               ) : (
                 <p>Er zijn geen maillijsten.</p>
