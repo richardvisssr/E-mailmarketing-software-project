@@ -46,7 +46,7 @@ export default function ToevoegVeld() {
           const response = await fetch(
             `http://localhost:3001/subscribers/add`,
             {
-              method: "PUT",
+              method: "POST",
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
@@ -296,7 +296,6 @@ export default function ToevoegVeld() {
               aria-describedby="basic-addon1"
               onChange={handleNameChange}
               value={data.name || ""}
-              id=""
             />
             <div>
               {Array.isArray(lists) && lists.length > 0 ? (
