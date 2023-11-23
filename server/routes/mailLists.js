@@ -12,7 +12,6 @@ router.get("/getList", async (req, res) => {
 });
 
 router.put("/addList", async (req, res) => {
-  console.log("We're in, boys");
   const { name } = req.body;
   try {
     const existingList = await mailList.findOne();
