@@ -30,7 +30,7 @@ export default function HeaderComponent() {
             className={`${styles.linky} nav-link`}
             aria-current="page"
           >
-            templates
+            Templates
           </Link>
         </li>
         <span className="fs-4 text-dark">|</span>
