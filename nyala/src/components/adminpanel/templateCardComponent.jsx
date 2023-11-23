@@ -17,7 +17,7 @@ import {
   toCanvas,
 } from "html-to-image";
 import Alert from "react-bootstrap/Alert";
-import SendMail from "@/components/SendMail";
+import SelectMailingLists from "../SendMail";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
@@ -128,9 +128,8 @@ function TemplateCard(props) {
           <Modal.Title>Wil je '{template.title}' versturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Placeholder as={Modal.Body} animation="glow">
-            <SendMail />
-          </Placeholder>
+          <Placeholder as={Modal.Body} animation="glow"></Placeholder>
+          <SelectMailingLists id={template.id} />
         </Modal.Body>
         <Modal.Footer>
           <Button

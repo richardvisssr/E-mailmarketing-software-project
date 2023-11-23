@@ -3,12 +3,12 @@ import React, { useState, useEffect } from "react";
 import SubscriptionForm from "./CategoriesComponent";
 import { useParams } from "next/navigation";
 
-function SelectMailingLists() {
+function SelectMailingLists({ id }) {
   const [mailingList, setMailingLists] = useState([]);
   const [selectedMailingList, setSelectedMailingList] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
   const [html, setHtml] = useState("");
-  const { id } = useParams();
+  const [emailSent, setEmailSent] = useState(false); // Nieuwe staat toegevoegd
 
   useEffect(() => {
     fetch("http://localhost:3001/mail/getList")
@@ -19,11 +19,10 @@ function SelectMailingLists() {
 
   useEffect(() => {
     if (selectedMailingList.length > 0) {
+      console.log(id);
       Promise.all([
         fetch(
-          `http://localhost:3001/subscribers?selectedMailingList=${selectedMailingList.join(
-            ","
-          )}`
+          `http://localhost:3001/subscribers?selectedMailingList=${selectedMailingList.join(",")}`
         )
           .then((response) => response.json())
           .catch((error) => {
@@ -71,20 +70,25 @@ function SelectMailingLists() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
+        setEmailSent(true);
         console.log("Email sent successfully");
       } catch (error) {
         console.error("Error sending email:", error);
+        setEmailSent(false); 
       }
     }
   };
 
   return (
     <div className="container mt-4">
+      {emailSent && (
+        <div className="alert alert-success" role="alert">
+          E-mail is succesvol verstuurd!
+        </div>
+      )}
+
       <label className="form-label">Selecteer Mailinglijst</label>
-      <SubscriptionForm
-        subscribers={mailingList[0]?.mailList || []}
-        setValue={handleMailingChange}
-      />
+      <SubscriptionForm subscribers={mailingList[0]?.mailList || []} setValue={handleMailingChange} />
 
       {selectedMailingList.length > 0 && (
         <div className="mt-4">
@@ -99,7 +103,7 @@ function SelectMailingLists() {
             <tbody>
               {subscribers.map((subscriber) => (
                 <tr key={subscriber.id}>
-                  <td>{subscriber.naam}</td>
+                  <td>{subscriber.name}</td>
                   <td>{subscriber.email}</td>
                 </tr>
               ))}

@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import FilterPanel from "@/components/adminpanel/filterComponent";
-import CardList from "@/components/adminpanel/cardListComponent";
+import CardList from "@/components/adminpanel/CardListComponent";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import styles from "@/components/adminpanel/button.module.css";
@@ -61,7 +61,7 @@ function Page() {
             </Alert>
           )}
           <Col md={{span: 11, offset: 11}} className="text-right mb-3">
-            <Button variant="primary" className={styles.knopPrimary} onClick={navigateToEditor}><i class="bi bi-plus">Nieuwe template</i></Button>
+            <Button variant="primary" className={styles.knopPrimary} onClick={navigateToEditor}><i className="bi bi-plus">Nieuwe template</i></Button>
           </Col>
           <CardList templates={templates} />
         </Col>

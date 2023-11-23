@@ -38,7 +38,7 @@ describe("Subscribers routes test", () => {
     await mongoose.disconnect();
   });
 
-  test("Get subscribers with selected mailing list - Valid Test", async () => {
+  test("Get subscribers with selected mailing list", async () => {
     const selectedMailingList = "Nieuwsbrief";
     const response = await request(app)
       .get("/subscribers")
