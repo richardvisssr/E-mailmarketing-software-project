@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import styles from "./AddField.module.css";
 import SubscriptionForm from "./CategoriesComponent";
 
+/**
+ * Functional component for adding email and subscribing to mailing lists.
+ * @returns {JSX.Element} The JSX element representing the component.
+ */
 export default function ToevoegVeld() {
   const [data, setData] = useState({ email: undefined, list: [] });
   const [status, setStatus] = useState(false);
@@ -11,6 +15,9 @@ export default function ToevoegVeld() {
   const [list, setList] = useState("");
 
   useEffect(() => {
+    /**
+     * Function to fetch mailing lists from the server.
+     */
     const fetchlists = async () => {
       const response = await fetch("http://localhost:3001/mail/getList");
       const body = await response.json();
@@ -31,6 +38,9 @@ export default function ToevoegVeld() {
     fetchlists();
 
     if (status) {
+      /**
+       * Function to post email data to the server.
+       */
       const postEmail = async () => {
         try {
           const response = await fetch(
@@ -75,6 +85,9 @@ export default function ToevoegVeld() {
 
   useEffect(() => {
     if (list !== "") {
+      /**
+       * Function to handle the addition of a new mailing list to the server.
+       */
       const postList = async () => {
         try {
           const response = await fetch("http://localhost:3001/mail/addList", {
@@ -93,7 +106,10 @@ export default function ToevoegVeld() {
               message: "De lijst is succesvol toegevoegd",
             });
           } else if (!response.ok) {
-            if (response.code === 404 && response.message === "List not found") {
+            if (
+              response.code === 404 &&
+              response.message === "List not found"
+            ) {
               setNotification({
                 type: "error",
                 message: "Er bestaat nog geen collectie voor maillijsten.",
@@ -118,6 +134,10 @@ export default function ToevoegVeld() {
     }
   }, [lists]);
 
+  /**
+   * Function to handle the addition of a new mailing list.
+   * @param {Object} event - The event object.
+   */
   const handleListAdd = (event) => {
     event.preventDefault();
 
@@ -132,6 +152,10 @@ export default function ToevoegVeld() {
     }
   };
 
+  /**
+   * Function to handle the addition of a new email and subscriptions.
+   * @param {Object} event - The event object.
+   */
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -177,6 +201,10 @@ export default function ToevoegVeld() {
     }
   };
 
+  /**
+   * Function to handle the change in the email input.
+   * @param {Object} event - The event object.
+   */
   const handleEmailChange = (event) => {
     if (notification.type === "succes") {
       setNotification({ type: "", message: "" });
@@ -184,6 +212,10 @@ export default function ToevoegVeld() {
     setData({ ...data, email: event.target.value });
   };
 
+  /**
+   * Function to handle the change in the checkbox for selecting mailing lists.
+   * @param {Object} event - The event object.
+   */
   const handleCheckboxChange = (event) => {
     if (notification.type === "succes") {
       setNotification({ type: "", message: "" });
