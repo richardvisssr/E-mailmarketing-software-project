@@ -21,40 +21,40 @@ export default function HeaderComponent() {
           className={`${styles.logo}`}
         />
       </a>
-    <div className="d-flex justify-content-between align-items-center">
-      <ul className="nav nav-pills ">
-        <span className="fs-4 text-dark">|</span>
-        <li className="nav-item">
-          <Link
-            href="/admin"
-            className={`${styles.linky} nav-link`}
-            aria-current="page"
-          >
-            Templates
-          </Link>
-        </li>
-        <span className="fs-4 text-dark">|</span>
-        <li className="nav-item">
-          <Link
-            href="/admin/addEmail"
-            className={`${styles.linky} nav-link`}
-            aria-current="page"
-          >
-            Lid toevoegen
-          </Link>
-        </li>
-        <span className="fs-4 text-dark">|</span>
-        <li className="nav-item">
-          <Link
-            href="/"
-            className={`${styles.linky} nav-link`}
-            aria-current="page"
-          >
-            Uitloggen
-          </Link>
-        </li>
-        <span className="fs-4 text-dark">|</span>
-      </ul>
+      <div className="d-flex justify-content-between align-items-center">
+        <ul className="nav nav-pills ">
+          <span className="fs-4 text-dark">|</span>
+          <li className="nav-item">
+            <Link
+              href="/admin"
+              className={`${styles.linky} nav-link`}
+              aria-current="page"
+            >
+              templates
+            </Link>
+          </li>
+          <span className="fs-4 text-dark">|</span>
+          <li className="nav-item">
+            <Link
+              href="/admin/addEmail"
+              className={`${styles.linky} nav-link`}
+              aria-current="page"
+            >
+              Lid toevoegen
+            </Link>
+          </li>
+          <span className="fs-4 text-dark">|</span>
+          <li className="nav-item">
+            <Link
+              href="/"
+              className={`${styles.linky} nav-link`}
+              aria-current="page"
+            >
+              Uitloggen
+            </Link>
+          </li>
+          <span className="fs-4 text-dark">|</span>
+        </ul>
       </div>
     </header>
   );

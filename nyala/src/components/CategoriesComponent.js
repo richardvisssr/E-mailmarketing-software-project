@@ -1,27 +1,9 @@
 import styles from "./categoriesComponent.module.css";
 
-/**
- * SubscriptionForm component displays a list of checkboxes for mail subscriptions.
- * @component
- * @param {Object} props - Component properties.
- * @param {Array<string>} props.subscribers - An array of strings representing mail subscriptions.
- * @param {function} props.setValue - A callback function to handle checkbox value changes.
- * @param {Array<string>} props.list - An array of selected subscriptions.
- * @returns {JSX.Element} React component.
- */
-const SubscriptionForm = ({ subscribers, setValue, list }) => {
+const SubscriptionForm = ({ subscribers, setValue }) => {
   try {
     if (!subscribers || !Array.isArray(subscribers)) {
       throw new Error("Invalid or missing subscribers data");
-    }
-
-    /**
-     * Checks if a subscription is selected.
-     * @param {string} subscription - The subscription to check.
-     * @returns {boolean} True if the subscription is selected, false otherwise.
-     */
-    function isSelected(subscription) {
-      return list.includes(subscription);
     }
 
     return (
@@ -37,7 +19,6 @@ const SubscriptionForm = ({ subscribers, setValue, list }) => {
                   value={subscription}
                   className={`me-2 control ${styles.customSelect}`}
                   onChange={setValue}
-                  checked={isSelected(subscription)}
                 />
                 {subscription}
               </label>
@@ -47,6 +28,7 @@ const SubscriptionForm = ({ subscribers, setValue, list }) => {
       </div>
     );
   } catch (error) {
+    alert("Error in SubscriptionForm:", error.message);
     return (
       <div className="alert alert-danger" role="alert">
         Oeps! Er is iets foutgegaan met het laten zien van de lijsten.

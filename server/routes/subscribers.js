@@ -18,9 +18,9 @@ router.get("/subscribers", async (req, res) => {
 
 router.post("/subscribers/add", async (req, res) => {
   try {
-    const { email, name, subscriptions } = req.body;
+    const { email, subscription } = req.body;
 
-    if (!email || !subscriptions || !Array.isArray(subscriptions)) {
+    if (!email || !subscription || !Array.isArray(subscription)) {
       return res.status(400).json({ message: "Bad Request: Invalid input" });
     }
 
@@ -30,40 +30,14 @@ router.post("/subscribers/add", async (req, res) => {
         .json({ message: "Bad Request: Invalid email format" });
     }
 
-    let existingSubscriber = await Subscriber.findOne({ email });
+    const subscriber = {
+      email,
+      subscription,
+    };
 
-    if (existingSubscriber) {
-      existingSubscriber.name = name || existingSubscriber.name;
-      existingSubscriber.subscription = subscriptions;
-      await existingSubscriber.save();
-      res.status(200).json({ message: "Subscriber updated" });
-    } else {
-      const subscriber = {
-        email,
-        subscription: subscriptions,
-      };
-      
-      if (name) {
-        subscriber.name = name;
-      }
-
-      const newSubscriber = new Subscriber(subscriber);
-      await newSubscriber.save();
-      res.status(200).json({ message: "Subscriber added" });
-    }
-
-    // const subscriber = {
-    //   email,
-    //   subscriptions,
-    // };
-    
-    // if (name) {
-    //   subscriber.name = name;
-    // }
-
-    // const newSubscriber = new Subscriber(subscriber);
-    // await newSubscriber.save();
-    // res.status(200).json({ message: "Subscriber added" });
+    const newSubscriber = new Subscriber(subscriber);
+    await newSubscriber.save();
+    res.status(200).json({ message: "Subscriber added" });
   } catch (err) {
     res.status(500).json({ message: "Internal Server Error" });
   }

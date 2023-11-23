@@ -1,5 +1,5 @@
 const express = require("express");
-const mailList = require("../model/mailingList");
+const mailList = require("../model/mailList");
 const router = express.Router();
 
 router.get("/getList", async (req, res) => {
