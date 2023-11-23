@@ -22,7 +22,9 @@ function SelectMailingLists({ id }) {
       console.log(id);
       Promise.all([
         fetch(
-          `http://localhost:3001/subscribers?selectedMailingList=${selectedMailingList.join(",")}`
+          `http://localhost:3001/subscribers?selectedMailingList=${selectedMailingList.join(
+            ","
+          )}`
         )
           .then((response) => response.json())
           .catch((error) => {
@@ -58,13 +60,16 @@ function SelectMailingLists({ id }) {
   const handleSendEmailClick = async () => {
     if (selectedMailingList.length > 0) {
       try {
-        const response = await fetch(" http://localhost:3001/sendMail/sendEmail", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ html: html, subscribers: subscribers }),
-        });
+        const response = await fetch(
+          " http://localhost:3001/sendMail/sendEmail",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ html: html, subscribers: subscribers }),
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -74,7 +79,7 @@ function SelectMailingLists({ id }) {
         console.log("Email sent successfully");
       } catch (error) {
         console.error("Error sending email:", error);
-        setEmailSent(false); 
+        setEmailSent(false);
       }
     }
   };
@@ -88,7 +93,10 @@ function SelectMailingLists({ id }) {
       )}
 
       <label className="form-label">Selecteer Mailinglijst</label>
-      <SubscriptionForm subscribers={mailingList[0]?.mailList || []} setValue={handleMailingChange} />
+      <SubscriptionForm
+        subscribers={mailingList[0]?.mailList || []}
+        setValue={handleMailingChange}
+      />
 
       {selectedMailingList.length > 0 && (
         <div className="mt-4">

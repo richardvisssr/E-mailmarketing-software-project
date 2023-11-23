@@ -42,40 +42,6 @@ function TemplateCard(props) {
           `http://127.0.0.1:3001/templates/${template.id}`
         );
         const data = await response.json();
-
-        if (response.ok) {
-          const htmlContent = data.html;
-
-          const tempDiv = document.createElement("div");
-          tempDiv.innerHTML = htmlContent;
-
-          document.body.appendChild(tempDiv);
-
-          htmlToImage
-            .toCanvas(tempDiv)
-            .then((canvas) => {
-              const ctx = canvas.getContext("2d");
-
-              const centerX = canvas.width / 2;
-              const centerY = canvas.height / 2;
-
-              ctx.translate(centerX, centerY);
-              ctx.scale(zoomLevel, zoomLevel);
-              ctx.translate(-centerX, -centerY);
-
-              const dataUrl = canvas.toDataURL("image/png");
-
-              let img = new Image();
-              img.src = dataUrl;
-              setImage(img);
-
-              tempDiv.remove();
-            })
-            .catch(function (error) {
-            });
-        } else {
-          throw new Error(data.message);
-        }
       } catch (error) {
         setError(true);
       }
