@@ -14,35 +14,28 @@ function SelectMailingLists({ id }) {
     fetch("http://localhost:3001/mail/getList")
       .then((response) => response.json())
       .then((data) => setMailingLists(data))
-      .catch((error) => console.error(error));
+      .catch((error) => alert(error));
   }, []);
 
   useEffect(() => {
     if (selectedMailingList.length > 0) {
-      console.log(id);
-      Promise.all([
-        fetch(
-          `http://localhost:3001/subscribers?selectedMailingList=${selectedMailingList.join(
-            ","
-          )}`
+      Promise.all(
+        selectedMailingList.map((listId) =>
+          fetch(
+            `http://localhost:3001/subscribers?selectedMailingList=${listId}`
+          )
+            .then((response) => response.json())
+            .catch((error) => {
+              alert("Error fetching subscribers:", error);
+              return [];
+            })
         )
-          .then((response) => response.json())
-          .catch((error) => {
-            console.error("Error fetching subscribers:", error);
-            return [];
-          }),
-        fetch(`http://localhost:3001/mail/getEmail/${id}`)
-          .then((response) => response.json())
-          .catch((error) => {
-            console.error("Error fetching email:", error);
-            return null;
-          }),
-      ])
-        .then(([subscribersData, emailData]) => {
-          setSubscribers(subscribersData);
-          setHtml(emailData.html);
+      )
+        .then((subscribersData) => {
+          const allSubscribers = subscribersData.flat();
+          setSubscribers(allSubscribers);
         })
-        .catch((error) => console.error("Error in Promise.all:", error));
+        .catch((error) => alert("Error in Promise.all:", error));
     }
   }, [selectedMailingList, id]);
 
@@ -70,15 +63,12 @@ function SelectMailingLists({ id }) {
             body: JSON.stringify({ html: html, subscribers: subscribers }),
           }
         );
-
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
         setEmailSent(true);
-        console.log("Email sent successfully");
       } catch (error) {
-        console.error("Error sending email:", error);
+        alert("Error sending email:", error);
         setEmailSent(false);
       }
     }

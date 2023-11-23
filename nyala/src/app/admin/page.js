@@ -51,9 +51,9 @@ function Page() {
   return (
     <Container>
       <Row>
-        <Col md={4}>
+        {/* <Col md={4}>
           <FilterPanel />
-        </Col>
+        </Col> */}
         <Col md={8}>
           {error && (
             <Alert key="danger" variant="danger">
