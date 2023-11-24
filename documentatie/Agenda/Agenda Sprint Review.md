@@ -15,20 +15,15 @@
    - Bespreken van voortgang en eventuele knelpunten
    - Feedback verzamelen
 
-## 4. Reflecteren (15 min)
-   - Evaluatie van de vorige sprint
-   - Identificeren van successen en verbeterpunten
-   - Actiepunten voor verbetering bespreken
-
-## 5. Demo (10 min)
+## 4. Demo (10 min)
    - Presenteren van de resultaten van de huidige sprint
    - Demonstratie van opgeleverde producten of functionaliteiten
 
-## 6. Samenvatting (10 min)
+## 5. Samenvatting (10 min)
    - Bespreken van belangrijkste conclusies en beslissingen
    - Afspraken voor de komende sprint vastleggen
 
-## 7. Afsluiting (5 min)
+## 6. Afsluiting (5 min)
    - Rondvraag en eventuele mededelingen
    - Datum, tijd en locatie van de volgende vergadering vaststellen
    - Bedanken en afsluiten van de vergadering
