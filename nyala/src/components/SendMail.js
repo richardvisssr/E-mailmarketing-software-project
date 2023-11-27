@@ -1,15 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import SubscriptionForm from "./CategoriesComponent";
-import { useParams } from "next/navigation";
 
 function SelectMailingLists({ id }) {
   const [mailingList, setMailingLists] = useState([]);
   const [selectedMailingList, setSelectedMailingList] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
   const [html, setHtml] = useState("");
-  const [emailSent, setEmailSent] = useState(false); // Nieuwe staat toegevoegd
-
+  const [emailSent, setEmailSent] = useState(false); 
+  
   useEffect(() => {
     fetch("http://localhost:3001/mail/getList")
       .then((response) => response.json())
@@ -19,7 +18,6 @@ function SelectMailingLists({ id }) {
 
   useEffect(() => {
     if (selectedMailingList.length > 0) {
-      console.log(id);
       Promise.all([
         fetch(
           `http://localhost:3001/subscribers?selectedMailingList=${selectedMailingList.join(
