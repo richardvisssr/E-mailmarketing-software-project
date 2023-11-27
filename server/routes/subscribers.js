@@ -16,6 +16,15 @@ router.get("/subscribers", async (req, res) => {
   }
 });
 
+router.get("/subscribers/all", async (req, res) => {
+  try {
+    const subscribers = await Subscriber.find();
+    res.status(200).send(subscribers);
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
 router.post("/subscribers/add", async (req, res) => {
   try {
     const { email, subscription } = req.body;
