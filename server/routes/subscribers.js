@@ -30,15 +30,26 @@ router.post("/subscribers/add", async (req, res) => {
         .json({ message: "Bad Request: Invalid email format" });
     }
 
-    const subscriber = {
-      email,
-      name,
-      subscription : subscriptions,
-    };
+    const existingSubscriber = await Subscriber.findOne({ email });
 
-    const newSubscriber = new Subscriber(subscriber);
-    await newSubscriber.save();
-    res.status(200).json({ message: "Subscriber added" });
+    if (existingSubscriber) {
+      existingSubscriber.subscription = [
+        ...existingSubscriber.subscription,
+        ...subscriptions,
+      ];
+
+      await existingSubscriber.save();
+      res.status(200).json({ message: "Subscriptions added to existing subscriber" });
+    } else {
+      const newSubscriber = new Subscriber({
+        email,
+        name,
+        subscriptions,
+      });
+
+      await newSubscriber.save();
+      res.status(200).json({ message: "New subscriber added" });
+    }
   } catch (err) {
     res.status(500).json({ message: "Internal Server Error" });
   }
