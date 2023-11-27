@@ -27,7 +27,7 @@ export default function ResubscribeComponent({}) {
         router.push("/resubscribed");
       } else {
         setWarning({
-          type: "wrong",
+          type: "error",
           bericht: "Er is iets misgegaan met het herinschrijven.",
         });
       }

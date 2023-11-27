@@ -43,7 +43,7 @@ export default function UnsubscribeForm({}) {
         return true;
       } else if (unsubscribeResponse.status === 404) {
         setWarning({
-          type: "wrong",
+          type: "error",
           bericht: "Vul een geldige email in.",
         });
         return false;
@@ -75,7 +75,7 @@ export default function UnsubscribeForm({}) {
         return true;
       } else if (unsubscribeResponse.status === 404) {
         setWarning({
-          type: "wrong",
+          type: "error",
           bericht: "Vul een geldige email in.",
         });
         return false;
@@ -86,7 +86,7 @@ export default function UnsubscribeForm({}) {
       }
     } catch (error) {
       setWarning({
-        type: "wrong",
+        type: "error",
         bericht: "Er ging iets mis met het uitschrijven.",
       });
       return false;
@@ -114,7 +114,7 @@ export default function UnsubscribeForm({}) {
       }
     } catch (error) {
       setWarning({
-        type: "wrong",
+        type: "error",
         bericht: "Er ging iets mis met het uitschrijven.",
       });
       return false;
@@ -133,7 +133,7 @@ export default function UnsubscribeForm({}) {
         .then((response) => {
           if (!response.ok) {
             setWarning({
-              type: "wrong",
+              type: "error",
               bericht: "Vul een geldige email in.",
             });
             throw new Error(
@@ -187,7 +187,7 @@ export default function UnsubscribeForm({}) {
     e.preventDefault();
     if (selectedSubs.length === 0 || reason === "") {
       setWarning({
-        type: "wrong",
+        type: "error",
         bericht: "Selecteer minstens een abonnement en een reden.",
       });
     } else {
@@ -219,7 +219,7 @@ export default function UnsubscribeForm({}) {
         }
       } catch (error) {
         setWarning({
-          type: "wrong",
+          type: "error",
           bericht: "Er ging iets mis met het uitschrijven.",
         });
     }
