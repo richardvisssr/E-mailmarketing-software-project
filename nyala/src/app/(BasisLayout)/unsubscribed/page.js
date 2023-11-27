@@ -1,4 +1,4 @@
-import ResubscribeComponent from "@/components/ResubscribeComponent";
+import ResubscribeComponent from "@/components/resubscribeComponent";
 
 export default function Page() {
   return (

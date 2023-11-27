@@ -7,19 +7,7 @@
   --bs-btn-hover-border-color: #c150f3;
 }
 
-.succesText {
-  color: green;
-  font-size: 1.5rem;
-  margin-top: 0.5rem;
-}
-
 .customText {
   font-size: 1.5rem;
-  margin-top: 0.5rem;
-}
-
-.warningText {
-  color: red;
-  font-size: 0.8rem;
   margin-top: 0.5rem;
 }
