@@ -20,6 +20,8 @@ router.post("/subscribers/add", async (req, res) => {
   try {
     const { email, name, subscriptions } = req.body;
 
+    console.log(req.body);
+
     if (!email || !subscriptions || !Array.isArray(subscriptions)) {
       return res.status(400).json({ message: "Bad Request: Invalid input" });
     }
@@ -33,18 +35,19 @@ router.post("/subscribers/add", async (req, res) => {
     const existingSubscriber = await Subscriber.findOne({ email });
 
     if (existingSubscriber) {
-      existingSubscriber.subscription = [
-        ...existingSubscriber.subscription,
-        ...subscriptions,
-      ];
+      existingSubscriber.subscription = Array.from(
+        new Set([...existingSubscriber.subscription, ...subscriptions])
+      );
 
       await existingSubscriber.save();
-      res.status(200).json({ message: "Subscriptions added to existing subscriber" });
+      res
+        .status(200)
+        .json({ message: "Subscriptions added to existing subscriber" });
     } else {
       const newSubscriber = new Subscriber({
         email,
         name,
-        subscriptions,
+        subscription: subscriptions,
       });
 
       await newSubscriber.save();
