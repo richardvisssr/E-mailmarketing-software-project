@@ -6,7 +6,12 @@ router.get("/loadDesign/:id", async (req, res) => {
   try {
     const design = await Design.findOne({ id: req.params.id });
 
-    res.json(design.design);
+    const responseData = {
+      design: design.design,
+      title: design.title
+    };
+
+    res.json(responseData);
   } catch (error) {
     res.status(500).send("Internal Server Error");
   }
@@ -15,6 +20,8 @@ router.get("/loadDesign/:id", async (req, res) => {
 router.put("/saveDesign", async (req, res) => {
   const id = req.body.id;
   const design = req.body.design;
+  const title = req.body.title;
+
   try {
     const existingDesign = await Design.findOne({ id });
     if (existingDesign) {
@@ -22,7 +29,7 @@ router.put("/saveDesign", async (req, res) => {
       await existingDesign.save();
       res.status(200).send("Design updated successfully");
     } else {
-      const newDesign = new Design({ id, design });
+      const newDesign = new Design({ id, design, title });
       await newDesign.save();
       res.status(200).send("Design saved successfully");
     }

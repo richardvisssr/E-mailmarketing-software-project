@@ -5,10 +5,10 @@ const { Subscriber, Unsubscriber } = require("../model/subscribers");
 const router = express.Router();
 
 router.get("/subscribers", async (req, res) => {
-  const selectedMailingList = req.query.selectedMailingList;
+ const selectedMailingList = req.query.selectedMailingList.split(',');
   try {
     const subscribers = await Subscriber.find({
-      subscription: selectedMailingList,
+      subscription: { $in: selectedMailingList },
     });
     res.status(200).send(subscribers);
   } catch (error) {
