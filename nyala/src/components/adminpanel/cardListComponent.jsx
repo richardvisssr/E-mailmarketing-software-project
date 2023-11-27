@@ -5,6 +5,7 @@ const { default: TemplateCard } = require("./TemplateCardComponent");
 
 function CardList(props) {
   const templates = props.templates;
+  console.log(templates);
 
   return (
     <Row xs={1} md={3} className="g-4">

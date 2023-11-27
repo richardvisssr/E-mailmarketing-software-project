@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import SubscriptionForm from "../categories/CategoriesComponent";
 
-function SelectMailingLists({ id }) {
+function SelectMailingLists(props) {
+  const { id } = props;
   const [mailingList, setMailingLists] = useState([]);
   const [selectedMailingList, setSelectedMailingList] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
@@ -14,6 +15,8 @@ function SelectMailingLists({ id }) {
       .then((response) => response.json())
       .then((data) => setMailingLists(data))
       .catch((error) => alert(error));
+
+      
   }, []);
 
   useEffect(() => {
@@ -39,6 +42,7 @@ function SelectMailingLists({ id }) {
         .then(([subscribersData, emailData]) => {
           setSubscribers(subscribersData);
           setHtml(emailData.html);
+          props.onDataChange({ html, subscribersData });
         })
         .catch((error) => console.error("Error in Promise.all:", error));
     }
@@ -53,40 +57,41 @@ function SelectMailingLists({ id }) {
         return prevSelected.filter((item) => item !== value);
       }
     });
+    props.setEmails((prevSelected) => {
+      if (checked) {
+        return [...prevSelected, value];
+      } else {
+        return prevSelected.filter((item) => item !== value);
+      }
+    });
   };
 
-  const handleSendEmailClick = async () => {
-    if (selectedMailingList.length > 0) {
-      try {
-        const response = await fetch(
-          " http://localhost:3001/sendMail/sendEmail",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ html: html, subscribers: subscribers }),
-          }
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        setEmailSent(true);
-      } catch (error) {
-        alert("Error sending email:", error);
-        setEmailSent(false);
-      }
-    }
-  };
+  // const handleSendEmailClick = async () => {
+  //   if (selectedMailingList.length > 0) {
+  //     try {
+  //       const response = await fetch(
+  //         " http://localhost:3001/sendMail/sendEmail",
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({ html: html, subscribers: subscribers }),
+  //         }
+  //       );
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! status: ${response.status}`);
+  //       }
+  //       setEmailSent(true);
+  //     } catch (error) {
+  //       alert("Error sending email:", error);
+  //       setEmailSent(false);
+  //     }
+  //   }
+  // };
 
   return (
     <div className="container mt-4">
-      {emailSent && (
-        <div className="alert alert-success" role="alert">
-          E-mail is succesvol verstuurd!
-        </div>
-      )}
-
       <label className="form-label">Selecteer Mailinglijst</label>
       <SubscriptionForm
         subscribers={mailingList[0]?.mailList || []}
@@ -112,10 +117,6 @@ function SelectMailingLists({ id }) {
               ))}
             </tbody>
           </table>
-
-          <button className="btn btn-primary" onClick={handleSendEmailClick}>
-            Mail Versturen
-          </button>
         </div>
       )}
     </div>
