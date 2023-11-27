@@ -1,14 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import SubscriptionForm from "./CategoriesComponent";
+import SubscriptionForm from "../categories/CategoriesComponent";
 
 function SelectMailingLists({ id }) {
   const [mailingList, setMailingLists] = useState([]);
   const [selectedMailingList, setSelectedMailingList] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
   const [html, setHtml] = useState("");
-  const [emailSent, setEmailSent] = useState(false); 
-  
+  const [emailSent, setEmailSent] = useState(false);
+
   useEffect(() => {
     fetch("http://localhost:3001/mail/getList")
       .then((response) => response.json())

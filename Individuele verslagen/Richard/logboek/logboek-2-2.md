@@ -42,7 +42,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 5 uur exc. pauze en assignment | https://github.com/HANICA-DWA/project-sep23-nyala/issues/46. Vandaag ging ik verder met email verzenden. De taak was om nu eerst de maillijst in een nieuw component te kunnen selecteren en de namen van de bijbehorende maillijst te zien en dan te kunnen versturen. Had hier niet veel tijd voor door assignment met Pim over PVA | Groepsgenoten indien relevant | Was voornamelijk bezig met bedenken hoe ik het kon aanpakken en er een begin aan gemaakt.  |:smiley:, :satisfied:| https://github.com/HANICA-DWA/project-sep23-nyala/commit/5cb4964e15b1ce7d2abcb446a960d15ee76595f8 |
 | | | | | | |
 
 
@@ -53,5 +53,5 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 7 uur exc. pazue |https://github.com/HANICA-DWA/project-sep23-nyala/issues/46 Vandaag bezig geweest met het afronden van mijn taak om emails te kunnen verzenden naar maillijst die ik heb geselecteerd en dan te verzenden naar gewenste gebruikers. Dat is ook gelukt en is tot een mooi eindresultaat gekomen. Ook rekening gehouden dat de component hergebruikt kon worden voor mijn groepsgenoot Jules | Jules en ik hebben zelffde functionaliteit nodig voor email verzenden omdat het op twee plaatsen mogelijk is om email te versturen. Overleg was belangrijk hoe de component te implementeren. | Rekening houden en nadenken of mijn functionaliteit zodanig goed werkt dat hij ook gebruikt kan worden op andere plekken in de code.  |:smiley:, :thinking:, :satisfied: |https://github.com/HANICA-DWA/project-sep23-nyala/commit/79fde3d3e6fe23a417b7a41db34e161c6a9d050f, https://github.com/HANICA-DWA/project-sep23-nyala/commit/99f1dc4d5f408a4c4245987ae47aca7d67cfbb10, https://github.com/HANICA-DWA/project-sep23-nyala/commit/1fbcb7a189c55ad533a1ad0cc82a1a48c5b412af |
 | | | | | | |
