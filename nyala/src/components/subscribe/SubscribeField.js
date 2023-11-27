@@ -48,7 +48,7 @@ export default function SubscribeField(props) {
               body: JSON.stringify({
                 email: data.email,
                 name: data.name,
-                subscriptions: list,
+                subscriptions: [list],
               }),
             }
           );
@@ -91,7 +91,7 @@ export default function SubscribeField(props) {
         type: "error",
         message: "Het emailadres is geen valide formaat.",
       });
-    } else if (lists.includes(list)) {
+    } else if (!lists.includes(list)) {
       setNotification({
         type: "error",
         message: "De maillijst bestaat niet.",
