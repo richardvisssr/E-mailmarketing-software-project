@@ -1,0 +1,38 @@
+.darkHeader {
+    background-color: #000000;
+}
+
+.logo {
+    transform: scale(1,1);
+    transition: transform 0.25s;;
+}
+
+.logo:hover {
+    transform: scale(1.1, 1.1);
+    transition: transform 0.5s;
+}
+
+.linky {
+    color: white;
+    font-size: 100%;
+    transition: color 0.25s, font-size 0.25s;
+}
+
+.linky:hover {
+    font-size: 105%;
+    color: #a66cf2;
+    transition: font-size 0.5s, color 0.5s;
+}
+
+.customContainer .knop {
+    background-color: #a66cf2;
+    color: white;
+    transform: scale(1, 1);
+    transition: transform 0.25s, color 0.25s, background-color 0.25s;
+}
+
+.customContainer .knop:hover {
+    transform: scale(1.1, 1.1);
+    background-color: #a66cf2;
+    color: white;
+}
