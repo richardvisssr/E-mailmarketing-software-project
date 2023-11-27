@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./UnsubscribeForm.module.css";
-import SubscriptionForm from "./CategoriesComponent";
+import SubscriptionForm from "../categories/CategoriesComponent";
 
 export default function UnsubscribeForm({}) {
   const router = useRouter();

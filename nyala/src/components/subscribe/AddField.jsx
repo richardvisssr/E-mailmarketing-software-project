@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./AddField.module.css";
-import SubscriptionForm from "./CategoriesComponent";
+import SubscriptionForm from "../categories/CategoriesComponent";
 
 /**
  * Functional component for adding email and subscribing to mailing lists.

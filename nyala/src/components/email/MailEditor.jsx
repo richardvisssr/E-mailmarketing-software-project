@@ -107,7 +107,7 @@ const MailEditor = ({ id }) => {
             translations: {
               "nl-NL": {
                 "You will lose 1 column. Are you sure?":
-                  "Je verliest 1 kolom. Weet je het zeker?", 
+                  "Je verliest 1 kolom. Weet je het zeker?",
               },
             },
             tools: {
