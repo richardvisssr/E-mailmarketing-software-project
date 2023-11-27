@@ -42,15 +42,11 @@ export default function ResubscribeComponent({}) {
       );
 
       if (reasonResponse.status === 200) {
-        console.log(subs);
-        console.log("U bent weer ingeschreven");
         return true;
       } else {
-        console.log("Er is iets misgegaan met het herinschrijven");
         return false;
       }
     } catch (error) {
-      console.error("Error tijdens inschrijven:", error);
       return false;
     }
   };
