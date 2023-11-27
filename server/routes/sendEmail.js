@@ -29,7 +29,9 @@ router.post("/sendEmail", async (req, res) => {
                             ${html}
                         </main>
                         <footer style="background-color: #f1f1f1; text-align: center; padding: 10px;">
-                            <a href="http://localhost:3000/unsubscribe">Uitschrijven</a>
+                        <a href="http://localhost:3000/unsubscribe?email=${encodeURIComponent(
+                          subscriber.email
+                        )}">Uitschrijven</a>
                         </footer>
                     </body>
                     </html>
