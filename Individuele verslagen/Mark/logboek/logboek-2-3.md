@@ -1,13 +1,5 @@
 # Logboek OW 2-3
 
-## Opmerkingen
-
-> [Hier is een Markdown Guide van GitHub](https://guides.github.com/features/mastering-markdown/)
-
-> [Gebruik eventueel deze handige table editor om de individuele tabellen te bewerken](https://www.tablesgenerator.com/markdown_tables)
-
-> [Hier is een lijstje met alle GitHub emojis](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md)
-
 ## Maandag 20 november
 
 > Vooral bestaande code verwerkt zodat het goed naar development kan en we aan het einde van de dag het grootste deel van de applicatie werkend samen hebben.
@@ -20,8 +12,6 @@
 
 ## Dinsdag 21 november
 
-> Eventueel informatieve algemene opmerkingen over deze dag.
-
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
 | 2u | Reviewen van code | - | - | :unamused: | Er is geen link naartoe |
@@ -29,29 +19,29 @@
 
 ## Woensdag 22 november
 
-> Eventueel informatieve algemene opmerkingen over deze dag.
+> Ik was ziek, dus heb niet veel gedaan.
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
 | 1u | Bugs fixen | - | - | :unamused: | [link naar de resultaten]() |
 | 1u | JSDocs schrijven | - | Uitgevonden hoe JSDocs werkt | :satisfied: | [link naar de resultaten]() |
+| - | Ziekte | - | - | :woozy_face: | - |
 
 ## Donderdag 23 november
 
-> Eventueel informatieve algemene opmerkingen over deze dag.
+> Tweede dag waar ik me ziek voelde.
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
-| | | | | | |
-
-
+| 1u | Een retro met Pim gehouden | Richard, Jules, Matthias | - | :satisfied: | [Link naar de resultaten](https://app.goretro.ai/t/JyhyvxIkh4hhuuXXISLK6kzo4/board/FfPFXIGLopUFMoXHpSr2iGDhIpVFcy7psOJe5cSVldPw5gKtnu) |
+| 1u | Laatste aanpassingen | - | - | :smile: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/d9e03e9ac4a5477fb5b92ee1c6aa7d9013e897ca) |
+| - | Ziekte | - | - | :woozy_face: | - |
 
 ## Vrijdag 24 november
 
-> Eventueel informatieve algemene opmerkingen over deze dag.
+> Einde van de eerste Sprint.
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
-| | | | | | |
+| 1u | Sprint review en planning | Richard, Jules, Matthias | - | :satisfied | Geen link |
+| 2u | User story uitwerking | Richard, Jules, Matthias | - | :satisfied: | [Link naar de resultaten](https://github.com/orgs/HANICA-DWA/projects/23/views/5) |
