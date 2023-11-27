@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import styles from "./SubscirbersTable.module.css";
+import styles from "./views.module.css";
 
 export default function SubscribersTable() {
   const [subscribers, setSubscribers] = useState([]);
@@ -20,18 +20,12 @@ export default function SubscribersTable() {
           <caption>Lijst met alle geabonneerde leden</caption>
           <thead>
             <tr>
-              <th scope="col" className={styles.smallerColumn}>
-                Naam
-              </th>
-              <th scope="col" className={styles.smallerColumn}>
-                Email
-              </th>
-              <th scope="col" className={styles.smallerColumn}>
-                Abonnementen
-              </th>
+              <th scope="col">Naam</th>
+              <th scope="col">Email</th>
+              <th scope="col">Abonnementen</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="table-group-divider">
             {subscribers.map((subscriber) => (
               <tr>
                 <td>{subscriber.name}</td>
