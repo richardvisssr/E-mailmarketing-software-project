@@ -26,7 +26,7 @@ function Page() {
           const bodyId = template.id;
           templateObject[templateId] = {
             id: bodyId,
-            title: `Template ${bodyId}`,
+            title: template.title,
           };
         });
         setTemplates(templateObject);
