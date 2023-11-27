@@ -44,7 +44,6 @@ function Page() {
 
   const navigateToEditor = () => {
     const newTemplateId = generateUniqueShortId();
-    console.log(newTemplateId);
     window.location.href = `/admin/mail/${newTemplateId}`;
   };
 
