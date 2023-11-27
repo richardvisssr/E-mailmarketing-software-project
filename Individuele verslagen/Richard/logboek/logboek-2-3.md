@@ -33,7 +33,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 2 uur | Er was geen taak op het project bord want na het testen was het plan om alles in development te mergen. Het was voornamelijk kleine bugs fixen na het mergen zodat we donderdag verder konden. Meeste onderdelen werkte maar paar testen faalden nog.| Mark, Jules, Matthias | Vandaag rustig dagje. Goed alles testen en nalopen is belangrijk  | :smiley:, :satisfied:| https://github.com/HANICA-DWA/project-sep23-nyala/commit/f053274aa7a1195a2e129e6074ed5f86d31895b7, https://github.com/HANICA-DWA/project-sep23-nyala/commit/fb8fc65c31729c0d5bddc4a1b2ce2df152381150 |
 | | | | | | |
 
 ## Donderdag 23 november
@@ -42,7 +42,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 7 uur | Vandaag retro gehad met Pim tot 11:00. Robert de product owner kwam nog langs om alvast te kijken naar ons product en nog wat besproken over evt. nieuwe functies. Daarna ook nog een agenda gemaakt voor zowel de sprint reviews als de planning. Als laatst sprint planning en review voorbereid. | Jules en Matthias | Niet te gezzelig doen anders komt alles op laatste moment aan  |:smiley: | https://github.com/HANICA-DWA/project-sep23-nyala/commit/48411b0f5bad804b565e5ebe41f4309fac4aea96 |
 | | | | | | |
 
 
@@ -53,5 +53,5 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 3 uur | Vandaag sprint review en planning gehad. De product owner was tevreden en was blij dat we al een werkende applicatie hadden waarmee emails gemaakt en vertuurd konden worden. De product owner had wel paar opmerkingen waaruit nieuwe user stories uit bloeide. Ook de scrum coach had opmerkingen over een user storie uit sprint een dat deze beter geformuleerd kon worden. Na de sprint review en planning hebben we van de user stories die we gaan maken in sprint twee taken aangemaakt met acceptatie criteria  | Groepsgenoten indien relevant | Beter oefenen met presenteren. Over algemeen ging wel goed maar meer verdiepen hoe de product owner het gepresenteerd wil hebben.  | :smiley:, :satisfied: | [link naar de resultaten](https://github.com/link-naar-de-commit) |
 | | | | | | |
