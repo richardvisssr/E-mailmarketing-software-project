@@ -11,12 +11,14 @@ import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import styles from "@/components/adminpanel/button.module.css";
 import { nanoid } from "nanoid";
+import { useRouter } from "next/navigation";
 
 function Page() {
   const [templates, setTemplates] = useState({});
   const [error, setError] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +58,8 @@ function Page() {
 
   const navigateToEditor = () => {
     const newTemplateId = generateUniqueShortId();
-    window.location.href = `/admin/mail/${newTemplateId}`;
+    router.push(`/admin/mail/${newTemplateId}`);
+    
   };
 
   return (
