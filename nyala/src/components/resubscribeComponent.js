@@ -1,12 +1,19 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./resubscribeComponent.module.css";
 
 export default function ResubscribeComponent({}) {
   const router = useRouter();
   const [warning, setWarning] = useState({ type: "", bericht: "" });
+
+  useEffect(() => {
+    setWarning({
+      type: "succes",
+      bericht: "U bent succesvol uitgeschreven.",
+    });
+  }, []);
 
   const handleUndo = async () => {
     const unsubscribedEmail = localStorage.getItem("unsubscribedEmail");
@@ -17,7 +24,7 @@ export default function ResubscribeComponent({}) {
       if (success) {
         localStorage.removeItem("unsubscribedEmail");
         localStorage.removeItem("unsubscribedSubs");
-        router.push("/homepage");
+        router.push("/resubscribed");
       } else {
         setWarning({
           type: "wrong",
@@ -84,9 +91,6 @@ export default function ResubscribeComponent({}) {
             </div>
           )}
         </div>
-        <p className={`${styles.succesText}`}>
-          U bent succesvol uitgeschreven{" "}
-        </p>
       </div>
       <div className="d-flex justify-content-center align-items-center">
         <p className={`${styles.customText}`}>
