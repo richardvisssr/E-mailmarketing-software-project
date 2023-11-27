@@ -11,6 +11,7 @@ const MailEditor = ({ id }) => {
   const [show, setShow] = useState(false);
   const [designSaved, setDesignSaved] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [title, setTitle] = useState("");
 
   const handleClose = () => {
     setShow(false);
@@ -26,7 +27,7 @@ const MailEditor = ({ id }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ design, id }),
+          body: JSON.stringify({ design, id, title }),
         });
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -82,7 +83,9 @@ const MailEditor = ({ id }) => {
 
       const design = await response.json();
 
-      editorRef.current.loadDesign(design);
+      editorRef.current.loadDesign(design.design);
+      setTitle(design.title);
+      
     } catch (error) {
       // alert("Error loading design:", error);
     }
@@ -91,6 +94,8 @@ const MailEditor = ({ id }) => {
 
   return (
     <div>
+      <h1 className="text-center">Mail Editor</h1>
+      <div className="p-2 gap-3 d-flex justify-content-center">
       {designSaved && (
         <Alert
           variant="success"
@@ -100,6 +105,16 @@ const MailEditor = ({ id }) => {
           Design is succesvol opgeslagen!
         </Alert>
       )}
+      </div>
+      <div className="p-2 gap-3 d-flex justify-content-center">
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Voer titel in"
+          className="form-control text-center"
+        />
+      </div>
       <div>
         <EmailEditor
           options={{
@@ -136,7 +151,7 @@ const MailEditor = ({ id }) => {
 
       <Modal show={show} onHide={handleClose} size="xl">
         <Modal.Header closeButton>
-          <Modal.Title>Wil je '{id}' verturen?</Modal.Title>
+          <Modal.Title>Wil je '{title}' verturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Placeholder as={Modal.Body} animation="glow">
