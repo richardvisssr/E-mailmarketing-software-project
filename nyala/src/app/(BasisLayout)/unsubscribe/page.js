@@ -1,4 +1,4 @@
-import UitschrijfForm from "@/components/UnsubscribeForm";
+import UitschrijfForm from "@/components/unsubscribe/UnsubscribeForm";
 
 export default function Page() {
   return (

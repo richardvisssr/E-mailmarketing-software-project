@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import SubscriptionForm from "./CategoriesComponent";
+import SubscriptionForm from "../categories/CategoriesComponent";
 import { useParams } from "next/navigation";
 
 function SelectMailingLists({ id }) {

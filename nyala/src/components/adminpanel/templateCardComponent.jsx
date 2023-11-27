@@ -17,7 +17,7 @@ import {
   toCanvas,
 } from "html-to-image";
 import Alert from "react-bootstrap/Alert";
-import SelectMailingLists from "../SendMail";
+import SelectMailingLists from "../email/SendMail";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
