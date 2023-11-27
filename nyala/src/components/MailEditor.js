@@ -151,7 +151,7 @@ const MailEditor = ({ id }) => {
 
       <Modal show={show} onHide={handleClose} size="xl">
         <Modal.Header closeButton>
-          <Modal.Title>Wil je '{id}' verturen?</Modal.Title>
+          <Modal.Title>Wil je '{title}' verturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Placeholder as={Modal.Body} animation="glow">
