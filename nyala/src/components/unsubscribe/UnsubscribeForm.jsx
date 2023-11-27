@@ -42,19 +42,15 @@ export default function UnsubscribeForm({}) {
         localStorage.setItem("unsubscribedEmail", email);
         return true;
       } else if (unsubscribeResponse.status === 404) {
-        console.log("Subscriber not found");
         setWarning({
           type: "wrong",
           bericht: "Vul een geldige email in.",
         });
         return false;
       } else {
-        console.log("Something went wrong during unsubscribe");
         return false;
       }
-    } catch (error) {
-      console.error("Error while unsubscribing:", error);
-    }
+    } catch (error) {}
   };
 
   // Wanneer de gebruiker een aantal abonnementen wilt verwijderen
@@ -75,25 +71,20 @@ export default function UnsubscribeForm({}) {
       );
 
       if (unsubscribeResponse.status === 200) {
-        console.log("Subscriber removed");
         localStorage.setItem("unsubscribedEmail", email);
         return true;
       } else if (unsubscribeResponse.status === 404) {
-        console.log("Subscriber not found");
         setWarning({
           type: "wrong",
           bericht: "Vul een geldige email in.",
         });
         return false;
       } else if (unsubscribeResponse.status === 400) {
-        console.log("Failed to unsubscribe");
         return false;
       } else {
-        console.log("Something went wrong during unsubscribing");
         return false;
       }
     } catch (error) {
-      console.error("Error during unsubscribe:", error);
       setWarning({
         type: "wrong",
         bericht: "Er ging iets mis met het uitschrijven.",
@@ -117,14 +108,16 @@ export default function UnsubscribeForm({}) {
       });
 
       if (reasonResponse.status === 200) {
-        console.log("Reason added");
         return true;
       } else {
-        console.log("Something went wrong during adding reason");
         return false;
       }
     } catch (error) {
-      console.error("Error while adding reason:", error);
+      setWarning({
+        type: "wrong",
+        bericht: "Er ging iets mis met het uitschrijven.",
+      });
+      return false;
     }
   };
 
@@ -150,17 +143,14 @@ export default function UnsubscribeForm({}) {
           return response.json();
         })
         .then((data) => {
-          console.log(data);
           setSubs(data);
           setSubscribersList(
             <SubscriptionForm subscribers={data} setValue={changeValue} />
           );
         })
         .catch((error) => {
-          console.error(error);
         });
     } catch (error) {
-      console.error("Error while fetching the data:", error);
     }
   };
 
@@ -228,8 +218,10 @@ export default function UnsubscribeForm({}) {
           }
         }
       } catch (error) {
-        console.error("Error:", error);
-      }
+        setWarning({
+          type: "wrong",
+          bericht: "Er ging iets mis met het uitschrijven.",
+        });
     }
   };
 

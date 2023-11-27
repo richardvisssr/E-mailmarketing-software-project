@@ -105,6 +105,7 @@ export default function ToevoegVeld() {
               type: "succes",
               message: "De lijst is succesvol toegevoegd",
             });
+            setList("");
           } else if (!response.ok) {
             if (
               response.code === 404 &&
@@ -145,6 +146,11 @@ export default function ToevoegVeld() {
       setNotification({
         type: "error",
         message: "De lijst is niet ingevuld.",
+      });
+    } else if (lists.includes(list)) {
+      setNotification({
+        type: "error",
+        message: "De ingevulde lijst bestaat al!",
       });
     } else {
       setLists([...lists, list]);
