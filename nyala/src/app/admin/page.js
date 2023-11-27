@@ -26,7 +26,7 @@ function Page() {
           const bodyId = template.id;
           templateObject[templateId] = {
             id: bodyId,
-            title: `Template ${bodyId}`,
+            title: template.title,
           };
         });
         setTemplates(templateObject);
@@ -44,7 +44,6 @@ function Page() {
 
   const navigateToEditor = () => {
     const newTemplateId = generateUniqueShortId();
-    console.log(newTemplateId);
     window.location.href = `/admin/mail/${newTemplateId}`;
   };
 
