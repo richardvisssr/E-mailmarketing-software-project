@@ -8,9 +8,9 @@ const subscribers = new mongoose.Schema({
   },
   name: {
     type: String,
-    required: false,
+    required: true,
   },
-  subscription: {
+  subscriptions: {
     type: [String],
     required: true,
   },

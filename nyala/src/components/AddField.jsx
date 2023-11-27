@@ -7,7 +7,7 @@ import SubscriptionForm from "./CategoriesComponent";
  * @returns {JSX.Element} The JSX element representing the component.
  */
 export default function ToevoegVeld() {
-  const [data, setData] = useState({ email: undefined, list: [] });
+  const [data, setData] = useState({ email: undefined, list: [], name: "" });
   const [status, setStatus] = useState(false);
   const [lists, setLists] = useState([]);
   const [add, setAdd] = useState(false);
@@ -46,19 +46,20 @@ export default function ToevoegVeld() {
           const response = await fetch(
             `http://localhost:3001/subscribers/add`,
             {
-              method: "PUT",
+              method: "POST",
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
                 email: data.email,
+                name: data.name,
                 subscriptions: data.list,
               }),
             }
           );
           if (response.ok) {
-            setData({ email: undefined, list: [] });
+            setData({ email: undefined, list: [], name: "" });
             setStatus(false);
             setNotification({
               type: "succes",
@@ -209,7 +210,7 @@ export default function ToevoegVeld() {
     if (notification.type === "succes") {
       setNotification({ type: "", message: "" });
     }
-    setData({ ...data, email: event.target.value });
+    setData({ ...data, email: event.target.value, name: data.name });
   };
 
   /**
@@ -267,9 +268,17 @@ export default function ToevoegVeld() {
           onSubmit={handleSubmit}
         >
           <label htmlFor="form" className={`${styles.label} mb-2 rounded`}>
-            Vul een email in, om toe te voegen aan een emaillijst
+            Vul een naam en email in, om toe te voegen aan een emaillijst
           </label>
           <div id="form">
+            <input
+              type="text"
+              className={`form-control ${styles.entry} p-2 mb-3`}
+              placeholder="Name"
+              onChange={(e) => setData({ ...data, name: e.target.value })}
+              value={data.name || ""}
+            />
+
             <input
               type="text"
               className={`form-control ${styles.entry} p-2 mb-3`}

@@ -18,9 +18,9 @@ router.get("/subscribers", async (req, res) => {
 
 router.post("/subscribers/add", async (req, res) => {
   try {
-    const { email, subscription } = req.body;
+    const { email, name, subscriptions } = req.body;
 
-    if (!email || !subscription || !Array.isArray(subscription)) {
+    if (!email || !subscriptions || !Array.isArray(subscriptions)) {
       return res.status(400).json({ message: "Bad Request: Invalid input" });
     }
 
@@ -32,7 +32,8 @@ router.post("/subscribers/add", async (req, res) => {
 
     const subscriber = {
       email,
-      subscription,
+      name, 
+      subscriptions,
     };
 
     const newSubscriber = new Subscriber(subscriber);
@@ -42,6 +43,7 @@ router.post("/subscribers/add", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 
 router.get("/:subscriber/subs", async (req, res) => {
   const { subscriber } = req.params;
