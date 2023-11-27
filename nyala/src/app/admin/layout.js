@@ -1,4 +1,4 @@
-import HeaderComponent from "@/components/layout/headerComponent";
+import HeaderComponent from "@/components/layout/HeaderComponent";
 import FooterComponent from "@/components/layout/FooterComponent";
 
 export default function BeheerderLayout({ children }) {
