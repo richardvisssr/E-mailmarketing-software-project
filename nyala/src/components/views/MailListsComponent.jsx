@@ -5,6 +5,7 @@ import { Modal, Button, Placeholder, Alert } from "react-bootstrap";
 
 import styles from "./Views.module.css";
 import AlertComponent from "../alert/AlertComponent";
+import TableComponent from "./TableComponent";
 
 export default function MailListComponent() {
   const [mailLists, setMailLists] = useState([]);
@@ -223,33 +224,11 @@ export default function MailListComponent() {
               data-bs-parent="#MaillistView"
             >
               <div className="accordion-body">
-                <div className="table-responsive">
-                  <table className="table table-hover">
-                    <thead>
-                      <tr>
-                        <th scope="col">Naam</th>
-                        <th scope="col">Email</th>
-                        <th> </th>
-                      </tr>
-                    </thead>
-                    <tbody className="table-group-divider">
-                      {subscribers[index]?.map((subscriber, subIndex) => (
-                        <tr key={subIndex}>
-                          <td>{subscriber.name}</td>
-                          <td>{subscriber.email}</td>
-                          <td className="hover-icon">
-                            <i
-                              className="bi bi-trash-fill"
-                              onClick={() =>
-                                handleShow(subscriber.email, mailList)
-                              }
-                            ></i>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <TableComponent
+                  subscribers={subscribers}
+                  handleShow={handleShow}
+                  mailList={mailList}
+                />
               </div>
             </div>
           </div>
