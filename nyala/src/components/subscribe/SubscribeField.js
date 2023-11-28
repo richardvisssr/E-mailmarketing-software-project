@@ -6,6 +6,7 @@ export default function SubscribeField(props) {
   const [status, setStatus] = useState(false);
   const [notification, setNotification] = useState({ type: "", message: "" });
   const [lists, setLists] = useState([]);
+  const [loading, setLoading] = useState(true);
   const list = props.list;
 
   useEffect(() => {
@@ -13,20 +14,32 @@ export default function SubscribeField(props) {
      * Function to fetch mailing lists from the server.
      */
     const fetchlists = async () => {
-      const response = await fetch("http://localhost:3001/mail/getList");
-      const body = await response.json();
-      if (!response.ok) {
+      try {
+        const response = await fetch("http://localhost:3001/mail/getList");
+        const body = await response.json();
+        if (!response.ok) {
+          setNotification({
+            type: "error",
+            message: "Er is iets foutgegaan tijdens het ophalen",
+          });
+        } else if (
+          response.ok &&
+          (!body[0] || body[0].mailList === undefined)
+        ) {
+          setNotification({
+            type: "error",
+            message: "Er zijn nog geen maillijsten gemaakt.",
+          });
+        } else {
+          setLists(body[0].mailList);
+        }
+      } catch (error) {
         setNotification({
           type: "error",
           message: "Er is iets foutgegaan tijdens het ophalen",
         });
-      } else if (response.ok && (!body[0] || body[0].mailList === undefined)) {
-        setNotification({
-          type: "error",
-          message: "Er zijn nog geen maillijsten gemaakt.",
-        });
-      } else {
-        setLists(body[0].mailList);
+      } finally {
+        setLoading(false);
       }
     };
     fetchlists();
