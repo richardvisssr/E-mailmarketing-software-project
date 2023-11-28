@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./AddField.module.css";
+import Link from "next/link";
 
 export default function SubscribeField(props) {
   const [data, setData] = useState({ email: undefined, name: "" });
@@ -133,66 +134,98 @@ export default function SubscribeField(props) {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center py-5">
-      <div>
-        <div>
-          {notification.type !== "succes" ? (
-            <></>
-          ) : (
-            <div
-              className="alert alert-success d-flex justify-content-around"
-              role="alert"
-            >
-              <p>{notification.message}</p>
-              <i className="bi bi-check"></i>
+    <>
+      {lists.includes(list) ? (
+        <div className="d-flex justify-content-center align-items-center py-5">
+          <div>
+            <div>
+              {notification.type !== "succes" ? (
+                <></>
+              ) : (
+                <div
+                  className="alert alert-success d-flex justify-content-around"
+                  role="alert"
+                >
+                  <p>{notification.message}</p>
+                  <i className="bi bi-check"></i>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <div>
-          {notification.type !== "error" ? (
-            <></>
-          ) : (
-            <div
-              className="alert alert-danger d-flex justify-content-around"
-              role="alert"
-            >
-              <p>{notification.message}</p>
-              <i className="bi bi-exclamation-triangle"></i>
+            <div>
+              {notification.type !== "error" ? (
+                <></>
+              ) : (
+                <div
+                  className="alert alert-danger d-flex justify-content-around"
+                  role="alert"
+                >
+                  <p>{notification.message}</p>
+                  <i className="bi bi-exclamation-triangle"></i>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <form
-          className={`input-group ${styles.form} d-flex flex-column`}
-          onSubmit={handleSubmit}
-        >
-          <label htmlFor="form" className={`${styles.label} mb-2 rounded`}>
-            Vul een naam en email in, om toe te voegen aan {list}
-          </label>
-          <div id="form">
-            <input
-              type="text"
-              className={`form-control ${styles.entry} p-2 mb-3`}
-              placeholder="Name"
-              onChange={handleNameChange}
-              value={data.name || ""}
-            />
+            <form
+              className={`input-group ${styles.form} d-flex flex-column`}
+              onSubmit={handleSubmit}
+            >
+              <label htmlFor="form" className={`${styles.label} mb-2 rounded`}>
+                Vul een naam en email in, om toe te voegen aan {list}
+              </label>
+              <div id="form">
+                <input
+                  type="text"
+                  className={`form-control ${styles.entry} p-2 mb-3`}
+                  placeholder="Name"
+                  onChange={handleNameChange}
+                  value={data.name || ""}
+                />
 
-            <input
-              type="text"
-              className={`form-control ${styles.entry} p-2 mb-3`}
-              placeholder="Email"
-              aria-describedby="basic-addon1"
-              onChange={handleEmailChange}
-              value={data.email || ""}
-            />
+                <input
+                  type="text"
+                  className={`form-control ${styles.entry} p-2 mb-3`}
+                  placeholder="Email"
+                  aria-describedby="basic-addon1"
+                  onChange={handleEmailChange}
+                  value={data.email || ""}
+                />
+              </div>
+              <input
+                type="submit"
+                className={`btn ${styles.buttonPrimary} rounded mt-4`}
+                value="Email toevoegen"
+              />
+            </form>
           </div>
-          <input
-            type="submit"
-            className={`btn ${styles.buttonPrimary} rounded mt-4`}
-            value="Email toevoegen"
-          />
-        </form>
-      </div>
-    </div>
+        </div>
+      ) : (
+        <div
+          className={`d-flex flex-column justify-content-center align-items-center `}
+        >
+          <div
+            className={`alert alert-danger d-flex justify-content-around ${styles.notFound}`}
+            role="alert"
+          >
+            <p>De gezochte maillijst bestaat niet, onze excuses hiervoor!</p>
+            <i className="bi bi-exclamation-triangle"></i>
+          </div>
+          <div>
+            <p>Zocht je een van de volgende lijsten?</p>
+            <ul>
+              {lists.map((list) => (
+                <li className={styles.listItem} key={list}>
+                  <Link
+                    href={`/${list}/subscribe`}
+                    className={`${styles.linky} nav-link`}
+                    aria-current="page"
+                  >
+                    {list}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
