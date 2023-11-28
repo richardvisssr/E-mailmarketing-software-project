@@ -135,7 +135,15 @@ export default function SubscribeField(props) {
 
   return (
     <>
-      {lists.includes(list) ? (
+      {loading ? (
+        <div
+          className={`d-flex flex-column justify-conten-center align-items-center py-5`}
+        >
+          <div className={`spinner-border ${styles.spinner}`} role="status">
+            <span className="sr-only"></span>
+          </div>
+        </div>
+      ) : lists.includes(list) ? (
         <div className="d-flex justify-content-center align-items-center py-5">
           <div>
             <div>
