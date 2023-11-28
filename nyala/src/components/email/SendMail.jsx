@@ -56,7 +56,7 @@ function SelectMailingLists({ id }) {
   };
 
   const handleSendEmailClick = async () => {
-    if (selectedMailingList.length > 0) {
+    if (selectedMailingList.length > 0 && subscribers.length > 0) {
       try {
         const response = await fetch(
           " http://localhost:3001/sendMail/sendEmail",
@@ -65,7 +65,11 @@ function SelectMailingLists({ id }) {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ html: html, subscribers: subscribers }),
+            body: JSON.stringify({
+              html: html,
+              subscribers: subscribers,
+              id: id,
+            }),
           }
         );
         if (!response.ok) {
@@ -76,6 +80,8 @@ function SelectMailingLists({ id }) {
         alert("Error sending email:", error);
         setEmailSent(false);
       }
+    } else {
+      alert("Selecteer een mailinglijst met subscribers.");
     }
   };
 
@@ -84,6 +90,11 @@ function SelectMailingLists({ id }) {
       {emailSent && (
         <div className="alert alert-success" role="alert">
           E-mail is succesvol verstuurd!
+        </div>
+      )}
+      {subscribers.length === 0 && selectedMailingList.length > 0 && (
+        <div className="alert alert-warning" role="alert">
+          Er zijn nog geen subscribers.
         </div>
       )}
 

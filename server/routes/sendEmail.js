@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/sendEmail", async (req, res) => {
   try {
-    const { html, subscribers } = req.body;
+    const { html, subscribers, id } = req.body;
 
     let transporter = nodemailer.createTransport({
       host: "145.74.104.216",
@@ -23,20 +23,25 @@ router.post("/sendEmail", async (req, res) => {
         to: subscriber.email,
         subject: `Hallo ${subscriber.name} - Xtend nieuwsbrief`,
         html: `
-          <div style="background-color: #f1f1f1; text-align: center; padding: 10px;">
-            <h1 style="color: #333; font-size: 24px;">Xtend</h1>
-            <h2 style="color: #666; font-size: 20px;">Beste ${
-              subscriber.name
-            }, hierbij ontvang je onze nieuwsbrief</h2>
-          </div>
-          <div style="padding: 20px;">
-            ${html}
-          </div>
-          <div style="background-color: #f1f1f1; text-align: center; padding: 10px;">
-            <a style="text-decoration: none; color: #333;" href="http://localhost:3000/unsubscribe?email=${encodeURIComponent(
-              subscriber.email
-            )}">Uitschrijven</a>
-          </div>
+        <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
+        ${html}
+      </div>
+      <div style="background-color: #f1f1f1; text-align: center; padding: 10px;">
+        <p>
+          Bekijk de online versie van deze e-mail
+          <a href="http://localhost:3000/onlineEmail/${id}/${
+          subscriber.email
+        }" style="text-decoration: none; color: #007BFF;">
+            hier
+          </a>.
+        </p>
+        <a href="http://localhost:3000/unsubscribe?email=${encodeURIComponent(
+          subscriber.email
+        )}" style="text-decoration: none; color: #333;">
+          Uitschrijven
+        </a>
+      </div>
+      
         `,
       };
 
