@@ -30,6 +30,7 @@ function TemplateCard(props) {
   const [planned, setPlanned] = useState(false);
   const [mails, setMails] = useState([]);
   const [emailSent, setEmailSent] = useState(false);
+  const [dateTime, setDateTime] = useState("");
   
   const router = useRouter();
 
@@ -106,7 +107,7 @@ function TemplateCard(props) {
             body: JSON.stringify({
               html: sentData.html,
               subscribers: sentData.subscribersData,
-              time: new Date(),
+              time: dateTime,
             }),
           }
         );
@@ -193,7 +194,7 @@ function TemplateCard(props) {
                 className="form-control"
                 id="exampleFormControlInput1"
                 placeholder="2021-06-12T19:30"
-                onInput={(e) => console.log(e.target.value)}
+                onInput={setDateTime}
                 required
               />
             </div>
