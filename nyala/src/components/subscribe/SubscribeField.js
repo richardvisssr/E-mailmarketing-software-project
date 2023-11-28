@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./AddField.module.css";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function SubscribeField(props) {
   const [data, setData] = useState({ email: undefined, name: "" });
@@ -9,6 +10,7 @@ export default function SubscribeField(props) {
   const [lists, setLists] = useState([]);
   const [loading, setLoading] = useState(true);
   const list = props.list;
+  const router = useRouter();
 
   useEffect(() => {
     /**
@@ -205,35 +207,7 @@ export default function SubscribeField(props) {
             </form>
           </div>
         </div>
-      ) : (
-        <div
-          className={`d-flex flex-column justify-content-center align-items-center `}
-        >
-          <div
-            className={`alert alert-danger d-flex justify-content-around ${styles.notFound}`}
-            role="alert"
-          >
-            <p>De gezochte maillijst bestaat niet, onze excuses hiervoor!</p>
-            <i className="bi bi-exclamation-triangle"></i>
-          </div>
-          <div>
-            <p>Zocht je een van de volgende lijsten?</p>
-            <ul>
-              {lists.map((list) => (
-                <li className={styles.listItem} key={list}>
-                  <Link
-                    href={`/${list}/subscribe`}
-                    className={`${styles.linky} nav-link`}
-                    aria-current="page"
-                  >
-                    {list}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
+      ) : router.push("/404")}
     </>
   );
 }
