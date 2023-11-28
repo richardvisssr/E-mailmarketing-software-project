@@ -26,10 +26,24 @@ function TemplateCard(props) {
   const [image, setImage] = useState("");
   const [zoomLevel, setZoomLevel] = useState(2);
   const [error, setError] = useState(false);
+  const [sentData, setSentData] = useState([]);
+  const [planned, setPlanned] = useState(false);
+  const [mails, setMails] = useState([]);
+  const [emailSent, setEmailSent] = useState(false);
+  
   const router = useRouter();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const onDataChange = (data) => {
+    setSentData(data);
+  };
+
+  useEffect(() => {
+    setPlanned(false);
+    setEmailSent(false);
+  }, [show]);
 
   useEffect(() => {
     router.prefetch(`/mail/${template.id}`);
@@ -49,6 +63,63 @@ function TemplateCard(props) {
 
     fetchHtmlContent();
   }, [template.id]);
+
+  const handleSendEmailClick = async () => {
+    console.log(mails);
+    if (mails.length > 0) {
+      try {
+        const response = await fetch(
+          " http://localhost:3001/sendMail/sendEmail",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              html: sentData.html,
+              subscribers: sentData.subscribersData,
+            }),
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        setEmailSent(true);
+      } catch (error) {
+        alert("Error sending email:", error);
+        setEmailSent(false);
+      }
+    }
+  };
+
+  const handlePlanMail = async () => {
+    console.log(mails);
+    if (mails.length > 0) {
+      try {
+        const response = await fetch(
+          " http://localhost:3001/sendMail/planMail",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              html: sentData.html,
+              subscribers: sentData.subscribersData,
+              time: new Date(),
+            }),
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        setEmailSent(true);
+      } catch (error) {
+        alert("Error sending email:", error);
+        setEmailSent(false);
+      }
+    }
+  };
 
   const handleNavigate = () => {
     router.push(`/admin/mail/${template.id}`);
@@ -90,19 +161,49 @@ function TemplateCard(props) {
       </Col>
 
       <Modal show={show} onHide={handleClose} size="xl">
+        {emailSent && (
+          <div className="alert alert-success" role="alert">
+            E-mail is succesvol verstuurd!
+          </div>
+        )}
         <Modal.Header closeButton>
-          <Modal.Title>Wil je '{template.title}' versturen?</Modal.Title>
+          <Modal.Title>Wil je '{template.title}' verturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Placeholder as={Modal.Body} animation="glow"></Placeholder>
-          <SelectMailingLists id={template.id} />
+          <SelectMailingLists
+            id={template.id}
+            setEmails={setMails}
+            onDataChange={onDataChange}
+          />
+          <label className="form-label">Wil je de mail vooruit plannen?</label>
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              onChange={() => setPlanned(!planned)}
+            />
+            <label className="form-check-label">Ja</label>
+          </div>
+
+          {planned && (
+            <div className="form-group">
+              <label className="form-label">Kies een datum</label>
+              <input
+                type="datetime-local"
+                className="form-control"
+                id="exampleFormControlInput1"
+                placeholder="2021-06-12T19:30"
+                onInput={(e) => console.log(e.target.value)}
+                required
+              />
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="secondary"
-            className={`${styles.knopSecondary}`}
-            onClick={handleClose}
-          >
+          <Button variant="primary" onClick={planned ? handlePlanMail : handleSendEmailClick}>
+            {planned ? "Inplannen" : "Mail versturen"}
+          </Button>
+          <Button variant="secondary" onClick={handleClose}>
             Annuleren
           </Button>
         </Modal.Footer>

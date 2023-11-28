@@ -11,12 +11,15 @@ const MailEditor = ({ id }) => {
   const [show, setShow] = useState(false);
   const [designSaved, setDesignSaved] = useState(false);
   const [mails, setMails] = useState([]);
-  const [showAlert, setShowAlert] = useState(false);
   const [title, setTitle] = useState("");
   const [emailSent, setEmailSent] = useState(false);
   const [sentData, setSentData] = useState([]);
-  const [subscribers, setSubscribers] = useState([]);
   const [planned, setPlanned] = useState(false);
+
+  useEffect(() => {
+    setPlanned(false);
+    setEmailSent(false);
+  }, [show]);
 
   const onDataChange = (data) => {
     setSentData(data);
@@ -69,15 +72,9 @@ const MailEditor = ({ id }) => {
     });
   };
 
-  const setEmailLists = (lists) => {
-    setSelectedMailingList(lists);
-  };
-
   const onReady = () => {
     onLoad(editorRef.current);
   };
-
-  subscribers.forEach((sub) => console.log(sub.name));
 
   const onLoad = async (editor) => {
     try {
@@ -132,8 +129,6 @@ const MailEditor = ({ id }) => {
       }
     }
   };
-
-  console.log(emailSent);
 
   return (
     <div>
@@ -225,13 +220,14 @@ const MailEditor = ({ id }) => {
                 className="form-control"
                 id="exampleFormControlInput1"
                 placeholder="2021-06-12T19:30"
+                required
               />
             </div>
           )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={handleSendEmailClick}>
-            {planned ? "Plan Mail" : "Mail Versturen"}
+            {planned ? "Inplannen" : "Mail versturen"}
           </Button>
           <Button variant="secondary" onClick={handleClose}>
             Annuleren
