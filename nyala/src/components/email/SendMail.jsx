@@ -105,7 +105,7 @@ function SelectMailingLists({ id }) {
             </thead>
             <tbody>
               {subscribers.map((subscriber) => (
-                <tr key={subscriber.id}>
+                <tr key={subscriber._id}>
                   <td>{subscriber.name}</td>
                   <td>{subscriber.email}</td>
                 </tr>
