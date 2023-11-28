@@ -10,7 +10,7 @@ const subscribers = new mongoose.Schema({
     type: String,
     required: true,
   },
-  subscriptions: {
+  subscription: {
     type: [String],
     required: true,
   },

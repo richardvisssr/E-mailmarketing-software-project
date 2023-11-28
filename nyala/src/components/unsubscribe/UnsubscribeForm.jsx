@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./UnsubscribeForm.module.css";
 import SubscriptionForm from "../categories/CategoriesComponent";
@@ -23,6 +23,14 @@ export default function UnsubscribeForm({}) {
     "Anders",
   ];
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get("email");
+    if (email) {
+      setEmail(decodeURIComponent(email));
+    }
+  }, []);
+  
   // Wanneer de gebruiker zich overal voor wilt uitschrijven en zichzelf wilt verwijderen uit de database
   const handleCompleteUnsubscribe = async () => {
     try {
@@ -148,10 +156,8 @@ export default function UnsubscribeForm({}) {
             <SubscriptionForm subscribers={data} setValue={changeValue} />
           );
         })
-        .catch((error) => {
-        });
-    } catch (error) {
-    }
+        .catch((error) => {});
+    } catch (error) {}
   };
 
   const changeValue = (event) => {
@@ -222,6 +228,7 @@ export default function UnsubscribeForm({}) {
           type: "error",
           bericht: "Er ging iets mis met het uitschrijven.",
         });
+      }
     }
   };
 
@@ -309,6 +316,7 @@ export default function UnsubscribeForm({}) {
             type="email"
             className={`form-control w-150`}
             onChange={changeEmail}
+            value={email}
             required={true}
           />
           <button

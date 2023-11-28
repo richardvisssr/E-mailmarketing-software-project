@@ -5,7 +5,7 @@ const { Subscriber, Unsubscriber } = require("../model/subscribers");
 const router = express.Router();
 
 router.get("/subscribers", async (req, res) => {
- const selectedMailingList = req.query.selectedMailingList.split(',');
+  const selectedMailingList = req.query.selectedMailingList.split(",");
   try {
     const subscribers = await Subscriber.find({
       subscription: { $in: selectedMailingList },
@@ -32,8 +32,8 @@ router.post("/subscribers/add", async (req, res) => {
 
     const subscriber = {
       email,
-      name, 
-      subscriptions,
+      name,
+      subscription : subscriptions,
     };
 
     const newSubscriber = new Subscriber(subscriber);
@@ -43,7 +43,6 @@ router.post("/subscribers/add", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
 
 router.get("/:subscriber/subs", async (req, res) => {
   const { subscriber } = req.params;
