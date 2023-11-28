@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Modal, Button, Placeholder, Alert } from "react-bootstrap";
 
 import styles from "./Views.module.css";
+import AlertComponent from "../alert/AlertComponent";
 
 export default function MailListComponent() {
   const [mailLists, setMailLists] = useState([]);
@@ -174,33 +175,7 @@ export default function MailListComponent() {
 
   return (
     <div>
-      <div>
-        {notification.type !== "success" ? (
-          <></>
-        ) : (
-          <div
-            className="alert alert-success mx-auto d-flex justify-content-around w-25"
-            role="alert"
-          >
-            <p>{notification.message}</p>
-            <i className="ms-2 bi bi-check"></i>
-          </div>
-        )}
-      </div>
-      <div>
-        {notification.type !== "error" ? (
-          <></>
-        ) : (
-          <div
-            className="alert alert-danger mx-auto d-flex justify-content-center w-25"
-            role="alert"
-          >
-            <p>{notification.message}</p>
-            <i className="ms-2 bi bi-exclamation-triangle"></i>
-          </div>
-        )}
-      </div>
-
+      <AlertComponent notification={notification} />
       <div className="accordion accordion-flush p-5 pt-1" id="MaillistView">
         <h1 className="text-center">Mail Lijsten</h1>
         <div className="input-group mb-3 mt-3 w-25 mx-auto d-flex align-items-center">
