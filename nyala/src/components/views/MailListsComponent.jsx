@@ -1,11 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Modal, Button, Placeholder, Alert } from "react-bootstrap";
+
+import styles from "./Views.module.css";
 
 export default function MailListComponent() {
   const [mailLists, setMailLists] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
   const [activeIndex, setActiveIndex] = useState(null);
+  const [add, setAdd] = useState(false);
+  const [notification, setNotification] = useState({
+    type: "",
+    message: "",
+  });
+  const [list, setList] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedSubscriber, setSelectedSubscriber] = useState(null);
+  const [modalContent, setModalContent] = useState(null);
+  const [footerContent, setFooterContent] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:3001/mail/getList")
@@ -31,16 +44,188 @@ export default function MailListComponent() {
     }
   }, [mailLists]);
 
+  useEffect(() => {
+    if (selectedSubscriber) {
+      setModalContent(
+        <p>
+          Weet je zeker dat je {selectedSubscriber.email} wilt uitschrijven van{" "}
+          {selectedSubscriber.list}?
+        </p>
+      );
+      setFooterContent(
+        <div>
+          <Button
+            onClick={handleClose}
+            className={`me-4 btn ${styles.buttonSecondary}`}
+          >
+            Annuleren
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              handleUnsubscribe(
+                selectedSubscriber.email,
+                selectedSubscriber.list
+              );
+              handleClose();
+            }}
+            className={`me-4 btn ${styles.buttonPrimary}`}
+          >
+            Verwijderen
+          </Button>
+        </div>
+      );
+    }
+  }, [selectedSubscriber]);
+
+  const handleClose = () => {
+    setShowModal(false);
+    setSelectedSubscriber(false);
+  };
+
+  const handleShow = (email, subs) => {
+    setShowModal(true);
+    setSelectedSubscriber({
+      email: email,
+      list: subs,
+    });
+  };
+
   const handleAccordionClick = (index) => {
     setActiveIndex(index === activeIndex ? null : index);
   };
 
+  const handleListAdd = (event) => {
+    event.preventDefault();
+
+    if (list === "") {
+      setNotification({
+        type: "error",
+        message: "De lijst is niet ingevuld.",
+      });
+    } else if (mailLists.includes(list)) {
+      setNotification({
+        type: "error",
+        message: "De ingevulde lijst bestaat al!",
+      });
+    } else {
+      fetch("http://localhost:3001/mail/addList", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: list }),
+      })
+        .then((response) => response.json())
+        .then(() => {
+          setMailLists([...mailLists, list]);
+          setAdd(false);
+          setNotification({
+            type: "success",
+            message: "De lijst is succesvol toegevoegd.",
+          });
+        })
+        .catch(() => {
+          setNotification({
+            type: "error",
+            message:
+              "Er is een fout opgetreden bij het toevoegen van de lijst.",
+          });
+        });
+    }
+  };
+
+  const handleUnsubscribe = async (email, subs) => {
+    try {
+      await fetch("http://localhost:3001/unsubscribe/subs", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          subscriptions: subs,
+        }),
+      });
+      setNotification({
+        type: "success",
+        message: "De gebruiker is succesvol uitgeschreven.",
+      });
+
+      setSubscribers((prevSubscribers) => {
+        const updatedSubscribers = [...prevSubscribers];
+        const listIndex = mailLists.findIndex((list) => list === subs);
+        const subscriberIndex = updatedSubscribers[listIndex]?.findIndex(
+          (subscriber) => subscriber.email === email
+        );
+        if (listIndex !== -1 && subscriberIndex !== -1) {
+          updatedSubscribers[listIndex].splice(subscriberIndex, 1);
+        }
+        return updatedSubscribers;
+      });
+    } catch (error) {
+      setNotification({
+        type: "error",
+        bericht: "Er ging iets mis met het uitschrijven.",
+      });
+      return false;
+    }
+  };
+
   return (
     <div>
-      <div className="accordion accordion-flush" id="MaillistView">
+      <div>
+        {notification.type !== "success" ? (
+          <></>
+        ) : (
+          <div
+            className="alert alert-success mx-auto d-flex justify-content-around w-25"
+            role="alert"
+          >
+            <p>{notification.message}</p>
+            <i className="ms-2 bi bi-check"></i>
+          </div>
+        )}
+      </div>
+      <div>
+        {notification.type !== "error" ? (
+          <></>
+        ) : (
+          <div
+            className="alert alert-danger mx-auto d-flex justify-content-center w-25"
+            role="alert"
+          >
+            <p>{notification.message}</p>
+            <i className="ms-2 bi bi-exclamation-triangle"></i>
+          </div>
+        )}
+      </div>
+
+      <div className="accordion accordion-flush p-5 pt-1" id="MaillistView">
+        <h1 className="text-center">Mail Lijsten</h1>
+        <div className="input-group mb-3 mt-3 w-25 mx-auto d-flex align-items-center">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Lijst"
+            aria-describedby="basic-addon1"
+            onChange={(e) => {
+              const value = e.target.value;
+              setList(value);
+            }}
+          />
+          <div className="input-group-prepend">
+            <input
+              type="submit"
+              className={`btn ${styles.buttonPrimary} rounded p-2`}
+              value="Lijst toevoegen"
+              onClick={handleListAdd}
+            />
+          </div>
+        </div>
         {mailLists.map((mailList, index) => (
-          <div className="accordion-item" key={index}>
-            <h2 className="accordion-header">
+          <div className="accordion-item shadow" key={index}>
+            <h2 className="accordion-header shadow">
               <button
                 className={`accordion-button ${
                   activeIndex === index ? "" : "collapsed"
@@ -69,6 +254,7 @@ export default function MailListComponent() {
                       <tr>
                         <th scope="col">Naam</th>
                         <th scope="col">Email</th>
+                        <th> </th>
                       </tr>
                     </thead>
                     <tbody className="table-group-divider">
@@ -76,6 +262,14 @@ export default function MailListComponent() {
                         <tr key={subIndex}>
                           <td>{subscriber.name}</td>
                           <td>{subscriber.email}</td>
+                          <td className="hover-icon">
+                            <i
+                              className="bi bi-trash-fill"
+                              onClick={() =>
+                                handleShow(subscriber.email, mailList)
+                              }
+                            ></i>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -86,6 +280,17 @@ export default function MailListComponent() {
           </div>
         ))}
       </div>
+      <Modal show={showModal} onHide={handleClose} size="md">
+        <Modal.Header closeButton>
+          <Modal.Title> Bevestig het verwijderen </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Placeholder as={Modal.Body} animation="glow">
+            {modalContent}
+          </Placeholder>
+        </Modal.Body>
+        <Modal.Footer>{footerContent}</Modal.Footer>
+      </Modal>
     </div>
   );
 }

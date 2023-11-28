@@ -27,9 +27,9 @@ const Subscriber = mongoose.model("Subscriber", subscribers);
 const Unsubscriber = mongoose.model("Unsubscribe", unsubscribe);
 
 // const sub = new Subscriber({
-//   email: "richard@jfc.nl",
-//   name: "Bert",
-//   subscription: ["Leden", "ICT"],
+//   email: "Mattt@jfc.nl",
+//   name: "Beccrt",
+//   subscription: ["CMD", "Nieuwsbrief"],
 // });
 
 // sub.save();
