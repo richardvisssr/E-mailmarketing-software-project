@@ -2,15 +2,50 @@ import { useEffect, useState } from "react";
 import styles from "./AddField.module.css";
 import { useRouter } from "next/navigation";
 
+/**
+ * Component for subscribing to a mailing list.
+ * @param {Object} props - Component properties.
+ * @param {string} props.list - Mailing list name.
+ */
 export default function SubscribeField(props) {
+  /**
+   * State hook for managing input data.
+   */
   const [data, setData] = useState({ email: undefined, name: "" });
+
+  /**
+   * State hook for managing subscription status.
+   */
   const [status, setStatus] = useState(false);
+
+  /**
+   * State hook for managing notification messages.
+   */
   const [notification, setNotification] = useState({ type: "", message: "" });
+
+  /**
+   * State hook for storing mailing lists.
+   */
   const [lists, setLists] = useState([]);
+
+  /**
+   * State hook for managing loading state.
+   */
   const [loading, setLoading] = useState(true);
+
+  /**
+   * Mailing list name from props.
+   */
   const list = props.list;
+
+  /**
+   * Router hook for programmatic navigation.
+   */
   const router = useRouter();
 
+  /**
+   * Effect hook for fetching mailing lists and updating state.
+   */
   useEffect(() => {
     /**
      * Function to fetch mailing lists from the server.
@@ -93,6 +128,10 @@ export default function SubscribeField(props) {
     }
   }, [status]);
 
+  /**
+   * Handles form submission.
+   * @param {Object} event - The form submission event.
+   */
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -117,8 +156,8 @@ export default function SubscribeField(props) {
   };
 
   /**
-   * Function to handle the change in the email input.
-   * @param {Object} event - The event object.
+   * Handles change in the email input.
+   * @param {Object} event - The change event.
    */
   const handleEmailChange = (event) => {
     if (notification.type === "succes") {
@@ -127,6 +166,10 @@ export default function SubscribeField(props) {
     setData({ ...data, email: event.target.value });
   };
 
+  /**
+   * Handles change in the name input.
+   * @param {Object} event - The change event.
+   */
   const handleNameChange = (event) => {
     if (notification.type === "succes") {
       setNotification({ type: "", message: "" });
@@ -134,6 +177,9 @@ export default function SubscribeField(props) {
     setData({ ...data, name: event.target.value });
   };
 
+  /**
+   * Renders the component.
+   */
   return (
     <>
       {loading ? (
