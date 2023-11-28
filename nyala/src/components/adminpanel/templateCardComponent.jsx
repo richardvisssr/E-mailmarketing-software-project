@@ -28,22 +28,38 @@ function TemplateCard(props) {
   const [error, setError] = useState(false);
   const [sentData, setSentData] = useState([]);
   const [planned, setPlanned] = useState(false);
-  const [mails, setMails] = useState([]);
+  const [mails, setEmails] = useState([]);
   const [emailSent, setEmailSent] = useState(false);
   const [dateTime, setDateTime] = useState("");
-  
+  const [subscribers, setSubscribers] = useState([]);
+
   const router = useRouter();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const setNewTime = (event) => {
+    setDateTime(event.target.value);
+  };
 
   const onDataChange = (data) => {
     setSentData(data);
   };
 
   useEffect(() => {
+    if (sentData.subscribersData) {
+      sentData.subscribersData.map((sub) => {
+        setSubscribers([sub]);
+      });
+    }
+  }, [sentData]);
+
+  useEffect(() => {
     setPlanned(false);
     setEmailSent(false);
+    setEmails([]);
+    setDateTime("");
+    setSubscribers([]);
   }, [show]);
 
   useEffect(() => {
@@ -66,7 +82,6 @@ function TemplateCard(props) {
   }, [template.id]);
 
   const handleSendEmailClick = async () => {
-    console.log(mails);
     if (mails.length > 0) {
       try {
         const response = await fetch(
@@ -94,29 +109,26 @@ function TemplateCard(props) {
   };
 
   const handlePlanMail = async () => {
-    console.log(mails);
     if (mails.length > 0) {
       try {
-        const response = await fetch(
-          " http://localhost:3001/sendMail/planMail",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              html: sentData.html,
-              subscribers: sentData.subscribersData,
-              time: dateTime,
-            }),
-          }
-        );
+        const response = await fetch(" http://localhost:3001/planMail", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: template.id,
+            html: sentData.html,
+            subs: subscribers,
+            date: dateTime,
+          }),
+        });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         setEmailSent(true);
       } catch (error) {
-        alert("Error sending email:", error);
+        console.error("Error sending email:", error);
         setEmailSent(false);
       }
     }
@@ -173,7 +185,7 @@ function TemplateCard(props) {
         <Modal.Body>
           <SelectMailingLists
             id={template.id}
-            setEmails={setMails}
+            setEmails={setEmails}
             onDataChange={onDataChange}
           />
           <label className="form-label">Wil je de mail vooruit plannen?</label>
@@ -194,14 +206,17 @@ function TemplateCard(props) {
                 className="form-control"
                 id="exampleFormControlInput1"
                 placeholder="2021-06-12T19:30"
-                onInput={setDateTime}
+                onInput={setNewTime}
                 required
               />
             </div>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={planned ? handlePlanMail : handleSendEmailClick}>
+          <Button
+            variant="primary"
+            onClick={planned ? handlePlanMail : handleSendEmailClick}
+          >
             {planned ? "Inplannen" : "Mail versturen"}
           </Button>
           <Button variant="secondary" onClick={handleClose}>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Modal, Button, Placeholder, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
@@ -103,7 +103,6 @@ const MailEditor = ({ id }) => {
   };
 
   const handleSendEmailClick = async () => {
-    console.log(mails);
     if (mails.length > 0) {
       try {
         const response = await fetch(
@@ -116,6 +115,35 @@ const MailEditor = ({ id }) => {
             body: JSON.stringify({
               html: sentData.html,
               subscribers: sentData.subscribersData,
+            }),
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        setEmailSent(true);
+      } catch (error) {
+        alert("Error sending email:", error);
+        setEmailSent(false);
+      }
+    }
+  };
+
+  const handlePlanMail = async () => {
+    if (mails.length > 0) {
+      try {
+        const response = await fetch(
+          " http://localhost:3001/sendMail/planMail",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: id,
+              html: sentData.html,
+              subscribers: sentData.subscribersData,
+              time: dateTime,
             }),
           }
         );
@@ -226,7 +254,7 @@ const MailEditor = ({ id }) => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleSendEmailClick}>
+          <Button variant="primary" onClick={planned ? handlePlanMail : handleSendEmailClick}>
             {planned ? "Inplannen" : "Mail versturen"}
           </Button>
           <Button variant="secondary" onClick={handleClose}>
