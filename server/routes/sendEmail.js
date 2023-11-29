@@ -19,21 +19,25 @@ router.post("/sendEmail", async (req, res) => {
 
     for (const subscriber of subscribers) {
       let mailOptions = {
-        from: '"Fred Foo 👻" <foo@example.com>',
+        from: '"Xtend" <info@svxtend.nl>',
         to: subscriber.email,
-        subject: "Hello ✔",
+        subject: `Hallo ${subscriber.name} - Xtend nieuwsbrief`,
         html: `
-                    <html>
-                    <body>
-                        <main>
-                            ${html}
-                        </main>
-                        <footer style="background-color: #f1f1f1; text-align: center; padding: 10px;">
-                            <a href="http://localhost:3000/unsubscribe">Uitschrijven</a>
-                        </footer>
-                    </body>
-                    </html>
-                `,
+          <div style="background-color: #f1f1f1; text-align: center; padding: 10px;">
+            <h1 style="color: #333; font-size: 24px;">Xtend</h1>
+            <h2 style="color: #666; font-size: 20px;">Beste ${
+              subscriber.name
+            }, hierbij ontvang je onze nieuwsbrief</h2>
+          </div>
+          <div style="padding: 20px;">
+            ${html}
+          </div>
+          <div style="background-color: #f1f1f1; text-align: center; padding: 10px;">
+            <a style="text-decoration: none; color: #333;" href="http://localhost:3000/unsubscribe?email=${encodeURIComponent(
+              subscriber.email
+            )}">Uitschrijven</a>
+          </div>
+        `,
       };
 
       await transporter.sendMail(mailOptions);

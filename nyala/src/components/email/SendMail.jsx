@@ -7,8 +7,8 @@ function SelectMailingLists({ id }) {
   const [selectedMailingList, setSelectedMailingList] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
   const [html, setHtml] = useState("");
-  const [emailSent, setEmailSent] = useState(false); 
-  
+  const [emailSent, setEmailSent] = useState(false);
+
   useEffect(() => {
     fetch("http://localhost:3001/mail/getList")
       .then((response) => response.json())
