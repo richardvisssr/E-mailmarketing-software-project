@@ -1,5 +1,4 @@
-const mongoose = require('../utils/connection');
-
+const mongoose = require("../utils/connection");
 
 const designSchema = new mongoose.Schema({
   id: {
@@ -8,8 +7,13 @@ const designSchema = new mongoose.Schema({
   },
   design: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+    unique: true,
+  },
 });
 
 const emailSchema = new mongoose.Schema({
@@ -24,11 +28,8 @@ const emailSchema = new mongoose.Schema({
   },
 });
 
-const Email = mongoose.model('Email', emailSchema);
+const Email = mongoose.model("Email", emailSchema);
 
-const Design = mongoose.model('Design', designSchema);
-
+const Design = mongoose.model("Design", designSchema);
 
 module.exports = { Design, Email };
-
-

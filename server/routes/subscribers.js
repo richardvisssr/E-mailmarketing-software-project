@@ -5,10 +5,10 @@ const { Subscriber, Unsubscriber } = require("../model/subscribers");
 const router = express.Router();
 
 router.get("/subscribers", async (req, res) => {
-  const selectedMailingList = req.query.selectedMailingList;
+  const selectedMailingList = req.query.selectedMailingList.split(",");
   try {
     const subscribers = await Subscriber.find({
-      subscription: selectedMailingList,
+      subscription: { $in: selectedMailingList },
     });
     res.status(200).send(subscribers);
   } catch (error) {
@@ -27,9 +27,9 @@ router.get("/subscribers/all", async (req, res) => {
 
 router.post("/subscribers/add", async (req, res) => {
   try {
-    const { email, subscription } = req.body;
+    const { email, name, subscriptions } = req.body;
 
-    if (!email || !subscription || !Array.isArray(subscription)) {
+    if (!email || !subscriptions || !Array.isArray(subscriptions)) {
       return res.status(400).json({ message: "Bad Request: Invalid input" });
     }
 
@@ -41,7 +41,8 @@ router.post("/subscribers/add", async (req, res) => {
 
     const subscriber = {
       email,
-      subscription,
+      name,
+      subscription : subscriptions,
     };
 
     const newSubscriber = new Subscriber(subscriber);
