@@ -18,13 +18,16 @@ export default function MailListAccordion({
   };
 
   return (
-    <div className="accordion accordion-flush p-5 pt-1" id="MaillistView">
+    <div className={`accordion accordion-flush p-5 pt-1`} id="MaillistView">
       {mailLists.map((mailList, index) => (
-        <div className="accordion-item shadow" key={index}>
+        <div
+          className={`accordion-item shadow ${styles.customAccordion}`}
+          key={index}
+        >
           <h2 className="accordion-header shadow">
             <div className="d-flex align-items-center">
               <i
-                className="bi bi-x ms-auto ps-2"
+                className={`bi bi-x ms-auto ps-2 pe-1 ${styles.icon}`}
                 onClick={() => handleDeleteButtonClick(mailList)}
               ></i>
               <button
@@ -66,7 +69,7 @@ export default function MailListAccordion({
                         <td>{subscriber.email}</td>
                         <td className="hover-icon">
                           <i
-                            className="bi bi-trash-fill"
+                            className={`bi bi-trash-fill ${styles.icon}`}
                             onClick={() =>
                               handleShow(subscriber.email, mailList)
                             }

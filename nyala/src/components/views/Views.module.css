@@ -15,3 +15,18 @@
   --bs-btn-hover-bg: #62b1ed;
   --bs-btn-hover-border-color: #62b1ed;
 }
+
+.icon {
+  cursor: pointer;
+}
+
+.icon:hover {
+  color: #a66cf2; /* Set the color you want on hover */
+}
+
+.customAccordion {
+  --bs-accordion-active-bg: #c7a3f6;
+  --bs-accordion-active-color: #fff;
+  --bs-accordion-body-bg: #fff;
+  --bs-accordion-btn-focus-box-shadow: none;
+}

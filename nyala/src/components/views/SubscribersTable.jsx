@@ -22,6 +22,7 @@ export default function SubscribersTable() {
               <th scope="col">Naam</th>
               <th scope="col">Email</th>
               <th scope="col">Abonnementen</th>
+              <th> </th>
             </tr>
           </thead>
           <tbody class="table-group-divider">
@@ -30,6 +31,12 @@ export default function SubscribersTable() {
                 <td>{subscriber.name}</td>
                 <td>{subscriber.email}</td>
                 <td>{subscriber.subscription.join(", ")}</td>
+                <td className="hover-icon">
+                  <i
+                    className="bi bi-trash-fill"
+                    onClick={() => handleShow(subscriber.email, mailList)}
+                  ></i>
+                </td>
               </tr>
             ))}
           </tbody>
