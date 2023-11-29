@@ -5,8 +5,7 @@ export default function MailListAccordion({
   mailLists,
   subscribers,
   handleShow,
-  handleDeleteList,
-  handleDeleteSubscription,
+  handleShowDeleteListModal,
 }) {
   const [activeIndex, setActiveIndex] = useState(null);
 
@@ -15,8 +14,7 @@ export default function MailListAccordion({
   };
 
   const handleDeleteButtonClick = (mailList) => {
-    handleDeleteList(mailList);
-    handleDeleteSubscription(mailList);
+    handleShowDeleteListModal(mailList);
   };
 
   return (

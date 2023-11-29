@@ -107,9 +107,9 @@ export default function MailListComponent() {
             Annuleren
           </Button>
           <Button
-            variant="primary"
             onClick={() => {
               deleteList(selectedListToDelete);
+              handleSubscribtionDelete(selectedListToDelete);
               handleCloseDeleteListModal();
             }}
             className={`me-4 btn ${styles.buttonPrimary}`}
@@ -284,6 +284,7 @@ export default function MailListComponent() {
         handleShow={handleShow}
         handleDeleteList={deleteList}
         handleDeleteSubscription={handleSubscribtionDelete}
+        handleShowDeleteListModal={handleShowDeleteListModal}
       />
 
       <ModelComponent
