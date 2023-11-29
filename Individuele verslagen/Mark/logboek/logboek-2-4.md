@@ -29,9 +29,10 @@
 
 | Uren | Taak | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
 | 0,5u | Reviewen | - | - | :satisfied: | [Geen link] |
-| | | | | | |
+| 2,5u | [Als product-owner wil ik een Docker omgeving zodat ik de applicatie makkelijk kan runnen](https://github.com/HANICA-DWA/project-sep23-nyala/issues/113) | - | Uitgevonden hoe docker-compose.yml, mongo init files en Dockerfile.x files werken | :smile: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/548efa1809e86151a5242007c1e415e46ced0b86) |
+| 0,5u | Reviewen | - | - | :satisfied: | [Geen link] |
+| 1,5u | [Als product-owner wil ik een Docker omgeving zodat ik de applicatie makkelijk kan runnen](https://github.com/HANICA-DWA/project-sep23-nyala/issues/113) | - | Aan het vechten met de backend die niet wel connecten met de mongo container door authentication issues. Weet nog niet echt wat er fout gaat. | :angry: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/acc6737b3aeb4a94714a17333d643f7b22eabbb1) |
 
 ## Donderdag 30 december
 
