@@ -59,7 +59,7 @@ function SelectMailingLists({ id }) {
     if (selectedMailingList.length > 0 && subscribers.length > 0) {
       try {
         const response = await fetch(
-          " http://localhost:3001/sendMail/sendEmail",
+          "http://localhost:3001/sendMail/sendEmail",
           {
             method: "POST",
             headers: {
@@ -72,9 +72,22 @@ function SelectMailingLists({ id }) {
             }),
           }
         );
-        if (!response.ok) {
+
+        const secondResponse = await fetch(
+          "http://localhost:3001/mail/sendEmail",
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ html: html, id: id, subscribers: subscribers }),
+          }
+        );
+
+        if (!response.ok || !secondResponse.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
+
         setEmailSent(true);
       } catch (error) {
         alert("Error sending email:", error);

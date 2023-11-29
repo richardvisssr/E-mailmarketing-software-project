@@ -16,6 +16,7 @@ router.get("/subscribers", async (req, res) => {
   }
 });
 
+
 router.post("/subscribers/add", async (req, res) => {
   try {
     const { email, name, subscriptions } = req.body;
