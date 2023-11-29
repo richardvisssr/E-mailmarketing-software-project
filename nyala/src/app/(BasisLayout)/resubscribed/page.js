@@ -1,4 +1,4 @@
-import Resubscribed from "@/components/Resubscribed";
+import Resubscribed from "@/components/unsubscribe/Resubscribed";
 
 export default function Page() {
   return (

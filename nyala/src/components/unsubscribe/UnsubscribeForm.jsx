@@ -148,10 +148,8 @@ export default function UnsubscribeForm({}) {
             <SubscriptionForm subscribers={data} setValue={changeValue} />
           );
         })
-        .catch((error) => {
-        });
-    } catch (error) {
-    }
+        .catch((error) => {});
+    } catch (error) {}
   };
 
   const changeValue = (event) => {
@@ -222,6 +220,7 @@ export default function UnsubscribeForm({}) {
           type: "error",
           bericht: "Er ging iets mis met het uitschrijven.",
         });
+      }
     }
   };
 

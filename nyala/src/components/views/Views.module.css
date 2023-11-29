@@ -1,0 +1,17 @@
+.buttonPrimary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #a66cf2;
+  --bs-btn-border-color: #a66cf2;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #c150f3;
+  --bs-btn-hover-border-color: #c150f3;
+}
+
+.buttonSecondary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #779bef;
+  --bs-btn-border-color: #779bef;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #62b1ed;
+  --bs-btn-hover-border-color: #62b1ed;
+}
