@@ -54,10 +54,22 @@ function TemplateCard(props) {
     router.push(`/admin/mail/${template.id}`);
   };
 
+  const handleDelete = () => {
+    fetch(`http://localhost:3001/template/${template.id}`, {
+      method: "DELETE",
+    }).then(() => {
+      window.location.reload();
+    });
+  };
+
   return (
     <>
       <Col key={template.id} style={{ width: "16rem" }}>
         <Card ref={cardRef}>
+          <Button variant="danger" onClick={handleDelete}>
+            Verwijderen
+          </Button>
+          ,
           {!error && (
             <Card.Img
               variant="top"
