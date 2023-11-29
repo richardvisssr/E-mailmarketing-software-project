@@ -12,9 +12,11 @@ const MailEditor = ({ id }) => {
   const [designSaved, setDesignSaved] = useState(false);
   const [mails, setMails] = useState([]);
   const [title, setTitle] = useState("");
+  const [html, setHtml] = useState("");
   const [emailSent, setEmailSent] = useState(false);
   const [sentData, setSentData] = useState([]);
   const [planned, setPlanned] = useState(false);
+  const [dateTime, setDateTime] = useState("");
 
   useEffect(() => {
     setPlanned(false);
@@ -23,6 +25,10 @@ const MailEditor = ({ id }) => {
 
   const onDataChange = (data) => {
     setSentData(data);
+  };
+
+  const setNewTime = (event) => {
+    setDateTime(event.target.value);
   };
 
   const handleClose = () => {
@@ -46,7 +52,27 @@ const MailEditor = ({ id }) => {
         }
         setDesignSaved(true);
       } catch (error) {
-        alert("Error saving design:", error);
+      }
+    });
+    saveHtml();
+  };
+
+  const saveHtml = () => {
+    editorRef.current.exportHtml(async (data) => {
+      const { html } = data;
+      setHtml(html);
+      try {
+        const response = await fetch("http://localhost:3001/mail/sendEmail", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ html: html, id: id }),
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+      } catch (error) {
       }
     });
   };
@@ -66,7 +92,6 @@ const MailEditor = ({ id }) => {
           throw new Error("Network response was not ok");
         }
       } catch (error) {
-        // alert("Error sending email:", error);
       }
       handleShow();
     });
@@ -97,7 +122,6 @@ const MailEditor = ({ id }) => {
       editorRef.current.loadDesign(design.design);
       setTitle(design.title);
     } catch (error) {
-      // alert("Error loading design:", error);
     }
     editorRef.current = editor;
   };
@@ -105,54 +129,53 @@ const MailEditor = ({ id }) => {
   const handleSendEmailClick = async () => {
     if (mails.length > 0) {
       try {
-        const response = await fetch(
-          " http://localhost:3001/sendMail/sendEmail",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              html: sentData.html,
-              subscribers: sentData.subscribersData,
-            }),
-          }
-        );
+        const response = await fetch(" http://localhost:3001/sendEmail", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            html: html,
+            subscribers: sentData.subscribersData,
+          }),
+        });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         setEmailSent(true);
       } catch (error) {
-        alert("Error sending email:", error);
         setEmailSent(false);
       }
     }
   };
 
   const handlePlanMail = async () => {
+    editorRef.current.exportHtml(async (data) => {
+      const { html } = data;
+      setHtml(html);
+    });
+
+    
     if (mails.length > 0) {
       try {
-        const response = await fetch(
-          " http://localhost:3001/sendMail/planMail",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              id: id,
-              html: sentData.html,
-              subscribers: sentData.subscribersData,
-              time: dateTime,
-            }),
-          }
-        );
+        const response = await fetch(" http://localhost:3001/planMail", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: id,
+            title: title,
+            html: html,
+            subs: sentData.subscribersData,
+            date: dateTime,
+          }),
+        });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         setEmailSent(true);
       } catch (error) {
-        alert("Error sending email:", error);
         setEmailSent(false);
       }
     }
@@ -248,13 +271,17 @@ const MailEditor = ({ id }) => {
                 className="form-control"
                 id="exampleFormControlInput1"
                 placeholder="2021-06-12T19:30"
+                onInput={setNewTime}
                 required
               />
             </div>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={planned ? handlePlanMail : handleSendEmailClick}>
+          <Button
+            variant="primary"
+            onClick={planned ? handlePlanMail : handleSendEmailClick}
+          >
             {planned ? "Inplannen" : "Mail versturen"}
           </Button>
           <Button variant="secondary" onClick={handleClose}>

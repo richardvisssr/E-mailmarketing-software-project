@@ -12,17 +12,15 @@ function sendEmail(event) {
         pass: "your_email_password",
       },
   });
-
+  
   event.subscribers.forEach((subscriber) => {
     const mailOptions = {
-        from: 'your-email@gmail.com',
+        from: 'xtend@svxtend.nl',
         to: subscriber.email,
-        subject: 'Event Reminder',
-        text: `Hi ${subscriber.name}, this is a reminder for the event. `,
+        subject: event.title,
         html: event.html
       };
     
-      // Send the email
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.error('Failed to send email:', error);
@@ -35,7 +33,6 @@ function sendEmail(event) {
 
 // Function to check for events and send email if necessary
 async function checkEvents() {
-  // Get the current date/time
   const currentDate = new Date();
   const formattedDate = currentDate.toISOString().slice(0, -7) + '00.000+00:00';
 

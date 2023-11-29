@@ -26,6 +26,7 @@ function TemplateCard(props) {
   const [image, setImage] = useState("");
   const [zoomLevel, setZoomLevel] = useState(2);
   const [error, setError] = useState(false);
+  const [html, setHtml] = useState("");
   const [sentData, setSentData] = useState([]);
   const [planned, setPlanned] = useState(false);
   const [mails, setEmails] = useState([]);
@@ -73,6 +74,7 @@ function TemplateCard(props) {
           `http://127.0.0.1:3001/templates/${template.id}`
         );
         const data = await response.json();
+        setHtml(data.html);
       } catch (error) {
         setError(true);
       }
@@ -85,14 +87,14 @@ function TemplateCard(props) {
     if (mails.length > 0) {
       try {
         const response = await fetch(
-          " http://localhost:3001/sendMail/sendEmail",
+          " http://localhost:3001/sendEmail",
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              html: sentData.html,
+              html: html,
               subscribers: sentData.subscribersData,
             }),
           }
@@ -102,7 +104,6 @@ function TemplateCard(props) {
         }
         setEmailSent(true);
       } catch (error) {
-        alert("Error sending email:", error);
         setEmailSent(false);
       }
     }
@@ -118,7 +119,8 @@ function TemplateCard(props) {
           },
           body: JSON.stringify({
             id: template.id,
-            html: sentData.html,
+            title: template.title,
+            html: html,
             subs: subscribers,
             date: dateTime,
           }),
@@ -134,6 +136,7 @@ function TemplateCard(props) {
     }
   };
 
+  
   const handleNavigate = () => {
     router.push(`/admin/mail/${template.id}`);
   };

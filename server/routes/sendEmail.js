@@ -47,27 +47,26 @@ router.post("/sendEmail", async (req, res) => {
 
 router.put("/planMail", async (req, res) => {
   try {
-    const { id, html, subs, date } = req.body;
+    const { id, title, html, subs, date } = req.body;
     const subscribers = subs.map((subscriber) => {
       return { name: subscriber.name, email: subscriber.email };
     });
     const planMail = await PlannedEmail.findOne({ id });
-    console.log(subscribers);
 
     if (planMail) {
       planMail.id = id;
+      planMail.title = title;
       planMail.html = html;
       planMail.subscribers = subscribers;
       planMail.date = date;
       await planMail.save();
       res.status(200).send("Mail planned successfully");
     } else {
-      const newPlanMail = new PlannedEmail({ id, html, subscribers, date });
+      const newPlanMail = new PlannedEmail({ id, title, html, subscribers, date });
       await newPlanMail.save();
       res.status(200).send("Mail planned successfully");
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: "Internal server error" });
   }
 });

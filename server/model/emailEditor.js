@@ -34,6 +34,10 @@ const plannedEmailSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  title: {
+    type: String,
+    require: true,
+  },
   html: {
     type: String,
     required: false,
