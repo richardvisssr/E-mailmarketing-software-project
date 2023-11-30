@@ -20,6 +20,7 @@ describe("Subscribers routes test", () => {
   beforeEach(async () => {
     await Subscriber.create({
       email: "Matthias@budding.nl",
+      name: "Matthias",
       subscription: ["Nieuwsbrief", "CMD", "ICT"],
     });
 
@@ -64,6 +65,7 @@ describe("Subscribers routes test", () => {
       .post("/subscribers/add")
       .send({
         email: "test@example.com",
+        name: "Test",
         subscription: ["Newsletter"],
       });
 
@@ -85,6 +87,7 @@ describe("Subscribers routes test", () => {
       .put("/subscribers/add")
       .send({
         email: subscriberEmail.email,
+        name: subscriberEmail.name,
         subscriptions: ["Leden"],
       });
 
@@ -122,6 +125,7 @@ describe("Subscribers routes test", () => {
       .delete("/unsubscribe/subs")
       .send({
         email: subscriberEmail.email,
+        name: subscriberEmail.name,
         subscriptions: ["Nieuwsbrief"],
       });
 
