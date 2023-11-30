@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import SubscriptionForm from "../categories/CategoriesComponent";
+import { Alert } from 'react-bootstrap';
 
 function SelectMailingLists({ id }) {
   const [mailingList, setMailingLists] = useState([]);
@@ -8,12 +9,14 @@ function SelectMailingLists({ id }) {
   const [subscribers, setSubscribers] = useState([]);
   const [html, setHtml] = useState("");
   const [emailSent, setEmailSent] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     fetch("http://localhost:3001/mail/getList")
       .then((response) => response.json())
       .then((data) => setMailingLists(data))
-      .catch((error) => alert(error));
+      .catch((error) => setShowError(true) && setErrorMessage(error));
   }, []);
 
   useEffect(() => {
@@ -80,7 +83,11 @@ function SelectMailingLists({ id }) {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ html: html, id: id, subscribers: subscribers }),
+            body: JSON.stringify({
+              html: html,
+              id: id,
+              subscribers: subscribers,
+            }),
           }
         );
 
@@ -90,16 +97,23 @@ function SelectMailingLists({ id }) {
 
         setEmailSent(true);
       } catch (error) {
-        alert("Error sending email:", error);
+        setErrorMessage(`Error sending email: ${error}`);
+        setShowError(true);
         setEmailSent(false);
       }
     } else {
-      alert("Selecteer een mailinglijst met subscribers.");
+      setErrorMessage("Selecteer een mailinglijst met subscribers.");
+      setShowError(true);
     }
   };
 
   return (
     <div className="container mt-4">
+      {showError && (
+        <Alert variant="danger" onClose={() => setShowError(false)} dismissible>
+          {errorMessage}
+        </Alert>
+      )}
       {emailSent && (
         <div className="alert alert-success" role="alert">
           E-mail is succesvol verstuurd!
