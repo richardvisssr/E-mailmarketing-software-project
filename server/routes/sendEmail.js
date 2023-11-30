@@ -1,5 +1,6 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
+const { Design, Email, PlannedEmail } = require("../model/emailEditor");
 
 const router = express.Router();
 
@@ -45,6 +46,32 @@ router.post("/sendEmail", async (req, res) => {
     res.status(200).json({ success: true });
   } catch (error) {
     res.status(500).json({ error: "Error sending email" });
+  }
+});
+
+router.put("/planMail", async (req, res) => {
+  try {
+    const { id, title, html, subs, date } = req.body;
+    const subscribers = subs.map((subscriber) => {
+      return { name: subscriber.name, email: subscriber.email };
+    });
+    const planMail = await PlannedEmail.findOne({ id });
+
+    if (planMail) {
+      planMail.id = id;
+      planMail.title = title;
+      planMail.html = html;
+      planMail.subscribers = subscribers;
+      planMail.date = date;
+      await planMail.save();
+      res.status(200).send("Mail planned successfully");
+    } else {
+      const newPlanMail = new PlannedEmail({ id, title, html, subscribers, date });
+      await newPlanMail.save();
+      res.status(200).send("Mail planned successfully");
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

@@ -47,7 +47,10 @@ router.put("/sendEmail", async (req, res) => {
       { html },
       { upsert: true, new: true }
     );
-    res.status(200).send("Design saved successfully");
+
+    if (existingHtml) {
+      res.status(200).send("Design updated successfully");
+    }
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
