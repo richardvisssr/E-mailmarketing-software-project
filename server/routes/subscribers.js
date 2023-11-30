@@ -42,7 +42,7 @@ router.post("/subscribers/add", async (req, res) => {
     const subscriber = {
       email,
       name,
-      subscription : subscriptions,
+      subscription: subscriptions,
     };
 
     const newSubscriber = new Subscriber(subscriber);
@@ -96,6 +96,34 @@ router.put("/subscribers/add", async (req, res) => {
       { $addToSet: { subscription: subscriptions } },
       { upsert: true }
     );
+
+    res.status(200).json({ message: "Subscriber updated" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+router.put("/change/:subscriber", async (req, res) => {
+  const prevEmail = req.params.subscriber;
+  const { name, email } = req.body;
+
+  try {
+    const selectedSubscriber = await Subscriber.findOne({
+      email: prevEmail,
+    });
+
+    if (!selectedSubscriber) {
+      return res.status(404).send({ message: "Subscriber not found" });
+    }
+
+    if (name) {
+      selectedSubscriber.name = name;
+    }
+
+    if (email) {
+      selectedSubscriber.email = email;
+    }
+
+    await selectedSubscriber.save();
 
     res.status(200).json({ message: "Subscriber updated" });
   } catch (err) {
