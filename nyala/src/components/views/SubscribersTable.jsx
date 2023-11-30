@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import AlertComponent from "../alert/AlertComponent";
+import ModelComponent from "./ModelComponent";
 import styles from "./Views.module.css";
 
 export default function SubscribersTable() {
@@ -10,6 +11,12 @@ export default function SubscribersTable() {
     type: "",
     message: "",
   });
+  const [showModal, setShowModal] = useState(false);
+  const [selectedSubscriber, setSelectedSubscriber] = useState(null);
+  const [modalContent, setModalContent] = useState(null);
+  const [footerContent, setFooterContent] = useState(null);
+  const [showDeleteUserModal, setShowDeleteUserModal] = useState(false);
+  const [selectedUserToDelete, setSelectedUserToDelete] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:3001/subscribers/all")
@@ -17,6 +24,39 @@ export default function SubscribersTable() {
       .then((data) => setSubscribers(data))
       .catch((error) => console.log(error));
   }, []);
+
+  const handleClose = () => {
+    setShowModal(false);
+    setSelectedSubscriber(null);
+  };
+
+  const handleShow = (subscriber) => {
+    setShowModal(true);
+    setSelectedSubscriber(subscriber);
+    setModalContent(
+      <p>
+        Weet u zeker dat u de gebruiker <strong>{subscriber}</strong> aanpassen?
+      </p>
+    );
+    setFooterContent(
+      <>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={handleClose}
+        >
+          Annuleren
+        </button>
+        <button
+          type="button"
+          className="btn btn-danger"
+          onClick={() => handleDeleteSubscriber(subscriber)}
+        >
+          {mailList ? "Verwijderen" : "Aanpassen"}
+        </button>
+      </>
+    );
+  };
 
   return (
     <div>
@@ -44,13 +84,13 @@ export default function SubscribersTable() {
                 <td className="hover-icon">
                   <i
                     className={`bi bi-pencil-fill ${styles.icon}`}
-                    onClick={() => handleShow(subscriber.email, mailList)}
+                    onClick={() => handleShow(subscriber.email)}
                   ></i>
                 </td>
                 <td className="hover-icon">
                   <i
                     className={`bi bi-trash-fill ${styles.icon}`}
-                    onClick={() => handleShow(subscriber.email, mailList)}
+                    onClick={() => handleShowDelete(subscriber.email)}
                   ></i>
                 </td>
               </tr>
@@ -58,6 +98,21 @@ export default function SubscribersTable() {
           </tbody>
         </table>
       </div>
+      <ModelComponent
+        showModal={showModal}
+        handleClose={handleClose}
+        modalContent={modalContent}
+        footerContent={footerContent}
+        modalTitle={`Weet u zeker dat u de gebruiker aanpassen?`}
+      />
+
+      {/* <ModelComponent
+        showModal={showDeleteUserModal}
+        handleClose={handleCloseDeleteListModal}
+        modalContent={modalContent}
+        footerContent={footerContent}
+        modalTitle="Bevestig het aanpassen van de gebruiker"
+      /> */}
     </div>
   );
 }
