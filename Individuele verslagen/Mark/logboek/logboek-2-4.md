@@ -40,7 +40,7 @@
 
 | Uren | Taak | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 2u | Gewerkt aan het persoonlijke tussentijdse verslag | - | Het is een tikkeltje frustrerend dat de organisatie van dit project niet erg vlekkeloos is gegaan, waardoor het bij ons onduidelijk was dat dit verslag de dag ervoor af had moeten zijn. | :expressionless: | [Linkn= naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/c19d5a727a7c3cd1d82bfd99ec5c314ff93abb9a) |
 | | | | | | |
 
 
@@ -51,5 +51,4 @@
 
 | Uren | Taak | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
 | | | | | | |
