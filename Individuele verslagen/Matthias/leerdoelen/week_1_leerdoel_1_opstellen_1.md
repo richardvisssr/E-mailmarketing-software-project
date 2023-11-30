@@ -1,7 +1,7 @@
 # Opstellen leerdoel 1
 
 ### De komende 4 weken ga ik met het volgende leerdoel aan de slag: 
-Mijn leerdoel is dat ik doelgerichter en sneller te werk ga in de komende weken.
+Mijn leerdoel is dat ik doelgerichter en sneller te werk gaan.
 
 ### Mijn motivatie om aan dit leerdoel te werken is:
 Waar ik nu nog wel eens tegenaan loop is dat ik vaak met meerdere dingen tegelijk bezig ben en daardoor af en toe de draad kwijt raak hoe ik er eigenlijk voor sta wat betreft de voortgang, ook raak ik soms snel afgeleid waardoor ik weer de focus kwijt ben, dit wil ik ook voorkomen
