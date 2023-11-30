@@ -10,7 +10,7 @@ Ik denk dat mijn mening waardevol is maar niet goed tot uiting komt, waardoor er
 
 ### Dit leerdoel leveren het volgende op voor mij:
 
-Meer zelfverzekerheid in mijn eigen mening.
+Meer zelfverzekerdheid in mijn eigen mening.
 
 ### Dit leerdoel levert het volgende op voor mijn team:
 
@@ -22,12 +22,12 @@ Wanneer er een discussie is over een onderwerp, geef ik mijn mening wanneer er e
 
 ### Om mijn leerdoel te bereiken ga ik de volgende acties op de volgende momenten uitvoeren:
 
-
+Ik ga proberen elke dag even na te denken over de situaties waar ik mijn mening niet heb gegeven, en waarom ik dit niet heb gedaan.
 
 ### Om mijn leerdoel te bereiken ga ik hulp vragen aan de volgende personen:
 
-Richard
+Richard.
 
 ### Ik heb mijn leerdoel bereikt als (formuleer meetbare criteria):
 
-Mijn leerdoel heb ik bereikt wanneer 
+Ik twee keer per vergadering mijn mening heb gegeven.
