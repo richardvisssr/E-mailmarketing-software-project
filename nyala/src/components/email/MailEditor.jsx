@@ -102,6 +102,15 @@ const MailEditor = ({ id }) => {
     <div>
       <h1 className="text-center">Mail Editor</h1>
       <div className="p-2 gap-3 d-flex justify-content-center">
+      {showError && (
+        <Alert
+          variant="danger"
+          onClose={() => setShowError(false)}
+          dismissible
+        >
+          {errorMessage}
+        </Alert>
+      )}
       {designSaved && (
         <Alert
           variant="success"
