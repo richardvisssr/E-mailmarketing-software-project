@@ -10,6 +10,7 @@ export default function page() {
         <span>404</span> - Pagina niet gevonden
       </h1>
       <p>Sorry, de pagina die je zoekt bestaat niet.</p>
+      <p>Voor meer informatie, neem contact op met info@svxtend.nl</p>
       <Link href="/" replace className={`${styles.customContainer}`}>
         <button type="button" className={`btn ${styles.button}`}>
           Ga naar de thuispagina
