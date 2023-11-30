@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import styles from "./UnsubscribeForm.module.css";
 import SubscriptionForm from "../categories/CategoriesComponent";
 
-export default function UnsubscribeForm({}) {
+export default function UnsubscribeForm({ userid }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [reason, setReason] = useState("");
@@ -24,13 +24,17 @@ export default function UnsubscribeForm({}) {
   ];
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const email = params.get("email");
-    if (email) {
-      setEmail(decodeURIComponent(email));
-    }
+    // Fetch subscriber
+    fetch(`http://localhost:3001/mail/subscribers/${userid}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setEmail(data.email);
+      })
+      .catch((error) => {
+        console.error("Error fetching subscriber:", error);
+      });
   }, []);
-  
+
   // Wanneer de gebruiker zich overal voor wilt uitschrijven en zichzelf wilt verwijderen uit de database
   const handleCompleteUnsubscribe = async () => {
     try {
@@ -169,11 +173,6 @@ export default function UnsubscribeForm({}) {
         return prevSelection.filter((sub) => sub !== value);
       }
     });
-  };
-
-  const changeEmail = (e) => {
-    e.preventDefault();
-    setEmail(e.target.value);
   };
 
   const changeReason = (selectedReason) => {
@@ -315,7 +314,6 @@ export default function UnsubscribeForm({}) {
           <input
             type="email"
             className={`form-control w-150`}
-            onChange={changeEmail}
             value={email}
             required={true}
           />
