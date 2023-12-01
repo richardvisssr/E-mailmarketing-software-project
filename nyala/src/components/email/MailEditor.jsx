@@ -86,8 +86,6 @@ const MailEditor = ({ id }) => {
       }
       setTitle(design.title);
     } catch (error) {
-      // setShowError(true);
-      // setErrorMessage(`Error loading design: ${error}`);
     }
     editorRef.current = editor;
   };
