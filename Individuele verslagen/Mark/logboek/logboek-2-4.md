@@ -51,5 +51,5 @@
 
 | Uren | Taak | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| 4,5u | [Als product-owner wil ik een Docker omgeving zodat ik de applicatie makkelijk kan runnen](https://github.com/HANICA-DWA/project-sep23-nyala/issues/113) | - | Heb nu door dat de omgeving goed werkt, alleen wordt de init-mongo.js file en de INIT_DATABASE env variabele niet gebruikt wanneer ik build | :angry: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/b357310899b23b2136aeb3759ba0fcca5fa97bb0) |
+| 4u | [Als product-owner wil ik een Docker omgeving zodat ik de applicatie makkelijk kan runnen](https://github.com/HANICA-DWA/project-sep23-nyala/issues/113) | - | Heb nu door dat de omgeving goed werkt, alleen wordt de init-mongo.js file en de INIT_DATABASE env variabele niet gebruikt wanneer ik build | :angry: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/b357310899b23b2136aeb3759ba0fcca5fa97bb0) |
 | 1u | Reviewen | - | - | :expressionless | - |
