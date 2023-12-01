@@ -6,7 +6,6 @@ import SubscriptionForm from "../categories/CategoriesComponent";
 
 export default function UnsubscribeForm({ userid }) {
   const router = useRouter();
-  const [email, setEmail] = useState("");
   const [reason, setReason] = useState("");
   const [customReason, setCustomReason] = useState("");
   const [subscribersList, setSubscribersList] = useState();
@@ -23,17 +22,17 @@ export default function UnsubscribeForm({ userid }) {
     "Anders",
   ];
 
-  useEffect(() => {
-    // Fetch subscriber
-    fetch(`http://localhost:3001/mail/subscribers/${userid}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setEmail(data.email);
-      })
-      .catch((error) => {
-        console.error("Error fetching subscriber:", error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   // Fetch subscriber
+  //   fetch(`http://localhost:3001/mail/subscribers/${userid}`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setEmail(data.email);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching subscriber:", error);
+  //     });
+  // }, []);
 
   // Wanneer de gebruiker zich overal voor wilt uitschrijven en zichzelf wilt verwijderen uit de database
   const handleCompleteUnsubscribe = async () => {
@@ -134,35 +133,27 @@ export default function UnsubscribeForm({ userid }) {
   };
 
   // Ophalen van abonnementen van de gebruiker
-  const getAbonnementen = async (e) => {
-    e.preventDefault();
-    if (!email) {
-      console.error("Email is required");
-      return;
-    }
-    try {
-      fetch(`http://localhost:3001/${email}/subs`)
-        .then((response) => {
-          if (!response.ok) {
-            setWarning({
-              type: "error",
-              bericht: "Vul een geldige email in.",
-            });
-            throw new Error(
-              `Something went wrong with fetching the subs: ${response.status} ${response.statusText}`
-            );
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setSubs(data);
-          setSubscribersList(
-            <SubscriptionForm subscribers={data} setValue={changeValue} />
-          );
-        })
-        .catch((error) => {});
-    } catch (error) {}
-  };
+  useEffect(() => {
+    fetch(`http://localhost:3001/mail/subscribers/${userid}`)
+      .then((response) => {
+        if (!response.ok) {
+          setWarning({
+            type: "error",
+            bericht: "Vul een geldige email in.",
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setSubs(data);
+      })
+      .catch((error) => {
+        setWarning({
+          type: "error",
+          bericht: `error ${error}`,
+        });
+      });
+  }, []);
 
   const changeValue = (event) => {
     const { value, checked } = event.target;
@@ -314,17 +305,11 @@ export default function UnsubscribeForm({ userid }) {
           <input
             type="email"
             className={`form-control w-150`}
-            value={email}
+            value={subs.email}
             required={true}
           />
-          <button
-            onClick={getAbonnementen}
-            className={`ms-4 btn ${styles.knopPrimary}`}
-          >
-            Ophalen
-          </button>
         </div>
-        {subscribersList}
+        <SubscriptionForm subscribers={subs.subscription} setValue={changeValue} />
         {showRedenen()}
       </form>
     </div>
