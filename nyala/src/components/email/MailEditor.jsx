@@ -3,7 +3,6 @@ import React, { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { Modal, Button, Placeholder, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
-import { Alert } from "react-bootstrap";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
@@ -12,9 +11,8 @@ const MailEditor = ({ id }) => {
   const [show, setShow] = useState(false);
   const [designSaved, setDesignSaved] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [title, setTitle] = useState("");
-
 
   const handleClose = () => {
     setShow(false);
@@ -90,7 +88,6 @@ const MailEditor = ({ id }) => {
 
       editorRef.current.loadDesign(design.design);
       setTitle(design.title);
-      
     } catch (error) {
       showError(true);
       setErrorMessage(`Error loading design: ${error}`);
@@ -102,24 +99,24 @@ const MailEditor = ({ id }) => {
     <div>
       <h1 className="text-center">Mail Editor</h1>
       <div className="p-2 gap-3 d-flex justify-content-center">
-      {showError && (
-        <Alert
-          variant="danger"
-          onClose={() => setShowError(false)}
-          dismissible
-        >
-          {errorMessage}
-        </Alert>
-      )}
-      {designSaved && (
-        <Alert
-          variant="success"
-          onClose={() => setDesignSaved(false)}
-          dismissible
-        >
-          Design is succesvol opgeslagen!
-        </Alert>
-      )}
+        {showError && (
+          <Alert
+            variant="danger"
+            onClose={() => setShowError(false)}
+            dismissible
+          >
+            {errorMessage}
+          </Alert>
+        )}
+        {designSaved && (
+          <Alert
+            variant="success"
+            onClose={() => setDesignSaved(false)}
+            dismissible
+          >
+            Design is succesvol opgeslagen!
+          </Alert>
+        )}
       </div>
       <div className="p-2 gap-3 d-flex justify-content-center">
         <input
