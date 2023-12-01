@@ -32,7 +32,7 @@
 | 0,5u | Reviewen | - | - | :satisfied: | [Geen link] |
 | 2,5u | [Als product-owner wil ik een Docker omgeving zodat ik de applicatie makkelijk kan runnen](https://github.com/HANICA-DWA/project-sep23-nyala/issues/113) | - | Uitgevonden hoe docker-compose.yml, mongo init files en Dockerfile.x files werken | :smile: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/548efa1809e86151a5242007c1e415e46ced0b86) |
 | 0,5u | Reviewen | - | - | :satisfied: | [Geen link] |
-| 1,5u | [Als product-owner wil ik een Docker omgeving zodat ik de applicatie makkelijk kan runnen](https://github.com/HANICA-DWA/project-sep23-nyala/issues/113) | - | Aan het vechten met de backend die niet wel connecten met de mongo container door authentication issues. Weet nog niet echt wat er fout gaat. | :angry: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/acc6737b3aeb4a94714a17333d643f7b22eabbb1) |
+| 1,5u | [Als product-owner wil ik een Docker omgeving zodat ik de applicatie makkelijk kan runnen](https://github.com/HANICA-DWA/project-sep23-nyala/issues/113) | - | Uitgevonden hoe docker-compose.yml en Dockerfile.x files werken. Aan het vechten met de backend die niet wel connecten met de mongo container door authentication issues. Weet nog niet echt wat er fout gaat. | :angry: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/acc6737b3aeb4a94714a17333d643f7b22eabbb1) |
 
 ## Donderdag 30 december
 
@@ -40,8 +40,8 @@
 
 | Uren | Taak | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| 2u | Gewerkt aan het persoonlijke tussentijdse verslag | - | Het is een tikkeltje frustrerend dat de organisatie van dit project niet erg vlekkeloos is gegaan, waardoor het bij ons onduidelijk was dat dit verslag de dag ervoor af had moeten zijn. | :expressionless: | [Linkn= naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/c19d5a727a7c3cd1d82bfd99ec5c314ff93abb9a) |
-| | | | | | |
+| 2u | Gewerkt aan het persoonlijke tussentijdse verslag | - | Het is een tikkeltje frustrerend dat de organisatie van dit project niet erg vlekkeloos is gegaan, waardoor het bij ons onduidelijk was dat dit verslag de dag ervoor af had moeten zijn. | :expressionless: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/c19d5a727a7c3cd1d82bfd99ec5c314ff93abb9a) |
+| 3,5u | [Als product-owner wil ik een Docker omgeving zodat ik de applicatie makkelijk kan runnen](https://github.com/HANICA-DWA/project-sep23-nyala/issues/113) | - | Begrijp t niet. | :angry | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/3bf6cb6d05d88b599005801aa2beba3e610b6417) |
 
 
 
@@ -51,4 +51,5 @@
 
 | Uren | Taak | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| | | | | | |
+|  | [Als product-owner wil ik een Docker omgeving zodat ik de applicatie makkelijk kan runnen](https://github.com/HANICA-DWA/project-sep23-nyala/issues/113) | - | Heb nu door dat de omgeving goed werkt, alleen wordt de init-mongo.js file en de INIT_DATABASE env variabele niet gebruikt wanneer ik build | :angry: | [Link naar de resultaten]() |
+| 0,5u | Reviewen | - | - | :expressionless | - |
