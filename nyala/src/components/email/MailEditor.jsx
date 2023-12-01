@@ -3,7 +3,6 @@ import React, { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { Modal, Button, Placeholder, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
-import { Alert } from "react-bootstrap";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
