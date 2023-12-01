@@ -26,6 +26,10 @@ const emailSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  subscribers: {
+    type: Array,
+    required: true,
+  },
 });
 
 const Email = mongoose.model("Email", emailSchema);

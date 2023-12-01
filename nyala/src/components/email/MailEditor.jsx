@@ -3,6 +3,7 @@ import React, { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { Modal, Button, Placeholder, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
+import { Alert } from "react-bootstrap";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
@@ -10,8 +11,10 @@ const MailEditor = ({ id }) => {
   const editorRef = useRef(null);
   const [show, setShow] = useState(false);
   const [designSaved, setDesignSaved] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [title, setTitle] = useState("");
+
 
   const handleClose = () => {
     setShow(false);
@@ -34,7 +37,8 @@ const MailEditor = ({ id }) => {
         }
         setDesignSaved(true);
       } catch (error) {
-        alert("Error saving design:", error);
+        showError(true);
+        setErrorMessage(`Error saving design: ${error}`);
       }
     });
   };
@@ -55,7 +59,8 @@ const MailEditor = ({ id }) => {
         }
         setEmailSent(true);
       } catch (error) {
-        // alert("Error sending email:", error);
+        showError(true);
+        setErrorMessage(`Error sending email: ${error}`);
       }
       handleShow();
     });
@@ -87,7 +92,8 @@ const MailEditor = ({ id }) => {
       setTitle(design.title);
       
     } catch (error) {
-      // alert("Error loading design:", error);
+      showError(true);
+      setErrorMessage(`Error loading design: ${error}`);
     }
     editorRef.current = editor;
   };
@@ -96,6 +102,15 @@ const MailEditor = ({ id }) => {
     <div>
       <h1 className="text-center">Mail Editor</h1>
       <div className="p-2 gap-3 d-flex justify-content-center">
+      {showError && (
+        <Alert
+          variant="danger"
+          onClose={() => setShowError(false)}
+          dismissible
+        >
+          {errorMessage}
+        </Alert>
+      )}
       {designSaved && (
         <Alert
           variant="success"
