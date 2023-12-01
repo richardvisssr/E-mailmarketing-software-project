@@ -21,7 +21,7 @@ import SelectMailingLists from "../email/SendMail";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
-  const { template } = props;
+  const { template, onDelete } = props;
   const [show, setShow] = useState(false);
   const [image, setImage] = useState("");
   const [zoomLevel, setZoomLevel] = useState(2);
@@ -58,7 +58,7 @@ function TemplateCard(props) {
     fetch(`http://localhost:3001/template/${template.id}`, {
       method: "DELETE",
     }).then(() => {
-      window.location.reload();
+      onDelete(template.id);
     });
   };
 

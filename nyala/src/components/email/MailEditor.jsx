@@ -68,22 +68,27 @@ const MailEditor = ({ id }) => {
   };
 
   const onLoad = async (editor) => {
-    const response = await fetch(
-      `http://localhost:3001/mail/loadDesign/${id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    try {
+      const response = await fetch(
+        `http://localhost:3001/mail/loadDesign/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const design = await response.json();
+
+      if (editorRef.current) {
+        editorRef.current.loadDesign(design.design);
       }
-    );
-  
-    const design = await response.json();
-  
-    if (editorRef.current) {
-      editorRef.current.loadDesign(design.design);
-    } 
-    setTitle(design.title);
+      setTitle(design.title);
+    } catch (error) {
+      // setShowError(true);
+      // setErrorMessage(`Error loading design: ${error}`);
+    }
     editorRef.current = editor;
   };
 
