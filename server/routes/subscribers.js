@@ -16,6 +16,14 @@ router.get("/subscribers", async (req, res) => {
   }
 });
 
+router.get("/subscribers/all", async (req, res) => {
+  try {
+    const subscribers = await Subscriber.find();
+    res.status(200).send(subscribers);
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
 
 router.post("/subscribers/add", async (req, res) => {
   try {
@@ -107,6 +115,36 @@ router.put("/subscribers/add", async (req, res) => {
   }
 });
 
+router.put("/change/:subscriber", async (req, res) => {
+  const prevEmail = req.params.subscriber;
+  const { name, email } = req.body;
+
+  try {
+    const selectedSubscriber = await Subscriber.findOne({
+      email: prevEmail,
+    });
+
+    if (!selectedSubscriber) {
+      return res.status(404).send({ message: "Subscriber not found" });
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res
+        .status(400)
+        .json({ message: "Bad Request: Invalid email format" });
+    }
+
+    selectedSubscriber.name = name;
+    selectedSubscriber.email = email;
+
+    await selectedSubscriber.save();
+
+    res.status(200).json({ message: "Subscriber updated" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 router.delete("/unsubscribe", async (req, res) => {
   const { email } = req.body;
   try {
@@ -145,6 +183,31 @@ router.delete("/unsubscribe/subs", async (req, res) => {
     return res
       .status(200)
       .send({ message: "subscriptions removed successfully" });
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
+router.delete("/unsubscribe/:subscription", async (req, res) => {
+  const { subscription } = req.params;
+
+  try {
+    const subscribers = await Subscriber.find({ subscription: subscription });
+
+    if (subscribers.length === 0) {
+      return res.status(404).send({ message: "No subscribers found" });
+    }
+
+    subscribers.forEach(async (subscriber) => {
+      subscriber.subscription = subscriber.subscription.filter(
+        (sub) => sub !== subscription
+      );
+      await subscriber.save();
+    });
+
+    return res
+      .status(200)
+      .send({ message: "Subscription removed for all subscribers" });
   } catch (error) {
     return res.status(500).send(error);
   }
