@@ -7,15 +7,8 @@ import styles from "./Views.module.css";
 
 export default function SubscribersTable() {
   const [subscribers, setSubscribers] = useState([]);
-  const [notification, setNotification] = useState({
-    type: "",
-    message: "",
-  });
   const [showModal, setShowModal] = useState(false);
-  const [selectedSubscriber, setSelectedSubscriber] = useState({
-    email: null,
-    name: null,
-  });
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [email, setEmail] = useState(null);
   const [name, setName] = useState(null);
   const [modalContent, setModalContent] = useState(null);
@@ -25,7 +18,14 @@ export default function SubscribersTable() {
     type: "",
     message: "",
   });
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [notification, setNotification] = useState({
+    type: "",
+    message: "",
+  });
+  const [selectedSubscriber, setSelectedSubscriber] = useState({
+    email: " ",
+    name: " ",
+  });
 
   useEffect(() => {
     fetch("http://localhost:3001/subscribers/all")
@@ -269,13 +269,13 @@ export default function SubscribersTable() {
                 <td>{subscriber.name}</td>
                 <td>{subscriber.email}</td>
                 <td>{subscriber.subscription.join(", ")}</td>
-                <td className="hover-icon">
+                <td className="hover-icon text-end">
                   <i
-                    className={`bi bi-pencil-fill m-4 text-end ${styles.icon}`}
+                    className={`bi bi-pencil-fill m-4 ${styles.icon}`}
                     onClick={() => handleShow(subscriber)}
                   ></i>
                   <i
-                    className={`bi bi-trash3-fill m-4 text-end ${styles.icon}`}
+                    className={`bi bi-trash3-fill m-4 me-5 ${styles.icon}`}
                     onClick={() => handleShowDelete(subscriber.email)}
                   ></i>
                 </td>

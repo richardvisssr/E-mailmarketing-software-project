@@ -67,9 +67,9 @@ export default function MailListAccordion({
                       <tr key={subIndex}>
                         <td>{subscriber.name}</td>
                         <td>{subscriber.email}</td>
-                        <td className="hover-icon">
+                        <td className="hover-icon text-end">
                           <i
-                            className={`bi bi-trash-fill ${styles.icon}`}
+                            className={`bi bi-trash-fill me-5 ${styles.icon}`}
                             onClick={() =>
                               handleShow(subscriber.email, mailList)
                             }

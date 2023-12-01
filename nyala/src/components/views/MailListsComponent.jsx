@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Modal, Button, Placeholder, Alert } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 import styles from "./Views.module.css";
 import AlertComponent from "../alert/AlertComponent";
@@ -11,10 +11,6 @@ import ModelComponent from "./ModelComponent";
 export default function MailListComponent() {
   const [mailLists, setMailLists] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
-  const [notification, setNotification] = useState({
-    type: "",
-    message: "",
-  });
   const [list, setList] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedSubscriber, setSelectedSubscriber] = useState(null);
@@ -22,6 +18,10 @@ export default function MailListComponent() {
   const [footerContent, setFooterContent] = useState(null);
   const [showDeleteListModal, setShowDeleteListModal] = useState(false);
   const [selectedListToDelete, setSelectedListToDelete] = useState(null);
+  const [notification, setNotification] = useState({
+    type: "",
+    message: "",
+  });
 
   useEffect(() => {
     fetch("http://localhost:3001/mail/getList")
