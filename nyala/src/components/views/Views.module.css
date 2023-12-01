@@ -40,3 +40,9 @@
   padding: 0;
   margin: 0;
 }
+
+.entry {
+  border-style: solid;
+  border-color: #a66cf2;
+  width: 100%;
+}

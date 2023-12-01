@@ -102,6 +102,7 @@ router.put("/subscribers/add", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 router.put("/change/:subscriber", async (req, res) => {
   const prevEmail = req.params.subscriber;
   const { name, email } = req.body;
@@ -115,13 +116,14 @@ router.put("/change/:subscriber", async (req, res) => {
       return res.status(404).send({ message: "Subscriber not found" });
     }
 
-    if (name) {
-      selectedSubscriber.name = name;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res
+        .status(400)
+        .json({ message: "Bad Request: Invalid email format" });
     }
 
-    if (email) {
-      selectedSubscriber.email = email;
-    }
+    selectedSubscriber.name = name;
+    selectedSubscriber.email = email;
 
     await selectedSubscriber.save();
 

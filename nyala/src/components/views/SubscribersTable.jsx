@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AlertComponent from "../alert/AlertComponent";
 import ModelComponent from "./ModelComponent";
 import styles from "./Views.module.css";
@@ -13,21 +13,25 @@ export default function SubscribersTable() {
   });
   const [showModal, setShowModal] = useState(false);
   const [selectedSubscriber, setSelectedSubscriber] = useState({
-    email: "",
-    name: "",
+    email: null,
+    name: null,
   });
   const [email, setEmail] = useState(null);
   const [name, setName] = useState(null);
   const [modalContent, setModalContent] = useState(null);
   const [footerContent, setFooterContent] = useState(null);
-  const [emailToUpdate, setEmailToUpdate] = useState(null);
   const [bool, setBool] = useState(false);
+  const [modalNotification, setModalNotification] = useState({
+    type: "",
+    message: "",
+  });
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:3001/subscribers/all")
       .then((response) => response.json())
       .then((data) => setSubscribers(data))
-      .catch((error) =>
+      .catch(() =>
         setNotification({
           type: "error",
           message: "Er ging iets mis met het ophalen van de abonnees",
@@ -38,6 +42,10 @@ export default function SubscribersTable() {
   const handleClose = () => {
     setShowModal(false);
     setSelectedSubscriber(null);
+    setModalNotification({
+      type: "",
+      message: "",
+    });
   };
 
   const handleShow = (subscriber) => {
@@ -46,13 +54,11 @@ export default function SubscribersTable() {
       name: subscriber.name,
       email: subscriber.email,
     });
-
-    setEmailToUpdate(subscriber.email);
     setModalContent(
       <div className="p-2">
         <p>
           Weet u zeker dat u de gebruiker <strong>{subscriber.email}</strong>{" "}
-          aanpassen?
+          wilt aanpassen?
         </p>
 
         <div className="p-2">
@@ -63,6 +69,7 @@ export default function SubscribersTable() {
             type="text"
             placeholder={subscriber.name}
             onChange={(e) => setName(e.target.value)}
+            className={`form-control ${styles.entry} p-2 mb-3`}
           />
         </div>
         <div className="p-2">
@@ -73,6 +80,7 @@ export default function SubscribersTable() {
             type="email"
             placeholder={subscriber.email}
             onChange={(e) => setEmail(e.target.value)}
+            className={`form-control ${styles.entry} p-2 mb-3`}
           />
         </div>
       </div>
@@ -81,14 +89,14 @@ export default function SubscribersTable() {
       <>
         <button
           type="button"
-          className="btn btn-secondary"
+          className={`me-4 btn ${styles.buttonSecondary}`}
           onClick={handleClose}
         >
           Annuleren
         </button>
         <button
           type="button"
-          className="btn btn-danger"
+          className={`me-4 btn ${styles.buttonPrimary}`}
           onClick={() => setBool(true)}
         >
           Aanpassen
@@ -99,41 +107,70 @@ export default function SubscribersTable() {
 
   useEffect(() => {
     if (bool === true) {
-      if (email === null || name === null) {
-        return false;
+      if (email == null && name == null) {
+        setModalNotification({
+          type: "error",
+          message: "Vul een naam of email in",
+        });
+        setBool(false);
+      } else if (!email) {
+        setEmail(selectedSubscriber.email);
+        handleUpdateSubscriber();
+      } else if (email) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          setModalNotification({
+            type: "error",
+            message: "Het emailadres is geen valide formaat.",
+          });
+          setBool(false);
+        } else {
+          handleUpdateSubscriber();
+        }
+      } else if (!name) {
+        setName(selectedSubscriber.name);
+        handleUpdateSubscriber();
       }
-      handleUpdateSubscriber();
     }
   }, [bool]);
 
   const handleUpdateSubscriber = () => {
-    console.log(email, name);
+    const updatedData = {
+      email: email || selectedSubscriber.email,
+      name: name || selectedSubscriber.name,
+    };
+
     fetch(`http://localhost:3001/change/${selectedSubscriber.email}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        email: email,
-        name: name,
-      }),
+      body: JSON.stringify(updatedData),
     })
       .then((response) => response.json())
       .then(() => {
         const updatedSubscribers = subscribers.map((subscriber) =>
           subscriber.email === selectedSubscriber.email
-            ? { ...subscriber, name, email }
+            ? {
+                ...subscriber,
+                name: updatedData.name,
+                email: updatedData.email,
+              }
             : subscriber
         );
         setSubscribers(updatedSubscribers);
-
         setNotification({
           type: "success",
-          message: `De gebruiker is aangepast`,
+          message: "De gebruiker is aangepast",
         });
         setShowModal(false);
         setSelectedSubscriber(null);
-        setEmailToUpdate(null);
+        setBool(false);
+        setModalNotification({
+          type: "",
+          message: "",
+        });
+        setEmail(null);
+        setName(null);
       })
       .catch((error) => {
         setNotification({
@@ -142,6 +179,74 @@ export default function SubscribersTable() {
         });
       });
   };
+
+  const handleCloseDelete = () => {
+    setShowDeleteModal(false);
+    setSelectedSubscriber(null);
+  };
+
+  const handleShowDelete = (email) => {
+    setShowDeleteModal(true);
+    setSelectedSubscriber({
+      email: email,
+    });
+    setModalContent(
+      <div className="p-2">
+        <p>
+          Weet u zeker dat u de gebruiker <strong>{email}</strong> wilt
+          verwijderen?
+        </p>
+      </div>
+    );
+    setFooterContent(
+      <>
+        <button
+          type="button"
+          className={`me-4 btn ${styles.buttonSecondary}`}
+          onClick={handleCloseDelete}
+        >
+          Annuleren
+        </button>
+        <button
+          type="button"
+          className={`me-4 btn ${styles.buttonPrimary}`}
+          onClick={() => handleDeleteSubscriber(email)}
+        >
+          Verwijderen
+        </button>
+      </>
+    );
+  };
+
+  const handleDeleteSubscriber = (email) => {
+    fetch(`http://localhost:3001/unsubscribe`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: email }),
+    })
+      .then((response) => response.json())
+      .then(() => {
+        const updatedSubscribers = subscribers.filter(
+          (subscriber) => subscriber.email !== email
+        );
+        setSubscribers(updatedSubscribers);
+        setNotification({
+          type: "success",
+          message: "De gebruiker is verwijderd",
+        });
+        setShowDeleteModal(false);
+        setSelectedSubscriber(null);
+      })
+      .catch((error) => {
+        setNotification({
+          type: "error",
+          message: `Er is iets fout gegaan: ${error.message}`,
+        });
+      });
+  };
+
   return (
     <div>
       <AlertComponent notification={notification} />
@@ -156,7 +261,6 @@ export default function SubscribersTable() {
               <th scope="col">Email</th>
               <th scope="col">Abonnementen</th>
               <th scope="col"></th>
-              <th scope="col"></th>
             </tr>
           </thead>
           <tbody className="table-group-divider">
@@ -167,13 +271,11 @@ export default function SubscribersTable() {
                 <td>{subscriber.subscription.join(", ")}</td>
                 <td className="hover-icon">
                   <i
-                    className={`bi bi-pencil-fill ${styles.icon}`}
+                    className={`bi bi-pencil-fill m-4 text-end ${styles.icon}`}
                     onClick={() => handleShow(subscriber)}
                   ></i>
-                </td>
-                <td className="hover-icon">
                   <i
-                    className={`bi bi-trash-fill ${styles.icon}`}
+                    className={`bi bi-trash3-fill m-4 text-end ${styles.icon}`}
                     onClick={() => handleShowDelete(subscriber.email)}
                   ></i>
                 </td>
@@ -184,11 +286,22 @@ export default function SubscribersTable() {
       </div>
 
       <ModelComponent
+        size="lg"
         showModal={showModal}
         handleClose={handleClose}
         modalContent={modalContent}
         footerContent={footerContent}
         modalTitle={`Wijzigen`}
+        Notification={<AlertComponent notification={modalNotification} />}
+      />
+
+      <ModelComponent
+        size="md"
+        showModal={showDeleteModal}
+        handleClose={handleCloseDelete}
+        modalContent={modalContent}
+        footerContent={footerContent}
+        modalTitle={`Verwijderen`}
       />
     </div>
   );
