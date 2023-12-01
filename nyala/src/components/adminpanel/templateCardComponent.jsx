@@ -69,7 +69,6 @@ function TemplateCard(props) {
           <Button variant="danger" onClick={handleDelete}>
             Verwijderen
           </Button>
-          ,
           {!error && (
             <Card.Img
               variant="top"
