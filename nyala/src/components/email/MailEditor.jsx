@@ -57,7 +57,7 @@ const MailEditor = ({ id }) => {
         }
         setEmailSent(true);
       } catch (error) {
-        showError(true);
+        setShowError(true);
         setErrorMessage(`Error sending email: ${error}`);
       }
       handleShow();
