@@ -1,5 +1,5 @@
 "use client";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./UnsubscribeForm.module.css";
 import SubscriptionForm from "../categories/CategoriesComponent";
@@ -141,17 +141,11 @@ export default function UnsubscribeForm({ userid }) {
             type: "error",
             bericht: "Vul een geldige email in.",
           });
-          throw new Error(
-            `Something went wrong with fetching the subs: ${response.status} ${response.statusText}`
-          );
         }
         return response.json();
       })
       .then((data) => {
         setSubs(data);
-        // setSubscribersList(
-        //   <SubscriptionForm subscribers={data} setValue={changeValue} />
-        // );
       })
       .catch((error) => {
         setWarning({
@@ -275,7 +269,7 @@ export default function UnsubscribeForm({ userid }) {
     } else {
     }
   };
-console.log(subs)
+
   return (
     <div className="d-flex align-items-center flex-column">
       <div>
