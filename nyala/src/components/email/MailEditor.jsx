@@ -78,16 +78,23 @@ const MailEditor = ({ id }) => {
           },
         }
       );
-
+  
+      if (!response.ok) {
+        return
+      }
+  
       const design = await response.json();
-
+  
       if (editorRef.current) {
         editorRef.current.loadDesign(design.design);
       }
       setTitle(design.title);
     } catch (error) {
+      setShowError(true);
+      setErrorMessage(`Error loading design: ${error}`);
+    } finally {
+      editorRef.current = editor;
     }
-    editorRef.current = editor;
   };
 
   return (
