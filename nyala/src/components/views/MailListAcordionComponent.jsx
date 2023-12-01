@@ -19,12 +19,11 @@ export default function MailListAccordion({
 
   return (
     <div className={`accordion accordion-flush p-5 pt-1`} id="MaillistView">
-      if (mailLists.length === 0){" "}
-      {
+      {mailLists.length === 0 && (
         <div className="text-center">
           <h1 className="text-center">Geen mailinglijsten gevonden</h1>
         </div>
-      }
+      )}
       {mailLists.map((mailList, index) => (
         <div
           className={`accordion-item shadow ${styles.customAccordion}`}

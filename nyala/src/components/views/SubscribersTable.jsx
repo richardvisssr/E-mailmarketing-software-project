@@ -251,10 +251,10 @@ export default function SubscribersTable() {
     <div>
       <AlertComponent notification={notification} />
 
-      <h1 className="text-center mb-2">Zie hier alle geabonneerde</h1>
+      <h1 className="text-center mb-2">Alle abonnees</h1>
       <div className="table-responsive p-5">
         <table className="table table-hover">
-          <caption>Lijst met alle geabonneerde leden</caption>
+          <caption>Lijst met alle geabonneerden leden</caption>
           <thead>
             <tr>
               <th scope="col">Naam</th>
@@ -264,29 +264,31 @@ export default function SubscribersTable() {
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            if (subscribers.length === 0){" "}
-            {
-              <div className="text-center">
-                <h1 className="text-center">Geen abonnees gevonden</h1>
-              </div>
-            }
-            {subscribers.map((subscriber, index) => (
-              <tr key={index}>
-                <td>{subscriber.name}</td>
-                <td>{subscriber.email}</td>
-                <td>{subscriber.subscription.join(", ")}</td>
-                <td className="hover-icon text-end">
-                  <i
-                    className={`bi bi-pencil-fill m-4 ${styles.icon}`}
-                    onClick={() => handleShow(subscriber)}
-                  ></i>
-                  <i
-                    className={`bi bi-trash3-fill m-4 me-5 ${styles.icon}`}
-                    onClick={() => handleShowDelete(subscriber.email)}
-                  ></i>
+            {subscribers.length === 0 ? (
+              <tr>
+                <td colSpan="4" className="text-center">
+                  <h1>Geen abonnees gevonden</h1>
                 </td>
               </tr>
-            ))}
+            ) : (
+              subscribers.map((subscriber, index) => (
+                <tr key={index}>
+                  <td>{subscriber.name}</td>
+                  <td>{subscriber.email}</td>
+                  <td>{subscriber.subscription.join(", ")}</td>
+                  <td className="hover-icon text-end">
+                    <i
+                      className={`bi bi-pencil-fill m-4 ${styles.icon}`}
+                      onClick={() => handleShow(subscriber)}
+                    ></i>
+                    <i
+                      className={`bi bi-trash3-fill m-4 me-5 ${styles.icon}`}
+                      onClick={() => handleShowDelete(subscriber.email)}
+                    ></i>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
