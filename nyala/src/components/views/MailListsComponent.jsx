@@ -27,7 +27,13 @@ export default function MailListComponent() {
     fetch("http://localhost:3001/mail/getList")
       .then((response) => response.json())
       .then((data) => setMailLists(data[0].mailList))
-      .catch((error) => console.log(error));
+      .catch((error) =>
+        setNotification({
+          type: "error",
+          message:
+            "Er is iets misgegaan met het ophalen van de maillinglijsten",
+        })
+      );
   }, []);
 
   useEffect(() => {

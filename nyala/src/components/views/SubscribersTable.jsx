@@ -264,6 +264,12 @@ export default function SubscribersTable() {
             </tr>
           </thead>
           <tbody className="table-group-divider">
+            if (subscribers.length === 0){" "}
+            {
+              <div className="text-center">
+                <h1 className="text-center">Geen abonnees gevonden</h1>
+              </div>
+            }
             {subscribers.map((subscriber, index) => (
               <tr key={index}>
                 <td>{subscriber.name}</td>
