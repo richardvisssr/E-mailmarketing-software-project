@@ -5,6 +5,7 @@ const { default: TemplateCard } = require("./TemplateCardComponent");
 
 function CardList(props) {
   const templates = props.templates;
+  const onDelete = props.onDelete;
 
   return (
     <Row xs={1} md={3} className="g-4">
@@ -14,7 +15,7 @@ function CardList(props) {
         </Alert>
       ) : (
         Object.values(templates).map((template, idx) => (
-          <TemplateCard key={idx} template={template} />
+          <TemplateCard key={idx} template={template} onDelete={onDelete} />
         ))
       )}
     </Row>

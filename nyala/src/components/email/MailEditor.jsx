@@ -35,7 +35,7 @@ const MailEditor = ({ id }) => {
         }
         setDesignSaved(true);
       } catch (error) {
-        showError(true);
+        setShowError(true);
         setErrorMessage(`Error saving design: ${error}`);
       }
     });
@@ -55,7 +55,6 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        setEmailSent(true);
       } catch (error) {
         setShowError(true);
         setErrorMessage(`Error sending email: ${error}`);
@@ -79,20 +78,23 @@ const MailEditor = ({ id }) => {
           },
         }
       );
-
+  
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        return
       }
-
+  
       const design = await response.json();
-
-      editorRef.current.loadDesign(design.design);
+  
+      if (editorRef.current) {
+        editorRef.current.loadDesign(design.design);
+      }
       setTitle(design.title);
     } catch (error) {
-      showError(true);
+      setShowError(true);
       setErrorMessage(`Error loading design: ${error}`);
+    } finally {
+      editorRef.current = editor;
     }
-    editorRef.current = editor;
   };
 
   return (
