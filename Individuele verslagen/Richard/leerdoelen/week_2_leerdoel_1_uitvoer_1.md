@@ -25,3 +25,4 @@ Tot nu toe lijkt het meer bewustzijn te creëren over de dynamiek van de teamint
 
 ### Welke acties zijn de komende 2 weken nodig om (nog meer) voortgang te boeken?
 Ik wil mijn aanpak aanpassen door niet alleen ruimte te geven, maar actief anderen aan te moedigen om hun mening te delen. Bijvoorbeeld door gerichte vragen te stellen en het stokje door te geven aan andere teamleden om uit hun comfortzone te stappen.
+>> Naast ruimte geven ook stimuleren lees ik. Welke gesprekstechniek zo hier bij passen? Voer deze techniek op en check welke onderdelen je wel/niet gaat toepassen.
