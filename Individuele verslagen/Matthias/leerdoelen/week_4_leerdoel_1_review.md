@@ -26,5 +26,7 @@ Ik denk dat ik voor mezelf echt wel kan zeggen dat ik hier profijt hier van heb 
 
 
 ### Het effect op het groepsproces was:
-Dat de groep meer een idee had wat ik aan het doen was en dat er sneller functionaliteiten kwamen
+Dat de groep meer een idee had wat ik aan het doen was en dat er sneller functionaliteiten kwamen.
+>> Aannemelijk betoog, ik mis echter de fedback uit je team. Is dat nog toe te voegen of heeft de IPV nog  voor inhoudelijke aanvullingen gezorgd?
+>> heb je theorie gevonden aangaande je leerdoel? Ga alsnog eens op zoek (zie ook mn feedback in week 2) en kijk of je dit leerdoel kunt versterken.
 
