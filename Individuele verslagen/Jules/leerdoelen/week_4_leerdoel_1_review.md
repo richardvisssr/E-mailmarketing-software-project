@@ -23,3 +23,6 @@ Zelf heeft het een positief effect gehad. Ik heb dus zoals hierboven beschreven 
 
 ### Het effect op het groepsproces was:
 Mijn groep merkte geen negatieve effecten op het proces. Door het voortouw te nemen in het voorbereiden zorgt dat ook een beetje voor meer rust binnen de groep.
+
+>> check bijgaand document en werk je  leerdoel zodanig bij dat het geheel een goed onderbouwd (denk aan theorie uit de PS-course) en aannemelijk beargumenteerd geheel gaat vormen. Kijk ook bij het hoofdstuk reflectie om dit onderdeel goed te verwoorden. Nu is je verwerking onder de maat.  
+[Reader leerdoelen en reflecteren.pdf](https://github.com/HANICA-DWA/project-sep23-nyala/files/13538873/Reader.leerdoelen.en.reflecteren.pdf)
