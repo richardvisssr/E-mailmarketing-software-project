@@ -27,3 +27,8 @@ Ik durf nu meer mijn meningen te delen met andere groepsleden.
 ### Het effect op het groepsproces was:
 
 Het groepsproces liep soepeler omdat er een extra persoon die hielp met het proces.
+
+>>check bijgaand document en werk je  leerdoel zodanig bij dat het geheel een goed onderbouwd (denk aan theorie uit de PS-course) en aannemelijk beargumenteerd geheel gaat vormen. Kijk ook bij het hoofdstuk reflectie om dit onderdeel goed te verwoorden. Nu is het geheel niet onderbouwd met concrete voorbeelden en gefundeerde reflectie...
+>> >> 
+
+[Reader leerdoelen en reflecteren.pdf](https://github.com/HANICA-DWA/project-sep23-nyala/files/13538940/Reader.leerdoelen.en.reflecteren.pdf)
