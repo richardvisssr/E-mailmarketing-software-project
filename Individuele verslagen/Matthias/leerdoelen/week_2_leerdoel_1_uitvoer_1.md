@@ -16,7 +16,8 @@ Heel af en toe de groep
 
 ### Tot welke inzichten ben je gekomen?
 Dat ik eigenlijk best wel doelgericht kan werken als ik er maar echt goed op let. Hetzelfde geld voor het afgeleid raken dit valt mee als ik de afleiding maar buitensluit
-
+>> geld
+>> hoe sluit je die buiten?
 
 ### Heb je iets bijgesteld? Waarom?
 Ja, af en toe heb ik soms mijn mobiel even in mijn tas gedaan en gewoon alleen muziek aan, eerder had ik eigenlijk altijd mijn mobiel naast me liggen
@@ -32,3 +33,7 @@ Meer code in een kortere tijd en meer duidelijkheid binnen de groep
 
 ### Welke acties zijn de komende 2 weken nodig om (nog meer) voortgang te boeken?
 Echt vaste werkblokken in een dag zetten voor mezelf, en elke dag een duidelijk doel voor mijzelf creëren
+>> geef eens een dagelijks voorbeeld zodat ik een beeld krijg..
+>
+Heeft je leerdoel met uitstelgedrag te maken? check eens: https://profskills.wp.aimsites.nl/2018/11/20/afleiding/
+
