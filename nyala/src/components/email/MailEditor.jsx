@@ -32,7 +32,6 @@ const MailEditor = ({ id }) => {
 
   const handleSubjectChange = (e) => {
     if (e.target.value.trim() === "") {
-      alert("Onderwerp mag niet leeg zijn");
       return;
     }
     setSubject(e.target.value);

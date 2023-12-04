@@ -101,7 +101,6 @@ function TemplateCard(props) {
 
   const handleSubjectChange = (e) => {
     if (e.target.value.trim() === "") {
-      alert("Onderwerp mag niet leeg zijn");
       return;
     }
     setSubject(e.target.value);
@@ -123,12 +122,8 @@ function TemplateCard(props) {
             date: dateTime,
           }),
         });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
         setEmailSent(true);
       } catch (error) {
-        console.error("Error sending email:", error);
         setEmailSent(false);
       }
     }
@@ -180,7 +175,7 @@ function TemplateCard(props) {
           </div>
         )}
         <Modal.Header closeButton>
-          <Modal.Title>Wil je '{template.title}' verturen?</Modal.Title>
+          <Modal.Title>Wil je '{template.title}' versturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="p-2 gap-3 d-flex justify-content-center">
