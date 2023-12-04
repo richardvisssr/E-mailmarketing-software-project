@@ -66,9 +66,51 @@ router.put("/planMail", async (req, res) => {
       await planMail.save();
       res.status(200).send("Mail planned successfully");
     } else {
-      const newPlanMail = new PlannedEmail({ id, title, html, subscribers, date });
+      const newPlanMail = new PlannedEmail({
+        id,
+        title,
+        html,
+        subscribers,
+        date,
+      });
       await newPlanMail.save();
       res.status(200).send("Mail planned successfully");
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/getPlannedMails", async (req, res) => {
+  try {
+    const plannedMails = await PlannedEmail.find();
+    res.status(200).json({ plannedMails });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.delete("/planMail/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await PlannedEmail.findOneAndDelete({ id });
+    res.status(200).send("Mail deleted successfully");
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.put("/updateMail/", async (req, res) => {
+  try {
+    const {id, date} = req.body;
+
+    const mail = await PlannedEmail.findOne({ id });
+    if (mail) {
+      mail.date = date;
+      await mail.save();
+      res.status(200).send("Mail updated successfully");
+    } else {
+      res.status(404).send("Mail not found");
     }
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
