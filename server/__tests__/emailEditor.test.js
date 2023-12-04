@@ -17,8 +17,15 @@ beforeAll(async () => {
   }
 });
 
+afterEach(async () => {
+  await Design.deleteMany({});
+  await Email.deleteMany({});
+});
+
 afterAll(async () => {
-  await mongoose.connection.close();
+  if (mongoose.connection.readyState !== 0) {
+    await mongoose.disconnect();
+  }
 });
 
 describe("Email Editor Routes", () => {
@@ -27,13 +34,17 @@ describe("Email Editor Routes", () => {
       const testDesign = await Design.create({
         id: "123",
         design: { key: "value" },
+        title: "testen",
       });
 
       const response = await request(app).get(
         `/mail/loadDesign/${testDesign.id}`
       );
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(testDesign.design);
+      expect(response.body).toEqual({
+        design: testDesign.design,
+        title: testDesign.title,
+      });
 
       await Design.deleteOne({ _id: testDesign._id });
     });
@@ -41,17 +52,27 @@ describe("Email Editor Routes", () => {
 
   describe("PUT /saveDesign", () => {
     it("should save the design and return a success message", async () => {
+      // Delete existing design with the same id
+      await Design.deleteOne({ id: "456" });
+
       const response = await request(app)
         .put("/mail/saveDesign")
-        .send({ id: "456", design: { key: "updatedValue" } });
+        .send({
+          id: "456",
+          design: { key: "updatedValue" },
+          title: "Title",
+        });
 
       expect(response.status).toBe(200);
-      expect(response.text).toBe("Design updated successfully");
+      expect(response.text).toBe("Design saved successfully");
     });
   });
 
   describe("PUT /sendEmail", () => {
     it("should send the email and return a success message", async () => {
+      // Delete existing email with the same id
+      await Email.deleteOne({ id: "789" });
+
       const response = await request(app)
         .put("/mail/sendEmail")
         .send({ id: "789", html: "<p>Email content</p>" });
@@ -63,6 +84,9 @@ describe("Email Editor Routes", () => {
 
   describe("GET /getEmail/:id", () => {
     it("should return the email with the specified id", async () => {
+      // Delete existing email with the same id
+      await Email.deleteOne({ id: "456" });
+
       const testEmail = await Email.create({ id: "456", html: "Test Email" });
 
       const response = await request(app).get(`/mail/getEmail/${testEmail.id}`);

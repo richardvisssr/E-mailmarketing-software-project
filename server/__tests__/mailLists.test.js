@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const request = require("supertest");
 const { app, server, httpServer } = require("../app");
 
-const MailList = require("../model/mailingList");
+const MailList = require("../model/mailList");
 
 describe("Mail List API", () => {
   beforeAll(async () => {
@@ -27,7 +27,9 @@ describe("Mail List API", () => {
   afterAll(async () => {
     server.close();
     httpServer.close();
-    await mongoose.disconnect();
+    if (mongoose.connection.readyState !== 0) {
+      await mongoose.disconnect();
+    }
   });
 
   test("MailList get test", async () => {
