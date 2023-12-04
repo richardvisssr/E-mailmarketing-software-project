@@ -69,18 +69,13 @@ router.get("/:subscriber/subs", async (req, res) => {
   const { subscriber } = req.params;
 
   try {
-    const sub = await Subscriber.findOne(
-      {
-        email: subscriber,
-      },
-      { subscription: 1 }
-    );
+    const sub = await Subscriber.findOne({ _id: subscriber });
 
     if (!sub) {
       return res.status(404).send({ message: "Subscriber not found" });
     }
 
-    return res.status(200).send(sub.subscription);
+    return res.status(200).send(sub);
   } catch (error) {
     return res.status(500).send({ message: "Internal server error" });
   }
