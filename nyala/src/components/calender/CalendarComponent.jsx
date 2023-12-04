@@ -42,7 +42,7 @@ function MailCalendar(props) {
       setError("Vul een datum in");
       return;
     }
-    
+
     const response = await fetch(`http://127.0.0.1:3001/updateMail`, {
       method: "PUT",
       headers: {
@@ -53,20 +53,20 @@ function MailCalendar(props) {
         date: emailDate,
       }),
     });
-  
+
     if (response.status === 200) {
       props.shouldUpdate();
       setId("");
       setEmailDate("");
       setEmailTitle("");
       setShowModal(false);
-
     } else {
       setWentWrong(true);
-      setError("Er is iets misgegaan met het aanpassen van de datum. Probeer het later opnieuw");
+      setError(
+        "Er is iets misgegaan met het aanpassen van de datum. Probeer het later opnieuw"
+      );
     }
   };
-  
 
   const handlePreviousMonth = () => {
     const previousMonth = new Date(date);
@@ -114,11 +114,6 @@ function MailCalendar(props) {
 
   return (
     <div>
-      {wentWrong && (
-        <div className="alert alert-danger" role="alert">
-          {error}
-        </div>
-      )}
       <div className="row justify-content-center align-items-center mb-3">
         <div className="col-auto">
           <i
@@ -199,8 +194,15 @@ function MailCalendar(props) {
       </div>
 
       <Modal show={showModal} onHide={handleCloseModal}>
+        {wentWrong && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
         <Modal.Header closeButton>
-          <Modal.Title>Wil je de datum voor '{emailTitle}' aanpassen?</Modal.Title>
+          <Modal.Title>
+            Wil je de datum voor '{emailTitle}' aanpassen?
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Group controlId="emailDate">

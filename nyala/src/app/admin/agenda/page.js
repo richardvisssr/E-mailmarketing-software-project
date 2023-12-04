@@ -6,7 +6,7 @@ function Page() {
   const [emails, setEmails] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [shouldUpdate, setShouldUpdate] = useState(false);
-  const [error, setError] = useState(true);
+  const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState("");
 
   useEffect(() => {
