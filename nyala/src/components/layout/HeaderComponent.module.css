@@ -28,6 +28,10 @@
   color: #a66cf2;
 }
 
+.active {
+  color: #a66cf2;
+}
+
 .customContainer .knop {
   background-color: #a66cf2;
   color: white;

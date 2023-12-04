@@ -1,0 +1,7 @@
+.icon {
+    cursor: pointer;
+  }
+  
+  .icon:hover {
+    color: #a66cf2; /* Set the color you want on hover */
+  }

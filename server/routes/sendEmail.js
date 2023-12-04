@@ -66,11 +66,36 @@ router.put("/planMail", async (req, res) => {
       await planMail.save();
       res.status(200).send("Mail planned successfully");
     } else {
-      const newPlanMail = new PlannedEmail({ id, title, html, subscribers, date });
+      const newPlanMail = new PlannedEmail({
+        id,
+        title,
+        html,
+        subscribers,
+        date,
+      });
       await newPlanMail.save();
       res.status(200).send("Mail planned successfully");
     }
   } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/getPlannedMails", async (req, res) => {
+  try {
+    const plannedMails = await PlannedEmail.find();
+    res.status(200).json({ plannedMails });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.delete("/planMail/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await PlannedEmail.findOneAndDelete({ id });
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
