@@ -5,26 +5,15 @@ import styles from "./button.module.css";
 import Button from "react-bootstrap/Button";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
-import { Placeholder } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
-import * as htmlToImage from "html-to-image";
-import {
-  toPng,
-  toJpeg,
-  toBlob,
-  toPixelData,
-  toSvg,
-  toCanvas,
-} from "html-to-image";
-import Alert from "react-bootstrap/Alert";
 import SelectMailingLists from "../email/SendMail";
+import { nanoid } from "nanoid";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
   const { template } = props;
   const [show, setShow] = useState(false);
   const [image, setImage] = useState("");
-  const [zoomLevel, setZoomLevel] = useState(2);
   const [error, setError] = useState(false);
   const [html, setHtml] = useState("");
   const [sentData, setSentData] = useState([]);
@@ -118,7 +107,7 @@ function TemplateCard(props) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            id: template.id,
+            id: generateUniqueShortId(),
             title: template.title,
             html: html,
             subs: subscribers,
@@ -140,6 +129,10 @@ function TemplateCard(props) {
   const handleNavigate = () => {
     router.push(`/admin/mail/${template.id}`);
   };
+  
+  function generateUniqueShortId() {
+    return nanoid();
+  }
 
   return (
     <>
