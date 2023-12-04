@@ -13,29 +13,36 @@ function sendEmail(event) {
     },
   });
 
-  event.subscribers.forEach((subscriber) => {
-    const mailOptions = {
-      from: "xtend@svxtend.nl",
-      to: subscriber.email,
-      subject: event.title,
-      html: `${event.html}
-        </div>
-          <div style="background-color: #f1f1f1; text-align: center; padding: 10px;">
-            <a style="text-decoration: none; color: #333;" href="http://localhost:3000/unsubscribe?email=${encodeURIComponent(
-              subscriber.email
-            )}">Uitschrijven</a>
+  try {
+    event.subscribers.forEach((subscriber) => {
+      const mailOptions = {
+        from: "xtend@svxtend.nl",
+        to: subscriber.email,
+        subject: event.title,
+        html: `${event.html}
           </div>
-        `,
-    };
+            <div style="background-color: #f1f1f1; text-align: center; padding: 10px;">
+              <a style="text-decoration: none; color: #333;" href="http://localhost:3000/unsubscribe?email=${encodeURIComponent(
+                subscriber.email
+              )}">Uitschrijven</a>
+            </div>
+          `,
+      };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Failed to send email:", error);
-      } else {
-        console.log("Email sent:", info.response);
-      }
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error("Failed to send email:", error);
+          return false;
+        } else {
+          console.log("Email sent:", info.response);
+        }
+      });
     });
-  });
+
+    return true;
+  } catch (error) {
+    return false;
+  }
 }
 
 // Function to check for events and send email if necessary
@@ -45,7 +52,10 @@ async function checkEvents() {
 
   console.log("Checking for events at", formattedDate);
 
-  const events = await PlannedEmail.find({ date: formattedDate });
+  const events = await PlannedEmail.find({
+    date: { $lte: formattedDate },
+    sended: false,
+  });
 
   if (events.length === 0) {
     console.log("No events found");
@@ -54,7 +64,12 @@ async function checkEvents() {
 
   try {
     for (const event of events) {
-      sendEmail(event);
+      const success = sendEmail(event);
+
+      if (success) {
+        event.sended = true;
+        await event.save();
+      }
     }
   } catch (error) {
     console.error("Error checking events:", error);

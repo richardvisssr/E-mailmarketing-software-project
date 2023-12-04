@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Modal, Button, Placeholder, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
+import { nanoid } from "nanoid";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
@@ -164,7 +165,7 @@ const MailEditor = ({ id }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            id: id,
+            id: generateUniqueShortId(),
             title: title,
             html: html,
             subs: sentData.subscribersData,
@@ -180,6 +181,10 @@ const MailEditor = ({ id }) => {
       }
     }
   };
+
+  function generateUniqueShortId() {
+    return nanoid();
+  }
 
   return (
     <div>

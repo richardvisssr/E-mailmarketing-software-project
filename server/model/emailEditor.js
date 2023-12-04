@@ -50,6 +50,10 @@ const plannedEmailSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  sended: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 const PlannedEmail = mongoose.model("PlannedEmail", plannedEmailSchema);

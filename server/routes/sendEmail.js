@@ -72,6 +72,7 @@ router.put("/planMail", async (req, res) => {
         html,
         subscribers,
         date,
+        sended: false,
       });
       await newPlanMail.save();
       res.status(200).send("Mail planned successfully");
