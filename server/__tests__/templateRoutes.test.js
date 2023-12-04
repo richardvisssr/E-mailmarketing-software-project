@@ -28,8 +28,6 @@ beforeEach(async () => {
     html: "<p>Your test HTML content here</p>",
   };
 
-  await Design.deleteOne({ title: "testTitle" });
-
   await Email.create(emailData);
   await Design.create(designData);
 });

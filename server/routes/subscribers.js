@@ -198,18 +198,18 @@ router.delete("/unsubscribe/:subscription", async (req, res) => {
       return res.status(404).send({ message: "No subscribers found" });
     }
 
-    subscribers.forEach(async (subscriber) => {
+    for (const subscriber of subscribers) {
       subscriber.subscription = subscriber.subscription.filter(
         (sub) => sub !== subscription
       );
       await subscriber.save();
-    });
+    }
 
     return res
       .status(200)
       .send({ message: "Subscription removed for all subscribers" });
   } catch (error) {
-    return res.status(500).send(error);
+    return res.status(500).send({ message: "Internal server error" });
   }
 });
 
