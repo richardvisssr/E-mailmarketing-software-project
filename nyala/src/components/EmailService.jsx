@@ -1,5 +1,4 @@
 async function sendDataToSendEmail(html, subscribers, subject, showHeader, id) {
-  console.log("sendDataToSendEmail");
   try {
     const response = await fetch("http://localhost:3001/sendEmail", {
       method: "POST",
