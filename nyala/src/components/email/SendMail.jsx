@@ -58,6 +58,14 @@ function SelectMailingLists(props) {
         return prevSelected.filter((item) => item !== value);
       }
     });
+    
+    props.setEmails((prevSelected) => {
+      if (checked) {
+        return [...prevSelected, value];
+      } else {
+        return prevSelected.filter((item) => item !== value);
+      }
+    });
   };
 
   const handleSendEmailClick = async () => {
@@ -108,38 +116,6 @@ function SelectMailingLists(props) {
       setShowError(true);
     }
   };
-    props.setEmails((prevSelected) => {
-      if (checked) {
-        return [...prevSelected, value];
-      } else {
-        return prevSelected.filter((item) => item !== value);
-      }
-    });
-  };
-
-  // const handleSendEmailClick = async () => {
-  //   if (selectedMailingList.length > 0) {
-  //     try {
-  //       const response = await fetch(
-  //         " http://localhost:3001/sendMail/sendEmail",
-  //         {
-  //           method: "POST",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify({ html: html, subscribers: subscribers }),
-  //         }
-  //       );
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! status: ${response.status}`);
-  //       }
-  //       setEmailSent(true);
-  //     } catch (error) {
-  //       alert("Error sending email:", error);
-  //       setEmailSent(false);
-  //     }
-  //   }
-  // };
 
   return (
     <div className="container mt-4">
@@ -189,5 +165,4 @@ function SelectMailingLists(props) {
     </div>
   );
 }
-
 export default SelectMailingLists;
