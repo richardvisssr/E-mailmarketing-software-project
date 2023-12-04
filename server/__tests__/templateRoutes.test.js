@@ -80,4 +80,28 @@ describe("GET /templates/:id", () => {
     expect(response.statusCode).toBe(500);
     expect(response.body).toEqual({ error: "Internal Server Error" });
   }, 10000);
+
+  describe("DELETE /template/:id", () => {
+    it("should delete the template and return a success message", async () => {
+      const response = await request(app).delete("/template/testDesignId");
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toEqual({ success: true });
+    }, 10000);
+
+    it("should return an error if the template does not exist", async () => {
+      const response = await request(app).delete("/template/non-existing-id");
+      expect(response.statusCode).toBe(404);
+      expect(response.body).toEqual({ error: "Design or email not found" });
+    }, 10000);
+
+    it("should respond with an error when an internal server error occurs", async () => {
+      jest.spyOn(Design, "findOneAndDelete").mockImplementation(() => {
+        throw new Error("Internal Server Error");
+      });
+
+      const response = await request(app).delete("/template/testDesignId");
+      expect(response.statusCode).toBe(500);
+      expect(response.body).toEqual({ error: "Internal Server Error" });
+    }, 10000);
+  });
 });

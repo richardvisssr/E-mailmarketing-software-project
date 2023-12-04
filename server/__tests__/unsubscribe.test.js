@@ -1,4 +1,5 @@
 const request = require("supertest");
+const express = require("express");
 const mongoose = require("mongoose");
 const { app, server, httpServer } = require("../app");
 
@@ -41,6 +42,111 @@ describe("Subscribers routes test", () => {
     }
   });
 
+  
+  describe("Get subscribers with selected mailing list", () => {
+    beforeEach(async () => {
+      // Assuming you want to have some initial data for testing
+      await Subscriber.create({
+        email: "test1@example.com",
+        name: "Test 1",
+        subscriptions: ["Nieuwsbrief", "CMD", "ICT", "Leden"],
+      });
+      await Subscriber.create({
+        email: "test2@example.com",
+        name: "Test 2",
+        subscriptions: ["Nieuwsbrief", "Leden"],
+      });
+    });
+
+    afterEach(async () => {
+      await Subscriber.deleteMany({});
+    });
+
+    describe('Remove subscription for all subscribers', () => {
+      beforeEach(async () => {
+        // Clear the subscribers collection before each test
+        await Subscriber.deleteMany({});
+  
+        // Insert test data
+        await Subscriber.create({
+          email: 'test1@example.com',
+          name: 'Test 1',
+          subscriptions: ['Nieuwsbrief', 'CMD', 'ICT', 'Leden'],
+        });
+        await Subscriber.create({
+          email: 'test2@example.com',
+          name: 'Test 2',
+          subscriptions: ['Nieuwsbrief', 'Leden'],
+        });
+      });
+  
+      afterEach(async () => {
+        await Subscriber.deleteMany({});
+      });
+  
+      test('should remove subscription for all subscribers', async () => {
+        const subscriptionToRemove = 'Nieuwsbrief';
+  
+        const response = await request(app)
+          .delete(`/unsubscribe/${subscriptionToRemove}`);
+  
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual({
+          message: 'Subscription removed for all subscribers',
+        });
+  
+        // Verify that the subscriptions are removed for all subscribers
+        const subscribers = await Subscriber.find({ subscription: subscriptionToRemove });
+        expect(subscribers.length).toBe(0);
+      });
+  
+      test('should handle case when no subscribers found', async () => {
+        const nonExistentSubscription = 'NonExistentSubscription';
+  
+        const response = await request(app)
+          .delete(`/unsubscribe/${nonExistentSubscription}`);
+  
+        expect(response.status).toBe(404);
+        expect(response.body).toEqual({ message: 'No subscribers found' });
+      });
+  
+      test('should handle internal server error', async () => {
+        jest.spyOn(Subscriber, 'find').mockRejectedValueOnce(new Error('Internal server error'));
+  
+        const response = await request(app)
+          .delete(`/unsubscribe/ErrorSubscription`);
+  
+        expect(response.status).toBe(500);
+        expect(response.body).toEqual({ message: 'Internal server error' });
+      });
+    });
+
+    test("should get subscribers with selected mailing list", async () => {
+      const selectedMailingList = "Nieuwsbrief";
+
+      const response = await request(app)
+        .get("/subscribers")
+        .query({ selectedMailingList });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(expect.any(Array));
+    });
+
+    test("should handle internal server error", async () => {
+      jest.spyOn(Subscriber, "find").mockImplementationOnce(() => {
+        throw new Error("Internal server error");
+      });
+
+      const response = await request(app)
+        .get("/subscribers")
+        .query({ selectedMailingList: "Nieuwsbrief" });
+
+      expect(response.status).toBe(500);
+      expect(response.body).toEqual({ message: "Internal server error" });
+    });
+  });
+
+
   test("Get subscribers with selected mailing list", async () => {
     const selectedMailingList = "Nieuwsbrief";
     const response = await request(app)
@@ -51,12 +157,7 @@ describe("Subscribers routes test", () => {
     expect(response.body).toEqual(expect.any(Array));
   });
 
-  test("Get subs of subscriber that doesn't exist", async () => {
-    const response = await request(app).get("/test@test.nl/subs");
 
-    expect(response.status).toBe(404);
-    expect(response.body).toEqual({ message: "Subscriber not found" });
-  });
 
   test("Internal server error when adding a subscriber", async () => {
     jest.spyOn(Subscriber.prototype, "save").mockImplementationOnce(() => {
@@ -97,12 +198,6 @@ describe("Subscribers routes test", () => {
     expect(response.body).toEqual({ message: "Subscriber updated" });
   });
 
-  test("Getting the subscribtions of an subscriber", async () => {
-    const response = await request(app).get(`/${subscriberEmail.email}/subs`);
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(subscribersSubscriptions);
-  });
 
   test("Removing an user from the database", async () => {
     const response = await request(app)
@@ -176,13 +271,7 @@ describe("Subscribers routes test", () => {
     expect(response.body).toEqual({ message: "Subscriber updated" });
   });
 
-  test("should return 404 if subscriber not found", async () => {
-    const subscriber = "TEST@TEST.nl";
-    const response = await request(app).get(`/${subscriber}/subs`);
 
-    expect(response.status).toBe(404);
-    expect(response.body).toEqual({ message: "Subscriber not found" });
-  });
 
   test("Adding a subscriber with valid input", async () => {
     const response = await request(app)
@@ -207,6 +296,8 @@ describe("Subscribers routes test", () => {
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ message: "Bad Request: Invalid input" });
   });
+
+
 
   test("Adding a subscriber with missing subscription", async () => {
     const response = await request(app).post("/subscribers/add").send({

@@ -5,7 +5,9 @@ const { Subscriber, Unsubscriber } = require("../model/subscribers");
 const router = express.Router();
 
 router.get("/subscribers", async (req, res) => {
-  const selectedMailingList = req.query.selectedMailingList.split(",");
+  const selectedMailingList = req.query.selectedMailingList
+    ? req.query.selectedMailingList.split(",")
+    : [];
   try {
     const subscribers = await Subscriber.find({
       subscription: { $in: selectedMailingList },

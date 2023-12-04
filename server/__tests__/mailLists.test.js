@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const request = require("supertest");
+const express = require("express");
 const { app, server, httpServer } = require("../app");
 
 const MailList = require("../model/mailList");
@@ -77,5 +78,42 @@ describe("Mail List API", () => {
 
     expect(response.status).toBe(500);
     expect(response.body.message).toBe("Internal server error");
+  });
+
+  test("MailList delete test 200", async () => {
+    const listName = "CMD";
+    const response = await request(app)
+      .delete("/deleteList")
+      .send({ name: listName });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      message: "The list " + listName + " is deleted",
+    });
+
+    const updatedList = await MailList.findOne();
+    expect(updatedList.mailList).not.toContain(listName);
+  });
+
+  test("MailList delete test 404", async () => {
+    const response = await request(app)
+      .delete("/deleteList")
+      .send({ name: "nonexistent" });
+
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({ message: "List not found" });
+  });
+
+  test("MailList delete test 500", async () => {
+    jest.spyOn(MailList, "findOne").mockImplementation(() => {
+      throw new Error("Internal server error");
+    });
+
+    const response = await request(app)
+      .delete("/deleteList")
+      .send({ name: "any" });
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: "Internal server error" });
   });
 });
