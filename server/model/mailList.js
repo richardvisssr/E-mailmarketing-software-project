@@ -23,7 +23,7 @@ const checkMailList = async () => {
       await newMailList.save();
     }
   } catch (err) {
-    alert(err);
+    console.log(err);
   }
 };
 

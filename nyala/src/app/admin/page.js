@@ -58,6 +58,11 @@ function Page() {
       template.title.toLowerCase().includes(searchValue.toLowerCase())
   );
 
+  const handleDelete = (id) => {
+    const templatesArray = Object.values(templates);
+    setTemplates(templatesArray.filter((template) => template.id !== id));
+  };
+
   const navigateToEditor = () => {
     const newTemplateId = generateUniqueShortId();
     router.push(`/admin/mail/${newTemplateId}`);
@@ -142,7 +147,9 @@ function Page() {
               <i className="bi bi-plus">Nieuwe template</i>
             </Button>
           </Col>
-          {!isLoading && <CardList templates={filteredTemplates} />}
+          {!isLoading && (
+            <CardList templates={filteredTemplates} onDelete={handleDelete} />
+          )}
         </Col>
       </Row>
     </Container>

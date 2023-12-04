@@ -21,7 +21,7 @@ describe("Subscribers routes test", () => {
     await Subscriber.create({
       email: "Matthias@budding.nl",
       name: "Matthias",
-      subscription: ["Nieuwsbrief", "CMD", "ICT"],
+      subscriptions: ["Nieuwsbrief", "CMD", "ICT", "Leden"],
     });
 
     const sub = await Subscriber.findOne({ email: "Matthias@budding.nl" });
@@ -36,7 +36,9 @@ describe("Subscribers routes test", () => {
   afterAll(async () => {
     server.close();
     httpServer.close();
-    await mongoose.disconnect();
+    if (mongoose.connection.readyState !== 0) {
+      await mongoose.disconnect();
+    }
   });
 
   test("Get subscribers with selected mailing list", async () => {
@@ -66,7 +68,7 @@ describe("Subscribers routes test", () => {
       .send({
         email: "test@example.com",
         name: "Test",
-        subscription: ["Newsletter"],
+        subscriptions: ["Newsletter", "Members"],
       });
 
     expect(response.status).toBe(500);
@@ -151,6 +153,7 @@ describe("Subscribers routes test", () => {
       .delete("/unsubscribe/subs")
       .send({
         email: "Test@tes.nl",
+        name: "Test",
         subscriptions: ["Nieuwsbrief"],
       });
 
@@ -165,6 +168,7 @@ describe("Subscribers routes test", () => {
       .put("/subscribers/add")
       .send({
         email: "Test@tes.nl",
+        name: "Test",
         subscriptions: ["Nieuwsbrief"],
       });
 
@@ -185,11 +189,12 @@ describe("Subscribers routes test", () => {
       .post("/subscribers/add")
       .send({
         email: "test@example.com",
-        subscription: ["Leden", "Nieuwsbrief"],
+        name: "Test",
+        subscriptions: ["Leden", "Nieuwsbrief"],
       });
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ message: "Subscriber added" });
+    expect(response.body).toEqual({ message: "New subscriber added" });
   });
 
   test("Adding a subscriber with missing email", async () => {
@@ -217,7 +222,8 @@ describe("Subscribers routes test", () => {
       .post("/subscribers/add")
       .send({
         email: "invalidemail",
-        subscription: ["Leden", "Nieuwsbrief"],
+        name: "Test",
+        subscriptions: ["Leden", "Nieuwsbrief"],
       });
 
     expect(response.status).toBe(400);
@@ -226,15 +232,122 @@ describe("Subscribers routes test", () => {
     });
   });
 
-  test("should return 500 if there is an internal server error", async () => {
-    const subscriberEmail = "test@example.com";
-    jest.spyOn(Subscriber, "findOne").mockImplementation(() => {
+  test("Getting all subscribers", async () => {
+    const subscribers = [
+      { email: "test1@example.com", name: "Test 1", subscriptions: ["Leden"] },
+      {
+        email: "test2@example.com",
+        name: "Test 2",
+        subscriptions: ["Nieuwsbrief"],
+      },
+      {
+        email: "test3@example.com",
+        name: "Test 3",
+        subscriptions: ["Leden", "Nieuwsbrief"],
+      },
+    ];
+
+    jest.spyOn(Subscriber, "find").mockResolvedValue(subscribers);
+
+    const response = await request(app).get("/subscribers/all");
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(subscribers);
+  });
+
+  test("Internal server error when getting all subscribers", async () => {
+    jest.spyOn(Subscriber, "find").mockImplementationOnce(() => {
       throw new Error("Internal server error");
     });
 
-    const response = await request(app).get(`/${subscriberEmail}/subs`);
+    const response = await request(app).get("/subscribers/all");
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ message: "Internal server error" });
+  });
+
+  test("Adding a subscriber with existing email", async () => {
+    const response = await request(app)
+      .post("/subscribers/add")
+      .send({
+        email: subscriberEmail.email,
+        name: subscriberEmail.name,
+        subscriptions: ["Leden"],
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      message: "Subscriptions added to existing subscriber",
+    });
+  });
+
+  test("Updating a subscriber with valid input", async () => {
+    const newName = "New Name";
+    const newEmail = "newemail@example.com";
+
+    const response = await request(app)
+      .put(`/change/${subscriberEmail.email}`)
+      .send({
+        name: newName,
+        email: newEmail,
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ message: "Subscriber updated" });
+
+    const updatedSubscriber = await Subscriber.findOne({ email: newEmail });
+    expect(updatedSubscriber).toBeDefined();
+    expect(updatedSubscriber.name).toBe(newName);
+  });
+
+  test("Updating a subscriber with invalid email format", async () => {
+    const newName = "New Name";
+    const newEmail = "invalidemail";
+
+    const response = await request(app)
+      .put(`/change/${subscriberEmail.email}`)
+      .send({
+        name: newName,
+        email: newEmail,
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+      message: "Bad Request: Invalid email format",
+    });
+  });
+
+  test("No subscribers found", async () => {
+    const subscription = "InvalidSubscription";
+
+    const subscribers = [];
+
+    jest.spyOn(Subscriber, "find").mockResolvedValue(subscribers);
+
+    const response = await request(app).delete(`/unsubscribe/${subscription}`);
+
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({ message: "No subscribers found" });
+
+    expect(Subscriber.find).toHaveBeenCalledWith({
+      subscription: subscription,
+    });
+  });
+
+  test("Internal server error", async () => {
+    const subscription = "Leden";
+
+    jest
+      .spyOn(Subscriber, "find")
+      .mockRejectedValue(new Error("Internal server error"));
+
+    const response = await request(app).delete(`/unsubscribe/${subscription}`);
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: "Internal server error" });
+
+    expect(Subscriber.find).toHaveBeenCalledWith({
+      subscription: subscription,
+    });
   });
 });

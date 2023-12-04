@@ -11,7 +11,7 @@ import { nanoid } from "nanoid";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
-  const { template } = props;
+  const { template, onDelete } = props;
   const [show, setShow] = useState(false);
   const [image, setImage] = useState("");
   const [error, setError] = useState(false);
@@ -134,10 +134,21 @@ function TemplateCard(props) {
     return nanoid();
   }
 
+  const handleDelete = () => {
+    fetch(`http://localhost:3001/template/${template.id}`, {
+      method: "DELETE",
+    }).then(() => {
+      onDelete(template.id);
+    });
+  };
+
   return (
     <>
       <Col key={template.id} style={{ width: "16rem" }}>
         <Card ref={cardRef}>
+          <Button variant="danger" onClick={handleDelete}>
+            Verwijderen
+          </Button>
           {!error && (
             <Card.Img
               variant="top"

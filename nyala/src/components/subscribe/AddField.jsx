@@ -84,80 +84,6 @@ export default function ToevoegVeld() {
     }
   }, [status]);
 
-  useEffect(() => {
-    if (list !== "") {
-      /**
-       * Function to handle the addition of a new mailing list to the server.
-       */
-      const postList = async () => {
-        try {
-          const response = await fetch("http://localhost:3001/mail/addList", {
-            method: "PUT",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              name: list,
-            }),
-          });
-          if (response.ok) {
-            setNotification({
-              type: "succes",
-              message: "De lijst is succesvol toegevoegd",
-            });
-            setList("");
-          } else if (!response.ok) {
-            if (
-              response.code === 404 &&
-              response.message === "List not found"
-            ) {
-              setNotification({
-                type: "error",
-                message: "Er bestaat nog geen collectie voor maillijsten.",
-              });
-            } else {
-              setNotification({
-                type: "error",
-                message:
-                  "Er heeft zich een fout opgetreden tijdens het toevoegen van de lijst.",
-              });
-            }
-          }
-        } catch (error) {
-          setNotification({
-            type: "error",
-            message:
-              "Er heeft zich een fout opgetreden tijdens het add van de list.",
-          });
-        }
-      };
-      postList();
-    }
-  }, [lists]);
-
-  /**
-   * Function to handle the addition of a new mailing list.
-   * @param {Object} event - The event object.
-   */
-  const handleListAdd = (event) => {
-    event.preventDefault();
-
-    if (list === "") {
-      setNotification({
-        type: "error",
-        message: "De lijst is niet ingevuld.",
-      });
-    } else if (lists.includes(list)) {
-      setNotification({
-        type: "error",
-        message: "De ingevulde lijst bestaat al!",
-      });
-    } else {
-      setLists([...lists, list]);
-      setAdd(false);
-    }
-  };
 
   /**
    * Function to handle the addition of a new email and subscriptions.
@@ -302,41 +228,7 @@ export default function ToevoegVeld() {
               ) : (
                 <p>Er zijn geen maillijsten.</p>
               )}
-              {add ? (
-                <div
-                  className={`input-group ${styles.form} d-flex justify-items-center align-content-center`}
-                >
-                  <div className="input-group mb-3">
-                    <input
-                      type="text"
-                      className={`form-control ${styles.entry} p-2`}
-                      placeholder="Lijst"
-                      aria-describedby="basic-addon1"
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setList(value);
-                      }}
-                    />
-                    <div className={`${styles.around} input-group-prepend`}>
-                      <input
-                        type="submit"
-                        className={`btn ${styles.buttonPrimary} rounded p-2`}
-                        value="Lijst toevoegen"
-                        onClick={handleListAdd}
-                      />
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  className={`btn ${styles.buttonPrimary} rounded`}
-                  onClick={() => {
-                    setAdd(true);
-                  }}
-                >
-                  Lijst aanmaken
-                </button>
-              )}
+              
             </div>
 
             <div className={`${styles.selectContainer}`}></div>

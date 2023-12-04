@@ -1,10 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./UnsubscribeForm.module.css";
 import SubscriptionForm from "../categories/CategoriesComponent";
 
-export default function UnsubscribeForm({}) {
+export default function UnsubscribeForm({ userid }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [reason, setReason] = useState("");
@@ -23,14 +23,6 @@ export default function UnsubscribeForm({}) {
     "Anders",
   ];
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const email = params.get("email");
-    if (email) {
-      setEmail(decodeURIComponent(email));
-    }
-  }, []);
-  
   // Wanneer de gebruiker zich overal voor wilt uitschrijven en zichzelf wilt verwijderen uit de database
   const handleCompleteUnsubscribe = async () => {
     try {
@@ -46,7 +38,6 @@ export default function UnsubscribeForm({}) {
       );
 
       if (unsubscribeResponse.status === 200) {
-        console.log("Subscriber removed");
         localStorage.setItem("unsubscribedEmail", email);
         return true;
       } else if (unsubscribeResponse.status === 404) {
@@ -129,15 +120,9 @@ export default function UnsubscribeForm({}) {
     }
   };
 
-  // Ophalen van abonnementen van de gebruiker
-  const getAbonnementen = async (e) => {
-    e.preventDefault();
-    if (!email) {
-      console.error("Email is required");
-      return;
-    }
+  useEffect(() => {
     try {
-      fetch(`http://localhost:3001/${email}/subs`)
+      fetch(`http://localhost:3001/${userid}/subs`)
         .then((response) => {
           if (!response.ok) {
             setWarning({
@@ -151,14 +136,18 @@ export default function UnsubscribeForm({}) {
           return response.json();
         })
         .then((data) => {
-          setSubs(data);
+          setSubs(data.subscription);
+          setEmail(data.email);
           setSubscribersList(
-            <SubscriptionForm subscribers={data} setValue={changeValue} />
+            <SubscriptionForm
+              subscribers={data.subscription}
+              setValue={changeValue}
+            />
           );
         })
         .catch((error) => {});
     } catch (error) {}
-  };
+  }, []);
 
   const changeValue = (event) => {
     const { value, checked } = event.target;
@@ -169,11 +158,6 @@ export default function UnsubscribeForm({}) {
         return prevSelection.filter((sub) => sub !== value);
       }
     });
-  };
-
-  const changeEmail = (e) => {
-    e.preventDefault();
-    setEmail(e.target.value);
   };
 
   const changeReason = (selectedReason) => {
@@ -315,16 +299,9 @@ export default function UnsubscribeForm({}) {
           <input
             type="email"
             className={`form-control w-150`}
-            onChange={changeEmail}
             value={email}
             required={true}
           />
-          <button
-            onClick={getAbonnementen}
-            className={`ms-4 btn ${styles.knopPrimary}`}
-          >
-            Ophalen
-          </button>
         </div>
         {subscribersList}
         {showRedenen()}

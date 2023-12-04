@@ -11,6 +11,8 @@ const MailEditor = ({ id }) => {
   const editorRef = useRef(null);
   const [show, setShow] = useState(false);
   const [designSaved, setDesignSaved] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [mails, setMails] = useState([]);
   const [title, setTitle] = useState("");
   const [html, setHtml] = useState("");
@@ -53,6 +55,8 @@ const MailEditor = ({ id }) => {
         }
         setDesignSaved(true);
       } catch (error) {
+        setShowError(true);
+        setErrorMessage(`Error saving design: ${error}`);
       }
     });
     saveHtml();
@@ -93,6 +97,8 @@ const MailEditor = ({ id }) => {
           throw new Error("Network response was not ok");
         }
       } catch (error) {
+        setShowError(true);
+        setErrorMessage(`Error sending email: ${error}`);
       }
       handleShow();
     });
@@ -113,16 +119,22 @@ const MailEditor = ({ id }) => {
           },
         }
       );
-
+  
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        return
       }
-
+  
       const design = await response.json();
-
-      editorRef.current.loadDesign(design.design);
+  
+      if (editorRef.current) {
+        editorRef.current.loadDesign(design.design);
+      }
       setTitle(design.title);
     } catch (error) {
+      setShowError(true);
+      setErrorMessage(`Error loading design: ${error}`);
+    } finally {
+      editorRef.current = editor;
     }
     editorRef.current = editor;
   };
@@ -190,15 +202,24 @@ const MailEditor = ({ id }) => {
     <div>
       <h1 className="text-center">Mail Editor</h1>
       <div className="p-2 gap-3 d-flex justify-content-center">
-        {designSaved && (
+          {showError && (
           <Alert
-            variant="success"
-            onClose={() => setDesignSaved(false)}
+            variant="danger"
+            onClose={() => setShowError(false)}
             dismissible
           >
-            Design is succesvol opgeslagen!
+            {errorMessage}
           </Alert>
         )}
+        {designSaved && (
+            <Alert
+              variant="success"
+              onClose={() => setDesignSaved(false)}
+              dismissible
+            >
+              Design is succesvol opgeslagen!
+            </Alert>
+          )}
       </div>
       <div className="p-2 gap-3 d-flex justify-content-center">
         <input

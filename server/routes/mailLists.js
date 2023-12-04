@@ -29,4 +29,26 @@ router.put("/addList", async (req, res) => {
   }
 });
 
+router.delete("/deleteList", async (req, res) => {
+  const { name } = req.body;
+
+  try {
+    const existingList = await mailList.findOne();
+
+    if (!existingList) {
+      return res.status(404).json({ message: "List not found" });
+    }
+
+    existingList.mailList = existingList.mailList.filter(
+      (mail) => mail !== name
+    );
+    const updatedList = await existingList.save();
+
+    res.status(200).json({ message: "The list " + name + " is deleted" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router;
