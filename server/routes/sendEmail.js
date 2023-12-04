@@ -94,8 +94,25 @@ router.delete("/planMail/:id", async (req, res) => {
   try {
     const { id } = req.params;
     await PlannedEmail.findOneAndDelete({ id });
+    res.status(200).send("Mail deleted successfully");
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.put("/updateMail/", async (req, res) => {
+  try {
+    const {id, date} = req.body;
+
+    const mail = await PlannedEmail.findOne({ id });
+    if (mail) {
+      mail.date = date;
+      await mail.save();
+      res.status(200).send("Mail updated successfully");
+    } else {
+      res.status(404).send("Mail not found");
+    }
+  } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
 });

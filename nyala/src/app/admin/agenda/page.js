@@ -1,10 +1,13 @@
 "use client";
-import EventCalendar from "@/components/calender/CalendarComponent";
+import MailCalendar from "@/components/calender/CalendarComponent";
 import React, { useEffect, useState } from "react";
 
 function Page() {
   const [emails, setEmails] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [shouldUpdate, setShouldUpdate] = useState(false);
+  const [error, setError] = useState(true);
+  const [errorText, setErrorText] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,26 +26,42 @@ function Page() {
         console.error(error.message);
       }
     };
+
+    setShouldUpdate(false);
     fetchData();
-  }, [emails]);
+  }, [shouldUpdate]);
 
   const deletePlannedMail = async (id) => {
-    const response = await fetch(`http://localhost:3001/planMail/${id}`, {
-      method: 'DELETE',
+    fetch(`http://localhost:3001/planMail/${id}`, {
+      method: "DELETE",
       headers: {
-        'Content-Type': 'application/json',
-      }
+        "Content-Type": "application/json",
+      },
     })
+      .then((response) => handleDeleteResponse(response))
+      .catch((error) => {
+        setError(true);
+        setErrorText(error.message);
+      });
+  };
 
-    if (!response.ok) {
-      console.log(response);
+  const handleDeleteResponse = (response) => {
+    if (response.status === 200) {
+      setShouldUpdate(true);
     }
-    setEmails(emails.filter((email) => email.id !== id));
-  }
+  };
 
+  const handleUpdate = () => {
+    setShouldUpdate(true);
+  };
 
   return (
     <div>
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {errorText}
+        </div>
+      )}
       <div className="d-flex justify-content-center align-items-center mb-4">
         <h1>Agenda</h1>
       </div>
@@ -53,7 +72,7 @@ function Page() {
           </div>
         </div>
       )}
-      {!isLoading && <EventCalendar emails={emails} deleteMail={deletePlannedMail} />}
+      {!isLoading && <MailCalendar emails={emails} deleteMail={deletePlannedMail} shouldUpdate={handleUpdate}/>}
     </div>
   );
 }

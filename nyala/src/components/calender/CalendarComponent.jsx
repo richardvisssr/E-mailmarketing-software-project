@@ -1,18 +1,72 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
+import { Modal, Form, Button } from "react-bootstrap";
 import styles from "./Calendar.module.css";
 
-function EventCalendar(props) {
+function MailCalendar(props) {
   const emails = props.emails;
   const [date, setDate] = useState(new Date());
+  const [showModal, setShowModal] = useState(false);
   const [showFutureMails, setShowFutureMails] = useState(false); // Added checkbox state
+  const [emailDate, setEmailDate] = useState("");
+  const [wentWrong, setWentWrong] = useState(false); // Added wentWrong state
+  const [error, setError] = useState(""); // Added error state
+  const [emailTitle, setEmailTitle] = useState("");
+  const [id, setId] = useState("");
   const currentYear = date.getFullYear();
   const currentMonth = date.getMonth();
 
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
   const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
   lastDayOfMonth.setHours(23, 59, 59, 999);
+
+  const updateEmailDate = (e) => {
+    setEmailDate(e.target.value);
+  };
+
+  const handleOpenModal = (id, title) => {
+    setId(id);
+    setEmailTitle(title);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleSaveChanges = async () => {
+    // Save the changes made by the user
+    if (emailDate === "") {
+      setWentWrong(true);
+      setError("Vul een datum in");
+      return;
+    }
+    
+    const response = await fetch(`http://127.0.0.1:3001/updateMail`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+        date: emailDate,
+      }),
+    });
+  
+    if (response.status === 200) {
+      props.shouldUpdate();
+      setId("");
+      setEmailDate("");
+      setEmailTitle("");
+      setShowModal(false);
+
+    } else {
+      setWentWrong(true);
+      setError("Er is iets misgegaan met het aanpassen van de datum. Probeer het later opnieuw");
+    }
+  };
+  
 
   const handlePreviousMonth = () => {
     const previousMonth = new Date(date);
@@ -58,12 +112,13 @@ function EventCalendar(props) {
     return formattedDate;
   };
 
-
-
-  console.log("filteredMails", filteredMails);
-
   return (
     <div>
+      {wentWrong && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
       <div className="row justify-content-center align-items-center mb-3">
         <div className="col-auto">
           <i
@@ -124,7 +179,7 @@ function EventCalendar(props) {
                 <td className="text-end">
                   <i
                     className={`bi bi-calendar-week-fill ${styles.icon}`}
-                    onClick={() => console.log(`${mail.title} - View`)}
+                    onClick={() => handleOpenModal(mail.id, mail.title)}
                     style={{ cursor: "pointer" }}
                   ></i>
                   <i
@@ -142,8 +197,33 @@ function EventCalendar(props) {
           </tbody>
         </table>
       </div>
+
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Wil je de datum voor '{emailTitle}' aanpassen?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group controlId="emailDate">
+            <Form.Label>Nieuwe datum</Form.Label>
+            <Form.Control
+              type="datetime-local"
+              value={emailDate}
+              onChange={(e) => updateEmailDate(e)}
+              required
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={() => handleSaveChanges(id)}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
 
-export default EventCalendar;
+export default MailCalendar;
