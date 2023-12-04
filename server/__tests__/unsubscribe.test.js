@@ -21,7 +21,7 @@ describe("Subscribers routes test", () => {
     await Subscriber.create({
       email: "Matthias@budding.nl",
       name: "Matthias",
-      subscription: ["Nieuwsbrief", "CMD", "ICT"],
+      subscriptions: ["Nieuwsbrief", "CMD", "ICT"],
     });
 
     const sub = await Subscriber.findOne({ email: "Matthias@budding.nl" });
@@ -66,7 +66,7 @@ describe("Subscribers routes test", () => {
       .send({
         email: "test@example.com",
         name: "Test",
-        subscription: ["Newsletter"],
+        subscriptions: ["Newsletter", "Members"],
       });
 
     expect(response.status).toBe(500);
@@ -151,6 +151,7 @@ describe("Subscribers routes test", () => {
       .delete("/unsubscribe/subs")
       .send({
         email: "Test@tes.nl",
+        name: "Test",
         subscriptions: ["Nieuwsbrief"],
       });
 
@@ -165,6 +166,7 @@ describe("Subscribers routes test", () => {
       .put("/subscribers/add")
       .send({
         email: "Test@tes.nl",
+        name: "Test",
         subscriptions: ["Nieuwsbrief"],
       });
 
@@ -185,11 +187,12 @@ describe("Subscribers routes test", () => {
       .post("/subscribers/add")
       .send({
         email: "test@example.com",
-        subscription: ["Leden", "Nieuwsbrief"],
+        name: "Test",
+        subscriptions: ["Leden", "Nieuwsbrief"],
       });
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ message: "Subscriber added" });
+    expect(response.body).toEqual({ message: "New subscriber added" });
   });
 
   test("Adding a subscriber with missing email", async () => {
@@ -217,7 +220,8 @@ describe("Subscribers routes test", () => {
       .post("/subscribers/add")
       .send({
         email: "invalidemail",
-        subscription: ["Leden", "Nieuwsbrief"],
+        name: "Test",
+        subscriptions: ["Leden", "Nieuwsbrief"],
       });
 
     expect(response.status).toBe(400);

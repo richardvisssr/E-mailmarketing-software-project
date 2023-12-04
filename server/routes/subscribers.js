@@ -29,7 +29,7 @@ router.post("/subscribers/add", async (req, res) => {
   try {
     const { email, name, subscriptions } = req.body;
 
-    if (!email || !subscriptions || !Array.isArray(subscriptions)) {
+    if (!email || !name || !subscriptions || !Array.isArray(subscriptions)) {
       return res.status(400).json({ message: "Bad Request: Invalid input" });
     }
 
