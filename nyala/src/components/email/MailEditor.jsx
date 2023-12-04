@@ -1,9 +1,8 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { Modal, Button, Placeholder, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
-import sendDataToSendEmail from "../emailService";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
@@ -11,35 +10,9 @@ const MailEditor = ({ id }) => {
   const editorRef = useRef(null);
   const [show, setShow] = useState(false);
   const [designSaved, setDesignSaved] = useState(false);
-  const [mails, setMails] = useState([]);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [title, setTitle] = useState("");
-  const [html, setHtml] = useState("");
-  const [emailSent, setEmailSent] = useState(false);
-  const [sentData, setSentData] = useState([]);
-  const [planned, setPlanned] = useState(false);
-  const [dateTime, setDateTime] = useState("");
-  const [subject, setSubject] = useState("");
-  const [showHeader, setShowHeader] = useState(false);
-
-  useEffect(() => {
-    setPlanned(false);
-    setEmailSent(false);
-  }, [show]);
-
-  const onDataChange = (data) => {
-    setSentData(data);
-  };
-
-  const handleSubjectChange = (e) => {
-    if (e.target.value.trim() === "") {
-      return;
-    }
-    setSubject(e.target.value);
-  };
-
-  const setNewTime = (event) => {
-    setDateTime(event.target.value);
-  };
 
   const handleClose = () => {
     setShow(false);
@@ -61,34 +34,16 @@ const MailEditor = ({ id }) => {
           throw new Error("Network response was not ok");
         }
         setDesignSaved(true);
-      } catch (error) {}
-    });
-    saveHtml();
-  };
-
-  const saveHtml = () => {
-    editorRef.current.exportHtml(async (data) => {
-      const { html } = data;
-      setHtml(html);
-      try {
-        const response = await fetch("http://localhost:3001/mail/sendEmail", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ html: html, id: id }),
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-      } catch (error) {}
+      } catch (error) {
+        setShowError(true);
+        setErrorMessage(`Error saving design: ${error}`);
+      }
     });
   };
 
   const sendEmail = () => {
     editorRef.current.exportHtml(async (data) => {
       const { html } = data;
-      setHtml(html);
       try {
         const response = await fetch("http://localhost:3001/mail/sendEmail", {
           method: "PUT",
@@ -100,7 +55,10 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-      } catch (error) {}
+      } catch (error) {
+        setShowError(true);
+        setErrorMessage(`Error sending email: ${error}`);
+      }
       handleShow();
     });
   };
@@ -120,60 +78,22 @@ const MailEditor = ({ id }) => {
           },
         }
       );
-
+  
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        return
       }
-
+  
       const design = await response.json();
-
-      editorRef.current.loadDesign(design.design);
-      setTitle(design.title);
-    } catch (error) {}
-    editorRef.current = editor;
-  };
-
-  const handleSendEmailClick = async () => {
-    if (mails.length > 0) {
-      const emailSent = await sendDataToSendEmail(
-        html,
-        sentData.subscribersData,
-        subject,
-        showHeader,
-        id,
-      );
-      setEmailSent(emailSent);
-    }
-  };
-
-  const handlePlanMail = async () => {
-    editorRef.current.exportHtml(async (data) => {
-      const { html } = data;
-      setHtml(html);
-    });
-
-    if (mails.length > 0) {
-      try {
-        const response = await fetch(" http://localhost:3001/planMail", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: id,
-            title: title,
-            html: html,
-            subs: sentData.subscribersData,
-            date: dateTime,
-          }),
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        setEmailSent(true);
-      } catch (error) {
-        setEmailSent(false);
+  
+      if (editorRef.current) {
+        editorRef.current.loadDesign(design.design);
       }
+      setTitle(design.title);
+    } catch (error) {
+      setShowError(true);
+      setErrorMessage(`Error loading design: ${error}`);
+    } finally {
+      editorRef.current = editor;
     }
   };
 
@@ -181,6 +101,15 @@ const MailEditor = ({ id }) => {
     <div>
       <h1 className="text-center">Mail Editor</h1>
       <div className="p-2 gap-3 d-flex justify-content-center">
+        {showError && (
+          <Alert
+            variant="danger"
+            onClose={() => setShowError(false)}
+            dismissible
+          >
+            {errorMessage}
+          </Alert>
+        )}
         {designSaved && (
           <Alert
             variant="success"
@@ -235,69 +164,15 @@ const MailEditor = ({ id }) => {
       </div>
 
       <Modal show={show} onHide={handleClose} size="xl">
-        {emailSent && (
-          <div className="alert alert-success" role="alert">
-            E-mail is succesvol verstuurd!
-          </div>
-        )}
         <Modal.Header closeButton>
           <Modal.Title>Wil je '{title}' verturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="p-2 gap-3 d-flex justify-content-center">
-            <input
-              type="text"
-              value={subject}
-              onChange={handleSubjectChange}
-              placeholder="Voer onderwerp van e-mail in"
-              className="form-control text-center"
-            />
-          </div>
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              onChange={() => setShowHeader(!showHeader)}
-            />
-            <label className="form-check-label">Header toevoegen</label>
-          </div>
-
-          <SelectMailingLists
-            id={id}
-            setEmails={setMails}
-            onDataChange={onDataChange}
-          />
-          <label className="form-label">Wil je de mail vooruit plannen?</label>
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              onChange={() => setPlanned(!planned)}
-            />
-            <label className="form-check-label">Ja</label>
-          </div>
-
-          {planned && (
-            <div className="form-group">
-              <label className="form-label">Kies een datum</label>
-              <input
-                type="datetime-local"
-                className="form-control"
-                id="exampleFormControlInput1"
-                placeholder="2021-06-12T19:30"
-                onInput={setNewTime}
-                required
-              />
-            </div>
-          )}
+          <Placeholder as={Modal.Body} animation="glow">
+            <SelectMailingLists id={id} />
+          </Placeholder>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="primary"
-            onClick={planned ? handlePlanMail : handleSendEmailClick}
-          >
-            {planned ? "Inplannen" : "Mail versturen"}
-          </Button>
           <Button variant="secondary" onClick={handleClose}>
             Annuleren
           </Button>

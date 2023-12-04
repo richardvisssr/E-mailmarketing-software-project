@@ -36,7 +36,7 @@ app.use("/", subscriberRouter);
 app.use('/', adminpanelRouter);
 app.use("/mail", emailEditorRouter);
 app.use("/mail", mailListRouter);
-app.use("/", sendMailRouter);
+app.use("/sendMail", sendMailRouter);
 
 const httpServer = http.createServer(app);
 const webSocketServer = new ws.Server({ noServer: true, path: "/socket" });
