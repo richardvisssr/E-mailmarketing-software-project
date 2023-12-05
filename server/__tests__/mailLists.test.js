@@ -76,4 +76,22 @@ describe("Mail List API", () => {
     expect(response.status).toBe(500);
     expect(response.body.message).toBe("Internal server error");
   });
+
+  test("Delete mailList", async () => {
+    const response = await request(app).delete("/mail/deleteList").send({
+      name: "ICT",
+    });
+
+    expect(response.status).toBe(200);
+    expect(response.body.mailList).not.toBe("ICT");
+  });
+
+  test("Delete mailList that doesnt exist", async () => {
+    const response = await request(app).delete("/mail/deleteList").send({
+      name: "Bestaat niet",
+    });
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("List not found");
+  });
 });
