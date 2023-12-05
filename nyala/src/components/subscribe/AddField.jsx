@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./AddField.module.css";
 import SubscriptionForm from "../categories/CategoriesComponent";
+import AlertComponent from "../alert/AlertComponent";
 
 /**
  * Functional component for adding email and subscribing to mailing lists.
@@ -84,7 +85,6 @@ export default function ToevoegVeld() {
     }
   }, [status]);
 
-
   /**
    * Function to handle the addition of a new email and subscriptions.
    * @param {Object} event - The event object.
@@ -104,7 +104,12 @@ export default function ToevoegVeld() {
       });
     }
 
-    if (data.email === "") {
+    if (!data.name) {
+      setNotification({
+        type: "error",
+        message: "De naam is niet ingevuld.",
+      });
+    } else if (!data.email) {
       setNotification({
         type: "error",
         message: "Het emailadres is niet ingevuld.",
@@ -169,32 +174,7 @@ export default function ToevoegVeld() {
   return (
     <div className="d-flex justify-content-center align-items-center py-5">
       <div>
-        <div>
-          {notification.type !== "succes" ? (
-            <></>
-          ) : (
-            <div
-              className="alert alert-success d-flex justify-content-around"
-              role="alert"
-            >
-              <p>{notification.message}</p>
-              <i className="bi bi-check"></i>
-            </div>
-          )}
-        </div>
-        <div>
-          {notification.type !== "error" ? (
-            <></>
-          ) : (
-            <div
-              className="alert alert-danger d-flex justify-content-around"
-              role="alert"
-            >
-              <p>{notification.message}</p>
-              <i className="bi bi-exclamation-triangle"></i>
-            </div>
-          )}
-        </div>
+        <AlertComponent notification={notification} />
         <form
           className={`input-group ${styles.form} d-flex flex-column`}
           onSubmit={handleSubmit}
@@ -228,7 +208,6 @@ export default function ToevoegVeld() {
               ) : (
                 <p>Er zijn geen maillijsten.</p>
               )}
-              
             </div>
 
             <div className={`${styles.selectContainer}`}></div>

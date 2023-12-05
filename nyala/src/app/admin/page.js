@@ -12,10 +12,11 @@ import Button from "react-bootstrap/Button";
 import styles from "@/components/adminpanel/button.module.css";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
+import AlertComponent from "@/components/alert/AlertComponent";
 
 function Page() {
   const [templates, setTemplates] = useState({});
-  const [error, setError] = useState(false);
+  const [notification, setNotification] = useState({ type: "", message: "" });
   const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -38,7 +39,11 @@ function Page() {
         setTemplates(templateObject);
         setIsLoading(false);
       } catch (error) {
-        setError(true);
+        setNotification({
+          type: "error",
+          message:
+            "Er is een fout opgetreden bij het ophalen van de templates...",
+        });
       }
     };
 
@@ -133,12 +138,10 @@ function Page() {
           </Card>
         </Col>
         <Col md={8}>
-          {error && (
-            <Alert key="danger" variant="danger">
-              Er is een fout opgetreden bij het ophalen van de templates...
-            </Alert>
-          )}
-          <Col md={{ span: 11, offset: 11 }} className="text-right mb-3">
+          <div className="d-flex  align-items-center ">
+            <AlertComponent notification={notification} />
+          </div>
+          <Col md={{ span: 4, offset: 11 }} className="text-right mb-3">
             <Button
               variant="primary"
               className={styles.knopPrimary}

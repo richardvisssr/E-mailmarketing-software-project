@@ -8,13 +8,13 @@ import { useEffect, useState, useRef } from "react";
 import Modal from "react-bootstrap/Modal";
 import SelectMailingLists from "../email/SendMail";
 import { nanoid } from "nanoid";
+import AlertComponent from "../alert/AlertComponent";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
   const { template, onDelete } = props;
   const [show, setShow] = useState(false);
   const [image, setImage] = useState("");
-  const [error, setError] = useState(false);
   const [html, setHtml] = useState("");
   const [sentData, setSentData] = useState([]);
   const [planned, setPlanned] = useState(false);
@@ -22,6 +22,7 @@ function TemplateCard(props) {
   const [emailSent, setEmailSent] = useState(false);
   const [dateTime, setDateTime] = useState("");
   const [subscribers, setSubscribers] = useState([]);
+  const [notification, setNotification] = useState({ type: "", message: "" });
 
   const router = useRouter();
 
@@ -65,7 +66,10 @@ function TemplateCard(props) {
         const data = await response.json();
         setHtml(data.html);
       } catch (error) {
-        setError(true);
+        setNotification({
+          type: "error",
+          message: "Er is iets misgegaan bij het ophalen van de template",
+        });
       }
     };
 
@@ -75,21 +79,21 @@ function TemplateCard(props) {
   const handleSendEmailClick = async () => {
     if (mails.length > 0) {
       try {
-        const response = await fetch(
-          " http://localhost:3001/sendEmail",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              html: html,
-              subscribers: sentData.subscribersData,
-            }),
-          }
-        );
+        const response = await fetch(" http://localhost:3001/sendEmail", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            html: html,
+            subscribers: sentData.subscribersData,
+          }),
+        });
         if (!response.ok) {
-            setError(true);
+          setNotification({
+            type: "error",
+            message: "Er is iets misgegaan bij het versturen van de mail",
+          });
         }
         setEmailSent(true);
       } catch (error) {
@@ -115,21 +119,26 @@ function TemplateCard(props) {
           }),
         });
         if (!response.ok) {
-          setError(true);
+          setNotification({
+            type: "error",
+            message: "Er is iets misgegaan bij het versturen van de mail",
+          });
         }
         setEmailSent(true);
       } catch (error) {
-        setError(error.message);
+        setNotification({
+          type: "error",
+          message: "Er is iets misgegaan bij het versturen van de mail",
+        });
         setEmailSent(false);
       }
     }
   };
 
-  
   const handleNavigate = () => {
     router.push(`/admin/mail/${template.id}`);
   };
-  
+
   function generateUniqueShortId() {
     return nanoid();
   }
@@ -149,13 +158,15 @@ function TemplateCard(props) {
           <Button variant="danger" onClick={handleDelete}>
             Verwijderen
           </Button>
-          {!error && (
+          {/* {!error && (
             <Card.Img
               variant="top"
               src={image.src}
               style={{ width: "100%", height: "auto" }}
             />
-          )}
+          )} */}
+
+          <AlertComponent notification={notification} />
           <Card.Body>
             <Card.Title>{template.title}</Card.Title>
             <div className="d-flex justify-content-between">

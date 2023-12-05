@@ -1,4 +1,5 @@
 "use client";
+import AlertComponent from "@/components/alert/AlertComponent";
 import MailCalendar from "@/components/calender/CalendarComponent";
 import React, { useEffect, useState } from "react";
 
@@ -6,8 +7,7 @@ function Page() {
   const [emails, setEmails] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [shouldUpdate, setShouldUpdate] = useState(false);
-  const [error, setError] = useState(false);
-  const [errorText, setErrorText] = useState("");
+  const [notification, setNotification] = useState({ type: "", message: "" });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,8 +23,10 @@ function Page() {
         await setEmails(jsonData);
         setIsLoading(false);
       } catch (error) {
-        setError(true);
-        setErrorText(error.message);
+        setNotification({
+          type: "error",
+          message: "Er is iets foutgegaan tijdens het ophalen",
+        });
       }
     };
 
@@ -41,8 +43,10 @@ function Page() {
     })
       .then((response) => handleDeleteResponse(response))
       .catch((error) => {
-        setError(true);
-        setErrorText(error.message);
+        setNotification({
+          type: "error",
+          message: "Er is iets foutgegaan tijdens het verwijderen",
+        });
       });
   };
 
@@ -58,11 +62,9 @@ function Page() {
 
   return (
     <div>
-      {error && (
-        <div className="alert alert-danger" role="alert">
-          {errorText}
-        </div>
-      )}
+      <div className="d-flex justify-content-center align-items-center mb-4">
+        <AlertComponent notification={notification} />
+      </div>
       <div className="d-flex justify-content-center align-items-center mb-4">
         <h1>Agenda</h1>
       </div>
@@ -73,7 +75,13 @@ function Page() {
           </div>
         </div>
       )}
-      {!isLoading && <MailCalendar emails={emails} deleteMail={deletePlannedMail} shouldUpdate={handleUpdate}/>}
+      {!isLoading && (
+        <MailCalendar
+          emails={emails}
+          deleteMail={deletePlannedMail}
+          shouldUpdate={handleUpdate}
+        />
+      )}
     </div>
   );
 }

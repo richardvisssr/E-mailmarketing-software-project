@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
 import { Modal, Form, Button } from "react-bootstrap";
 import styles from "./Calendar.module.css";
+import AlertComponent from "../alert/AlertComponent";
 
 function MailCalendar(props) {
   const emails = props.emails;
@@ -10,12 +11,11 @@ function MailCalendar(props) {
   const [showModal, setShowModal] = useState(false);
   const [showFutureMails, setShowFutureMails] = useState(false);
   const [emailDate, setEmailDate] = useState("");
-  const [wentWrong, setWentWrong] = useState(false);
-  const [error, setError] = useState("");
   const [emailTitle, setEmailTitle] = useState("");
   const [id, setId] = useState("");
   const currentYear = date.getFullYear();
   const currentMonth = date.getMonth();
+  const [notification, setNotification] = useState({ type: "", message: "" });
 
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
   const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
@@ -37,8 +37,10 @@ function MailCalendar(props) {
 
   const handleSaveChanges = async () => {
     if (emailDate === "") {
-      setWentWrong(true);
-      setError("Vul een datum in");
+      setNotification({
+        type: "error",
+        message: "Je moet een datum invullen",
+      });
       return;
     }
 
@@ -60,10 +62,10 @@ function MailCalendar(props) {
       setEmailTitle("");
       setShowModal(false);
     } else {
-      setWentWrong(true);
-      setError(
-        "Er is iets misgegaan met het aanpassen van de datum. Probeer het later opnieuw"
-      );
+      setNotification({
+        type: "error",
+        message: "Er is iets misgegaan bij het aanpassen van de datum",
+      });
     }
   };
 
@@ -192,11 +194,7 @@ function MailCalendar(props) {
       </div>
 
       <Modal show={showModal} onHide={handleCloseModal}>
-        {wentWrong && (
-          <div className="alert alert-danger" role="alert">
-            {error}
-          </div>
-        )}
+        <AlertComponent notification={notification} />
         <Modal.Header closeButton>
           <Modal.Title>
             Wil je de datum voor '{emailTitle}' aanpassen?

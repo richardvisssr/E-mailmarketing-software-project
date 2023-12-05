@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { Modal, Button, Placeholder, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
 import { nanoid } from "nanoid";
+import AlertComponent from "../alert/AlertComponent";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
@@ -11,8 +12,6 @@ const MailEditor = ({ id }) => {
   const editorRef = useRef(null);
   const [show, setShow] = useState(false);
   const [designSaved, setDesignSaved] = useState(false);
-  const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const [mails, setMails] = useState([]);
   const [title, setTitle] = useState("");
   const [html, setHtml] = useState("");
@@ -20,6 +19,7 @@ const MailEditor = ({ id }) => {
   const [sentData, setSentData] = useState([]);
   const [planned, setPlanned] = useState(false);
   const [dateTime, setDateTime] = useState("");
+  const [notification, setNotification] = useState({ type: "", message: "" });
 
   useEffect(() => {
     setPlanned(false);
@@ -55,8 +55,10 @@ const MailEditor = ({ id }) => {
         }
         setDesignSaved(true);
       } catch (error) {
-        setShowError(true);
-        setErrorMessage(`Error saving design: ${error}`);
+        setNotification({
+          type: "error",
+          message: `Error saving design: ${error}`,
+        });
       }
     });
     saveHtml();
@@ -77,8 +79,7 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-      } catch (error) {
-      }
+      } catch (error) {}
     });
   };
 
@@ -97,8 +98,10 @@ const MailEditor = ({ id }) => {
           throw new Error("Network response was not ok");
         }
       } catch (error) {
-        setShowError(true);
-        setErrorMessage(`Error sending email: ${error}`);
+        setNotification({
+          type: "error",
+          message: `Error sending email: ${error}`,
+        });
       }
       handleShow();
     });
@@ -119,20 +122,22 @@ const MailEditor = ({ id }) => {
           },
         }
       );
-  
+
       if (!response.ok) {
-        return
+        return;
       }
-  
+
       const design = await response.json();
-  
+
       if (editorRef.current) {
         editorRef.current.loadDesign(design.design);
       }
       setTitle(design.title);
     } catch (error) {
-      setShowError(true);
-      setErrorMessage(`Error loading design: ${error}`);
+      setNotification({
+        type: "error",
+        message: `Er is iets misgegaan bij het laden van de mail`,
+      });
     } finally {
       editorRef.current = editor;
     }
@@ -168,7 +173,6 @@ const MailEditor = ({ id }) => {
       setHtml(html);
     });
 
-    
     if (mails.length > 0) {
       try {
         const response = await fetch(" http://localhost:3001/planMail", {
@@ -202,24 +206,16 @@ const MailEditor = ({ id }) => {
     <div>
       <h1 className="text-center">Mail Editor</h1>
       <div className="p-2 gap-3 d-flex justify-content-center">
-          {showError && (
+        <AlertComponent notification={notification} />
+        {designSaved && (
           <Alert
-            variant="danger"
-            onClose={() => setShowError(false)}
+            variant="success"
+            onClose={() => setDesignSaved(false)}
             dismissible
           >
-            {errorMessage}
+            Design is succesvol opgeslagen!
           </Alert>
         )}
-        {designSaved && (
-            <Alert
-              variant="success"
-              onClose={() => setDesignSaved(false)}
-              dismissible
-            >
-              Design is succesvol opgeslagen!
-            </Alert>
-          )}
       </div>
       <div className="p-2 gap-3 d-flex justify-content-center">
         <input
