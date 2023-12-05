@@ -12,7 +12,7 @@ function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:3001/getPlannedMails", {
+        const response = await fetch("http://127.0.0.1:3001/plannedMails", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -23,7 +23,8 @@ function Page() {
         await setEmails(jsonData);
         setIsLoading(false);
       } catch (error) {
-        console.error(error.message);
+        setError(true);
+        setErrorText(error.message);
       }
     };
 

@@ -1,6 +1,6 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
-const { Design, Email, PlannedEmail } = require("../model/emailEditor");
+const { PlannedEmail } = require("../model/emailEditor");
 
 const router = express.Router();
 
@@ -85,7 +85,7 @@ router.put("/planMail", async (req, res) => {
   }
 });
 
-router.get("/getPlannedMails", async (req, res) => {
+router.get("/plannedMails", async (req, res) => {
   try {
     const plannedMails = await PlannedEmail.find();
     res.status(200).json({ plannedMails });

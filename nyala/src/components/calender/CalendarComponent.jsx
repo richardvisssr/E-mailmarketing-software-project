@@ -8,10 +8,10 @@ function MailCalendar(props) {
   const emails = props.emails;
   const [date, setDate] = useState(new Date());
   const [showModal, setShowModal] = useState(false);
-  const [showFutureMails, setShowFutureMails] = useState(false); // Added checkbox state
+  const [showFutureMails, setShowFutureMails] = useState(false);
   const [emailDate, setEmailDate] = useState("");
-  const [wentWrong, setWentWrong] = useState(false); // Added wentWrong state
-  const [error, setError] = useState(""); // Added error state
+  const [wentWrong, setWentWrong] = useState(false);
+  const [error, setError] = useState("");
   const [emailTitle, setEmailTitle] = useState("");
   const [id, setId] = useState("");
   const currentYear = date.getFullYear();
@@ -36,7 +36,6 @@ function MailCalendar(props) {
   };
 
   const handleSaveChanges = async () => {
-    // Save the changes made by the user
     if (emailDate === "") {
       setWentWrong(true);
       setError("Vul een datum in");
@@ -83,7 +82,7 @@ function MailCalendar(props) {
   const filteredMails = emails.plannedMails.filter((email) => {
     const emailDate = new Date(email.date);
     return (
-      (!showFutureMails || emailDate.getTime() >= new Date().getTime()) && // Added condition to filter future mails
+      (!showFutureMails || emailDate.getTime() >= new Date().getTime()) &&
       emailDate.getTime() >= firstDayOfMonth.getTime() &&
       emailDate.getTime() <= lastDayOfMonth.getTime()
     );
@@ -144,7 +143,6 @@ function MailCalendar(props) {
       <div className="table-responsive p-5">
         <div className="form-check mb-3">
           {" "}
-          {/* Added checkbox */}
           <input
             className="form-check-input"
             type="checkbox"

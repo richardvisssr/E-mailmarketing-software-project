@@ -89,7 +89,7 @@ function TemplateCard(props) {
           }
         );
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+            setError(true);
         }
         setEmailSent(true);
       } catch (error) {
@@ -115,11 +115,11 @@ function TemplateCard(props) {
           }),
         });
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          setError(true);
         }
         setEmailSent(true);
       } catch (error) {
-        console.error("Error sending email:", error);
+        setError(error.message);
         setEmailSent(false);
       }
     }
@@ -187,7 +187,7 @@ function TemplateCard(props) {
           </div>
         )}
         <Modal.Header closeButton>
-          <Modal.Title>Wil je '{template.title}' verturen?</Modal.Title>
+          <Modal.Title>Wil je '{template.title}' versturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <SelectMailingLists
