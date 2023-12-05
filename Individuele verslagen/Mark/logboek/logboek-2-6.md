@@ -1,13 +1,5 @@
 # Logboek OW 2-6
 
-## Opmerkingen
-
-> [Hier is een Markdown Guide van GitHub](https://guides.github.com/features/mastering-markdown/)
-
-> [Gebruik eventueel deze handige table editor om de individuele tabellen te bewerken](https://www.tablesgenerator.com/markdown_tables)
-
-> [Hier is een lijstje met alle GitHub emojis](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md)
-
 ## Maandag 11 december
 
 > Eventueel informatieve algemene opmerkingen over deze dag.

@@ -25,8 +25,6 @@
 
 ## Woensdag 29 december
 
-> Eventueel informatieve algemene opmerkingen over deze dag.
-
 | Uren | Taak | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
 | 0,5u | Reviewen | - | - | :satisfied: | [Geen link] |
@@ -36,8 +34,6 @@
 
 ## Donderdag 30 december
 
-> Eventueel informatieve algemene opmerkingen over deze dag.
-
 | Uren | Taak | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
 | 2u | Gewerkt aan het persoonlijke tussentijdse verslag | - | Het is een tikkeltje frustrerend dat de organisatie van dit project niet erg vlekkeloos is gegaan, waardoor het bij ons onduidelijk was dat dit verslag de dag ervoor af had moeten zijn. | :expressionless: | [Link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/c19d5a727a7c3cd1d82bfd99ec5c314ff93abb9a) |
@@ -46,8 +42,6 @@
 
 
 ## Vrijdag 1 december
-
-> Eventueel informatieve algemene opmerkingen over deze dag.
 
 | Uren | Taak | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
