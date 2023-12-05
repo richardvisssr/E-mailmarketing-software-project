@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "./Views.module.css";
+import SubscribeLinkButton from "../subscribe/SubscribeLinkButton";
 
 export default function MailListAccordion({
   mailLists,
@@ -58,6 +59,9 @@ export default function MailListAccordion({
             data-bs-parent="#MaillistView"
           >
             <div className="accordion-body">
+              <div className="d-flex justify-content-start">
+                <SubscribeLinkButton list={mailList} />
+              </div>
               <div className="table-responsive">
                 <table className="table table-hover">
                   <thead>
