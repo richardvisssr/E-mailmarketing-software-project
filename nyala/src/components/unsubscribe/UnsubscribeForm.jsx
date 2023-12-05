@@ -1,8 +1,9 @@
 "use client";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./UnsubscribeForm.module.css";
 import SubscriptionForm from "../categories/CategoriesComponent";
+import AlertComponent from "../alert/AlertComponent";
 
 export default function UnsubscribeForm({ userid }) {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function UnsubscribeForm({ userid }) {
   const [subscribersList, setSubscribersList] = useState();
   const [selectedSubs, setSelectedSubs] = useState([]);
   const [subs, setSubs] = useState([]);
-  const [warning, setWarning] = useState({ type: "", bericht: "" });
+  const [warning, setWarning] = useState({ type: "", message: "" });
 
   // Dit zijn de redenen gekregen van de PO
   const reasons = [
@@ -43,7 +44,7 @@ export default function UnsubscribeForm({ userid }) {
       } else if (unsubscribeResponse.status === 404) {
         setWarning({
           type: "error",
-          bericht: "Vul een geldige email in.",
+          message: "Vul een geldige email in.",
         });
         return false;
       } else {
@@ -75,7 +76,7 @@ export default function UnsubscribeForm({ userid }) {
       } else if (unsubscribeResponse.status === 404) {
         setWarning({
           type: "error",
-          bericht: "Vul een geldige email in.",
+          message: "Vul een geldige email in.",
         });
         return false;
       } else if (unsubscribeResponse.status === 400) {
@@ -86,7 +87,7 @@ export default function UnsubscribeForm({ userid }) {
     } catch (error) {
       setWarning({
         type: "error",
-        bericht: "Er ging iets mis met het uitschrijven.",
+        message: "Er ging iets mis met het uitschrijven.",
       });
       return false;
     }
@@ -114,7 +115,7 @@ export default function UnsubscribeForm({ userid }) {
     } catch (error) {
       setWarning({
         type: "error",
-        bericht: "Er ging iets mis met het uitschrijven.",
+        message: "Er ging iets mis met het uitschrijven.",
       });
       return false;
     }
@@ -127,7 +128,7 @@ export default function UnsubscribeForm({ userid }) {
           if (!response.ok) {
             setWarning({
               type: "error",
-              bericht: "Vul een geldige email in.",
+              message: "Vul een geldige email in.",
             });
             throw new Error(
               `Something went wrong with fetching the subs: ${response.status} ${response.statusText}`
@@ -145,7 +146,7 @@ export default function UnsubscribeForm({ userid }) {
             />
           );
         })
-        .catch((error) => {});
+        .catch(() => {});
     } catch (error) {}
   }, []);
 
@@ -175,10 +176,10 @@ export default function UnsubscribeForm({ userid }) {
   // Hierin worden alle functies op zijn eigen tijd aangeroepen
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (selectedSubs.length === 0 || reason === "") {
+    if (!selectedSubs || !reason) {
       setWarning({
         type: "error",
-        bericht: "Selecteer minstens een abonnement en een reden.",
+        message: "Selecteer minstens een abonnement en een reden.",
       });
     } else {
       try {
@@ -210,7 +211,7 @@ export default function UnsubscribeForm({ userid }) {
       } catch (error) {
         setWarning({
           type: "error",
-          bericht: "Er ging iets mis met het uitschrijven.",
+          message: "Er ging iets mis met het uitschrijven.",
         });
       }
     }
@@ -266,32 +267,7 @@ export default function UnsubscribeForm({ userid }) {
 
   return (
     <div className="d-flex align-items-center flex-column">
-      <div>
-        {warning.type !== "succes" ? (
-          <></>
-        ) : (
-          <div
-            className="alert alert-success d-flex justify-content-around"
-            role="alert"
-          >
-            <p>{warning.bericht}</p>
-            <i className="ms-2 bi bi-check"></i>
-          </div>
-        )}
-      </div>
-      <div>
-        {warning.type !== "wrong" ? (
-          <></>
-        ) : (
-          <div
-            className="alert alert-danger d-flex justify-content-around"
-            role="alert"
-          >
-            <p>{warning.bericht}</p>
-            <i className="ms-2 bi bi-exclamation-triangle"></i>
-          </div>
-        )}
-      </div>
+      <AlertComponent notification={warning} />
       <h1 className="mb-4 mt-3">Uitschrijven</h1>
       <form>
         <label className="form-label">Email-adres</label>
