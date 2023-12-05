@@ -46,7 +46,7 @@ router.post("/sendEmail", async (req, res) => {
         </p>
         <a href="http://localhost:3000/unsubscribe/${
           subscriber._id
-        }" style="text-decoration: none; color: #333;">
+        }" style="text-decoration: none;">
           Uitschrijven
         </a>
       </div>

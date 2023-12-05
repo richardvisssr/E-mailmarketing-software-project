@@ -1,5 +1,5 @@
 const express = require("express");
-const { Design, Email } = require("../model/emailEditor");
+const { PlannedEmail, Design, Email } = require("../model/emailEditor");
 const router = express.Router();
 
 router.get("/loadDesign/:id", async (req, res) => {
@@ -59,8 +59,17 @@ router.put("/sendEmail", async (req, res) => {
 
 router.get("/getEmail/:id", async (req, res) => {
   try {
-    const email = await Email.findOne({ id: req.params.id });
-    res.json(email);
+    let email = await Email.findOne({ id: req.params.id });
+
+    if (!email) {
+      email = await PlannedEmail.findOne({ id: req.params.id });
+    }
+
+    if (email) {
+      res.json(email);
+    } else {
+      res.status(404).json({ error: "Email not found" });
+    }
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
   }
@@ -69,9 +78,11 @@ router.get("/getEmail/:id", async (req, res) => {
 router.get("/subscribers/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const email = await Email.findOne({ 'subscribers._id': id });
+    const email = await Email.findOne({ "subscribers._id": id });
     if (email) {
-      const subscriber = email.subscribers.find(sub => sub._id.toString() === id);
+      const subscriber = email.subscribers.find(
+        (sub) => sub._id.toString() === id
+      );
       res.status(200).send(subscriber);
     } else {
       res.status(404).send({ message: "Subscriber not found" });
