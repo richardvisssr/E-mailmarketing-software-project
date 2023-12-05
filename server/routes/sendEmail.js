@@ -6,8 +6,8 @@ const router = express.Router();
 
 router.post("/sendEmail", async (req, res) => {
   try {
-    const { html, subscribers, id } = req.body;
- 
+    const { html, subscribers, subject, showHeader, id } = req.body;
+
     let transporter = nodemailer.createTransport({
       host: "145.74.104.216",
       port: 1025,
@@ -22,20 +22,30 @@ router.post("/sendEmail", async (req, res) => {
       let mailOptions = {
         from: '"Xtend" <info@svxtend.nl>',
         to: subscriber.email,
-        subject: `Hallo ${subscriber.name} - Xtend nieuwsbrief`,
+        subject: `${subject}`,
         html: `
+        <div style="text-align: center; padding: 10px; font-family: 'Arial', sans-serif;">
+          <h1 style="color: #333; font-size: 24px;">Xtend</h1>
+          ${
+            showHeader
+              ? `<h2 style="color: #666; font-size: 20px;">Beste ${subscriber.name}, hierbij een nieuwe bericht</h2>`
+              : ""
+          }
+        </div>
         <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
         ${html}
       </div>
-      <div style="background-color: #f1f1f1; text-align: center; padding: 10px;">
+      <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
         <p>
           Bekijk de online versie van deze e-mail
-          <a href="http://localhost:3000/onlineEmail/${id}/${subscriber._id
+          <a href="http://localhost:3000/onlineEmail/${id}/${
+          subscriber._id
         }" style="text-decoration: none; color: #007BFF;">
             hier
           </a>.
         </p>
-        <a href="http://localhost:3000/unsubscribe/${subscriber._id
+        <a href="http://localhost:3000/unsubscribe/${
+          subscriber._id
         }" style="text-decoration: none; color: #333;">
           Uitschrijven
         </a>
@@ -106,7 +116,7 @@ router.delete("/planMail/:id", async (req, res) => {
 
 router.put("/updateMail/", async (req, res) => {
   try {
-    const {id, date} = req.body;
+    const { id, date } = req.body;
 
     const mail = await PlannedEmail.findOne({ id });
     if (mail) {

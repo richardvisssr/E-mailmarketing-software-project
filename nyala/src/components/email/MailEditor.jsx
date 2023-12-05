@@ -1,9 +1,10 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { Modal, Button, Placeholder, Alert } from "react-bootstrap";
+import { Modal, Button, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
 import { nanoid } from "nanoid";
+import sendDataToSendEmail from "../emailService";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
@@ -20,6 +21,8 @@ const MailEditor = ({ id }) => {
   const [sentData, setSentData] = useState([]);
   const [planned, setPlanned] = useState(false);
   const [dateTime, setDateTime] = useState("");
+  const [subject, setSubject] = useState("");
+  const [showHeader, setShowHeader] = useState(false);
 
   useEffect(() => {
     setPlanned(false);
@@ -28,6 +31,14 @@ const MailEditor = ({ id }) => {
 
   const onDataChange = (data) => {
     setSentData(data);
+  };
+
+  const handleSubjectChange = (e) => {
+    if (e.target.value.trim() === "") {
+      alert("Onderwerp mag niet leeg zijn");
+      return;
+    }
+    setSubject(e.target.value);
   };
 
   const setNewTime = (event) => {
@@ -85,6 +96,7 @@ const MailEditor = ({ id }) => {
   const sendEmail = () => {
     editorRef.current.exportHtml(async (data) => {
       const { html } = data;
+      setHtml(html);
       try {
         const response = await fetch("http://localhost:3001/mail/sendEmail", {
           method: "PUT",
@@ -141,24 +153,14 @@ const MailEditor = ({ id }) => {
 
   const handleSendEmailClick = async () => {
     if (mails.length > 0) {
-      try {
-        const response = await fetch(" http://localhost:3001/sendEmail", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            html: html,
-            subscribers: sentData.subscribersData,
-          }),
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        setEmailSent(true);
-      } catch (error) {
-        setEmailSent(false);
-      }
+      const emailSent = await sendDataToSendEmail(
+        html,
+        sentData.subscribersData,
+        subject,
+        showHeader,
+        id
+      );
+      setEmailSent(emailSent);
     }
   };
 
@@ -274,6 +276,23 @@ const MailEditor = ({ id }) => {
           <Modal.Title>Wil je '{title}' verturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+        <div className="p-2 gap-3 d-flex justify-content-center">
+            <input
+              type="text"
+              value={subject}
+              onChange={handleSubjectChange}
+              placeholder="Voer onderwerp van e-mail in"
+              className="form-control text-center"
+            />
+          </div>
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              onChange={() => setShowHeader(!showHeader)}
+            />
+            <label className="form-check-label">Header toevoegen</label>
+          </div>
           <SelectMailingLists
             id={id}
             setEmails={setMails}
