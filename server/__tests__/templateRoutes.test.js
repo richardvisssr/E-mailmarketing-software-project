@@ -81,3 +81,29 @@ describe("GET /templates/:id", () => {
     expect(response.body).toEqual({ error: "Internal Server Error" });
   }, 10000);
 });
+
+describe("DELETE /template/:id", () => {
+  it("should respond with a success message", async () => {
+    // Create a design or email with the id "testEmailId"
+    await Design.create({
+      id: "testEmailId",
+      design: { key: "value" },
+      title: "Title",
+    });
+
+    const response = await request(app).delete("/template/testEmailId");
+
+    expect(response.body).toEqual({ success: true });
+    expect(response.statusCode).toBe(200);
+  }, 10000);
+
+  it("should respond with an error when an internal server error occurs", async () => {
+    jest.spyOn(Email, "findOneAndDelete").mockImplementation(() => {
+      throw new Error("Internal Server Error");
+    });
+
+    const response = await request(app).delete("/template/testEmailId");
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toEqual({ message: "Internal Server Error" });
+  }, 10000);
+});

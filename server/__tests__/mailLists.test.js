@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const request = require("supertest");
-const { app, server, httpServer } = require("../app");
+const { app } = require("../app");
 
 const MailList = require("../model/mailList");
 
@@ -41,6 +41,14 @@ describe("Mail List API", () => {
     );
   });
 
+  test('response should be same as created list', async () => {
+    const response = await request(app).get('/mail/getList');
+    const expectedResult = ["Nieuwsbrief", "CMD", "ICT", "Leden"];
+
+    expect(response.status).toBe(200);
+    expect(response.body[0].mailList).toEqual(expect.arrayContaining(expectedResult));
+  });
+
   test("MailList add test 200", async () => {
     const newName = "NewList";
     const response = await request(app)
@@ -49,6 +57,17 @@ describe("Mail List API", () => {
 
     expect(response.status).toBe(200);
     expect(response.body.mailList).toContain(newName);
+  });
+
+  test("getList error 500", async () => {
+    jest.spyOn(MailList, "find").mockImplementationOnce(() => {
+      throw new Error("Simulated internal server error");
+    });
+
+    const response = await request(app).get("/mail/getList");
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe("Internal server error");
   });
 
   test("MailList add test 404", async () => {
