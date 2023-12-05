@@ -117,7 +117,7 @@ router.delete("/planMail/:id", async (req, res) => {
   }
 });
 
-router.put("/updateMail/", async (req, res) => {
+router.put("/updateMail", async (req, res) => {
   try {
     const { id, date } = req.body;
 
