@@ -31,6 +31,7 @@ const MailEditor = ({ id }) => {
 
   const onDataChange = (data) => {
     setSentData(data);
+    console.log(data);
   };
 
   const handleSubjectChange = (e) => {
@@ -184,6 +185,8 @@ const MailEditor = ({ id }) => {
             html: html,
             subs: sentData.subscribersData,
             date: dateTime,
+            showHeader: showHeader,
+            subject: subject,
           }),
         });
         if (!response.ok) {

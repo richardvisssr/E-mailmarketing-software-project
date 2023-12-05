@@ -110,6 +110,8 @@ function TemplateCard(props) {
             html: html,
             subs: subscribers,
             date: dateTime,
+            showHeader: showHeader,
+            subject: subject,
           }),
         });
         if (!response.ok) {

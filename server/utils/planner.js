@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 const { PlannedEmail } = require("../model/emailEditor");
 
 // Function to send email
-function sendEmail(event) {
+async function sendEmail(email) {
   const transporter = nodemailer.createTransport({
     host: "145.74.104.216",
     port: 1025,
@@ -14,33 +14,54 @@ function sendEmail(event) {
   });
 
   try {
-    event.subscribers.forEach((subscriber) => {
+    for (const subscriber of email.subscribers) {
       const mailOptions = {
         from: "xtend@svxtend.nl",
         to: subscriber.email,
-        subject: event.title,
-        html: `${event.html}
-          </div>
-            <div style="background-color: #f1f1f1; text-align: center; padding: 10px;">
-              <a style="text-decoration: none; color: #333;" href="http://localhost:3000/unsubscribe?email=${encodeURIComponent(
-                subscriber.email
-              )}">Uitschrijven</a>
-            </div>
-          `,
+        subject: email.subject,
+        html: `
+        <div style="text-align: center; padding: 10px; font-family: 'Arial', sans-serif;">
+          <h1 style="color: #333; font-size: 24px;">Xtend</h1>
+          ${
+            email.showHeader
+              ? `<h2 style="color: #666; font-size: 20px;">Beste ${subscriber.name}, hierbij een nieuwe bericht</h2>`
+              : ""
+          }
+        </div>
+        <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
+        ${email.html}
+      </div>
+      <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
+        <p>
+          Bekijk de online versie van deze e-mail
+          <a href="http://localhost:3000/onlineEmail/${email.id}/${subscriber.id}" style="text-decoration: none; color: #007BFF;">
+            hier
+          </a>.
+        </p>
+        <a href="http://localhost:3000/unsubscribe/${subscriber.id}" style="text-decoration: none; color: #333;">
+          Uitschrijven
+        </a>
+      </div>
+      
+        `,
       };
 
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.error("Failed to send email:", error);
-          return false;
-        } else {
-          console.log("Email sent:", info.response);
-        }
+      await new Promise((resolve, reject) => {
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.error("Failed to send email:", error);
+            reject(error);
+          } else {
+            console.log("Email sent:", info.response);
+            resolve();
+          }
+        });
       });
-    });
+    }
 
     return true;
   } catch (error) {
+    console.error("Error sending email:", error);
     return false;
   }
 }
@@ -52,23 +73,23 @@ async function checkEvents() {
 
   console.log("Checking for events at", formattedDate);
 
-  const events = await PlannedEmail.find({
+  const emails = await PlannedEmail.find({
     date: { $lte: formattedDate },
     sended: false,
   });
 
-  if (events.length === 0) {
+  if (emails.length === 0) {
     console.log("No events found");
     return;
   }
 
   try {
-    for (const event of events) {
-      const success = sendEmail(event);
+    for (const email of emails) {
+      const success = await sendEmail(email);
 
       if (success) {
-        event.sended = true;
-        await event.save();
+        email.sended = true;
+        await email.save();
       }
     }
   } catch (error) {
