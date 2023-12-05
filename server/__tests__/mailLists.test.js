@@ -25,8 +25,6 @@ describe("Mail List API", () => {
   });
 
   afterAll(async () => {
-    server.close();
-    httpServer.close();
     if (mongoose.connection.readyState !== 0) {
       await mongoose.disconnect();
     }

@@ -5,31 +5,52 @@ import styles from "./button.module.css";
 import Button from "react-bootstrap/Button";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
-import { Placeholder } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
-import * as htmlToImage from "html-to-image";
-import {
-  toPng,
-  toJpeg,
-  toBlob,
-  toPixelData,
-  toSvg,
-  toCanvas,
-} from "html-to-image";
-import Alert from "react-bootstrap/Alert";
 import SelectMailingLists from "../email/SendMail";
+import { nanoid } from "nanoid";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
   const { template, onDelete } = props;
   const [show, setShow] = useState(false);
   const [image, setImage] = useState("");
-  const [zoomLevel, setZoomLevel] = useState(2);
   const [error, setError] = useState(false);
+  const [html, setHtml] = useState("");
+  const [sentData, setSentData] = useState([]);
+  const [planned, setPlanned] = useState(false);
+  const [mails, setEmails] = useState([]);
+  const [emailSent, setEmailSent] = useState(false);
+  const [dateTime, setDateTime] = useState("");
+  const [subscribers, setSubscribers] = useState([]);
+
   const router = useRouter();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const setNewTime = (event) => {
+    setDateTime(event.target.value);
+  };
+
+  const onDataChange = (data) => {
+    setSentData(data);
+  };
+
+  useEffect(() => {
+    if (sentData.subscribersData) {
+      sentData.subscribersData.map((sub) => {
+        setSubscribers([sub]);
+      });
+    }
+  }, [sentData]);
+
+  useEffect(() => {
+    setPlanned(false);
+    setEmailSent(false);
+    setEmails([]);
+    setDateTime("");
+    setSubscribers([]);
+  }, [show]);
 
   useEffect(() => {
     router.prefetch(`/mail/${template.id}`);
@@ -42,6 +63,7 @@ function TemplateCard(props) {
           `http://127.0.0.1:3001/templates/${template.id}`
         );
         const data = await response.json();
+        setHtml(data.html);
       } catch (error) {
         setError(true);
       }
@@ -50,9 +72,67 @@ function TemplateCard(props) {
     fetchHtmlContent();
   }, [template.id]);
 
+  const handleSendEmailClick = async () => {
+    if (mails.length > 0) {
+      try {
+        const response = await fetch(
+          " http://localhost:3001/sendEmail",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              html: html,
+              subscribers: sentData.subscribersData,
+            }),
+          }
+        );
+        if (!response.ok) {
+            setError(true);
+        }
+        setEmailSent(true);
+      } catch (error) {
+        setEmailSent(false);
+      }
+    }
+  };
+
+  const handlePlanMail = async () => {
+    if (mails.length > 0) {
+      try {
+        const response = await fetch(" http://localhost:3001/planMail", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: generateUniqueShortId(),
+            title: template.title,
+            html: html,
+            subs: subscribers,
+            date: dateTime,
+          }),
+        });
+        if (!response.ok) {
+          setError(true);
+        }
+        setEmailSent(true);
+      } catch (error) {
+        setError(error.message);
+        setEmailSent(false);
+      }
+    }
+  };
+
+  
   const handleNavigate = () => {
     router.push(`/admin/mail/${template.id}`);
   };
+  
+  function generateUniqueShortId() {
+    return nanoid();
+  }
 
   const handleDelete = () => {
     fetch(`http://localhost:3001/template/${template.id}`, {
@@ -101,19 +181,52 @@ function TemplateCard(props) {
       </Col>
 
       <Modal show={show} onHide={handleClose} size="xl">
+        {emailSent && (
+          <div className="alert alert-success" role="alert">
+            E-mail is succesvol verstuurd!
+          </div>
+        )}
         <Modal.Header closeButton>
           <Modal.Title>Wil je '{template.title}' versturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Placeholder as={Modal.Body} animation="glow"></Placeholder>
-          <SelectMailingLists id={template.id} />
+          <SelectMailingLists
+            id={template.id}
+            setEmails={setEmails}
+            onDataChange={onDataChange}
+          />
+          <label className="form-label">Wil je de mail vooruit plannen?</label>
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              onChange={() => setPlanned(!planned)}
+            />
+            <label className="form-check-label">Ja</label>
+          </div>
+
+          {planned && (
+            <div className="form-group">
+              <label className="form-label">Kies een datum</label>
+              <input
+                type="datetime-local"
+                className="form-control"
+                id="exampleFormControlInput1"
+                placeholder="2021-06-12T19:30"
+                onInput={setNewTime}
+                required
+              />
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button
-            variant="secondary"
-            className={`${styles.knopSecondary}`}
-            onClick={handleClose}
+            variant="primary"
+            onClick={planned ? handlePlanMail : handleSendEmailClick}
           >
+            {planned ? "Inplannen" : "Mail versturen"}
+          </Button>
+          <Button variant="secondary" onClick={handleClose}>
             Annuleren
           </Button>
         </Modal.Footer>

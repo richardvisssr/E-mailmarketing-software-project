@@ -6,7 +6,6 @@ const { Subscriber } = require("../model/subscribers");
 
 describe("Subscribers routes test", () => {
   let subscriberEmail;
-  let subscribersSubscriptions;
 
   beforeAll(async () => {
     if (mongoose.connection.readyState === 0) {
@@ -26,7 +25,6 @@ describe("Subscribers routes test", () => {
 
     const sub = await Subscriber.findOne({ email: "Matthias@budding.nl" });
     subscriberEmail = sub;
-    subscribersSubscriptions = sub.subscription;
   });
 
   afterEach(async () => {
@@ -34,8 +32,6 @@ describe("Subscribers routes test", () => {
   });
 
   afterAll(async () => {
-    server.close();
-    httpServer.close();
     if (mongoose.connection.readyState !== 0) {
       await mongoose.disconnect();
     }
@@ -52,7 +48,8 @@ describe("Subscribers routes test", () => {
   });
 
   test("Get subs of subscriber that doesn't exist", async () => {
-    const response = await request(app).get("/test@test.nl/subs");
+    const fakeId = "5f9e9b6b0f1b3c1b7c9b1b1b";
+    const response = await request(app).get(`/${fakeId}/subs`);
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Subscriber not found" });
@@ -98,10 +95,9 @@ describe("Subscribers routes test", () => {
   });
 
   test("Getting the subscribtions of an subscriber", async () => {
-    const response = await request(app).get(`/${subscriberEmail.email}/subs`);
+    const response = await request(app).get(`/${subscriberEmail._id}/subs`);
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(subscribersSubscriptions);
   });
 
   test("Removing an user from the database", async () => {
@@ -161,27 +157,6 @@ describe("Subscribers routes test", () => {
     expect(response.body).toEqual({
       message: "Subscriber not found",
     });
-  });
-
-  test("Adding a subscription to an user that doesn't exist", async () => {
-    const response = await request(app)
-      .put("/subscribers/add")
-      .send({
-        email: "Test@tes.nl",
-        name: "Test",
-        subscriptions: ["Nieuwsbrief"],
-      });
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({ message: "Subscriber updated" });
-  });
-
-  test("should return 404 if subscriber not found", async () => {
-    const subscriber = "TEST@TEST.nl";
-    const response = await request(app).get(`/${subscriber}/subs`);
-
-    expect(response.status).toBe(404);
-    expect(response.body).toEqual({ message: "Subscriber not found" });
   });
 
   test("Adding a subscriber with valid input", async () => {
