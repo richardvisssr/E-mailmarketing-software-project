@@ -52,8 +52,10 @@ function Page() {
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
   };
-  const filteredTemplates = Object.values(templates).filter((template) =>
-    template.title.toLowerCase().includes(searchValue.toLowerCase())
+  const filteredTemplates = Object.values(templates).filter(
+    (template) =>
+      template.title &&
+      template.title.toLowerCase().includes(searchValue.toLowerCase())
   );
 
   const handleDelete = (id) => {

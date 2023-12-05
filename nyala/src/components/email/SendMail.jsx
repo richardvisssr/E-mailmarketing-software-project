@@ -1,16 +1,17 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import SubscriptionForm from "../categories/CategoriesComponent";
-import { Alert } from 'react-bootstrap';
+import { Alert } from "react-bootstrap";
 
-function SelectMailingLists({ id }) {
+function SelectMailingLists(props) {
+  const { id } = props;
   const [mailingList, setMailingLists] = useState([]);
   const [selectedMailingList, setSelectedMailingList] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
   const [html, setHtml] = useState("");
   const [emailSent, setEmailSent] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:3001/mail/getList")
@@ -29,27 +30,41 @@ function SelectMailingLists({ id }) {
         )
           .then((response) => response.json())
           .catch((error) => {
-            console.error("Error fetching subscribers:", error);
+            setShowError(true);
+            setErrorMessage(error);
             return [];
           }),
         fetch(`http://localhost:3001/mail/getEmail/${id}`)
           .then((response) => response.json())
           .catch((error) => {
-            console.error("Error fetching email:", error);
+            setShowError(true);
+            setErrorMessage(error);
             return null;
           }),
       ])
         .then(([subscribersData, emailData]) => {
           setSubscribers(subscribersData);
           setHtml(emailData.html);
+          props.onDataChange({ html, subscribersData });
         })
-        .catch((error) => console.error("Error in Promise.all:", error));
+        .catch((error) => {
+          setShowError(true);
+          setErrorMessage(error);
+        });
     }
   }, [selectedMailingList, id]);
 
   const handleMailingChange = (event) => {
     const { checked, value } = event.target;
     setSelectedMailingList((prevSelected) => {
+      if (checked) {
+        return [...prevSelected, value];
+      } else {
+        return prevSelected.filter((item) => item !== value);
+      }
+    });
+
+    props.setEmails((prevSelected) => {
       if (checked) {
         return [...prevSelected, value];
       } else {
@@ -150,14 +165,9 @@ function SelectMailingLists({ id }) {
               ))}
             </tbody>
           </table>
-
-          <button className="btn btn-primary" onClick={handleSendEmailClick}>
-            Mail Versturen
-          </button>
         </div>
       )}
     </div>
   );
 }
-
 export default SelectMailingLists;

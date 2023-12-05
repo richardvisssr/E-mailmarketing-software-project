@@ -1,8 +1,9 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Modal, Button, Placeholder, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
+import { nanoid } from "nanoid";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
@@ -12,7 +13,26 @@ const MailEditor = ({ id }) => {
   const [designSaved, setDesignSaved] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [mails, setMails] = useState([]);
   const [title, setTitle] = useState("");
+  const [html, setHtml] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
+  const [sentData, setSentData] = useState([]);
+  const [planned, setPlanned] = useState(false);
+  const [dateTime, setDateTime] = useState("");
+
+  useEffect(() => {
+    setPlanned(false);
+    setEmailSent(false);
+  }, [show]);
+
+  const onDataChange = (data) => {
+    setSentData(data);
+  };
+
+  const setNewTime = (event) => {
+    setDateTime(event.target.value);
+  };
 
   const handleClose = () => {
     setShow(false);
@@ -37,6 +57,27 @@ const MailEditor = ({ id }) => {
       } catch (error) {
         setShowError(true);
         setErrorMessage(`Error saving design: ${error}`);
+      }
+    });
+    saveHtml();
+  };
+
+  const saveHtml = () => {
+    editorRef.current.exportHtml(async (data) => {
+      const { html } = data;
+      setHtml(html);
+      try {
+        const response = await fetch("http://localhost:3001/mail/sendEmail", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ html: html, id: id }),
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+      } catch (error) {
       }
     });
   };
@@ -95,13 +136,73 @@ const MailEditor = ({ id }) => {
     } finally {
       editorRef.current = editor;
     }
+    editorRef.current = editor;
   };
+
+  const handleSendEmailClick = async () => {
+    if (mails.length > 0) {
+      try {
+        const response = await fetch(" http://localhost:3001/sendEmail", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            html: html,
+            subscribers: sentData.subscribersData,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        setEmailSent(true);
+      } catch (error) {
+        setEmailSent(false);
+      }
+    }
+  };
+
+  const handlePlanMail = async () => {
+    editorRef.current.exportHtml(async (data) => {
+      const { html } = data;
+      setHtml(html);
+    });
+
+    
+    if (mails.length > 0) {
+      try {
+        const response = await fetch(" http://localhost:3001/planMail", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: generateUniqueShortId(),
+            title: title,
+            html: html,
+            subs: sentData.subscribersData,
+            date: dateTime,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        setEmailSent(true);
+      } catch (error) {
+        setEmailSent(false);
+      }
+    }
+  };
+
+  function generateUniqueShortId() {
+    return nanoid();
+  }
 
   return (
     <div>
       <h1 className="text-center">Mail Editor</h1>
       <div className="p-2 gap-3 d-flex justify-content-center">
-        {showError && (
+          {showError && (
           <Alert
             variant="danger"
             onClose={() => setShowError(false)}
@@ -111,14 +212,14 @@ const MailEditor = ({ id }) => {
           </Alert>
         )}
         {designSaved && (
-          <Alert
-            variant="success"
-            onClose={() => setDesignSaved(false)}
-            dismissible
-          >
-            Design is succesvol opgeslagen!
-          </Alert>
-        )}
+            <Alert
+              variant="success"
+              onClose={() => setDesignSaved(false)}
+              dismissible
+            >
+              Design is succesvol opgeslagen!
+            </Alert>
+          )}
       </div>
       <div className="p-2 gap-3 d-flex justify-content-center">
         <input
@@ -164,15 +265,51 @@ const MailEditor = ({ id }) => {
       </div>
 
       <Modal show={show} onHide={handleClose} size="xl">
+        {emailSent && (
+          <div className="alert alert-success" role="alert">
+            E-mail is succesvol verstuurd!
+          </div>
+        )}
         <Modal.Header closeButton>
           <Modal.Title>Wil je '{title}' verturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Placeholder as={Modal.Body} animation="glow">
-            <SelectMailingLists id={id} />
-          </Placeholder>
+          <SelectMailingLists
+            id={id}
+            setEmails={setMails}
+            onDataChange={onDataChange}
+          />
+          <label className="form-label">Wil je de mail vooruit plannen?</label>
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              onChange={() => setPlanned(!planned)}
+            />
+            <label className="form-check-label">Ja</label>
+          </div>
+
+          {planned && (
+            <div className="form-group">
+              <label className="form-label">Kies een datum</label>
+              <input
+                type="datetime-local"
+                className="form-control"
+                id="exampleFormControlInput1"
+                placeholder="2021-06-12T19:30"
+                onInput={setNewTime}
+                required
+              />
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
+          <Button
+            variant="primary"
+            onClick={planned ? handlePlanMail : handleSendEmailClick}
+          >
+            {planned ? "Inplannen" : "Mail versturen"}
+          </Button>
           <Button variant="secondary" onClick={handleClose}>
             Annuleren
           </Button>
