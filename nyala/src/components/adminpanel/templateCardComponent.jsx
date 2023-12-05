@@ -8,6 +8,7 @@ import { useEffect, useState, useRef } from "react";
 import Modal from "react-bootstrap/Modal";
 import SelectMailingLists from "../email/SendMail";
 import { nanoid } from "nanoid";
+import sendDataToSendEmail from "../emailService";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
@@ -22,6 +23,8 @@ function TemplateCard(props) {
   const [emailSent, setEmailSent] = useState(false);
   const [dateTime, setDateTime] = useState("");
   const [subscribers, setSubscribers] = useState([]);
+  const [subject, setSubject] = useState("");
+  const [showHeader, setShowHeader] = useState(false);
 
   const router = useRouter();
 
@@ -74,28 +77,23 @@ function TemplateCard(props) {
 
   const handleSendEmailClick = async () => {
     if (mails.length > 0) {
-      try {
-        const response = await fetch(
-          " http://localhost:3001/sendEmail",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              html: html,
-              subscribers: sentData.subscribersData,
-            }),
-          }
-        );
-        if (!response.ok) {
-            setError(true);
-        }
-        setEmailSent(true);
-      } catch (error) {
-        setEmailSent(false);
-      }
+      const emailSent = await sendDataToSendEmail(
+        html,
+        sentData.subscribersData,
+        subject,
+        showHeader,
+        template.id
+      );
+      setEmailSent(emailSent);
     }
+  };
+
+  const handleSubjectChange = (e) => {
+    if (e.target.value.trim() === "") {
+      alert("Onderwerp mag niet leeg zijn");
+      return;
+    }
+    setSubject(e.target.value);
   };
 
   const handlePlanMail = async () => {
@@ -112,6 +110,8 @@ function TemplateCard(props) {
             html: html,
             subs: subscribers,
             date: dateTime,
+            showHeader: showHeader,
+            subject: subject,
           }),
         });
         if (!response.ok) {
@@ -125,11 +125,10 @@ function TemplateCard(props) {
     }
   };
 
-  
   const handleNavigate = () => {
     router.push(`/admin/mail/${template.id}`);
   };
-  
+
   function generateUniqueShortId() {
     return nanoid();
   }
@@ -190,6 +189,23 @@ function TemplateCard(props) {
           <Modal.Title>Wil je '{template.title}' versturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <div className="p-2 gap-3 d-flex justify-content-center">
+            <input
+              type="text"
+              value={subject}
+              onChange={handleSubjectChange}
+              placeholder="Voer onderwerp van e-mail in"
+              className="form-control text-center"
+            />
+          </div>
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              onChange={() => setShowHeader(!showHeader)}
+            />
+            <label className="form-check-label">Header toevoegen</label>
+          </div>
           <SelectMailingLists
             id={template.id}
             setEmails={setEmails}

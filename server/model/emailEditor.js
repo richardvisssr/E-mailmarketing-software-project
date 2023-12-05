@@ -58,6 +58,14 @@ const plannedEmailSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
+  showHeader: {
+    type: Boolean,
+    required: true,
+  },
+  subject: {
+    type: String,
+    required: true,
+  },
 });
 
 const PlannedEmail = mongoose.model("PlannedEmail", plannedEmailSchema);

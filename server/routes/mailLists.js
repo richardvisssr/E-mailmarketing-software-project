@@ -46,7 +46,6 @@ router.delete("/deleteList", async (req, res) => {
 
     res.status(200).json({ message: "The list " + name + " is deleted" });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });
