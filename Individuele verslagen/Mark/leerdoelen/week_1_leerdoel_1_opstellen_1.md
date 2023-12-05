@@ -6,7 +6,8 @@ Ik wil meer mijn mening inbrengen in discussies, in plaats van anderen aan het w
 
 ### Mijn motivatie om aan dit leerdoel te werken is:
 
-Ik denk dat mijn mening waardevol is maar niet goed tot uiting komt, waardoor er een minder productieve discussie plaat vind.
+Ik denk dat mijn mening waardevol is, maar deze komt niet goed tot uiting, waardoor er een minder productieve discussie plaatsvindt.
+>> updated [05/12/2023]
 >> grammatica... 
 ### Dit leerdoel leveren het volgende op voor mij:
 
