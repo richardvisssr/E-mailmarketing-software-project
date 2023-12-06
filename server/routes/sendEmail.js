@@ -25,12 +25,12 @@ router.post("/sendEmail", async (req, res) => {
         subject: `${subject}`,
         html: `
         <div style="text-align: center; padding: 10px; font-family: 'Arial', sans-serif;">
-          <h1 style="color: #333; font-size: 24px;">Xtend</h1>
-          ${
-            showHeader
-              ? `<h2 style="color: #666; font-size: 20px;">Beste ${subscriber.name}, hierbij een nieuwe bericht</h2>`
-              : ""
-          }
+        ${
+          showHeader
+            ? `<h1 style="color: #333; font-size: 24px;">Xtend</h1>
+             <h2 style="color: #666; font-size: 20px;">Beste ${subscriber.name}, hierbij een nieuwe bericht</h2>`
+            : ""
+        }
         </div>
         <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
         ${html}
@@ -66,7 +66,11 @@ router.put("/planMail", async (req, res) => {
   try {
     const { id, title, html, subs, date, showHeader, subject } = req.body;
     const subscribers = subs.map((subscriber) => {
-      return { id: subscriber._id, name: subscriber.name, email: subscriber.email };
+      return {
+        id: subscriber._id,
+        name: subscriber.name,
+        email: subscriber.email,
+      };
     });
     const planMail = await PlannedEmail.findOne({ id });
 
