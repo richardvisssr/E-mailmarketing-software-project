@@ -148,8 +148,7 @@ const MailEditor = ({ id }) => {
 
   const handleSendEmailClick = async () => {
     if (!subject || subject.trim() === "") {
-      setShowError(true);
-      setErrorMessage("Onderwerp mag niet leeg zijn!");
+      alert("Onderwerp mag niet leeg zijn!");
       return;
     }
 
@@ -167,8 +166,7 @@ const MailEditor = ({ id }) => {
 
   const handlePlanMail = async () => {
     if (!subject || subject.trim() === "") {
-      setError(true);
-      setErrorMessage("Onderwerp mag niet leeg zijn!");
+      alert("Onderwerp mag niet leeg zijn!");
       return;
     }
     editorRef.current.exportHtml(async (data) => {
