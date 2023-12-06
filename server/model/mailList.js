@@ -20,7 +20,6 @@ const checkMailList = async (req, res, next) => {
     });
 
     await newMailList.save();
-    res.status(200).json({ message: "Mail list is created" });
   }
 };
 
