@@ -1,8 +1,10 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
-const { app, server, httpServer } = require("../app");
+const { app } = require("../app");
 
 const { Subscriber } = require("../model/subscribers");
+const { response } = require("express");
+
 
 describe("Subscribers routes test", () => {
   let subscriberEmail;
@@ -35,24 +37,7 @@ describe("Subscribers routes test", () => {
     if (mongoose.connection.readyState !== 0) {
       await mongoose.disconnect();
     }
-  });
 
-  test("Get subscribers with selected mailing list", async () => {
-    const selectedMailingList = "Nieuwsbrief";
-    const response = await request(app)
-      .get("/subscribers")
-      .query({ selectedMailingList });
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(expect.any(Array));
-  });
-
-  test("Get subs of subscriber that doesn't exist", async () => {
-    const fakeId = "5f9e9b6b0f1b3c1b7c9b1b1b";
-    const response = await request(app).get(`/${fakeId}/subs`);
-
-    expect(response.status).toBe(404);
-    expect(response.body).toEqual({ message: "Subscriber not found" });
   });
 
   test("Internal server error when adding a subscriber", async () => {
@@ -324,5 +309,44 @@ describe("Subscribers routes test", () => {
     expect(Subscriber.find).toHaveBeenCalledWith({
       subscription: subscription,
     });
+  });
+
+  test("Get all subscribers", async () => {
+    const subscribers = [
+      { email: "subscriber1@example.com", name: "Subscriber 1", subscriptions: ["Nieuwsbrief"] },
+      { email: "subscriber2@example.com", name: "Subscriber 2", subscriptions: ["Nieuwsbrief"] },
+    ];
+
+    const selectedMailingList = ["Nieuwsbrief"];
+
+    jest.spyOn(Subscriber, "find").mockResolvedValue(subscribers);
+
+    const response = await request(app).get(`/subscribers?selectedMailingList=${selectedMailingList.join(",")}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(subscribers);
+
+    expect(Subscriber.find).toHaveBeenCalled();
+  });
+
+  test("error status 500 when getting all subscribers", async () => {
+    const selectedMailingList = ["Nieuwsbrief"];
+
+    jest.spyOn(Subscriber, "find").mockRejectedValue(new Error("Internal server error"));
+
+    const response = await request(app).get(`/subscribers?selectedMailingList=${selectedMailingList.join(",")}`);
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: "Internal server error" });
+
+    expect(Subscriber.find).toHaveBeenCalled();
+  });
+
+  test("Get subs of subscriber that doesn't exist", async () => {
+    const fakeId = "5f9e9b6b0f1b3c1b7c9b1b1b";
+    const response = await request(app).get(`/${fakeId}/subs`);
+
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({ message: "Subscriber not found" });
   });
 });
