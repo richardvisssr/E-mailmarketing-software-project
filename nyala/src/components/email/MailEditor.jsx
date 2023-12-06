@@ -192,21 +192,26 @@ const MailEditor = ({ id }) => {
     }
 
     if (mails.length > 0) {
-      const emailSent = await sendDataToSendEmail(
+      await sendDataToSendEmail(
         html,
         sentData.subscribersData,
         subject,
         showHeader,
         id
       );
-      setEmailSent(emailSent);
+      setModalNotification({
+        type: "success",
+        message: "Mail is succesvol verstuurd",
+      });
     }
   };
 
   const handlePlanMail = async () => {
     if (!subject || subject.trim() === "") {
-      setError(true);
-      setErrorMessage("Onderwerp mag niet leeg zijn!");
+      setModalNotification({
+        type: "error",
+        message: "Onderwerp mag niet leeg zijn!",
+      });
       return;
     }
     editorRef.current.exportHtml(async (data) => {
@@ -237,7 +242,10 @@ const MailEditor = ({ id }) => {
             message: "Network response was not ok",
           });
         }
-        setEmailSent(true);
+        setModalNotification({
+          type: "success",
+          message: "Mail is succesvol ingepland",
+        });
       } catch (error) {
         setEmailSent(false);
       }
@@ -298,16 +306,12 @@ const MailEditor = ({ id }) => {
       </div>
 
       <Modal show={show} onHide={handleClose} size="xl">
-        {emailSent && (
-          <div className="alert alert-success" role="alert">
-            E-mail is succesvol verstuurd!
-          </div>
-        )}
+        <AlertComponent notification={modalNotification} />
+
         <Modal.Header closeButton>
           <Modal.Title>Wil je '{title}' verturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AlertComponent notification={modalNotification} />
           <div className="p-2 gap-3 d-flex justify-content-center">
             <input
               type="text"

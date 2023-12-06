@@ -81,20 +81,25 @@ function TemplateCard(props) {
 
   const handleSendEmailClick = async () => {
     if (!subject || subject.trim() === "") {
-      setError(true);
-      setErrorMessage("Onderwerp mag niet leeg zijn!");
+      setNotification({
+        type: "error",
+        message: "Onderwerp mag niet leeg zijn!",
+      });
       return;
     }
 
     if (mails.length > 0) {
-      const emailSent = await sendDataToSendEmail(
+      await sendDataToSendEmail(
         html,
         sentData.subscribersData,
         subject,
         showHeader,
         template.id
       );
-      setEmailSent(emailSent);
+      setNotification({
+        type: "success",
+        message: "Mail is succesvol verstuurd",
+      });
     }
   };
 
@@ -104,8 +109,10 @@ function TemplateCard(props) {
 
   const handlePlanMail = async () => {
     if (!subject || subject.trim() === "") {
-      setError(true);
-      setErrorMessage("Onderwerp mag niet leeg zijn!");
+      setNotification({
+        type: "error",
+        message: "Onderwerp mag niet leeg zijn!",
+      });
       return;
     }
     if (mails.length > 0) {
@@ -131,7 +138,10 @@ function TemplateCard(props) {
             message: "Er is iets misgegaan bij het versturen van de mail",
           });
         }
-        setEmailSent(true);
+        setNotification({
+          type: "success",
+          message: "Mail is succesvol ingepland",
+        });
       } catch (error) {
         setNotification({
           type: "error",
@@ -173,7 +183,6 @@ function TemplateCard(props) {
             />
           )} */}
 
-          <AlertComponent notification={notification} />
           <Card.Body>
             <Card.Title>{template.title}</Card.Title>
             <div className="d-flex justify-content-between">
@@ -199,11 +208,8 @@ function TemplateCard(props) {
       </Col>
 
       <Modal show={show} onHide={handleClose} size="xl">
-        {emailSent && (
-          <div className="alert alert-success" role="alert">
-            E-mail is succesvol verstuurd!
-          </div>
-        )}
+        <AlertComponent notification={notification} />
+
         <Modal.Header closeButton>
           <Modal.Title>Wil je '{template.title}' versturen?</Modal.Title>
         </Modal.Header>
