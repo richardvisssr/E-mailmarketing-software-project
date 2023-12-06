@@ -200,7 +200,6 @@ function TemplateCard(props) {
         </Card>
       </Col>
       
-
       <Modal show={showDeleteModal} onHide={cancelDelete}>
         <Modal.Header closeButton>
           <Modal.Title>Bevestig Verwijderen</Modal.Title>
@@ -217,7 +216,7 @@ function TemplateCard(props) {
           </Button>
         </Modal.Footer>
       </Modal>
-      
+
       <Modal show={show} onHide={handleClose} size="xl">
         {emailSent && (
           <div className="alert alert-success" role="alert">
