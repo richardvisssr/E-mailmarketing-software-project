@@ -35,6 +35,10 @@ function TemplateCard(props) {
     setDateTime(event.target.value);
   };
 
+  const handleSubjectChange = (e) => {
+    setSubject(e.target.value);
+  };
+
   const onDataChange = (data) => {
     setSentData(data);
   };
@@ -77,8 +81,7 @@ function TemplateCard(props) {
 
   const handleSendEmailClick = async () => {
     if (!subject || subject.trim() === "") {
-      setError(true);
-      setErrorMessage("Onderwerp mag niet leeg zijn!");
+      alert("Onderwerp mag niet leeg zijn!");
       return;
     }
 
@@ -92,10 +95,6 @@ function TemplateCard(props) {
       );
       setEmailSent(emailSent);
     }
-  };
-
-  const handleSubjectChange = (e) => {
-    setSubject(e.target.value);
   };
 
   const handlePlanMail = async () => {
@@ -203,6 +202,7 @@ function TemplateCard(props) {
               onChange={handleSubjectChange}
               placeholder="Voer onderwerp van e-mail in"
               className="form-control text-center"
+              required
             />
           </div>
           <div className="form-check">
