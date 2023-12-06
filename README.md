@@ -19,10 +19,10 @@ Robert Boudewijn
 - r.boudewijn@svxtend.nl
 
 #### Groepsgenoten
- - Richard Visser, 1677755
- - Mark Evers, 2110802
- - Matthias Budding, 2368952
- - Jules Koster, 1653865
+ - Richard Visser, 1677755, HJ.Visser@student.han.nl
+ - Mark Evers, 2110802, MDA.Evers@student.han.nl
+ - Matthias Budding, 2368952, MD.Budding@student.han.nl
+ - Jules Koster, 1653865, JFJ.Koster@student.han.nl
  
 ### Links naar andere documenten
 [Software guidebook](https://github.com/HANICA-DWA/project-sep23-nyala/blob/main/groepsdocumenten/Software%20Guidebook.md)<br>
