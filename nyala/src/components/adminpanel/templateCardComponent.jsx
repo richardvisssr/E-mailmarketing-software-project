@@ -76,6 +76,12 @@ function TemplateCard(props) {
   }, [template.id]);
 
   const handleSendEmailClick = async () => {
+    if (!subject || subject.trim() === "") {
+      setError(true);
+      setErrorMessage("Onderwerp mag niet leeg zijn!");
+      return;
+    }
+
     if (mails.length > 0) {
       const emailSent = await sendDataToSendEmail(
         html,
@@ -89,14 +95,15 @@ function TemplateCard(props) {
   };
 
   const handleSubjectChange = (e) => {
-    if (e.target.value.trim() === "") {
-      alert("Onderwerp mag niet leeg zijn");
-      return;
-    }
     setSubject(e.target.value);
   };
 
   const handlePlanMail = async () => {
+    if (!subject || subject.trim() === "") {
+      setError(true);
+      setErrorMessage("Onderwerp mag niet leeg zijn!");
+      return;
+    }
     if (mails.length > 0) {
       try {
         const response = await fetch(" http://localhost:3001/planMail", {

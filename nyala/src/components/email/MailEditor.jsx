@@ -31,14 +31,9 @@ const MailEditor = ({ id }) => {
 
   const onDataChange = (data) => {
     setSentData(data);
-    console.log(data);
   };
 
   const handleSubjectChange = (e) => {
-    if (e.target.value.trim() === "") {
-      alert("Onderwerp mag niet leeg zijn");
-      return;
-    }
     setSubject(e.target.value);
   };
 
@@ -89,8 +84,7 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-      } catch (error) {
-      }
+      } catch (error) {}
     });
   };
 
@@ -132,13 +126,13 @@ const MailEditor = ({ id }) => {
           },
         }
       );
-  
+
       if (!response.ok) {
-        return
+        return;
       }
-  
+
       const design = await response.json();
-  
+
       if (editorRef.current) {
         editorRef.current.loadDesign(design.design);
       }
@@ -153,6 +147,12 @@ const MailEditor = ({ id }) => {
   };
 
   const handleSendEmailClick = async () => {
+    if (!subject || subject.trim() === "") {
+      setShowError(true);
+      setErrorMessage("Onderwerp mag niet leeg zijn!");
+      return;
+    }
+
     if (mails.length > 0) {
       const emailSent = await sendDataToSendEmail(
         html,
@@ -166,12 +166,16 @@ const MailEditor = ({ id }) => {
   };
 
   const handlePlanMail = async () => {
+    if (!subject || subject.trim() === "") {
+      setError(true);
+      setErrorMessage("Onderwerp mag niet leeg zijn!");
+      return;
+    }
     editorRef.current.exportHtml(async (data) => {
       const { html } = data;
       setHtml(html);
     });
 
-    
     if (mails.length > 0) {
       try {
         const response = await fetch(" http://localhost:3001/planMail", {
@@ -207,7 +211,7 @@ const MailEditor = ({ id }) => {
     <div>
       <h1 className="text-center">Mail Editor</h1>
       <div className="p-2 gap-3 d-flex justify-content-center">
-          {showError && (
+        {showError && (
           <Alert
             variant="danger"
             onClose={() => setShowError(false)}
@@ -217,14 +221,14 @@ const MailEditor = ({ id }) => {
           </Alert>
         )}
         {designSaved && (
-            <Alert
-              variant="success"
-              onClose={() => setDesignSaved(false)}
-              dismissible
-            >
-              Design is succesvol opgeslagen!
-            </Alert>
-          )}
+          <Alert
+            variant="success"
+            onClose={() => setDesignSaved(false)}
+            dismissible
+          >
+            Design is succesvol opgeslagen!
+          </Alert>
+        )}
       </div>
       <div className="p-2 gap-3 d-flex justify-content-center">
         <input
@@ -279,13 +283,14 @@ const MailEditor = ({ id }) => {
           <Modal.Title>Wil je '{title}' verturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <div className="p-2 gap-3 d-flex justify-content-center">
+          <div className="p-2 gap-3 d-flex justify-content-center">
             <input
               type="text"
               value={subject}
               onChange={handleSubjectChange}
               placeholder="Voer onderwerp van e-mail in"
               className="form-control text-center"
+              required
             />
           </div>
           <div className="form-check">
