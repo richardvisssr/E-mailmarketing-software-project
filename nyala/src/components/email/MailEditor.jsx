@@ -69,7 +69,7 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           setNotification({
             type: "error",
-            message: "Network response was not ok",
+            message: "Er ging iets fout met het opslaan van het design",
           });
         }
         setNotification({
@@ -79,7 +79,7 @@ const MailEditor = ({ id }) => {
       } catch (error) {
         setNotification({
           type: "error",
-          message: `Error saving design: ${error}`,
+          message: `Er ging iets fout met het opslaan van het design`,
         });
       }
     });
@@ -101,7 +101,7 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           setNotification({
             type: "error",
-            message: "Network response was not ok",
+            message: "Er ging iets fout met het opslaan van de html",
           });
         }
       } catch (error) {
@@ -128,13 +128,13 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           setNotification({
             type: "error",
-            message: "Network response was not ok",
+            message: "Er ging iets fout met het versturen van de mail",
           });
         }
       } catch (error) {
         setNotification({
           type: "error",
-          message: `Error sending email: ${error}`,
+          message: `Er ging iets mis met het versturen van de mail`,
         });
       }
       handleShow();
@@ -239,7 +239,7 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           setNotification({
             type: "error",
-            message: "Network response was not ok",
+            message: "Er is iets fout gegaan tijdens het inplannen",
           });
         }
         setModalNotification({

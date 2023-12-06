@@ -120,7 +120,7 @@ function SelectMailingLists(props) {
           if (!response.ok || !secondResponse.ok) {
             setNotification({
               type: "error",
-              message: "Network response was not ok",
+              message: "Er ging iets mis met het versturen van de mail",
             });
           }
 
@@ -134,7 +134,7 @@ function SelectMailingLists(props) {
       } else {
         setNotification({
           type: "error",
-          message: "Er zijn geen abonnees gevodnen voor deze mailinglijst",
+          message: "Er zijn geen abonnees gevonden voor deze mailinglijst",
         });
       }
     } else {
