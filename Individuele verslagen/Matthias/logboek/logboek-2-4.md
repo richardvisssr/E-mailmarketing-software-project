@@ -27,22 +27,22 @@
 |7 uur | https://github.com/HANICA-DWA/project-sep23-nyala/issues/82 | | Ik ben begonnen met de back end van de overzichtpagina, hiermee bedoel ik dat we een specifiek abonnement kunnen verwijderen van een gebruiker  |🤚 | https://github.com/HANICA-DWA/project-sep23-nyala/commit/6817953642923c7d66db9a06b8a677c59ad2c760 |
 | | | | | | |
 
-## Woensdag 29 december
+## Woensdag 29 november
 
 > Eventueel informatieve algemene opmerkingen over deze dag.
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 6 uur | Ik ben bezig geweest met de front en de back end van de maillinglijsten overzicht en de gebruikerstabel | Groepsgenoten indien relevant | Het meest vervelende was hier om de front end er een beetje mooi uit te laten zien omdat er hier en daar wat vervelende dingen waren. Ik heb een accordion gebruikt maar daar binnen in kan je niet een knop zetten dus dat was een gedoe  |😅 |https://github.com/HANICA-DWA/project-sep23-nyala/commit/a98967230deb6c8e1403393b69782858ddf3a5a7 |
 | | | | | | |
 
-## Donderdag 30 december
+## Donderdag 30 november
 
 > Eventueel informatieve algemene opmerkingen over deze dag.
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 8 uur | Ik ben bezig geweest met de front en de back end van de maillinglijsten overzicht en de gebruikerstabel, en we hebben pim weer even kort gesproken  |  | Moesten nog even de persoonlijke punten bijwerken zodat pim de tussentijdse beoordeling kon invullen  | 👍 | https://github.com/HANICA-DWA/project-sep23-nyala/commit/a56e61292600947d6a2d3b60823c237bdf9d7751 |
 | | | | | | |
 
 
@@ -53,5 +53,5 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 7 uur | Ik ben bezig geweest met de front en de back end van de maillinglijsten overzicht en de gebruikerstabel  | | Alle laatste dingetjes aangepast |🤞 | https://github.com/HANICA-DWA/project-sep23-nyala/commit/2105900a3e3c9fe8b33b3350ac0e20bfe52b0e08 |
 | | | | | | |
