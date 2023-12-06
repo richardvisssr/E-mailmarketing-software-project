@@ -33,7 +33,7 @@ router.delete("/deleteList", async (req, res) => {
   const { name } = req.body;
 
   try {
-    const existingList = await mailList.findOne();
+    const existingList = await mailList.findOne({ mailList: name });
 
     if (!existingList) {
       return res.status(404).json({ message: "List not found" });
@@ -46,7 +46,6 @@ router.delete("/deleteList", async (req, res) => {
 
     res.status(200).json({ message: "The list " + name + " is deleted" });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });

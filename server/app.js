@@ -67,9 +67,10 @@ webSocketServer.on("connection", (socket, req) => {
   });
 });
 
-httpServer.listen(port, () =>
-  console.log(`Listening on http://${host}:${port}`)
-);
+httpServer.listen(() => {
+  const port = httpServer.address().port;
+  console.log(`Listening on http://${host}:${port}`);
+});
 
 const server = app.listen(port, host, async () => {
   console.log("> connecting");

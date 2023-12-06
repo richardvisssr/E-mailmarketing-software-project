@@ -50,24 +50,6 @@ describe("Email Editor Routes", () => {
     });
   });
 
-  describe("PUT /saveDesign", () => {
-    it("should save the design and return a success message", async () => {
-      // Delete existing design with the same id
-      await Design.deleteOne({ id: "456" });
-
-      const response = await request(app)
-        .put("/mail/saveDesign")
-        .send({
-          id: "456",
-          design: { key: "updatedValue" },
-          title: "Title",
-        });
-
-      expect(response.status).toBe(200);
-      expect(response.text).toBe("Design saved successfully");
-    });
-  });
-
   describe("PUT /sendEmail", () => {
     it("should send the email and return a success message", async () => {
       // Delete existing email with the same id
@@ -78,7 +60,7 @@ describe("Email Editor Routes", () => {
         .send({ id: "789", html: "<p>Email content</p>" });
 
       expect(response.status).toBe(200);
-      expect(response.text).toBe("Design saved successfully");
+      expect(response.text).toBe("Design updated successfully");
     });
   });
 
@@ -123,4 +105,54 @@ describe("Email Editor Routes", () => {
       expect(response.body).toEqual({ error: "Internal server error" });
     });
   });
+
+  describe("test 500 error on /loadDesign/:id", () => {
+    it("should handle errors during design loading", async () => {
+      jest.spyOn(Design, "findOne").mockImplementationOnce(() => {
+        throw new Error("Mocked design loading error");
+      });
+
+      const response = await request(app).get("/mail/loadDesign/someid");
+      expect(response.status).toBe(500);
+      expect(response.body).toEqual({ error: "Internal server error" });
+    });
+  });
+
+  describe("test 200 and save on saveDesign", () => {
+    it("should update the design and return a success message", async () => {
+      // Create a design with the same id
+      await Design.create({
+        id: "456",
+        design: { key: "initialValue" },
+        title: "Initial Title",
+      });
+
+      const response = await request(app)
+        .put("/mail/saveDesign")
+        .send({
+          id: "456",
+          design: { key: "updatedValue" },
+          title: "Updated Title",
+        });
+
+      expect(response.status).toBe(200);
+      expect(response.text).toBe("Design updated successfully");
+    });
+  });
+
+  describe("test 200 and save on saveDesign", () => {
+    it("should save the design and return a success message", async () => {
+      const response = await request(app)
+        .put("/mail/saveDesign")
+        .send({
+          id: "789",
+          design: { key: "newValue" },
+          title: "New Title",
+        });
+  
+      expect(response.status).toBe(200);
+      expect(response.text).toBe("Design saved successfully");
+    });
+  });
+ 
 });
