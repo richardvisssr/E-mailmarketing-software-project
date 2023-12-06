@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import SubscriptionForm from "../categories/CategoriesComponent";
+import { Alert } from "react-bootstrap";
 import AlertComponent from "../alert/AlertComponent";
 
 function SelectMailingLists(props) {
@@ -18,7 +19,7 @@ function SelectMailingLists(props) {
       .catch((error) =>
         setNotification({
           type: "error",
-          message: "Er is iets misgegaan met het ophalen van de data",
+          message: "Er ging iets mis met het ophalen van de data",
         })
       );
   }, []);
@@ -35,7 +36,7 @@ function SelectMailingLists(props) {
           .catch((error) => {
             setNotification({
               type: "error",
-              message: "Er is iets misgegaan met het ophalen van de data",
+              message: "Er ging iets mis met het ophalen van de data",
             });
             return [];
           }),
@@ -44,7 +45,7 @@ function SelectMailingLists(props) {
           .catch((error) => {
             setNotification({
               type: "error",
-              message: "Er is iets misgegaan met het ophalen van de data",
+              message: "Er ging iets mis met het ophalen van de data",
             });
             return null;
           }),
@@ -57,7 +58,7 @@ function SelectMailingLists(props) {
         .catch((error) => {
           setNotification({
             type: "error",
-            message: "Er is iets misgegaan met het ophalen van de data",
+            message: "Er ging ergens iets mis",
           });
         });
     }
@@ -83,67 +84,69 @@ function SelectMailingLists(props) {
   };
 
   const handleSendEmailClick = async () => {
-    if (selectedMailingList.length > 0 && subscribers.length > 0) {
-      try {
-        const response = await fetch(
-          "http://localhost:3001/sendMail/sendEmail",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              html: html,
-              subscribers: subscribers,
-              id: id,
-            }),
-          }
-        );
+    if (selectedMailingList.length === 0) {
+      if (selectedMailingList.length > 0 && subscribers.length === 0) {
+        try {
+          const response = await fetch(
+            "http://localhost:3001/sendMail/sendEmail",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                html: html,
+                subscribers: subscribers,
+                id: id,
+              }),
+            }
+          );
 
-        const secondResponse = await fetch(
-          "http://localhost:3001/mail/sendEmail",
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              html: html,
-              id: id,
-              subscribers: subscribers,
-            }),
-          }
-        );
+          const secondResponse = await fetch(
+            "http://localhost:3001/mail/sendEmail",
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                html: html,
+                id: id,
+                subscribers: subscribers,
+              }),
+            }
+          );
 
-        if (!response.ok || !secondResponse.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          if (!response.ok || !secondResponse.ok) {
+            setNotification({
+              type: "error",
+              message: "Network response was not ok",
+            });
+          }
+
+          setNotification({
+            type: "success",
+            message: "E-mail is succesvol verstuurd!",
+          });
+        } catch (error) {
+          setNotification({ type: "error", message: error });
         }
-        setNotification({
-          type: "success",
-          message: "E-mail is succesvol verstuurd!",
-        });
-      } catch (error) {
+      } else {
         setNotification({
           type: "error",
-          message: "Er is iets misgegaan bij het versturen van de mail",
+          message: "Er zijn geen abonnees gevodnen voor deze mailinglijst",
         });
       }
     } else {
       setNotification({
         type: "error",
-        message: "Er i geen lijst geselecteerd",
+        message: "Selecteer een mailinglijst",
       });
     }
   };
 
   return (
     <div className="container mt-4">
-      {subscribers.length === 0 &&
-        selectedMailingList.length > 0 &&
-        setNotification({
-          type: "error",
-          message: "Er zijn geen abonnees voor deze lijst",
-        })}
       <AlertComponent notification={notification} />
 
       <label className="form-label">Selecteer Mailinglijst</label>

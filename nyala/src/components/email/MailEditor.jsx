@@ -12,7 +12,6 @@ const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 const MailEditor = ({ id }) => {
   const editorRef = useRef(null);
   const [show, setShow] = useState(false);
-  const [designSaved, setDesignSaved] = useState(false);
   const [mails, setMails] = useState([]);
   const [title, setTitle] = useState("");
   const [html, setHtml] = useState("");
@@ -23,6 +22,10 @@ const MailEditor = ({ id }) => {
   const [subject, setSubject] = useState("");
   const [showHeader, setShowHeader] = useState(false);
   const [notification, setNotification] = useState({ type: "", message: "" });
+  const [modalNotification, setModalNotification] = useState({
+    type: "",
+    message: "",
+  });
 
   useEffect(() => {
     setPlanned(false);
@@ -36,7 +39,10 @@ const MailEditor = ({ id }) => {
 
   const handleSubjectChange = (e) => {
     if (e.target.value.trim() === "") {
-      alert("Onderwerp mag niet leeg zijn");
+      setModalNotification({
+        type: "error",
+        message: "Onderwerp mag niet leeg zijn",
+      });
       return;
     }
     setSubject(e.target.value);
@@ -48,7 +54,6 @@ const MailEditor = ({ id }) => {
 
   const handleClose = () => {
     setShow(false);
-    setDesignSaved(false);
   };
   const handleShow = () => setShow(true);
 
@@ -63,9 +68,15 @@ const MailEditor = ({ id }) => {
           body: JSON.stringify({ design, id, title }),
         });
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          setNotification({
+            type: "error",
+            message: "Network response was not ok",
+          });
         }
-        setDesignSaved(true);
+        setNotification({
+          type: "success",
+          message: "Design is succesvol opgeslagen!",
+        });
       } catch (error) {
         setNotification({
           type: "error",
@@ -89,9 +100,17 @@ const MailEditor = ({ id }) => {
           body: JSON.stringify({ html: html, id: id }),
         });
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          setNotification({
+            type: "error",
+            message: "Network response was not ok",
+          });
         }
-      } catch (error) {}
+      } catch (error) {
+        setNotification({
+          type: "error",
+          message: `Error tijdens het opslaan van de html`,
+        });
+      }
     });
   };
 
@@ -108,7 +127,10 @@ const MailEditor = ({ id }) => {
           body: JSON.stringify({ html: html, id: id }),
         });
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          setNotification({
+            type: "error",
+            message: "Network response was not ok",
+          });
         }
       } catch (error) {
         setNotification({
@@ -137,6 +159,10 @@ const MailEditor = ({ id }) => {
       );
 
       if (!response.ok) {
+        setNotification({
+          type: "error",
+          message: `Er is iets misgegaan bij het laden van de mail`,
+        });
         return;
       }
 
@@ -194,7 +220,10 @@ const MailEditor = ({ id }) => {
           }),
         });
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          setNotification({
+            type: "error",
+            message: "Network response was not ok",
+          });
         }
         setEmailSent(true);
       } catch (error) {
@@ -212,15 +241,6 @@ const MailEditor = ({ id }) => {
       <h1 className="text-center">Mail Editor</h1>
       <div className="p-2 gap-3 d-flex justify-content-center">
         <AlertComponent notification={notification} />
-        {designSaved && (
-          <Alert
-            variant="success"
-            onClose={() => setDesignSaved(false)}
-            dismissible
-          >
-            Design is succesvol opgeslagen!
-          </Alert>
-        )}
       </div>
       <div className="p-2 gap-3 d-flex justify-content-center">
         <input
@@ -275,6 +295,7 @@ const MailEditor = ({ id }) => {
           <Modal.Title>Wil je '{title}' verturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <AlertComponent notification={modalNotification} />
           <div className="p-2 gap-3 d-flex justify-content-center">
             <input
               type="text"
