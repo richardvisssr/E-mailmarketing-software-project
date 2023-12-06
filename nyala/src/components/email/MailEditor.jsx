@@ -184,8 +184,10 @@ const MailEditor = ({ id }) => {
 
   const handleSendEmailClick = async () => {
     if (!subject || subject.trim() === "") {
-      setShowError(true);
-      setErrorMessage("Onderwerp mag niet leeg zijn!");
+      setModalNotification({
+        type: "error",
+        message: "Onderwerp mag niet leeg zijn!",
+      });
       return;
     }
 
