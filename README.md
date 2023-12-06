@@ -25,5 +25,6 @@ Robert Boudewijn
  - Jules Koster, 1653865
  
 ### Links naar andere documenten
-[Software guidebook](https://github.com/HANICA-DWA/project-sep23-nyala/blob/main/groepsdocumenten/Software%20Guidebook.md)
+[Software guidebook](https://github.com/HANICA-DWA/project-sep23-nyala/blob/main/groepsdocumenten/Software%20Guidebook.md)  
+
 [Algemene documentatie van de opdracht](https://github.com/HANICA-DWA/project-sep23-nyala/tree/main/groepsdocumenten/Template-projectplan-dwa)
