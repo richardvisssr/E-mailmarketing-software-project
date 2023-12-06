@@ -26,6 +26,7 @@ function TemplateCard(props) {
   const [notification, setNotification] = useState({ type: "", message: "" });
   const [subject, setSubject] = useState("");
   const [showHeader, setShowHeader] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const router = useRouter();
 
@@ -34,6 +35,10 @@ function TemplateCard(props) {
 
   const setNewTime = (event) => {
     setDateTime(event.target.value);
+  };
+
+  const handleSubjectChange = (e) => {
+    setSubject(e.target.value);
   };
 
   const onDataChange = (data) => {
@@ -103,10 +108,6 @@ function TemplateCard(props) {
     }
   };
 
-  const handleSubjectChange = (e) => {
-    setSubject(e.target.value);
-  };
-
   const handlePlanMail = async () => {
     if (!subject || subject.trim() === "") {
       setNotification({
@@ -161,11 +162,26 @@ function TemplateCard(props) {
   }
 
   const handleDelete = () => {
+    setShowDeleteModal(true);
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+  };
+
+  const confirmDelete = () => {
     fetch(`http://localhost:3001/template/${template.id}`, {
       method: "DELETE",
-    }).then(() => {
-      onDelete(template.id);
-    });
+    })
+      .then(() => {
+        onDelete(template.id);
+        setShowDeleteModal(false);
+      })
+      .catch((error) => {
+        console.error("Error deleting template:", error);
+        // Handle error as needed
+        setShowDeleteModal(false);
+      });
   };
 
   return (
@@ -207,6 +223,23 @@ function TemplateCard(props) {
         </Card>
       </Col>
 
+      <Modal show={showDeleteModal} onHide={cancelDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>Bevestig Verwijderen</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Weet je zeker dat je '{template.title}' wilt verwijderen?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={confirmDelete}>
+            Verwijderen
+          </Button>
+          <Button variant="secondary" onClick={cancelDelete}>
+            Annuleren
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <Modal show={show} onHide={handleClose} size="xl">
         <AlertComponent notification={notification} />
 
@@ -221,6 +254,7 @@ function TemplateCard(props) {
               onChange={handleSubjectChange}
               placeholder="Voer onderwerp van e-mail in"
               className="form-control text-center"
+              required
             />
           </div>
           <div className="form-check">
