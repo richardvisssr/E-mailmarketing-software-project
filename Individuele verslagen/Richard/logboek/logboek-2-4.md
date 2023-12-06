@@ -42,7 +42,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| 6 uur ex pauze | [Issue 117] https://github.com/HANICA-DWA/project-sep23-nyala/issues/117, Vandaag bezig geweest met template verwijderen Ging snel en vlot. Na review nog wat aanapssingen gedaan. Terwijl ik de taak aan het maken was heb ik ook nog wat andere aanpassingen gedaan zoals code opschonen en goede eroor handling toegevoegd. Verder bezig geweest voor individueel tussentijds verslag. | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 6 uur ex pauze | [Issue 117] https://github.com/HANICA-DWA/project-sep23-nyala/issues/117, Vandaag bezig geweest met template verwijderen Ging snel en vlot. Na review nog wat aanapssingen gedaan. Terwijl ik de taak aan het maken was heb ik ook nog wat andere aanpassingen gedaan zoals code opschonen en goede eroor handling toegevoegd. Verder bezig geweest voor individueel tussentijds verslag. | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | https://github.com/HANICA-DWA/project-sep23-nyala/commit/eb04fb9291e3cfc68f2ea8a7b7e5b430d2888214, https://github.com/HANICA-DWA/project-sep23-nyala/commit/62cc13f0914b8b03be3c52317628b6aba49ddbe2|
 | | | | | | |
 
 ## Vrijdag 1 december
