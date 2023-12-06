@@ -231,11 +231,17 @@ function TemplateCard(props) {
           Weet je zeker dat je '{template.title}' wilt verwijderen?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={confirmDelete}>
-            Verwijderen
-          </Button>
-          <Button variant="secondary" onClick={cancelDelete}>
+          <Button
+            onClick={cancelDelete}
+            className={`btn ${styles.knopSecondary}`}
+          >
             Annuleren
+          </Button>
+          <Button
+            onClick={confirmDelete}
+            className={`btn ${styles.knopPrimary}`}
+          >
+            Verwijderen
           </Button>
         </Modal.Footer>
       </Modal>
