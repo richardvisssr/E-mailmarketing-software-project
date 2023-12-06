@@ -6,7 +6,7 @@ export default function AlertComponent({ notification }) {
           <></>
         ) : (
           <div
-            className="alert alert-success mx-auto d-flex justify-content-around w-25"
+            className="alert alert-success mx-auto d-flex justify-content-around w-auto"
             role="alert"
           >
             <p>{notification.message}</p>
@@ -19,7 +19,7 @@ export default function AlertComponent({ notification }) {
           <></>
         ) : (
           <div
-            className="alert alert-danger mx-auto d-flex justify-content-center w-25"
+            className="alert alert-danger mx-auto d-flex justify-content-center w-auto"
             role="alert"
           >
             <p>{notification.message}</p>

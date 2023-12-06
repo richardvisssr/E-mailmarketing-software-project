@@ -16,16 +16,9 @@ const domain = `localhost:3000`; // e.g. svxtend.nl
 
 /**
  * Component for rendering a button to copy the subscribe link.
- * @param {Object} props - Component properties.
- * @param {string} props.list - Name of the mailing list.
+ * @param {string} list - Component properties.
  */
-export default function SubscribeLinkButton(props) {
-  /**
-   * Mailing list name from props.
-   * @type {string}
-   */
-  const list = props.list;
-
+export default function SubscribeLinkButton({ list }) {
   /**
    * Subscribe link constructed based on protocol, domain, and list.
    * @type {string}
@@ -58,12 +51,9 @@ export default function SubscribeLinkButton(props) {
    * Renders the component.
    */
   return (
-    <div className={`${styles.around} input-group-prepend`}>
+    <div className={`input-group-prepend`}>
       <button
-        type="button"
         className={`btn ${styles.buttonPrimary} rounded p-2`}
-        data-toggle="modal"
-        data-target="#exampleModal"
         onClick={handleCopy}
       >
         Link naar de lijst kopiëren

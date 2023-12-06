@@ -33,7 +33,7 @@ router.delete("/deleteList", async (req, res) => {
   const { name } = req.body;
 
   try {
-    const existingList = await mailList.findOne();
+    const existingList = await mailList.findOne({ mailList: name });
 
     if (!existingList) {
       return res.status(404).json({ message: "List not found" });
