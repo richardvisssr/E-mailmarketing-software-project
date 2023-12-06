@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import SubscriptionForm from "../categories/CategoriesComponent";
 import { Alert } from "react-bootstrap";
+import AlertComponent from "../alert/AlertComponent";
 
 function SelectMailingLists(props) {
   const { id } = props;
@@ -9,15 +10,18 @@ function SelectMailingLists(props) {
   const [selectedMailingList, setSelectedMailingList] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
   const [html, setHtml] = useState("");
-  const [emailSent, setEmailSent] = useState(false);
-  const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [notification, setNotification] = useState({ type: "", message: "" });
 
   useEffect(() => {
     fetch("http://localhost:3001/mail/getList")
       .then((response) => response.json())
       .then((data) => setMailingLists(data))
-      .catch((error) => setShowError(true) && setErrorMessage(error));
+      .catch((error) =>
+        setNotification({
+          type: "error",
+          message: "Er ging iets mis met het ophalen van de data",
+        })
+      );
   }, []);
 
   useEffect(() => {
@@ -30,15 +34,19 @@ function SelectMailingLists(props) {
         )
           .then((response) => response.json())
           .catch((error) => {
-            setShowError(true);
-            setErrorMessage(error);
+            setNotification({
+              type: "error",
+              message: "Er ging iets mis met het ophalen van de data",
+            });
             return [];
           }),
         fetch(`http://localhost:3001/mail/getEmail/${id}`)
           .then((response) => response.json())
           .catch((error) => {
-            setShowError(true);
-            setErrorMessage(error);
+            setNotification({
+              type: "error",
+              message: "Er ging iets mis met het ophalen van de data",
+            });
             return null;
           }),
       ])
@@ -48,8 +56,10 @@ function SelectMailingLists(props) {
           props.onDataChange({ html, subscribersData });
         })
         .catch((error) => {
-          setShowError(true);
-          setErrorMessage(error);
+          setNotification({
+            type: "error",
+            message: "Er ging ergens iets mis",
+          });
         });
     }
   }, [selectedMailingList, id]);
@@ -74,71 +84,70 @@ function SelectMailingLists(props) {
   };
 
   const handleSendEmailClick = async () => {
-    if (selectedMailingList.length > 0 && subscribers.length > 0) {
-      try {
-        const response = await fetch(
-          "http://localhost:3001/sendMail/sendEmail",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              html: html,
-              subscribers: subscribers,
-              id: id,
-            }),
-          }
-        );
+    if (selectedMailingList.length === 0) {
+      if (selectedMailingList.length > 0 && subscribers.length === 0) {
+        try {
+          const response = await fetch(
+            "http://localhost:3001/sendMail/sendEmail",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                html: html,
+                subscribers: subscribers,
+                id: id,
+              }),
+            }
+          );
 
-        const secondResponse = await fetch(
-          "http://localhost:3001/mail/sendEmail",
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              html: html,
-              id: id,
-              subscribers: subscribers,
-            }),
-          }
-        );
+          const secondResponse = await fetch(
+            "http://localhost:3001/mail/sendEmail",
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                html: html,
+                id: id,
+                subscribers: subscribers,
+              }),
+            }
+          );
 
-        if (!response.ok || !secondResponse.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          if (!response.ok || !secondResponse.ok) {
+            setNotification({
+              type: "error",
+              message: "Er ging iets mis met het versturen van de mail",
+            });
+          }
+
+          setNotification({
+            type: "success",
+            message: "E-mail is succesvol verstuurd!",
+          });
+        } catch (error) {
+          setNotification({ type: "error", message: error });
         }
-
-        setEmailSent(true);
-      } catch (error) {
-        setErrorMessage(`Error sending email: ${error}`);
-        setShowError(true);
-        setEmailSent(false);
+      } else {
+        setNotification({
+          type: "error",
+          message: "Er zijn geen abonnees gevonden voor deze mailinglijst",
+        });
       }
     } else {
-      setErrorMessage("Selecteer een mailinglijst met subscribers.");
-      setShowError(true);
+      setNotification({
+        type: "error",
+        message: "Selecteer een mailinglijst",
+      });
     }
   };
 
   return (
     <div className="container mt-4">
-      {showError && (
-        <Alert variant="danger" onClose={() => setShowError(false)} dismissible>
-          {errorMessage}
-        </Alert>
-      )}
-      {emailSent && (
-        <div className="alert alert-success" role="alert">
-          E-mail is succesvol verstuurd!
-        </div>
-      )}
-      {subscribers.length === 0 && selectedMailingList.length > 0 && (
-        <div className="alert alert-warning" role="alert">
-          Er zijn nog geen subscribers.
-        </div>
-      )}
+      <AlertComponent notification={notification} />
 
       <label className="form-label">Selecteer Mailinglijst</label>
       <SubscriptionForm

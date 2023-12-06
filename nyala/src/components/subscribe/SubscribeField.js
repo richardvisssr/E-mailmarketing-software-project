@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./AddField.module.css";
 import { useRouter } from "next/navigation";
+import AlertComponent from "../alert/AlertComponent";
 
 /**
  * Component for subscribing to a mailing list.
@@ -135,7 +136,12 @@ export default function SubscribeField(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (data.email === "") {
+    if (!data.name) {
+      setNotification({
+        type: "error",
+        message: "De naam is niet ingevuld.",
+      });
+    } else if (!data.email) {
       setNotification({
         type: "error",
         message: "Het emailadres is niet ingevuld.",
@@ -151,6 +157,10 @@ export default function SubscribeField(props) {
         message: "De maillijst bestaat niet.",
       });
     } else {
+      setNotification({
+        type: "succes",
+        message: "Email wordt toegevoegd.",
+      });
       setStatus(true);
     }
   };
@@ -193,32 +203,8 @@ export default function SubscribeField(props) {
       ) : lists.includes(list) ? (
         <div className="d-flex justify-content-center align-items-center py-5">
           <div>
-            <div>
-              {notification.type !== "succes" ? (
-                <></>
-              ) : (
-                <div
-                  className="alert alert-success d-flex justify-content-around"
-                  role="alert"
-                >
-                  <p>{notification.message}</p>
-                  <i className="bi bi-check"></i>
-                </div>
-              )}
-            </div>
-            <div>
-              {notification.type !== "error" ? (
-                <></>
-              ) : (
-                <div
-                  className="alert alert-danger d-flex justify-content-around"
-                  role="alert"
-                >
-                  <p>{notification.message}</p>
-                  <i className="bi bi-exclamation-triangle"></i>
-                </div>
-              )}
-            </div>
+            <AlertComponent notification={notification} />
+
             <form
               className={`input-group ${styles.form} d-flex flex-column`}
               onSubmit={handleSubmit}
@@ -252,7 +238,9 @@ export default function SubscribeField(props) {
             </form>
           </div>
         </div>
-      ) : router.push("/404")}
+      ) : (
+        router.push("/404")
+      )}
     </>
   );
 }

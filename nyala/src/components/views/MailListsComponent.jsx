@@ -260,8 +260,9 @@ export default function MailListComponent() {
 
   return (
     <div>
-      <AlertComponent notification={notification} />
-
+      <div className="d-flex justify-content-center">
+        <AlertComponent notification={notification} />
+      </div>
       <h1 className="text-center">Mail Lijsten</h1>
       <div className="input-group mb-3 mt-3 w-25 mx-auto d-flex align-items-center">
         <input

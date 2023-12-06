@@ -18,7 +18,13 @@ router.post("/sendEmail", async (req, res) => {
       },
     });
 
+    let sentSubscribers = [];
+
     for (const subscriber of subscribers) {
+      if (sentSubscribers.includes(subscriber.email)) {
+        continue;
+      }
+
       let mailOptions = {
         from: '"Xtend" <info@svxtend.nl>',
         to: subscriber.email,
@@ -55,6 +61,7 @@ router.post("/sendEmail", async (req, res) => {
       };
 
       await transporter.sendMail(mailOptions);
+      sentSubscribers.push(subscriber.email);
     }
     res.status(200).json({ success: true });
   } catch (error) {

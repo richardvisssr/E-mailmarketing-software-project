@@ -8,6 +8,7 @@ import { useEffect, useState, useRef } from "react";
 import Modal from "react-bootstrap/Modal";
 import SelectMailingLists from "../email/SendMail";
 import { nanoid } from "nanoid";
+import AlertComponent from "../alert/AlertComponent";
 import sendDataToSendEmail from "../emailService";
 
 function TemplateCard(props) {
@@ -15,7 +16,6 @@ function TemplateCard(props) {
   const { template, onDelete } = props;
   const [show, setShow] = useState(false);
   const [image, setImage] = useState("");
-  const [error, setError] = useState(false);
   const [html, setHtml] = useState("");
   const [sentData, setSentData] = useState([]);
   const [planned, setPlanned] = useState(false);
@@ -23,8 +23,10 @@ function TemplateCard(props) {
   const [emailSent, setEmailSent] = useState(false);
   const [dateTime, setDateTime] = useState("");
   const [subscribers, setSubscribers] = useState([]);
+  const [notification, setNotification] = useState({ type: "", message: "" });
   const [subject, setSubject] = useState("");
   const [showHeader, setShowHeader] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const router = useRouter();
 
@@ -33,6 +35,10 @@ function TemplateCard(props) {
 
   const setNewTime = (event) => {
     setDateTime(event.target.value);
+  };
+
+  const handleSubjectChange = (e) => {
+    setSubject(e.target.value);
   };
 
   const onDataChange = (data) => {
@@ -68,7 +74,10 @@ function TemplateCard(props) {
         const data = await response.json();
         setHtml(data.html);
       } catch (error) {
-        setError(true);
+        setNotification({
+          type: "error",
+          message: "Er is iets misgegaan bij het ophalen van de template",
+        });
       }
     };
 
@@ -76,27 +85,37 @@ function TemplateCard(props) {
   }, [template.id]);
 
   const handleSendEmailClick = async () => {
+    if (!subject || subject.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Onderwerp mag niet leeg zijn!",
+      });
+      return;
+    }
+
     if (mails.length > 0) {
-      const emailSent = await sendDataToSendEmail(
+      await sendDataToSendEmail(
         html,
         sentData.subscribersData,
         subject,
         showHeader,
         template.id
       );
-      setEmailSent(emailSent);
+      setNotification({
+        type: "success",
+        message: "Mail is succesvol verstuurd",
+      });
     }
-  };
-
-  const handleSubjectChange = (e) => {
-    if (e.target.value.trim() === "") {
-      alert("Onderwerp mag niet leeg zijn");
-      return;
-    }
-    setSubject(e.target.value);
   };
 
   const handlePlanMail = async () => {
+    if (!subject || subject.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Onderwerp mag niet leeg zijn!",
+      });
+      return;
+    }
     if (mails.length > 0) {
       try {
         const response = await fetch(" http://localhost:3001/planMail", {
@@ -115,11 +134,20 @@ function TemplateCard(props) {
           }),
         });
         if (!response.ok) {
-          setError(true);
+          setNotification({
+            type: "error",
+            message: "Er is iets misgegaan bij het versturen van de mail",
+          });
         }
-        setEmailSent(true);
+        setNotification({
+          type: "success",
+          message: "Mail is succesvol ingepland",
+        });
       } catch (error) {
-        setError(error.message);
+        setNotification({
+          type: "error",
+          message: "Er is iets misgegaan bij het versturen van de mail",
+        });
         setEmailSent(false);
       }
     }
@@ -134,11 +162,26 @@ function TemplateCard(props) {
   }
 
   const handleDelete = () => {
+    setShowDeleteModal(true);
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+  };
+
+  const confirmDelete = () => {
     fetch(`http://localhost:3001/template/${template.id}`, {
       method: "DELETE",
-    }).then(() => {
-      onDelete(template.id);
-    });
+    })
+      .then(() => {
+        onDelete(template.id);
+        setShowDeleteModal(false);
+      })
+      .catch((error) => {
+        console.error("Error deleting template:", error);
+        // Handle error as needed
+        setShowDeleteModal(false);
+      });
   };
 
   return (
@@ -148,13 +191,14 @@ function TemplateCard(props) {
           <Button variant="danger" onClick={handleDelete}>
             Verwijderen
           </Button>
-          {!error && (
+          {/* {!error && (
             <Card.Img
               variant="top"
               src={image.src}
               style={{ width: "100%", height: "auto" }}
             />
-          )}
+          )} */}
+
           <Card.Body>
             <Card.Title>{template.title}</Card.Title>
             <div className="d-flex justify-content-between">
@@ -179,12 +223,32 @@ function TemplateCard(props) {
         </Card>
       </Col>
 
+      <Modal show={showDeleteModal} onHide={cancelDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>Bevestig Verwijderen</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Weet je zeker dat je '{template.title}' wilt verwijderen?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={cancelDelete}
+            className={`btn ${styles.knopSecondary}`}
+          >
+            Annuleren
+          </Button>
+          <Button
+            onClick={confirmDelete}
+            className={`btn ${styles.knopPrimary}`}
+          >
+            Verwijderen
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <Modal show={show} onHide={handleClose} size="xl">
-        {emailSent && (
-          <div className="alert alert-success" role="alert">
-            E-mail is succesvol verstuurd!
-          </div>
-        )}
+        <AlertComponent notification={notification} />
+
         <Modal.Header closeButton>
           <Modal.Title>Wil je '{template.title}' versturen?</Modal.Title>
         </Modal.Header>
@@ -196,6 +260,7 @@ function TemplateCard(props) {
               onChange={handleSubjectChange}
               placeholder="Voer onderwerp van e-mail in"
               className="form-control text-center"
+              required
             />
           </div>
           <div className="form-check">
