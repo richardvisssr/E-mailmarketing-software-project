@@ -249,7 +249,9 @@ export default function SubscribersTable() {
 
   return (
     <div>
-      <AlertComponent notification={notification} />
+      <div className="d-flex justify-content-center">
+        <AlertComponent notification={notification} />
+      </div>
 
       <h1 className="text-center mb-2">Alle abonnees</h1>
       <div className="table-responsive p-5">
