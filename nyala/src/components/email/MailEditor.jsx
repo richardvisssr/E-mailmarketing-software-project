@@ -34,7 +34,6 @@ const MailEditor = ({ id }) => {
 
   const onDataChange = (data) => {
     setSentData(data);
-    console.log(data);
   };
 
   const handleSubjectChange = (e) => {
@@ -184,6 +183,12 @@ const MailEditor = ({ id }) => {
   };
 
   const handleSendEmailClick = async () => {
+    if (!subject || subject.trim() === "") {
+      setShowError(true);
+      setErrorMessage("Onderwerp mag niet leeg zijn!");
+      return;
+    }
+
     if (mails.length > 0) {
       const emailSent = await sendDataToSendEmail(
         html,
@@ -197,6 +202,11 @@ const MailEditor = ({ id }) => {
   };
 
   const handlePlanMail = async () => {
+    if (!subject || subject.trim() === "") {
+      setError(true);
+      setErrorMessage("Onderwerp mag niet leeg zijn!");
+      return;
+    }
     editorRef.current.exportHtml(async (data) => {
       const { html } = data;
       setHtml(html);
@@ -303,6 +313,7 @@ const MailEditor = ({ id }) => {
               onChange={handleSubjectChange}
               placeholder="Voer onderwerp van e-mail in"
               className="form-control text-center"
+              required
             />
           </div>
           <div className="form-check">
