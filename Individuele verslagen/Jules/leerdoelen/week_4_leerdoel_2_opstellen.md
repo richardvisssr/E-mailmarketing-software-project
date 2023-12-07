@@ -19,17 +19,17 @@ Ik merk dat ik soms moeite heb om volledig gefocust te zijn op mijn taken, waard
 
 ### Ik ga op de volgende manier(en) werken aan mijn leerdoel:
 - Op de juiste momenten pauze nemen om even tot rust te komen.
-- Geluidsdempende oortjes meenemen zodat ik minder snel afgeleid wordt door externe geluiden
+- Geluidsdempende oortjes meenemen zodat ik minder snel afgeleid wordt door externe geluiden.
 
 ### Om mijn leerdoel te bereiken ga ik de volgende acties op de volgende momenten uitvoeren:
 
 - Tijdens vergaderingen actief deelnemen en afleiding minimaliseren.
-- Wekelijks mijn voortgang evalueren en eventuele aanpassingen maken aan mijn aanpak.
+- Wekelijks mijn vooruitgang checken om te zien of ik goed bezig ben.
 
 ### Om mijn leerdoel te bereiken ga ik hulp vragen aan de volgende personen:
 
-
+Mijn groepsgenoten waar nodig.
 
 ### Ik heb mijn leerdoel bereikt als (formuleer meetbare criteria):
-
+Als ik mij beter kan concentreren voor een langere periode achter elkaar.
 
