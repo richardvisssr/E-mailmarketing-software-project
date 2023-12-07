@@ -79,6 +79,23 @@ describe("PUT /planMail", () => {
     expect(response.text).toBe("Mail planned successfully");
   });
 
+  it("should respond with success message when planning a new mail", async () => {
+    const response = await request(app)
+      .put("/planMail")
+      .send({
+        id: "testPlannedEmailId2",
+        title: "testTitle",
+        html: "<p>Test HTML content</p>",
+        subs: [{ _id: "1234568", name: "test1", email: "jan@gmail.com" }],
+        date: new Date(),
+        showHeader: true,
+        subject: "testSubject",
+      });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.text).toBe("Mail planned successfully");
+  });
+
   it("should respond with an error when an internal server error occurs", async () => {
     jest.spyOn(PlannedEmail, "findOne").mockImplementation(() => {
       throw new Error("Internal server error");
@@ -142,6 +159,10 @@ describe("DELETE /planMail/:id", () => {
 
 describe("PUT /updateMail", () => {
   it("should respond with success message when updating a planned mail", async () => {
+    jest.spyOn(PlannedEmail, "findOne").mockImplementation(() => {
+      return { save: () => {} };
+    });
+
     const response = await request(app).put("/updateMail").send({
       id: "testPlannedEmailId",
       date: new Date(),
@@ -151,9 +172,13 @@ describe("PUT /updateMail", () => {
     expect(response.text).toBe("Mail updated successfully");
   });
 
-  it("should respond with an error when the mail is not found", async () => {
+  it("should respond with a 404 error when the planned mail is not found", async () => {
+    jest.spyOn(PlannedEmail, "findOne").mockImplementation(() => {
+      return null;
+    });
+
     const response = await request(app).put("/updateMail").send({
-      id: "nonExistentMailId",
+      id: "testPlannedEmailId",
       date: new Date(),
     });
 
