@@ -22,7 +22,9 @@ Zelf heeft het een positief effect gehad. Ik heb dus zoals hierboven beschreven 
 
 
 ### Het effect op het groepsproces was:
-Mijn groep merkte geen negatieve effecten op het proces. Door het voortouw te nemen in het voorbereiden zorgt dat ook een beetje voor meer rust binnen de groep.
+In de afgelopen weken heb ik actief gewerkt aan het optimaliseren van mijn vermogen om mijn tijd effectiever te organiseren. Dit leerdoel stelde ik op met als doel efficiënter te werken en tijdig aan mijn verplichtingen te voldoen. 
+
+Gedurende het project wist ik wanneer er iets gepland was en deelde ik de tijd goed in, ik heb zoveel mogelijk gebruik gemaakt van onze opgestelde dagplanning en hield op vaste momenten pauze. Mijn groepsgenoten waren er over eens dat ik mijn tijd inderdaad goed indeel en dat hier eigenlijk niks op aan te merken is ook gaven ze aan dat ik soms snel afgeleid raak. Ik ben erg blij met deze progressie, het zorgde voor een goede groepssfeer.
 
 >> check bijgaand document en werk je  leerdoel zodanig bij dat het geheel een goed onderbouwd (denk aan theorie uit de PS-course) en aannemelijk beargumenteerd geheel gaat vormen. Kijk ook bij het hoofdstuk reflectie om dit onderdeel goed te verwoorden. Nu is je verwerking onder de maat.  
 [Reader leerdoelen en reflecteren.pdf](https://github.com/HANICA-DWA/project-sep23-nyala/files/13538873/Reader.leerdoelen.en.reflecteren.pdf)
