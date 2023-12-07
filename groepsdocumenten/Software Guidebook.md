@@ -25,9 +25,12 @@ Deze software zal worden gebruikt door Xtend gebruikers die verantwoordelijk zij
 
 ## context diagram
 
-Hier wordt duidelijk dat er twee belanghebbenden zijn in de applicatie. De gebruiker fungeert als beheerder en heeft de bevoegdheid voor CRUD-acties. Aan de andere kant maakt de subscriber beperkt gebruik van de applicatie, alleen wanneer hij zich wil aan- of afmelden. Onze applicatie maakt gebruik van een extern systeem voor het bewerken van e-mails.
-
 <img width="424" alt="image" src="https://github.com/HANICA-DWA/project-sep23-nyala/assets/93944422/d6049e6e-a241-443f-8c4f-500627934420">
+</br>
+</br>
+Een contextdiagram biedt in één oogopslag een overzicht van hoe de applicatie wordt gebruikt en door welke personen. 
+
+Hier wordt duidelijk dat er twee belanghebbenden zijn in de applicatie. De gebruiker fungeert als beheerder en heeft de bevoegdheid voor CRUD-acties. Aan de andere kant maakt de subscriber beperkt gebruik van de applicatie, alleen wanneer hij zich wil aan- of afmelden. Onze applicatie maakt gebruik van een extern systeem voor het bewerken van e-mails.
 
 
 
