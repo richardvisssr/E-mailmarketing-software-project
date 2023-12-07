@@ -157,13 +157,13 @@ const MailEditor = ({ id }) => {
         }
       );
 
-      if (!response.ok) {
-        setNotification({
-          type: "error",
-          message: `Er is iets misgegaan bij het laden van de mail`,
-        });
-        return;
-      }
+      // if (!response.ok) {
+      //   setNotification({
+      //     type: "error",
+      //     message: `Er is iets misgegaan bij het laden van de mail`,
+      //   });
+      //   return;
+      // }
 
       const design = await response.json();
 
@@ -309,7 +309,7 @@ const MailEditor = ({ id }) => {
         <AlertComponent notification={modalNotification} />
 
         <Modal.Header closeButton>
-          <Modal.Title>Wil je '{title}' verturen?</Modal.Title>
+          <Modal.Title>Wil je '{title}' versturen?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="p-2 gap-3 d-flex justify-content-center">
