@@ -3,7 +3,6 @@
 ### De komende 4 weken ga ik met het volgende leerdoel aan de slag: 
 
 
-
 ### Mijn motivatie om aan dit leerdoel te werken is:
 
 
