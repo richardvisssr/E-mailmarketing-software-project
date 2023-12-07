@@ -5,4 +5,4 @@ Uiteindelijk zal de Docker omgeving draaien op een server, aangeleverd door Xten
 Er is nog niet bepaald wat de ingedeelde CPU en geheugen capaciteiten zullen zijn. Dit zal worden gedaan wanneer de Docker omgeving volledig draait en getest is.
 Wanneer er een fout is ontstaan op de deployment server en er moet een rollback naar een vorige versie van de code komen, kan men de gewenste versie van Github halen, het originele commande uitvoeren, en dan werkt de applicatie weer. Vanuit ons wordt er dus ook geen data replicatie geleverd.
 
-<img src="afbeeldingen/Docker-opstelling.png" alt="Docker opstelling"  width="500">
+<img src="../afbeeldingen/Docker-opstelling.png" alt="Docker opstelling"  width="500">
