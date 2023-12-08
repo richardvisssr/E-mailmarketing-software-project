@@ -29,3 +29,19 @@ Notules Sprint Planning 2
  - Modal moet sluiten nadat de mail verstuurd is of ingeplant is. Dit gebeurt nu niet.<br>
  - Na het inschrijven moet er een bevestiging getoond worden en een foutmelding wanneer je een bestaande email probeert in te schrijven.<br>
 </p>
+
+<h2>Planning sprint 3:</h2>
+<h3>Doelen:</h3>
+<p>
+ - Emailanaylse toevoegen aan de webapplicatie. Hoe vaak zijn ze geopend, hoevaak geklikt op link, hoeveel mails behoud de subscribers. Per template alle statestieken kunnen zien en dit kunnen vergelijken met een andere template
+ - Subscribers kunnen toevoegen via een API call. Dit zouden ze dan kunnen doen via hun eigen website. Hier komt ook dan documentatie bij.
+ - Geautomatiseerd testen van de webapplicatie. Dit moet gebeuren met behulp van GitHub Actions.
+ - Herbouwen van de subscribers/maillijsten overzichtspagina.
+ - Voortgang van de geplande mails kunnen zien op de agenda pagina.
+</p>
+
+<h3>Demo voor na de sprints:</h3>
+<p>
+ Door de applicatie heen lopen. Laat zien wat ons eerste idee was en vervolgens door de belangrijkste use cases voor het bestuur heen lopen en laten zien hoe 'makkelijk' alles gaat.
+</p>
+</p>
