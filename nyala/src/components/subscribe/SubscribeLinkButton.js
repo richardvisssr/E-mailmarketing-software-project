@@ -12,18 +12,20 @@ const PROTOCOL = `http`; // e.g. https
  * Domain for constructing the subscribe link.
  * @type {string}
  */
-const domain = `localhost:3000`; // e.g. svxtend.nl
+const DOMAIN = `localhost:3000`; // e.g. svxtend.nl
 
 /**
  * Component for rendering a button to copy the subscribe link.
- * @param {string} list - Component properties.
+ * @param {Object} props - Component properties.
+ * @param {string} props.list - The mailing list for which to generate the subscribe link.
+ * @returns {JSX.Element} The JSX element representing the component.
  */
 export default function SubscribeLinkButton({ list }) {
   /**
    * Subscribe link constructed based on protocol, domain, and list.
    * @type {string}
    */
-  const link = `${protocol}://${domain}/${list}/subscribe`;
+  const link = `${PROTOCOL}://${DOMAIN}/${list}/subscribe`;
 
   /**
    * State hook for managing the visibility of the copy notification.
@@ -48,7 +50,9 @@ export default function SubscribeLinkButton({ list }) {
   const handleClose = () => setShowNotification(false);
 
   /**
+   * 
    * Renders the component.
+   * @returns {JSX.Element} The JSX element representing the component.
    */
   return (
     <div className={`input-group-prepend`}>

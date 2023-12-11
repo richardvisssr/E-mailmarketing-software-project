@@ -1,15 +1,74 @@
 import { useEffect, useState } from "react";
 import AlertComponent from "../alert/AlertComponent";
 import EmailForm from "./EmailForm";
+import Spinner from "../spinner/Spinner";
+
+/**
+ * Messages to show when an error occurs.
+ * @type {string}
+ */
+const NAME_REQUIRED = "De naam is niet ingevuld.";
+const EMAIL_REQUIRED = "Het emailadres is niet ingevuld.";
+const INVALID_EMAIL_FORMAT = "Het emailadres is geen valide formaat.";
+const LIST_NOT_FOUND = "De maillijst bestaat niet.";
+const EXCESS_LISTS = "Er zijn te veel mailinglists gekozen.";
+const NO_LIST = "Er is geen mailinglijst gekozen.";
+const NO_LISTS_MADE = "Er zijn nog geen maillijsten gemaakt.";
+const FETCH_PROBLEM = "Er is iets foutgegaan tijdens het ophalen.";
+const ADDING_PROBLEM =
+  "Er heeft zich een fout opgetreden tijdens het toevoegen van de mail.";
+const MAIL_IN_USE = "Het ingevulde emailadres is al in gebruik!";
+
+/**
+ * Message to show when a subscriber gets succesfully added.
+ * @type {string}
+ */
+const SUBSCRIBER_ADDED = "Abonnee succesvol toegevoegd.";
+
+/**
+ * Label for the form.
+ * @type {string}
+ */
+const FORM_LABEL =
+  "Vul een naam en email in, om toe te voegen aan een emaillijst";
 
 /**
  * Functional component for adding email and subscribing to mailing lists.
  * @returns {JSX.Element} The JSX element representing the component.
  */
 export default function AddField() {
+  /**
+   * State hook for managing the form data (email, list, name).
+   * @type {Object}
+   * @property {string|undefined} email - The email address.
+   * @property {Array} list - The selected mailing lists.
+   * @property {string} name - The name associated with the email.
+   */
   const [data, setData] = useState({ email: undefined, list: [], name: "" });
+
+  /**
+   * State hook for managing the status of email submission.
+   * @type {boolean}
+   */
   const [status, setStatus] = useState(false);
+
+  /**
+   * State hook for managing the mailing lists fetched from the server.
+   * @type {Array}
+   */
   const [lists, setLists] = useState([]);
+
+  /**
+   * State hook for managing loading state.
+   */
+  const [loading, setLoading] = useState(true);
+
+  /**
+   * State hook for managing notification data (type and message).
+   * @type {Object}
+   * @property {string} type - The type of notification (e.g., "success", "error").
+   * @property {string} message - The notification message.
+   */
   const [notification, setNotification] = useState({ type: "", message: "" });
 
   /**
@@ -32,14 +91,16 @@ export default function AddField() {
         const response = await fetch("http://localhost:3001/mail/getList");
         const body = await response.json();
         if (!response.ok) {
-          setErrorNotification("Er is iets foutgegaan tijdens het ophalen");
+          setErrorNotification(FETCH_PROBLEM);
         } else if (!body[0] || body[0].mailList === undefined) {
-          setErrorNotification("Er zijn nog geen maillijsten gemaakt.");
+          setErrorNotification(NO_LISTS_MADE);
         } else {
           setLists(body[0].mailList);
         }
       } catch (err) {
-        setErrorNotification("Er is iets foutgegaan tijdens het ophalen");
+        setErrorNotification(FETCH_PROBLEM);
+      } finally {
+        setLoading(false);
       }
     };
     fetchlists();
@@ -70,7 +131,7 @@ export default function AddField() {
             setStatus(false);
             setNotification({
               type: "success",
-              message: "Email succesvol toegevoegd.",
+              message: SUBSCRIBER_ADDED,
             });
             return;
           }
@@ -81,16 +142,12 @@ export default function AddField() {
             response.status === 400 &&
             responseData.message === "Bad Request: Email already used"
           ) {
-            setErrorNotification("Het ingevulde emailadres is al in gebruik!");
+            setErrorNotification(MAIL_IN_USE);
           } else {
-            setErrorNotification(
-              "Er heeft zich een fout opgetreden tijdens het toevoegen van de mail."
-            );
+            setErrorNotification(ADDING_PROBLEM);
           }
         } catch (error) {
-          setErrorNotification(
-            "Er heeft zich een fout opgetreden tijdens het toevoegen van de mail."
-          );
+          setErrorNotification(ADDING_PROBLEM);
         }
       };
       postEmail();
@@ -105,7 +162,7 @@ export default function AddField() {
     event.preventDefault();
 
     if (data.list.length === 0) {
-      setErrorNotification("Er is geen mailinglijst gekozen.");
+      setErrorNotification(NO_LIST);
       return;
     }
 
@@ -117,27 +174,27 @@ export default function AddField() {
     });
 
     if (!inLists) {
-      setErrorNotification("De gekozen mailinglijst bestaat niet.");
+      setErrorNotification(LIST_NOT_FOUND);
       return;
     }
 
     if (!data.name) {
-      setErrorNotification("De naam is niet ingevuld.");
+      setErrorNotification(NAME_REQUIRED);
       return;
     }
 
     if (!data.email) {
-      setErrorNotification("Het emailadres is niet ingevuld.");
+      setErrorNotification(EMAIL_REQUIRED);
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-      setErrorNotification("Het emailadres is geen valide formaat.");
+      setErrorNotification(INVALID_EMAIL_FORMAT);
       return;
     }
 
     if (data.list.length > lists.length) {
-      setErrorNotification("Er zijn te veel mailinglists gekozen.");
+      setErrorNotification(EXCESS_LISTS);
       return;
     }
 
@@ -179,20 +236,31 @@ export default function AddField() {
     setData({ ...data, list: updatedList });
   };
 
+  /**
+   * Renders the component.
+   * @returns {JSX.Element} The JSX element representing the component.
+   */
   return (
-    <div className="d-flex justify-content-center align-items-center py-5">
-      <div>
-        <AlertComponent notification={notification} />
-        <EmailForm
-          handleSubmit={handleSubmit}
-          handleNameChange={handleNameChange}
-          handleEmailChange={handleEmailChange}
-          handleCheckboxChange={handleCheckboxChange}
-          labelMessage="Vul een naam en email in, om toe te voegen aan een emaillijst"
-          lists={lists}
-          initialValues={data}
-        />
-      </div>
-    </div>
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="d-flex justify-content-center align-items-center py-5">
+          <div>
+            <h2 className="mb-3">Abonnee toevoegen</h2>
+            <AlertComponent notification={notification} />
+            <EmailForm
+              handleSubmit={handleSubmit}
+              handleNameChange={handleNameChange}
+              handleEmailChange={handleEmailChange}
+              handleCheckboxChange={handleCheckboxChange}
+              labelMessage={FORM_LABEL}
+              lists={lists}
+              initialValues={data}
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 }

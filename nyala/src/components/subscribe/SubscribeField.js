@@ -5,6 +5,25 @@ import EmailForm from "./EmailForm";
 import Spinner from "../spinner/Spinner";
 
 /**
+ * Messages to show when an error occurs.
+ * @type {string}
+ */
+const NAME_REQUIRED = "De naam is niet ingevuld.";
+const EMAIL_REQUIRED = "Het emailadres is niet ingevuld.";
+const INVALID_EMAIL_FORMAT = "Het emailadres is geen valide formaat.";
+const LIST_NOT_FOUND = "De maillijst bestaat niet.";
+const NO_LISTS_MADE = "Er zijn nog geen maillijsten gemaakt.";
+const FETCH_PROBLEM = "Er is iets foutgegaan tijdens het ophalen.";
+const ADDING_PROBLEM =
+  "Er heeft zich een fout opgetreden tijdens het toevoegen van de mail.";
+
+/**
+ * Message to show when a subscriber gets succesfully added.
+ * @type {string}
+ */
+const SUBSCRIBER_ADDED = "Abonnee succesvol toegevoegd.";
+
+/**
  * Component for subscribing to a mailing list.
  * @param {Object} props - Component properties.
  * @param {string} props.list - Mailing list name.
@@ -41,9 +60,26 @@ export default function SubscribeField(props) {
   const list = props.list;
 
   /**
+   * Label for the form.
+   * @type {string}
+   */
+  const FORM_LABEL = `Vul een naam en email in, om toe te voegen aan ${list}`;
+
+  /**
    * Router hook for programmatic navigation.
    */
   const router = useRouter();
+
+  /**
+   * Sets an error notification.
+   * @param {string} message - The error message.
+   */
+  const setErrorNotification = (message) => {
+    setNotification({
+      type: "error",
+      message,
+    });
+  };
 
   /**
    * Effect hook for fetching mailing lists and updating state.
@@ -57,26 +93,14 @@ export default function SubscribeField(props) {
         const response = await fetch("http://localhost:3001/mail/getList");
         const body = await response.json();
         if (!response.ok) {
-          setNotification({
-            type: "error",
-            message: "Er is iets foutgegaan tijdens het ophalen",
-          });
-        } else if (
-          response.ok &&
-          (!body[0] || body[0].mailList === undefined)
-        ) {
-          setNotification({
-            type: "error",
-            message: "Er zijn nog geen maillijsten gemaakt.",
-          });
+          setErrorNotification(FETCH_PROBLEM);
+        } else if (!body[0] || body[0].mailList === undefined) {
+          setErrorNotification(NO_LISTS_MADE);
         } else {
           setLists(body[0].mailList);
         }
       } catch (error) {
-        setNotification({
-          type: "error",
-          message: "Er is iets foutgegaan tijdens het ophalen",
-        });
+        setErrorNotification(FETCH_PROBLEM);
       } finally {
         setLoading(false);
       }
@@ -104,26 +128,19 @@ export default function SubscribeField(props) {
               }),
             }
           );
+
           if (response.ok) {
             setData({ email: undefined, name: "" });
             setStatus(false);
             setNotification({
               type: "success",
-              message: "Email succesvol toegevoegd.",
+              message: SUBSCRIBER_ADDED,
             });
-          } else if (!response.ok) {
-            setNotification({
-              type: "error",
-              message:
-                "Er heeft zich een fout opgetreden tijdens het toevoegen van de mail.",
-            });
+          } else {
+            setErrorNotification(ADDING_PROBLEM);
           }
         } catch (error) {
-          setNotification({
-            type: "error",
-            message:
-              "Er heeft zich een fout opgetreden tijdens het toevoegen van de mail.",
-          });
+          setErrorNotification(ADDING_PROBLEM);
         }
       };
       postEmail();
@@ -137,26 +154,21 @@ export default function SubscribeField(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (!data.name) {
-      setNotification({
-        type: "error",
-        message: "De naam is niet ingevuld.",
-      });
-    } else if (!data.email) {
-      setNotification({
-        type: "error",
-        message: "Het emailadres is niet ingevuld.",
-      });
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-      setNotification({
-        type: "error",
-        message: "Het emailadres is geen valide formaat.",
-      });
-    } else if (!lists.includes(list)) {
-      setNotification({
-        type: "error",
-        message: "De maillijst bestaat niet.",
-      });
+    if (
+      !data.name ||
+      !data.email ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email) ||
+      !lists.includes(list)
+    ) {
+      setErrorNotification(
+        !data.name
+          ? NAME_REQUIRED
+          : !data.email
+          ? EMAIL_REQUIRED
+          : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)
+          ? INVALID_EMAIL_FORMAT
+          : LIST_NOT_FOUND
+      );
     } else {
       setStatus(true);
     }
@@ -167,7 +179,7 @@ export default function SubscribeField(props) {
    * @param {Object} event - The change event.
    */
   const handleEmailChange = (event) => {
-    if (notification.type === "succes") {
+    if (notification.type === "success") {
       setNotification({ type: "", message: "" });
     }
     setData({ ...data, email: event.target.value });
@@ -178,7 +190,7 @@ export default function SubscribeField(props) {
    * @param {Object} event - The change event.
    */
   const handleNameChange = (event) => {
-    if (notification.type === "succes") {
+    if (notification.type === "success") {
       setNotification({ type: "", message: "" });
     }
     setData({ ...data, name: event.target.value });
@@ -194,12 +206,13 @@ export default function SubscribeField(props) {
       ) : lists.includes(list) ? (
         <div className="d-flex justify-content-center align-items-center py-5">
           <div>
+            <h2 className="mb-3">Abonneren</h2>
             <AlertComponent notification={notification} />
             <EmailForm
               handleSubmit={handleSubmit}
               handleNameChange={handleNameChange}
               handleEmailChange={handleEmailChange}
-              labelMessage={`Vul een naam en email in, om toe te voegen aan ${list}.`}
+              labelMessage={FORM_LABEL}
               lists={lists}
               initialValues={data}
             />
