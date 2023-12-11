@@ -11,6 +11,7 @@ const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
 const MailEditor = ({ id }) => {
   const editorRef = useRef(null);
+  const [headerText, setHeaderText] = useState("");
   const [show, setShow] = useState(false);
   const [mails, setMails] = useState([]);
   const [title, setTitle] = useState("");
@@ -34,6 +35,17 @@ const MailEditor = ({ id }) => {
 
   const onDataChange = (data) => {
     setSentData(data);
+  };
+
+  const handleHeaderTextChange = (e) => {
+    if (e.target.value.trim() === "") {
+      setModalNotification({
+        type: "error",
+        message: "Header mag niet leeg zijn",
+      });
+      return;
+    }
+    setHeaderText(e.target.value);
   };
 
   const handleSubjectChange = (e) => {
@@ -197,6 +209,7 @@ const MailEditor = ({ id }) => {
         sentData.subscribersData,
         subject,
         showHeader,
+        headerText,
         id
       );
       setModalNotification({
@@ -220,6 +233,7 @@ const MailEditor = ({ id }) => {
     });
 
     if (mails.length > 0) {
+      
       try {
         const response = await fetch(" http://localhost:3001/planMail", {
           method: "PUT",
@@ -233,6 +247,7 @@ const MailEditor = ({ id }) => {
             subs: sentData.subscribersData,
             date: dateTime,
             showHeader: showHeader,
+            headerText: headerText,
             subject: subject,
           }),
         });
@@ -330,6 +345,21 @@ const MailEditor = ({ id }) => {
             />
             <label className="form-check-label">Header toevoegen</label>
           </div>
+          {showHeader && (
+            <div className="p-2 gap-3 d-flex flex-column justify-content-center">
+              <label className="form-label">
+                Gebruik {"{name}"} om naam toe te voegen, {"{image}"} om xtend
+                logo toe te voegen en {"<br>"} om een nieuwe regel te beginnen
+              </label>
+              <textarea
+                value={headerText}
+                onChange={handleHeaderTextChange}
+                placeholder="Voer header tekst in"
+                className="form-control text-center"
+                rows="4" // Set the number of rows as needed
+              />
+            </div>
+          )}
           <SelectMailingLists
             id={id}
             setEmails={setMails}

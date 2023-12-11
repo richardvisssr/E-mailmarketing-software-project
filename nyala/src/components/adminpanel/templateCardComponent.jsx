@@ -6,13 +6,14 @@ import Button from "react-bootstrap/Button";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import Modal from "react-bootstrap/Modal";
-import SelectMailingLists from "../email/SendMail";
+import SelectMailingLists from "../templateEditor/SendMail";
 import { nanoid } from "nanoid";
 import AlertComponent from "../alert/AlertComponent";
 import sendDataToSendEmail from "../emailService";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
+  const [headerText, setHeaderText] = useState("");
   const { template, onDelete } = props;
   const [show, setShow] = useState(false);
   const [image, setImage] = useState("");
@@ -37,7 +38,25 @@ function TemplateCard(props) {
     setDateTime(event.target.value);
   };
 
+  const handleHeaderTextChange = (e) => {
+    if (e.target.value.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Header mag niet leeg zijn",
+      });
+      return;
+    }
+    setHeaderText(e.target.value);
+  };
+
   const handleSubjectChange = (e) => {
+    if (e.target.value.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Onderwerp mag niet leeg zijn",
+      });
+      return;
+    }
     setSubject(e.target.value);
   };
 
@@ -99,6 +118,7 @@ function TemplateCard(props) {
         sentData.subscribersData,
         subject,
         showHeader,
+        headerText,
         template.id
       );
       setNotification({
@@ -130,6 +150,7 @@ function TemplateCard(props) {
             subs: subscribers,
             date: dateTime,
             showHeader: showHeader,
+            headerText: headerText,
             subject: subject,
           }),
         });
@@ -271,6 +292,21 @@ function TemplateCard(props) {
             />
             <label className="form-check-label">Header toevoegen</label>
           </div>
+          {showHeader && (
+            <div className="p-2 gap-3 d-flex flex-column justify-content-center">
+              <label className="form-label">
+                Gebruik {"{name}"} om naam toe te voegen, {"{image}"} om xtend
+                logo toe te voegen en {"<br>"} om een nieuwe regel te beginnen
+              </label>
+              <textarea
+                value={headerText}
+                onChange={handleHeaderTextChange}
+                placeholder="Voer header tekst in"
+                className="form-control text-center"
+                rows="4" // Set the number of rows as needed
+              />
+            </div>
+          )}
           <SelectMailingLists
             id={template.id}
             setEmails={setEmails}

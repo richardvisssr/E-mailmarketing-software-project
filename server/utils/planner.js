@@ -1,8 +1,13 @@
 const nodemailer = require("nodemailer");
 const { PlannedEmail } = require("../model/emailEditor");
+const path = require("path");
+const fs = require("fs");
 
 // Function to send email
 async function sendEmail(email) {
+  const imagePath = path.join(__dirname, "xtend-logo.webp");
+  const imageAsBase64 = fs.readFileSync(imagePath, { encoding: "base64" });
+
   const transporter = nodemailer.createTransport({
     host: "145.74.104.216",
     port: 1025,
@@ -13,20 +18,31 @@ async function sendEmail(email) {
     },
   });
 
+  let sentSubscribers = [];
+
   try {
     for (const subscriber of email.subscribers) {
-      const mailOptions = {
-        from: "xtend@svxtend.nl",
+      let personalizedHeaderText = email.headerText.replace(
+        "{name}",
+        subscriber.name
+      );
+
+      personalizedHeaderText = personalizedHeaderText.replace(
+        "{image}",
+        `<img src="data:image/webp;base64,${imageAsBase64}" alt="Xtend Logo" style="width: 100px; height: auto;" />`
+      );
+
+      if (sentSubscribers.includes(subscriber.email)) {
+        continue;
+      }
+
+      let mailOptions = {
+        from: '"Xtend" <info@svxtend.nl>',
         to: subscriber.email,
-        subject: email.subject,
+        subject: `${email.subject}`,
         html: `
         <div style="text-align: center; padding: 10px; font-family: 'Arial', sans-serif;">
-          <h1 style="color: #333; font-size: 24px;">Xtend</h1>
-          ${
-            email.showHeader
-              ? `<h2 style="color: #666; font-size: 20px;">Beste ${subscriber.name}, hierbij een nieuwe bericht</h2>`
-              : ""
-          }
+        ${email.showHeader ? ` ${personalizedHeaderText}` : ""}
         </div>
         <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
         ${email.html}
@@ -34,11 +50,15 @@ async function sendEmail(email) {
       <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
         <p>
           Bekijk de online versie van deze e-mail
-          <a href="http://localhost:3000/onlineEmail/${email.id}/${subscriber.id}" style="text-decoration: none; color: #007BFF;">
+          <a href="http://localhost:3000/onlineEmail/${email.id}/${
+          subscriber._id
+        }" style="text-decoration: none; color: #007BFF;">
             hier
           </a>.
         </p>
-        <a href="http://localhost:3000/unsubscribe/${subscriber.id}" style="text-decoration: none; color: #333;">
+        <a href="http://localhost:3000/unsubscribe/${
+          subscriber._id
+        }" style="text-decoration: none;">
           Uitschrijven
         </a>
       </div>

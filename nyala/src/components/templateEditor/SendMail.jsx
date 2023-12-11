@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import SubscriptionForm from "../categories/CategoriesComponent";
-import { Alert } from "react-bootstrap";
 import AlertComponent from "../alert/AlertComponent";
 
 function SelectMailingLists(props) {
