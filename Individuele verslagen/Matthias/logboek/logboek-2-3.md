@@ -42,7 +42,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 6 uur | Samen alle laatste dingetjes op een rijtje gezet en de sprint review en planning voorbereid. Ook hebben we nog een retrospective gehad samen met Pim | Richard, Jules | We hebben wel nog even getwijfeld over welke ideeën er nou bij ons sprint doel hoorden en welke dingen er nou eigenlijk net buiten vielen en wat we in sprint 3 konden doen |💭 | Het sprintboard en de sprint review/planning |
 | | | | | | |
 
 
@@ -53,5 +53,5 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 3 Uur | We hebben de sprint planning en de sprint review gehad, daarna heb ik kort wat wireframes gemaakt en hebben we met zn alle de user storys en taken afgemaakt met acceptatie creteria | Mark, Jules, Richard | Het enige wat we echt hadden tijdens de sprint planning was wat we nou echt wouden doen |🙂 | Het sprintboard van sprint 2 |
 | | | | | | |
