@@ -28,7 +28,7 @@ jobs:
 
       - name: Changing directory and install dependencies
         run: |
-          ls
+          cd server
           npm install
 
       - name: Run tests
