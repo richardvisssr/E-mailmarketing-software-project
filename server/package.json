@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "jest --verbose --coverage --maxWorkers=1"
+    "test": "jest --verbose --coverage --maxWorkers=1 --detectOpenHandles"
   },
   "dependencies": {
     "cors": "^2.8.5",
