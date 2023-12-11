@@ -14,15 +14,16 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      mongodb:
+      database:
         image: mongo:latest
+        env:
+          MONGO_INITDB_ROOT_USERNAME: xtend_admin
+          MONGO_INITDB_ROOT_PASSWORD: supercoolpassword
+          MONGO_INITDB_DATABASE: nyala
         ports:
-          - "27017:27017"
-        options: >-
-          --health-cmd "mongo --eval 'db.runCommand({ ping: 1 })'"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
+          - 27017:27017
+        options: --name mongodb-container
+        
     strategy:
       matrix:
         node-version: [20.x]
@@ -35,7 +36,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
+          
+      - name: Build Docker image for backend
+        run: docker build -t Nyala_Backend -f Dockerfile.backend .
+        working-directory: ./path/to/backend
 
+      - name: Wait for MongoDB to be ready
+        run: ./wait-for-mongo.sh
+        
       - name: Install dependencies
         run: npm install
         working-directory: ./server
