@@ -1,83 +1,109 @@
-const express = require('express');
-const request = require('supertest');
-const routes = require('../routes/templateRoutes');
-const mongoose = require('mongoose');
+const express = require("express");
+const request = require("supertest");
+const routes = require("../routes/templateRoutes");
+const mongoose = require("mongoose");
 
 const app = express();
 app.use(express.json());
-app.use('/', routes);
+app.use("/", routes);
 
-const Design = mongoose.model('Design');
-const Email = mongoose.model('Email');
+const Design = mongoose.model("Design");
+const Email = mongoose.model("Email");
 
 beforeAll(async () => {
-    if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(`mongodb://localhost:27017/nyala`);
-    }
-})
+  if (mongoose.connection.readyState === 0) {
+    await mongoose.connect(`mongodb://localhost:27017/nyala`);
+  }
+});
 
 beforeEach(async () => {
   const designData = {
-    id: 'testDesignId',
-    design: { test: 'test' },
+    id: "testDesignId",
+    design: { test: "test" },
+    title: "testTitle",
   };
 
   const emailData = {
-    id: 'testEmailId',
-    html: '<p>Your test HTML content here</p>',
+    id: "testEmailId",
+    html: "<p>Your test HTML content here</p>",
   };
 
-  await Design.create(designData);
   await Email.create(emailData);
+  await Design.create(designData);
 });
-
 afterEach(async () => {
-  await Design.deleteOne({ id: 'testDesignId' });
-  await Email.deleteOne({ id: 'testEmailId' });
+  await Design.deleteOne({ id: "testDesignId" });
+  await Email.deleteOne({ id: "testEmailId" });
 });
 afterAll(async () => {
-    if (mongoose.connection.readyState !== 0) {
-      await mongoose.disconnect();
-    }});
+  if (mongoose.connection.readyState !== 0) {
+    await mongoose.disconnect();
+  }
+});
 
-describe('GET /templates', () => {
-    it('should respond with an array of templates', async () => {
-      const response = await request(app).get('/templates');
-      expect(response.body).toEqual(expect.any(Array));
-      expect(response.statusCode).toBe(200);
-    }, 10000);
-    it('should respond with an error when an internal server error occurs', async () => {
-      jest.spyOn(Design, 'find').mockImplementation(() => {
-        throw new Error('Internal Server Error');
-      });
-  
-      const response = await request(app).get('/templates');
-      expect(response.statusCode).toBe(500);
-      expect(response.body).toEqual({ error: 'Internal Server Error' });
-    }, 10000);
-  });
-  
-  describe('GET /templates/:id', () => {
-    it('should respond with a template', async () => {
-      const response = await request(app).get('/templates/testEmailId');
-      expect(response.body).toEqual(expect.any(Object));
-      expect(response.statusCode).toBe(200);
-    }, 10000);
-  
-    it('should respond with an error', async () => {
-      const response = await request(app).get('/templates/100');
-      expect(response.body).toEqual({ error: 'Email not found' });
-      expect(response.statusCode).toBe(404);
-    }, 10000);
+describe("GET /templates", () => {
+  it("should respond with an array of templates", async () => {
+    const response = await request(app).get("/templates");
+    expect(response.body).toEqual(expect.any(Array));
+    expect(response.statusCode).toBe(200);
+  }, 10000);
+  it("should respond with an error when an internal server error occurs", async () => {
+    jest.spyOn(Design, "find").mockImplementation(() => {
+      throw new Error("Internal Server Error");
+    });
 
-    it('should respond with an error when an internal server error occurs', async () => {
-      jest.spyOn(Email, 'findOne').mockImplementation(() => {
-        throw new Error('Internal Server Error');
-      });
+    const response = await request(app).get("/templates");
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toEqual({ error: "Internal Server Error" });
+  }, 10000);
+});
 
-      const response = await request(app).get('/templates/testEmailId');
-      expect(response.statusCode).toBe(500);
-      expect(response.body).toEqual({ error: 'Internal Server Error' });
-    }, 10000);
-  });
-  
+describe("GET /templates/:id", () => {
+  it("should respond with a template", async () => {
+    const response = await request(app).get("/templates/testEmailId");
+    expect(response.body).toEqual(expect.any(Object));
+    expect(response.statusCode).toBe(200);
+  }, 10000);
+
+  it("should respond with an error", async () => {
+    const response = await request(app).get("/templates/100");
+    expect(response.body).toEqual({ error: "Email not found" });
+    expect(response.statusCode).toBe(404);
+  }, 10000);
+
+  it("should respond with an error when an internal server error occurs", async () => {
+    jest.spyOn(Email, "findOne").mockImplementation(() => {
+      throw new Error("Internal Server Error");
+    });
+
+    const response = await request(app).get("/templates/testEmailId");
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toEqual({ error: "Internal Server Error" });
+  }, 10000);
+});
+
+describe("DELETE /template/:id", () => {
+  it("should respond with a success message", async () => {
+    // Create a design or email with the id "testEmailId"
+    await Design.create({
+      id: "testEmailId",
+      design: { key: "value" },
+      title: "Title",
+    });
+
+    const response = await request(app).delete("/template/testEmailId");
+
+    expect(response.body).toEqual({ success: true });
+    expect(response.statusCode).toBe(200);
+  }, 10000);
+
+  it("should respond with an error when an internal server error occurs", async () => {
+    jest.spyOn(Email, "findOneAndDelete").mockImplementation(() => {
+      throw new Error("Internal Server Error");
+    });
+
+    const response = await request(app).delete("/template/testEmailId");
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toEqual({ message: "Internal Server Error" });
+  }, 10000);
+});

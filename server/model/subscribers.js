@@ -10,7 +10,7 @@ const subscribers = new mongoose.Schema({
     type: String,
     required: true,
   },
-  subscriptions: {
+  subscription: {
     type: [String],
     required: true,
   },
@@ -27,9 +27,9 @@ const Subscriber = mongoose.model("Subscriber", subscribers);
 const Unsubscriber = mongoose.model("Unsubscribe", unsubscribe);
 
 // const sub = new Subscriber({
-//   email: "richard@jfc.nl",
-//   name: "Bert",
-//   subscription: ["Leden", "ICT"],
+//   email: "Maaadddtt@jfc.nl",
+//   name: "Beccrt",
+//   subscription: ["ICT", "CMD", "Leden"],
 // });
 
 // sub.save();

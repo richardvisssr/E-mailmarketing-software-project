@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./AddField.module.css";
-import SubscriptionForm from "./CategoriesComponent";
+import SubscriptionForm from "../categories/CategoriesComponent";
+import AlertComponent from "../alert/AlertComponent";
 
 /**
  * Functional component for adding email and subscribing to mailing lists.
@@ -84,75 +85,6 @@ export default function ToevoegVeld() {
     }
   }, [status]);
 
-  useEffect(() => {
-    if (list !== "") {
-      /**
-       * Function to handle the addition of a new mailing list to the server.
-       */
-      const postList = async () => {
-        try {
-          const response = await fetch("http://localhost:3001/mail/addList", {
-            method: "PUT",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              name: list,
-            }),
-          });
-          if (response.ok) {
-            setNotification({
-              type: "succes",
-              message: "De lijst is succesvol toegevoegd",
-            });
-          } else if (!response.ok) {
-            if (
-              response.code === 404 &&
-              response.message === "List not found"
-            ) {
-              setNotification({
-                type: "error",
-                message: "Er bestaat nog geen collectie voor maillijsten.",
-              });
-            } else {
-              setNotification({
-                type: "error",
-                message:
-                  "Er heeft zich een fout opgetreden tijdens het toevoegen van de lijst.",
-              });
-            }
-          }
-        } catch (error) {
-          setNotification({
-            type: "error",
-            message:
-              "Er heeft zich een fout opgetreden tijdens het add van de list.",
-          });
-        }
-      };
-      postList();
-    }
-  }, [lists]);
-
-  /**
-   * Function to handle the addition of a new mailing list.
-   * @param {Object} event - The event object.
-   */
-  const handleListAdd = (event) => {
-    event.preventDefault();
-
-    if (list === "") {
-      setNotification({
-        type: "error",
-        message: "De lijst is niet ingevuld.",
-      });
-    } else {
-      setLists([...lists, list]);
-      setAdd(false);
-    }
-  };
-
   /**
    * Function to handle the addition of a new email and subscriptions.
    * @param {Object} event - The event object.
@@ -172,7 +104,12 @@ export default function ToevoegVeld() {
       });
     }
 
-    if (data.email === "") {
+    if (!data.name) {
+      setNotification({
+        type: "error",
+        message: "De naam is niet ingevuld.",
+      });
+    } else if (!data.email) {
       setNotification({
         type: "error",
         message: "Het emailadres is niet ingevuld.",
@@ -237,32 +174,7 @@ export default function ToevoegVeld() {
   return (
     <div className="d-flex justify-content-center align-items-center py-5">
       <div>
-        <div>
-          {notification.type !== "succes" ? (
-            <></>
-          ) : (
-            <div
-              className="alert alert-success d-flex justify-content-around"
-              role="alert"
-            >
-              <p>{notification.message}</p>
-              <i className="bi bi-check"></i>
-            </div>
-          )}
-        </div>
-        <div>
-          {notification.type !== "error" ? (
-            <></>
-          ) : (
-            <div
-              className="alert alert-danger d-flex justify-content-around"
-              role="alert"
-            >
-              <p>{notification.message}</p>
-              <i className="bi bi-exclamation-triangle"></i>
-            </div>
-          )}
-        </div>
+        <AlertComponent notification={notification} />
         <form
           className={`input-group ${styles.form} d-flex flex-column`}
           onSubmit={handleSubmit}
@@ -295,41 +207,6 @@ export default function ToevoegVeld() {
                 />
               ) : (
                 <p>Er zijn geen maillijsten.</p>
-              )}
-              {add ? (
-                <div
-                  className={`input-group ${styles.form} d-flex justify-items-center align-content-center`}
-                >
-                  <div className="input-group mb-3">
-                    <input
-                      type="text"
-                      className={`form-control ${styles.entry} p-2`}
-                      placeholder="Lijst"
-                      aria-describedby="basic-addon1"
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setList(value);
-                      }}
-                    />
-                    <div className={`${styles.around} input-group-prepend`}>
-                      <input
-                        type="submit"
-                        className={`btn ${styles.buttonPrimary} rounded p-2`}
-                        value="Lijst toevoegen"
-                        onClick={handleListAdd}
-                      />
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  className={`btn ${styles.buttonPrimary} rounded`}
-                  onClick={() => {
-                    setAdd(true);
-                  }}
-                >
-                  Lijst aanmaken
-                </button>
               )}
             </div>
 

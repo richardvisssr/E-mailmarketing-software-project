@@ -43,3 +43,27 @@
   border-color: #a66cf2;
   width: 100%;
 }
+
+.notFound {
+  width: 50%;
+}
+
+.linky {
+  color: white;
+  font-size: 100%;
+  transition: color 0.25s, font-size 0.25s;
+}
+
+.linky:hover {
+  font-size: 105%;
+  color: #a66cf2;
+  transition: font-size 0.5s, color 0.5s;
+}
+
+.linky:focus {
+  color: #a66cf2;
+}
+
+.listItem {
+  list-style-type: none;
+}

@@ -11,19 +11,15 @@ const mailList = mongoose.model("mailList", mailListSchema);
 
 const defaultMailList = ["Nieuwsbrief", "CMD", "ICT", "Leden"];
 
-const checkMailList = async () => {
-  try {
-    const count = await mailList.countDocuments({});
+const checkMailList = async (req, res, next) => {
+  const count = await mailList.countDocuments({});
 
-    if (count === 0) {
-      const newMailList = new mailList({
-        mailList: defaultMailList,
-      });
+  if (count === 0) {
+    const newMailList = new mailList({
+      mailList: defaultMailList,
+    });
 
-      await newMailList.save();
-    }
-  } catch (err) {
-    alert(err);
+    await newMailList.save();
   }
 };
 

@@ -1,5 +1,5 @@
-import BasicHeaderComponent from "@/components/BasicHeaderComponent";
-import FooterComponent from "@/components/FooterComponent";
+import BasicHeaderComponent from "@/components/layout/BasicHeaderComponent";
+import FooterComponent from "@/components/layout/FooterComponent";
 
 export default function BasisLayout({ children }) {
   return (

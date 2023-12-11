@@ -36,7 +36,7 @@ app.use("/", subscriberRouter);
 app.use('/', adminpanelRouter);
 app.use("/mail", emailEditorRouter);
 app.use("/mail", mailListRouter);
-app.use("/sendMail", sendMailRouter);
+app.use("/", sendMailRouter);
 
 const httpServer = http.createServer(app);
 const webSocketServer = new ws.Server({ noServer: true, path: "/socket" });
@@ -67,9 +67,10 @@ webSocketServer.on("connection", (socket, req) => {
   });
 });
 
-httpServer.listen(port, () =>
-  console.log(`Listening on http://${host}:${port}`)
-);
+httpServer.listen(() => {
+  const port = httpServer.address().port;
+  console.log(`Listening on http://${host}:${port}`);
+});
 
 const server = app.listen(port, host, async () => {
   console.log("> connecting");

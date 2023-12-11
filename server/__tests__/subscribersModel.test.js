@@ -5,6 +5,7 @@ const { Subscriber } = require("../model/subscribers");
 
 describe("Subscriber Model Tests", () => {
   let testMail = "test@example.com";
+  let testName = "testName";
 
   beforeAll(async () => {
     if (mongoose.connection.readyState === 0) {
@@ -16,7 +17,11 @@ describe("Subscriber Model Tests", () => {
   });
 
   beforeEach(async () => {
-    await Subscriber.create({ email: testMail, subscription: ["CMD"] });
+    await Subscriber.create({
+      email: testMail,
+      name: testName,
+      subscription: ["CMD"],
+    });
   });
 
   afterEach(async () => {
@@ -24,7 +29,9 @@ describe("Subscriber Model Tests", () => {
   });
 
   afterAll(async () => {
-    await mongoose.disconnect();
+    if (mongoose.connection.readyState !== 0) {
+      await mongoose.disconnect();
+    }
   });
 
   test("abonnement can be added", async () => {

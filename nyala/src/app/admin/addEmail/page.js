@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import AddField from "@/components/AddField";
+import AddField from "@/components/subscribe/AddField";
 
 export default function page() {
   return <AddField />;
