@@ -206,7 +206,7 @@ export default function SubscribeField(props) {
       ) : lists.includes(list) ? (
         <div className="d-flex justify-content-center align-items-center py-5">
           <div>
-            <h2 className="mb-3">Abonneren</h2>
+          <h1 className="text-center mb-2">Abonneren</h1>
             <AlertComponent notification={notification} />
             <EmailForm
               handleSubmit={handleSubmit}

@@ -247,7 +247,7 @@ export default function AddField() {
       ) : (
         <div className="d-flex justify-content-center align-items-center py-5">
           <div>
-            <h2 className="mb-3">Abonnee toevoegen</h2>
+            <h1 className="text-center mb-2">Abonnee toevoegen</h1>
             <AlertComponent notification={notification} />
             <EmailForm
               handleSubmit={handleSubmit}
