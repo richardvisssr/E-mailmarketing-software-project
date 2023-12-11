@@ -1,9 +1,14 @@
-export default function Home() {
-  return (
-    <main>
-      <div>
-        <p>Doei, buur</p>
-      </div>
-    </main>
-  )
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+export default function page() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("admin");
+  }, []);
+
+  return <></>;
 }
