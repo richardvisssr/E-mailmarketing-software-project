@@ -29,6 +29,28 @@ router.put("/addList", async (req, res) => {
   }
 });
 
+router.put("/updateListName", async (req, res) => {
+  const { name, newName } = req.body;
+
+  try {
+    const existingList = await mailList.findOne({ mailList: name });
+
+    if (!existingList) {
+      return res.status(404).json({ message: "List not found" });
+    }
+    existingList.mailList = existingList.mailList.map((mail) =>
+      mail === name ? newName : mail
+    );
+    await existingList.save();
+
+    res
+      .status(200)
+      .json({ message: "The list " + name + " is updated to " + newName });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 router.delete("/deleteList", async (req, res) => {
   const { name } = req.body;
 
@@ -42,7 +64,7 @@ router.delete("/deleteList", async (req, res) => {
     existingList.mailList = existingList.mailList.filter(
       (mail) => mail !== name
     );
-    const updatedList = await existingList.save();
+    await existingList.save();
 
     res.status(200).json({ message: "The list " + name + " is deleted" });
   } catch (err) {

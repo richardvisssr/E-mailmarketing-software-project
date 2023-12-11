@@ -7,15 +7,12 @@ export default function MailListAccordion({
   subscribers,
   handleShow,
   handleShowDeleteListModal,
+  handleShowUpdateListModal,
 }) {
   const [activeIndex, setActiveIndex] = useState(null);
 
   const handleAccordionClick = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
-  };
-
-  const handleDeleteButtonClick = (mailList) => {
-    handleShowDeleteListModal(mailList);
   };
 
   return (
@@ -33,8 +30,12 @@ export default function MailListAccordion({
           <h2 className="accordion-header shadow">
             <div className="d-flex align-items-center">
               <i
+                className={`bi bi-pencil-fill ms-auto ps-2 pe-1 ${styles.icon}`}
+                onClick={() => handleShowUpdateListModal(mailList)}
+              ></i>
+              <i
                 className={`bi bi-x ms-auto ps-2 pe-1 ${styles.icon}`}
-                onClick={() => handleDeleteButtonClick(mailList)}
+                onClick={() => handleShowDeleteListModal(mailList)}
               ></i>
               <button
                 className={`accordion-button ${

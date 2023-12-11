@@ -140,6 +140,32 @@ router.put("/change/:subscriber", async (req, res) => {
   }
 });
 
+router.put("/update/:list", async (req, res) => {
+  const prevList = req.params.list;
+  const { name } = req.body;
+
+  try {
+    const subscribers = await Subscriber.find({ subscription: prevList });
+
+    if (subscribers.length === 0) {
+      return res.status(404).send({ message: "No subscribers found" });
+    }
+
+    for (const subscriber of subscribers) {
+      const index = subscriber.subscription.indexOf(prevList);
+      if (index !== -1) {
+        subscriber.subscription[index] = name;
+      }
+    }
+
+    await Promise.all(subscribers.map((subscriber) => subscriber.save()));
+
+    res.status(200).json({ message: "Subscriber updated" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 router.delete("/unsubscribe", async (req, res) => {
   const { email } = req.body;
   try {
