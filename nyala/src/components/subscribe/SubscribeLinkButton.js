@@ -1,12 +1,12 @@
 import { useState } from "react";
-import styles from "./SubscribeLinkButton.module.css";
+import styles from "./Subscribe.module.css";
 import { Modal } from "react-bootstrap";
 
 /**
  * Protocol for constructing the subscribe link.
  * @type {string}
  */
-const protocol = `http`; // e.g. https
+const PROTOCOL = `http`; // e.g. https
 
 /**
  * Domain for constructing the subscribe link.

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import styles from "./AddField.module.css";
 import { useRouter } from "next/navigation";
 import AlertComponent from "../alert/AlertComponent";
+import EmailForm from "./EmailForm";
+import Spinner from "../spinner/Spinner";
 
 /**
  * Component for subscribing to a mailing list.
@@ -89,9 +90,9 @@ export default function SubscribeField(props) {
       const postEmail = async () => {
         try {
           const response = await fetch(
-            `http://localhost:3001/subscribers/add`,
+            `http://localhost:3001/subscribers/edit`,
             {
-              method: "POST",
+              method: "PUT",
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
@@ -107,7 +108,7 @@ export default function SubscribeField(props) {
             setData({ email: undefined, name: "" });
             setStatus(false);
             setNotification({
-              type: "succes",
+              type: "success",
               message: "Email succesvol toegevoegd.",
             });
           } else if (!response.ok) {
@@ -157,10 +158,6 @@ export default function SubscribeField(props) {
         message: "De maillijst bestaat niet.",
       });
     } else {
-      setNotification({
-        type: "succes",
-        message: "Email wordt toegevoegd.",
-      });
       setStatus(true);
     }
   };
@@ -193,49 +190,19 @@ export default function SubscribeField(props) {
   return (
     <>
       {loading ? (
-        <div
-          className={`d-flex flex-column justify-conten-center align-items-center py-5`}
-        >
-          <div className={`spinner-border ${styles.spinner}`} role="status">
-            <span className="sr-only"></span>
-          </div>
-        </div>
+        <Spinner />
       ) : lists.includes(list) ? (
         <div className="d-flex justify-content-center align-items-center py-5">
           <div>
             <AlertComponent notification={notification} />
-
-            <form
-              className={`input-group ${styles.form} d-flex flex-column`}
-              onSubmit={handleSubmit}
-            >
-              <label htmlFor="form" className={`${styles.label} mb-2 rounded`}>
-                Vul een naam en email in, om toe te voegen aan {list}
-              </label>
-              <div id="form">
-                <input
-                  type="text"
-                  className={`form-control ${styles.entry} p-2 mb-3`}
-                  placeholder="Name"
-                  onChange={handleNameChange}
-                  value={data.name || ""}
-                />
-
-                <input
-                  type="text"
-                  className={`form-control ${styles.entry} p-2 mb-3`}
-                  placeholder="Email"
-                  aria-describedby="basic-addon1"
-                  onChange={handleEmailChange}
-                  value={data.email || ""}
-                />
-              </div>
-              <input
-                type="submit"
-                className={`btn ${styles.buttonPrimary} rounded mt-4`}
-                value="Email toevoegen"
-              />
-            </form>
+            <EmailForm
+              handleSubmit={handleSubmit}
+              handleNameChange={handleNameChange}
+              handleEmailChange={handleEmailChange}
+              labelMessage={`Vul een naam en email in, om toe te voegen aan ${list}.`}
+              lists={lists}
+              initialValues={data}
+            />
           </div>
         </div>
       ) : (
