@@ -29,7 +29,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - name: run tests on pull request
     - run: cd server
     - run: npm i
     - run: npm test
