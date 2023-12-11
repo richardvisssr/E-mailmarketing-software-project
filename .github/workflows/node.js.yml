@@ -1,6 +1,10 @@
-name: Code Cerberus
+name: 🐾 Code Cerberus
 
 on:
+  workflow_run:
+      workflows: ["🐾 Code Cerberus"]
+      types:
+        - completed
   push:
     branches:
       - main
