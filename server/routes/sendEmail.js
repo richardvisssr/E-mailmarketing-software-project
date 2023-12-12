@@ -72,13 +72,16 @@ router.post("/sendEmail", async (req, res) => {
 router.put("/planMail", async (req, res) => {
   try {
     const { id, title, html, subs, date, showHeader, subject } = req.body;
-    const subscribers = subs.map((subscriber) => {
+    const subscribers = subs.map((subscriberArray) => {
+      const subscriber = subscriberArray[0]; // Access the first element of the inner array
       return {
         id: subscriber._id,
         name: subscriber.name,
         email: subscriber.email,
       };
     });
+    
+    console.log(subscribers);
     const planMail = await PlannedEmail.findOne({ id });
 
     if (planMail) {
