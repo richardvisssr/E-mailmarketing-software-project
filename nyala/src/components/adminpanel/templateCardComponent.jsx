@@ -31,7 +31,10 @@ function TemplateCard(props) {
 
   const router = useRouter();
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShowHeader(false);
+    setShow(false);
+  };
   const handleShow = () => setShow(true);
 
   const setNewTime = (event) => {
@@ -127,6 +130,7 @@ function TemplateCard(props) {
       });
     }
   };
+  // console.log(subscribers);
 
   const handlePlanMail = async () => {
     if (!subject || subject.trim() === "") {
@@ -296,14 +300,19 @@ function TemplateCard(props) {
             <div className="p-2 gap-3 d-flex flex-column justify-content-center">
               <label className="form-label">
                 Gebruik {"{name}"} om naam toe te voegen, {"{image}"} om xtend
-                logo toe te voegen en {"<br>"} om een nieuwe regel te beginnen
+                logo toe te voegen
               </label>
               <textarea
                 value={headerText}
                 onChange={handleHeaderTextChange}
                 placeholder="Voer header tekst in"
                 className="form-control text-center"
+                wrap="hard"
                 rows="4" // Set the number of rows as needed
+                style={{
+                  whiteSpace: "pre-wrap", // Behoudt witruimte inclusief nieuwe regels
+                  fontFamily: "Arial, sans-serif",
+                }}
               />
             </div>
           )}

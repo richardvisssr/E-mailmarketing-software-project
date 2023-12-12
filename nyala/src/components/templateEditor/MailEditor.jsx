@@ -65,6 +65,7 @@ const MailEditor = ({ id }) => {
 
   const handleClose = () => {
     setShow(false);
+    setShowHeader(false);
   };
   const handleShow = () => setShow(true);
 
@@ -233,7 +234,6 @@ const MailEditor = ({ id }) => {
     });
 
     if (mails.length > 0) {
-      
       try {
         const response = await fetch(" http://localhost:3001/planMail", {
           method: "PUT",
@@ -348,15 +348,19 @@ const MailEditor = ({ id }) => {
           {showHeader && (
             <div className="p-2 gap-3 d-flex flex-column justify-content-center">
               <label className="form-label">
-                Gebruik {"{name}"} om naam toe te voegen, {"{image}"} om xtend
-                logo toe te voegen en {"<br>"} om een nieuwe regel te beginnen
+                Gebruik {"{name}"} om naam toe te voegen en {"{image}"} om xtend
+                logo toe te voegen
               </label>
               <textarea
                 value={headerText}
                 onChange={handleHeaderTextChange}
                 placeholder="Voer header tekst in"
                 className="form-control text-center"
-                rows="4" // Set the number of rows as needed
+                rows="4"
+                style={{
+                  whiteSpace: "pre-line",
+                  fontFamily: "Arial, sans-serif",
+                }}
               />
             </div>
           )}

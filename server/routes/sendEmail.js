@@ -31,6 +31,8 @@ router.post("/sendEmail", async (req, res) => {
         subscriber.name
       );
 
+      personalizedHeaderText = personalizedHeaderText.replace(/\n/g, "<br>");
+
       personalizedHeaderText = personalizedHeaderText.replace(
         "{image}",
         `<img src="data:image/webp;base64,${imageAsBase64}" alt="Xtend Logo" style="width: 100px; height: auto;" />`
@@ -46,13 +48,9 @@ router.post("/sendEmail", async (req, res) => {
         subject: `${subject}`,
         html: `
         <div style="text-align: center; padding: 10px; font-family: 'Arial', sans-serif;">
-        ${
-          showHeader
-            ? ` ${personalizedHeaderText}`
-            : ""
-        }
+        ${showHeader ? ` ${personalizedHeaderText}` : ""}
         </div>
-        <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
+        <div style=" padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
         ${html}
       </div>
       <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
@@ -85,7 +83,8 @@ router.post("/sendEmail", async (req, res) => {
 
 router.put("/planMail", async (req, res) => {
   try {
-    const { id, title, html, subs, date, showHeader, headerText, subject } = req.body;
+    const { id, title, html, subs, date, showHeader, headerText, subject } =
+      req.body;
     const subscribers = subs.map((subscriber) => {
       return {
         id: subscriber._id,

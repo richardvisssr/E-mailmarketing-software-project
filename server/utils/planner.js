@@ -26,7 +26,9 @@ async function sendEmail(email) {
         "{name}",
         subscriber.name
       );
-
+      
+      personalizedHeaderText = personalizedHeaderText.replace(/\n/g, "<br>");
+      
       personalizedHeaderText = personalizedHeaderText.replace(
         "{image}",
         `<img src="data:image/webp;base64,${imageAsBase64}" alt="Xtend Logo" style="width: 100px; height: auto;" />`
