@@ -95,16 +95,13 @@ export default function UnsubscribeForm({ userid }) {
 
   // Reden van uitschrijven toevoegen aan de database
   const handleReasonSubmit = async () => {
-    const geselecteerdeReden =
-      reason === "Anders" ? customReason : reason === "" ? null : reason;
-
     try {
       const reasonResponse = await fetch("http://localhost:3001/reason", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ reden: geselecteerdeReden }),
+        body: JSON.stringify({ reden: reason }),
       });
 
       if (reasonResponse.status === 200) {

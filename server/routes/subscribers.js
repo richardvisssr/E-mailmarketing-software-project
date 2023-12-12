@@ -4,6 +4,15 @@ const express = require("express");
 const { Subscriber, Unsubscriber } = require("../model/subscribers");
 const router = express.Router();
 
+router.get("/unsubscribeReasons", async (req, res) => {
+  try {
+    const reason = await Unsubscriber.find();
+    res.status(200).send(reason);
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
 router.get("/subscribers", async (req, res) => {
   const selectedMailingList = req.query.selectedMailingList.split(",");
   try {
