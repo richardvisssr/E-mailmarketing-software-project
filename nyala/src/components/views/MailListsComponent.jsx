@@ -296,8 +296,7 @@ export default function MailListComponent() {
           message: "De ingevulde lijst bestaat al!",
         });
         setChangeName(false);
-      }
-      if (newName.trim().length === 0) {
+      } else if (newName.trim().length === 0) {
         setModalNotification({
           type: "error",
           message: "De ingevulde lijstnaam is te kort!",
@@ -318,7 +317,11 @@ export default function MailListComponent() {
             );
 
             if (!response.ok) {
-              throw new Error("Failed to update list name");
+              setModalNotification({
+                type: "error",
+                message:
+                  "Er is een fout opgetreden bij het bijwerken van de lijstnaam.",
+              });
             }
 
             setMailLists((prevLists) => {
@@ -357,7 +360,11 @@ export default function MailListComponent() {
             });
 
             if (!response.ok) {
-              throw new Error("Failed to update list");
+              setModalNotification({
+                type: "error",
+                message:
+                  "Er is een fout opgetreden bij het bijwerken van de lijst.",
+              });
             }
 
             setNotification({
