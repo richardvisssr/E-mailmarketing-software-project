@@ -86,7 +86,7 @@ router.post("/reason", async (req, res) => {
 
   try {
     const unsubscriber = new Unsubscriber({
-      reden: reden,
+      reason: reden,
     });
     await unsubscriber.save();
     return res.status(200).send({ message: "Reason added" });
