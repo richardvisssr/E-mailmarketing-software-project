@@ -3,6 +3,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import AlertComponent from "../alert/AlertComponent";
+import reasonChart from "./reasonChart";
+import styles from "./analyse.module.css";
 
 export default function AnalysePanel({ props }) {
   const chartRef = useRef(null);
@@ -44,33 +46,67 @@ export default function AnalysePanel({ props }) {
   };
 
   useEffect(() => {
-    if (!ready) return;
+    if (ready) {
+      const svg = d3.select(chartRef.current);
 
-    const customData = reasonData.map((item) => item.count * 10);
+      const customData = reasonData.map((item) => item.count);
+      const reasons = reasonData.map((item) => item.reason);
 
-    const svg = d3
-      .select(chartRef.current)
-      .append("svg")
-      .attr("width", 400)
-      .attr("height", 300);
+      const barHeight = 20;
+      const width = 300;
+      const margin = { top: 40, right: 40, bottom: 60, left: 160 };
+      const height =
+        Math.ceil((customData.length + 0.1) * barHeight) +
+        margin.top +
+        margin.bottom;
 
-    svg
-      .selectAll("rect")
-      .data(customData)
-      .enter()
-      .append("rect")
-      .attr("x", (d, i) => i * 50)
-      .attr("y", (d) => 300 - d)
-      .attr("width", 40)
-      .attr("height", (d) => d)
-      .attr("fill", "steelblue");
+      const x = d3
+        .scaleLinear()
+        .domain([0, d3.max(reasonData, (d) => d.count)])
+        .range([margin.left, width - margin.right]);
+
+      const y = d3
+        .scaleBand()
+        .domain(d3.sort(reasonData, (d) => -d.count).map((d) => d.reason))
+        .rangeRound([margin.top, height - margin.bottom])
+        .padding(0.1);
+
+      svg
+        .selectAll("rect")
+        .data(customData)
+        .enter()
+        .append("rect")
+        .attr("x", margin.left)
+        .attr("y", (d, i) => y(reasons[i]))
+        .attr("width", (d) => x(d) - margin.left)
+        .attr("height", y.bandwidth)
+        .attr("fill", "green");
+      svg
+        .append("g")
+        .attr("transform", `translate(${margin.left},0)`)
+        .call(d3.axisLeft(y));
+
+      svg
+        .append("g")
+        .attr("transform", `translate(0,${height - margin.bottom})`)
+        .call(d3.axisBottom(x).ticks(d3.max(customData) / 1));
+    }
   }, [ready]);
 
   return (
-    <div ref={chartRef}>
+    <div>
+      {" "}
       <AlertComponent notification={notification} />
-      <h1>analysePanel</h1>
-      <button onClick={getUnsubscribeReasons}>Get unsubscribe reasons</button>
+      <div>
+        {" "}
+        <button onClick={getUnsubscribeReasons}>Get unsubscribe reasons</button>
+      </div>{" "}
+      <div>
+        {" "}
+        <div className={`d-flex justify-content-center w-50`}>
+          <svg ref={chartRef} />
+        </div>
+      </div>
     </div>
   );
 }
