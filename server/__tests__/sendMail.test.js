@@ -67,4 +67,26 @@ describe("Email Router", () => {
     expect(response.status).toBe(500);
 
   });
+
+  test("should send email to 900 subscribers", async () => {
+    const subscribers = Array.from({ length: 300 }, (_, index) => ({
+      email: `subscriber${index + 1}@example.com`,
+    }));
+  
+    const htmlContent = "<p>This is the email content</p>";
+  
+    // Create an array of promises for sending emails
+    const emailPromises = subscribers.map((subscriber) => {
+      return request(app)
+      .post("/sendEmail/sendEmail")
+        .send({ html: htmlContent, subscribers: [subscriber] })
+        .then((response) => {
+          expect(response.status).toBe(200);
+        });
+    });
+  
+    // Wait for all promises to resolve
+    await Promise.all(emailPromises);
+  });
+  
 });
