@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { Modal, Button, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
 import { nanoid } from "nanoid";
-import sendDataToSendEmail from "../emailService";
+import sendDataToSendEmail from "../EmailService";
 import AlertComponent from "../alert/AlertComponent";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
@@ -222,6 +222,11 @@ const MailEditor = ({ id }) => {
         type: "success",
         message: "Mail is succesvol verstuurd.",
       });
+    } else {
+      setModalNotification({
+        type: "error",
+        message: "Er zijn geen lijsten geselecteerd!",
+      });
     }
   };
 
@@ -270,6 +275,11 @@ const MailEditor = ({ id }) => {
       } catch (error) {
         setEmailSent(false);
       }
+    } else {
+      setNotification({
+        type: "error",
+        message: "He imbiciel, je hebt geen lijsten geselecteerd.",
+      });
     }
   };
 
