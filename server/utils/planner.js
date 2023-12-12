@@ -1,5 +1,15 @@
 const nodemailer = require("nodemailer");
 const { PlannedEmail } = require("../model/emailEditor");
+const { webSocketServer } = require("../app");
+const ws = require("ws");
+
+function sendWebsocketMessage(message) {
+  webSocketServer.clients.forEach((client) => {
+    if (client.readyState === ws.OPEN) {
+      client.send(JSON.stringify(message));
+    }
+  });
+}
 
 // Function to send email
 async function sendEmail(email) {
@@ -106,9 +116,11 @@ async function checkEvents() {
         email.status = "Verzonden";
         email.sended = true;
         await email.save();
+        sendWebsocketMessage({ type: "update", message: "Email sended" });
       } else {
         email.status = "Mislukt";
         await email.save();
+        sendWebsocketMessage({ type: "update", message: "Failed to send email" });
       }
     }
   } catch (error) {
