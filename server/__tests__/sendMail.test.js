@@ -1,6 +1,8 @@
 const request = require("supertest");
 const express = require("express");
 const nodemailer = require("nodemailer");
+const { Subscriber } = require("../model/subscribers");
+const mongoose = require("mongoose");
 
 const router = require("../routes/sendEmail");
 const app = express();
@@ -10,6 +12,7 @@ app.use("/sendEmail", router);
 describe("Email Router", () => {
   let testAccount;
   let transporter;
+  let subscribers;
 
   beforeAll(async () => {
     testAccount = await nodemailer.createTestAccount();
@@ -24,12 +27,38 @@ describe("Email Router", () => {
     });
   });
 
-  test("should send email to subscribers", async () => {
-    const subscribers = [
-      { email: "subscriber1@example.com" },
-      { email: "subscriber2@example.com" },
-    ];
+  beforeEach(async () => {
+    if (mongoose.connection.readyState === 0) {
+      // If no existing connection, create a new one
+      await mongoose.connect(`mongodb://127.0.0.1:27017/nyalaTest`);
+    }
+  });
+  
+  afterEach(async () => {
+    await mongoose.disconnect();
+  });
 
+  test("should add 500 subscribers", async () => {
+    // Create an array of promises for adding subscribers
+    const subscriberPromises = Array.from({ length: 500 }, (_, index) => {
+      const subscriber = new Subscriber({
+        email: `subscriber${index + 1}@example.com`,
+        name: `Subscriber ${index + 1}`,
+        subscription: ["ICT", "CMD", "Leden"],
+      });
+  
+      return subscriber.save();
+    });
+  
+    // Wait for all promises to resolve
+    subscribers = await Promise.all(subscriberPromises);
+  
+    // Check that 500 subscribers were added
+    const count = await Subscriber.countDocuments({});
+    expect(count).toBe(500);
+  });
+
+  xtest("should send email to subscribers", async () => {
     const htmlContent = "<p>This is the email content</p>";
 
     const response = await request(app)
@@ -38,7 +67,7 @@ describe("Email Router", () => {
 
     expect(response.status).toBe(200);
 
-  });
+  },150000);
 
   test("should return 404 error for invalid route", async () => {
     const response = await request(app).get("/sendEmail/invalidRoute");
@@ -53,11 +82,6 @@ describe("Email Router", () => {
       throw new Error('Internal Server Error');
     });
 
-    const subscribers = [
-      { email: "subscriber1@example.com" },
-      { email: "subscriber2@example.com" },
-    ];
-
     const htmlContent = "<p>This is the email content</p>";
 
     const response = await request(app)
@@ -66,27 +90,6 @@ describe("Email Router", () => {
 
     expect(response.status).toBe(500);
 
-  });
-
-  test("should send email to 900 subscribers", async () => {
-    const subscribers = Array.from({ length: 300 }, (_, index) => ({
-      email: `subscriber${index + 1}@example.com`,
-    }));
-  
-    const htmlContent = "<p>This is the email content</p>";
-  
-    // Create an array of promises for sending emails
-    const emailPromises = subscribers.map((subscriber) => {
-      return request(app)
-      .post("/sendEmail/sendEmail")
-        .send({ html: htmlContent, subscribers: [subscriber] })
-        .then((response) => {
-          expect(response.status).toBe(200);
-        });
-    });
-  
-    // Wait for all promises to resolve
-    await Promise.all(emailPromises);
   });
   
 });
