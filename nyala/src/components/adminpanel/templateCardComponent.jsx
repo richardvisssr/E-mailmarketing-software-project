@@ -9,7 +9,8 @@ import Modal from "react-bootstrap/Modal";
 import SelectMailingLists from "../email/SendMail";
 import { nanoid } from "nanoid";
 import AlertComponent from "../alert/AlertComponent";
-import sendDataToSendEmail from "../emailService";
+import sendDataToSendEmail from "../EmailService";
+import AnalyticsPanelCard from "./AnalyticsPanelCard";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
@@ -27,12 +28,16 @@ function TemplateCard(props) {
   const [subject, setSubject] = useState("");
   const [showHeader, setShowHeader] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   const router = useRouter();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const toggleAnalyticsCard = () => {
+    setShowAnalytics((prevVisibility) => !prevVisibility);
+  };
   const setNewTime = (event) => {
     setDateTime(event.target.value);
   };
@@ -218,8 +223,18 @@ function TemplateCard(props) {
               >
                 Versturen
               </Button>
+              <Button
+                variant="primary"
+                className={`ms-auto ${styles.knopPrimary}`}
+                size="sm"
+                onClick={toggleAnalyticsCard}
+              >
+                <i className="fas fa-arrow-right"></i>{" "}
+                {/* Replace with your preferred arrow icon */}
+              </Button>
             </div>
           </Card.Body>
+          {showAnalytics && <AnalyticsPanelCard />}
         </Card>
       </Col>
 

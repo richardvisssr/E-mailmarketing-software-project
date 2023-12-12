@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { Modal, Button, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
 import { nanoid } from "nanoid";
-import sendDataToSendEmail from "../emailService";
+import sendDataToSendEmail from "../EmailService";
 import AlertComponent from "../alert/AlertComponent";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
