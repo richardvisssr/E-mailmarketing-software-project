@@ -162,6 +162,7 @@ function MailCalendar(props) {
               <th scope="col">Event</th>
               <th scope="col">Datum</th>
               <th scope="col">Tijd</th>
+              <th scope="col">Status</th>
               <th scope="col"></th>
             </tr>
           </thead>
@@ -171,6 +172,7 @@ function MailCalendar(props) {
                 <td>{mail.title}</td>
                 <td>{formatDate(mail.date)}</td>
                 <td>{formatTime(mail.date)}</td>
+                <td>In Afwachting</td>
                 <td className="text-end">
                   <i
                     className={`bi bi-calendar-week-fill ${styles.icon}`}
