@@ -62,6 +62,10 @@ const plannedEmailSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
+  headerText: {
+    type: String,
+    required: false,
+  },
   subject: {
     type: String,
     required: true,

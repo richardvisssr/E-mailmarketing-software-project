@@ -17,6 +17,7 @@ const emailEditorRouter = require("./routes/emailEditor");
 const mailListRouter = require("./routes/mailLists");
 const sendMailRouter = require("./routes/sendEmail");
 const adminpanelRouter = require('./routes/templateRoutes');
+const afbeeldingRouter = require('./routes/afbeeldingRouter');
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use('/', adminpanelRouter);
 app.use("/mail", emailEditorRouter);
 app.use("/mail", mailListRouter);
 app.use("/", sendMailRouter);
+app.use("/afbeelding", afbeeldingRouter);
 
 const httpServer = http.createServer(app);
 const webSocketServer = new ws.Server({ noServer: true, path: "/socket" });
