@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import Loading from "@/app/loading";
 
 export default function Page({ params }) {
   const { id } = params;
@@ -27,7 +26,6 @@ export default function Page({ params }) {
           <div
             dangerouslySetInnerHTML={{ __html: email.html }}
             style={{
-
               textAlign: "center",
               padding: "10px",
             }}
@@ -39,7 +37,6 @@ export default function Page({ params }) {
               backgroundColor: "#f1f1f1",
               fontFamily: "Arial",
               textAlign: "center",
-
             }}
           >
             <a
@@ -55,7 +52,7 @@ export default function Page({ params }) {
           </div>
         </div>
       ) : (
-        <Loading/>
+        <Loading />
       )}
     </main>
   );

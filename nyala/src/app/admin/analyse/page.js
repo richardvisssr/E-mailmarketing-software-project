@@ -1,7 +1,11 @@
 "use client";
 
-import analysePanel from "@/components/analyse/analysePanel";
+import AnalysePanel from "@/components/analyse/analysePanel";
 
 export default function page() {
-  return <analysePanel />;
+  return (
+    <div>
+      <AnalysePanel />
+    </div>
+  );
 }
