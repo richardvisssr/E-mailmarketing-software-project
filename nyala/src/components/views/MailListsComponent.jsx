@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 import styles from "./Views.module.css";
 import AlertComponent from "../alert/AlertComponent";
@@ -26,12 +26,16 @@ export default function MailListComponent() {
     type: "",
     message: "",
   });
+  const [modalNotification, setModalNotification] = useState({
+    type: "",
+    message: "",
+  });
 
   useEffect(() => {
     fetch("http://localhost:3001/mail/getList")
       .then((response) => response.json())
       .then((data) => setMailLists(data[0].mailList))
-      .catch((error) =>
+      .catch(() =>
         setNotification({
           type: "error",
           message:
@@ -75,11 +79,14 @@ export default function MailListComponent() {
   const handleShowUpdateListModal = (list) => {
     setShowUpdateListModal(true);
     setSelectedListToUpdate(list);
+    setModalNotification({
+      type: "",
+      message: "",
+    });
   };
 
   const updateName = (e) => {
     setNewName(e.target.value);
-    console.log(e.target.value);
   };
 
   useEffect(() => {
@@ -151,14 +158,13 @@ export default function MailListComponent() {
       setModalContent(
         <div>
           <p>
-            Weet je zeker dat je de lijstnaam {selectedListToUpdate} wilt
-            aanpassen?
+            Weet je zeker dat je de lijst {selectedListToUpdate} wilt aanpassen?
           </p>
-          <label htmlFor="newListName">Nieuwe lijstnaam</label>
+          <label htmlFor="newListName">Nieuwe naam</label>
           <input
             type="text"
             className="form-control"
-            placeholder="Nieuwe lijstnaam"
+            placeholder="Naam"
             aria-describedby="basic-addon1"
             onChange={(e) => {
               updateName(e);
@@ -270,7 +276,7 @@ export default function MailListComponent() {
     } catch (error) {
       setNotification({
         type: "error",
-        bericht: "Er ging iets mis met het uitschrijven.",
+        message: "Er ging iets mis met het uitschrijven.",
       });
       return false;
     }
@@ -278,87 +284,111 @@ export default function MailListComponent() {
 
   useEffect(() => {
     if (changeName) {
-      const handleUpdateListName = async (name, newName) => {
-        try {
-          const response = await fetch(
-            "http://localhost:3001/mail/updateListName",
-            {
+      if (newName === "" || newName === null) {
+        setModalNotification({
+          type: "error",
+          message: "De lijst is niet ingevuld.",
+        });
+        setChangeName(false);
+      } else if (mailLists.includes(newName)) {
+        setModalNotification({
+          type: "error",
+          message: "De ingevulde lijst bestaat al!",
+        });
+        setChangeName(false);
+      }
+      if (newName.trim().length === 0) {
+        setModalNotification({
+          type: "error",
+          message: "De ingevulde lijstnaam is te kort!",
+        });
+        setChangeName(false);
+      } else {
+        const handleUpdateListName = async (name, newName) => {
+          try {
+            const response = await fetch(
+              "http://localhost:3001/mail/updateListName",
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ name, newName }),
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error("Failed to update list name");
+            }
+
+            setMailLists((prevLists) => {
+              const updatedLists = [...prevLists];
+              const index = updatedLists.findIndex((list) => list === name);
+              if (index !== -1) {
+                updatedLists[index] = newName;
+              }
+              return updatedLists;
+            });
+            setNotification({
+              type: "success",
+              message: "De lijstnaam is succesvol bijgewerkt.",
+            });
+          } catch (error) {
+            setNotification({
+              type: "error",
+              message:
+                "Er is een fout opgetreden bij het bijwerken van de lijstnaam.",
+            });
+          }
+        };
+
+        if (selectedListToUpdate !== "" && newName !== "") {
+          handleUpdateListName(selectedListToUpdate, newName);
+        }
+
+        const handleUpdateListChange = (list, name) => {
+          try {
+            const response = fetch(`http://localhost:3001/update/${list}`, {
               method: "PUT",
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ name, newName }),
-            }
-          );
+              body: JSON.stringify({ name }),
+            });
 
-          if (!response.ok) {
-            throw new Error("Failed to update list name");
+            if (!response.ok) {
+              throw new Error("Failed to update list");
+            }
+
+            setNotification({
+              type: "success",
+              message: "De lijst is succesvol bijgewerkt.",
+            });
+
+            setMailLists((prevLists) => {
+              const updatedLists = [...prevLists];
+              const index = updatedLists.findIndex((list) => list === list);
+              if (index !== -1) {
+                updatedLists[index] = name;
+              }
+              return updatedLists;
+            });
+          } catch (error) {
+            setNotification({
+              type: "error",
+              message:
+                "Er is een fout opgetreden bij het bijwerken van de lijst.",
+            });
+          } finally {
+            setChangeName(false);
+            handleCloseUpdateListModal();
           }
+        };
 
-          setMailLists((prevLists) => {
-            const updatedLists = [...prevLists];
-            const index = updatedLists.findIndex((list) => list === name);
-            if (index !== -1) {
-              updatedLists[index] = newName;
-            }
-            return updatedLists;
-          });
-          console.log(newName);
-          setNotification({
-            type: "success",
-            message: "De lijstnaam is succesvol bijgewerkt.",
-          });
-        } catch (error) {
-          setNotification({
-            type: "error",
-            message:
-              "Er is een fout opgetreden bij het bijwerken van de lijstnaam.",
-          });
+        if (selectedListToUpdate !== "" && newName !== "") {
+          handleUpdateListChange(selectedListToUpdate, newName);
         }
-      };
-
-      handleUpdateListName(selectedListToUpdate, newName);
-
-      const handleUpdateListChange = (list, name) => {
-        try {
-          const response = fetch(`http://localhost:3001/update/${list}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ name }),
-          });
-
-          if (!response.ok) {
-            throw new Error("Failed to update list");
-          }
-
-          setNotification({
-            type: "success",
-            message: "De lijst is succesvol bijgewerkt.",
-          });
-
-          setMailLists((prevLists) => {
-            const updatedLists = [...prevLists];
-            const index = updatedLists.findIndex((list) => list === list);
-            if (index !== -1) {
-              updatedLists[index] = name;
-            }
-            return updatedLists;
-          });
-        } catch (error) {
-          setNotification({
-            type: "error",
-            message:
-              "Er is een fout opgetreden bij het bijwerken van de lijst.",
-          });
-        } finally {
-          setChangeName(false);
-          handleCloseUpdateListModal();
-        }
-      };
-
-      handleUpdateListChange(selectedListToUpdate, newName);
+      }
     }
   }, [changeName]);
 
@@ -403,8 +433,6 @@ export default function MailListComponent() {
       });
     }
   };
-
-  console.log(selectedListToUpdate);
 
   return (
     <div>
@@ -465,6 +493,7 @@ export default function MailListComponent() {
         modalContent={modalContent}
         footerContent={footerContent}
         modalTitle="Bevestig het aanpassen"
+        Notification={<AlertComponent notification={modalNotification} />}
       />
     </div>
   );

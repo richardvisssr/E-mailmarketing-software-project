@@ -38,6 +38,23 @@ router.put("/updateListName", async (req, res) => {
     if (!existingList) {
       return res.status(404).json({ message: "List not found" });
     }
+
+    if (newName === "") {
+      return res.status(400).json({ message: "New name is empty" });
+    }
+
+    if (newName === name) {
+      return res.status(400).json({ message: "New name is the same" });
+    }
+
+    if (existingList.mailList.includes(newName)) {
+      return res.status(400).json({ message: "New name already exists" });
+    }
+
+    if (newName.trim() !== newName) {
+      return res.status(400).json({ message: "New name contains spaces" });
+    }
+
     existingList.mailList = existingList.mailList.map((mail) =>
       mail === name ? newName : mail
     );

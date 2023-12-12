@@ -30,7 +30,7 @@ export default function MailListAccordion({
           <h2 className="accordion-header shadow">
             <div className="d-flex align-items-center">
               <i
-                className={`bi bi-pencil-fill ms-auto ps-2 pe-1 ${styles.icon}`}
+                className={`bi bi-pencil-fill h4 ms-auto ps-2 pe-1 pt-2 ${styles.icon}`}
                 onClick={() => handleShowUpdateListModal(mailList)}
               ></i>
               <i
