@@ -253,7 +253,7 @@ export default function SubscribersTable() {
         <AlertComponent notification={notification} />
       </div>
 
-      <h1 className="text-center mb-2">Alle abonnees</h1>
+      <h1 className="text-center mb-2">Ledenlijst</h1>
       <div className="table-responsive p-5">
         <table className="table table-hover">
           <caption>Lijst met alle geabonneerden leden</caption>
