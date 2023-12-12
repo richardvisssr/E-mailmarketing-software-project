@@ -41,7 +41,7 @@ const MailEditor = ({ id }) => {
     if (e.target.value.trim() === "") {
       setModalNotification({
         type: "error",
-        message: "Header mag niet leeg zijn",
+        message: "Header mag niet leeg zijn.",
       });
       return;
     }
@@ -52,7 +52,7 @@ const MailEditor = ({ id }) => {
     if (e.target.value.trim() === "") {
       setModalNotification({
         type: "error",
-        message: "Onderwerp mag niet leeg zijn",
+        message: "Onderwerp mag niet leeg zijn.",
       });
       return;
     }
@@ -82,7 +82,7 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           setNotification({
             type: "error",
-            message: "Er ging iets fout met het opslaan van het design",
+            message: "Er ging iets fout met het opslaan van het design.",
           });
           return;
         }
@@ -94,7 +94,7 @@ const MailEditor = ({ id }) => {
       } catch (error) {
         setNotification({
           type: "error",
-          message: `Er ging iets fout met het opslaan van het design`,
+          message: `Er ging iets fout met het opslaan van het design.`,
         });
       }
     });
@@ -116,14 +116,14 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           setNotification({
             type: "error",
-            message: "Er ging iets fout met het opslaan van de html",
+            message: "Er ging iets fout met het opslaan van de html.",
           });
         }
         setShow(false);
       } catch (error) {
         setNotification({
           type: "error",
-          message: `Error tijdens het opslaan van de html`,
+          message: `Error tijdens het opslaan van de html.`,
         });
       }
     });
@@ -144,14 +144,14 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           setNotification({
             type: "error",
-            message: "Er ging iets fout met het versturen van de mail",
+            message: "Er ging iets fout met het versturen van de mail.",
           });
         }
         setShow(false);
       } catch (error) {
         setNotification({
           type: "error",
-          message: `Er ging iets mis met het versturen van de mail`,
+          message: `Er ging iets mis met het versturen van de mail.`,
         });
       }
       handleShow();
@@ -191,7 +191,7 @@ const MailEditor = ({ id }) => {
     } catch (error) {
       setNotification({
         type: "error",
-        message: `Er is iets misgegaan bij het laden van de mail`,
+        message: `Er is iets misgegaan bij het laden van de mail.`,
       });
     } finally {
       editorRef.current = editor;
@@ -220,7 +220,7 @@ const MailEditor = ({ id }) => {
       setShow(false);
       setNotification({
         type: "success",
-        message: "Mail is succesvol verstuurd",
+        message: "Mail is succesvol verstuurd.",
       });
     }
   };
@@ -262,9 +262,10 @@ const MailEditor = ({ id }) => {
             message: "Er is iets fout gegaan tijdens het inplannen",
           });
         }
+        setShow(false);
         setNotification({
           type: "success",
-          message: "Mail is succesvol ingepland",
+          message: "Mail is succesvol ingepland.",
         });
       } catch (error) {
         setEmailSent(false);
