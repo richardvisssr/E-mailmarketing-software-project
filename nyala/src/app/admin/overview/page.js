@@ -16,16 +16,16 @@ export default function Page() {
     <div>
       <div className="d-flex justify-content-center">
         <button
-          onClick={() => handleComponentChange("MailLists")}
-          className={`btn ${styles.buttonPrimary} rounded m-4`}
-        >
-          Maillijsten{" "}
-        </button>
-        <button
           onClick={() => handleComponentChange("SubscribersTable")}
           className={`btn ${styles.buttonPrimary} rounded m-4`}
         >
           Ledenlijst{" "}
+        </button>
+        <button
+          onClick={() => handleComponentChange("MailLists")}
+          className={`btn ${styles.buttonPrimary} rounded m-4`}
+        >
+          Maillijsten{" "}
         </button>
       </div>
 

@@ -164,7 +164,7 @@ export default function MailListComponent() {
           <input
             type="text"
             className="form-control"
-            placeholder="Naam"
+            placeholder={selectedListToUpdate}
             aria-describedby="basic-addon1"
             onChange={(e) => {
               updateName(e);
