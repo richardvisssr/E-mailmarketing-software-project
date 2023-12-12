@@ -152,6 +152,7 @@ function SelectMailingLists(props) {
       <SubscriptionForm
         subscribers={mailingList[0]?.mailList || []}
         setValue={handleMailingChange}
+        selectedSubscribers={selectedMailingList}
       />
 
       {selectedMailingList.length > 0 && (

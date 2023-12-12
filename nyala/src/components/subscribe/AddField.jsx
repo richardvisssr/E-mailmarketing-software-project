@@ -204,6 +204,7 @@ export default function ToevoegVeld() {
                 <SubscriptionForm
                   subscribers={lists}
                   setValue={handleCheckboxChange}
+                  selectedSubscribers={data.list}
                 />
               ) : (
                 <p>Er zijn geen maillijsten.</p>
