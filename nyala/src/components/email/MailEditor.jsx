@@ -71,7 +71,9 @@ const MailEditor = ({ id }) => {
             type: "error",
             message: "Er ging iets fout met het opslaan van het design",
           });
+          return;
         }
+        setShow(false);
         setNotification({
           type: "success",
           message: "Design is succesvol opgeslagen!",
@@ -104,6 +106,7 @@ const MailEditor = ({ id }) => {
             message: "Er ging iets fout met het opslaan van de html",
           });
         }
+        setShow(false);
       } catch (error) {
         setNotification({
           type: "error",
@@ -131,6 +134,7 @@ const MailEditor = ({ id }) => {
             message: "Er ging iets fout met het versturen van de mail",
           });
         }
+        setShow(false);
       } catch (error) {
         setNotification({
           type: "error",
@@ -199,7 +203,8 @@ const MailEditor = ({ id }) => {
         showHeader,
         id
       );
-      setModalNotification({
+      setShow(false);
+      setNotification({
         type: "success",
         message: "Mail is succesvol verstuurd",
       });
@@ -242,7 +247,7 @@ const MailEditor = ({ id }) => {
             message: "Er is iets fout gegaan tijdens het inplannen",
           });
         }
-        setModalNotification({
+        setNotification({
           type: "success",
           message: "Mail is succesvol ingepland",
         });

@@ -30,7 +30,10 @@ function TemplateCard(props) {
 
   const router = useRouter();
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setNotification({type: "", message: ""});
+  }
   const handleShow = () => setShow(true);
 
   const setNewTime = (event) => {
@@ -76,7 +79,7 @@ function TemplateCard(props) {
       } catch (error) {
         setNotification({
           type: "error",
-          message: "Er is iets misgegaan bij het ophalen van de template",
+          message: "Er is iets misgegaan bij het ophalen van de template.",
         });
       }
     };
@@ -101,10 +104,12 @@ function TemplateCard(props) {
         showHeader,
         template.id
       );
-      setNotification({
+      props.setNotification((prevNotification) => ({
+        ...prevNotification,
         type: "success",
-        message: "Mail is succesvol verstuurd",
-      });
+        message: "Mail is succesvol verstuurd.",
+      }));
+      setShow(false);
     }
   };
 
@@ -134,20 +139,24 @@ function TemplateCard(props) {
           }),
         });
         if (!response.ok) {
-          setNotification({
+          props.setNotification((prevNotification) => ({
+            ...prevNotification,
             type: "error",
             message: "Er is iets misgegaan bij het versturen van de mail",
-          });
+          }));
         }
-        setNotification({
+        props.setNotification((prevNotification) => ({
+          ...prevNotification,
           type: "success",
-          message: "Mail is succesvol ingepland",
-        });
+          message: "Mail is succesvol ingepland.",
+        }));
+        setShow(false);
       } catch (error) {
-        setNotification({
+        props.setNotification((prevNotification) => ({
+          ...prevNotification,
           type: "error",
           message: "Er is iets misgegaan bij het versturen van de mail",
-        });
+        }));
         setEmailSent(false);
       }
     }
@@ -176,9 +185,18 @@ function TemplateCard(props) {
       .then(() => {
         onDelete(template.id);
         setShowDeleteModal(false);
+        props.setNotification((prevNotification) => ({
+          ...prevNotification,
+          type: "success",
+          message: "Template is succesvol verwijderd.",
+        }));
       })
       .catch((error) => {
-        console.error("Error deleting template:", error);
+        props.setNotification((prevNotification) => ({
+          ...prevNotification,
+          type: "error",
+          message: "Er is iets misgegaan tijdens het verwijderen!"
+        }));
         // Handle error as needed
         setShowDeleteModal(false);
       });
