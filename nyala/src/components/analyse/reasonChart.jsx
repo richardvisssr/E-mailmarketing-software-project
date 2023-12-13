@@ -3,7 +3,6 @@ import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import styles from "./analyse.module.css";
 
-// Definieer een aparte functiecomponent voor het diagram
 const UnsubscribeReasonChart = ({ reasonData }) => {
   const chartRef = useRef(null);
 
