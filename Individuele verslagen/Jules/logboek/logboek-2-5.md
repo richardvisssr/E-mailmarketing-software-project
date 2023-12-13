@@ -14,8 +14,8 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
-| | | | | | |
+| 3u | [link naar de taak](https://github.com/HANICA-DWA/project-sep23-nyala/issues/12) | n.v.t. | backend check mails | :satisfied: | [link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/401899e39614f38137015dd86cbc63f232b0eab9) |
+| 1u | [link naar de taak](https://github.com/HANICA-DWA/project-sep23-nyala/issues/12) | n.v.t. | Front end| 👓 | [link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/5d52df0094041d904382a565ac29ff6e8e5469a6)|
 
 
 ## Dinsdag 5 december
@@ -24,16 +24,15 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 2u | [link naar de taak](https://github.com/HANICA-DWA/project-sep23-nyala/issues/12) | n.v.t. | Fixes | :satisfied: | [link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/39a3434b162279bb4f5d3c81ed8e36920fd7953f) |
 | | | | | | |
 
 ## Woensdag 6 december
 
-> Eventueel informatieve algemene opmerkingen over deze dag.
+> Niet aanwezig vanwege werk
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
 | | | | | | |
 
 ## Donderdag 7 december
@@ -42,16 +41,14 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
-| | | | | | |
+| 2u | Gewerkt aan het bijwerken van logboek en leerdoelen | n.v.t. | |:scream:| |
 
 
 
 ## Vrijdag 8 december
 
-> Eventueel informatieve algemene opmerkingen over deze dag.
+> Review, planning
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
 | | | | | | |
