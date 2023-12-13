@@ -3,6 +3,7 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import styles from "./button.module.css";
 import Button from "react-bootstrap/Button";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import Modal from "react-bootstrap/Modal";
@@ -192,7 +193,7 @@ function TemplateCard(props) {
   return (
     <>
       <Col key={template.id} style={{ width: "16rem" }}>
-        <Card ref={cardRef}>
+        <Card ref={cardRef} className="shadow">
           <Button variant="danger" onClick={handleDelete}>
             Verwijderen
           </Button>
@@ -204,7 +205,7 @@ function TemplateCard(props) {
             />
           )} */}
 
-          <Card.Body>
+          <Card.Body style={{ marginTop: "1.5rem"}}>
             <Card.Title>{template.title}</Card.Title>
             <div className="d-flex justify-content-between">
               <Button
@@ -215,6 +216,13 @@ function TemplateCard(props) {
               >
                 Aanpassen
               </Button>
+              <div
+                className={`ms-auto clickable`}
+                onClick={toggleAnalyticsCard}
+                style={{ color: 'black', fontSize: '20px', cursor: 'pointer'}}
+              >
+                <i class="bi bi-caret-down-fill"></i>
+              </div>
               <Button
                 variant="primary"
                 className={`ms-auto ${styles.knopPrimary}`}
@@ -223,19 +231,10 @@ function TemplateCard(props) {
               >
                 Versturen
               </Button>
-              <Button
-                variant="primary"
-                className={`ms-auto ${styles.knopPrimary}`}
-                size="sm"
-                onClick={toggleAnalyticsCard}
-              >
-                <i className="fas fa-arrow-right"></i>{" "}
-                {/* Replace with your preferred arrow icon */}
-              </Button>
             </div>
           </Card.Body>
-          {showAnalytics && <AnalyticsPanelCard />}
         </Card>
+        {showAnalytics && <AnalyticsPanelCard />}
       </Col>
 
       <Modal show={showDeleteModal} onHide={cancelDelete}>
