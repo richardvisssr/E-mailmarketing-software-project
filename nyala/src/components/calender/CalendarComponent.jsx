@@ -13,9 +13,11 @@ function MailCalendar(props) {
   const [emailDate, setEmailDate] = useState("");
   const [emailTitle, setEmailTitle] = useState("");
   const [id, setId] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const currentYear = date.getFullYear();
   const currentMonth = date.getMonth();
   const [notification, setNotification] = useState({ type: "", message: "" });
+  const [mails, setMails] = useState([]);
 
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
   const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
@@ -83,13 +85,17 @@ function MailCalendar(props) {
 
   const filteredMails = emails.plannedMails.filter((email) => {
     const emailDate = new Date(email.date);
-    return (
-      (!showFutureMails || emailDate.getTime() >= new Date().getTime()) &&
-      emailDate.getTime() >= firstDayOfMonth.getTime() &&
-      emailDate.getTime() <= lastDayOfMonth.getTime()
-    );
-  });
-
+  
+    if (showFutureMails) {
+      return emailDate.getTime() >= new Date().getTime();
+    } else if (statusFilter !== "") {
+      return email.status === statusFilter;
+    } else {
+      return emailDate.getTime() >= firstDayOfMonth.getTime() &&
+      emailDate.getTime() <= lastDayOfMonth.getTime();
+    }
+  }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  
   const formatTime = (dateString) => {
     const options = {
       hour: "2-digit",
@@ -119,7 +125,10 @@ function MailCalendar(props) {
         <div className="col-auto">
           <i
             className={`bi bi-arrow-left-circle-fill ${styles.icon}`}
-            onClick={handlePreviousMonth}
+            onClick={() => {
+              handlePreviousMonth();
+              setShowFutureMails(false);
+            }}
           ></i>
         </div>
         <div className="col-auto">
@@ -137,7 +146,10 @@ function MailCalendar(props) {
         <div className="col-auto">
           <i
             className={`bi bi-arrow-right-circle-fill ${styles.icon}`}
-            onClick={handleNextMonth}
+            onClick={() => {
+              handleNextMonth();
+              setShowFutureMails(false);
+            }}
           ></i>
         </div>
       </div>
@@ -150,12 +162,33 @@ function MailCalendar(props) {
             type="checkbox"
             id="showFutureMailsCheckbox"
             checked={showFutureMails}
-            onChange={() => setShowFutureMails(!showFutureMails)}
+            onChange={() => {
+              setShowFutureMails(!showFutureMails);
+              setStatusFilter("");
+              setDate(new Date());
+            }}
           />
           <label className="form-check-label" htmlFor="showFutureMailsCheckbox">
             Toon toekomstige mails
           </label>
         </div>
+        <div className="form-group mb-3">
+                <label htmlFor="statusFilterSelect">Filter op status:</label>
+                <select
+                  className="form-select"
+                  id="statusFilterSelect"
+                  value={statusFilter}
+                  onChange={(e) => {
+                    setStatusFilter(e.target.value);
+                    setShowFutureMails(false);
+                  }}
+                >
+                  <option value="">Alle</option>
+                  <option value="In afwachting">In afwachting</option>
+                  <option value="Verzonden">Verzonden</option>
+                  <option value="Mislukt">Mislukt</option>
+                </select>
+              </div>
         <table className="table table-hover">
           <thead>
             <tr>
