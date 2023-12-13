@@ -278,7 +278,7 @@ const MailEditor = ({ id }) => {
     } else {
       setNotification({
         type: "error",
-        message: "He imbiciel, je hebt geen lijsten geselecteerd.",
+        message: "Er zijn geen lijsten geselecteerd!",
       });
     }
   };
