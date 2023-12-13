@@ -1,15 +1,23 @@
-// ReasonChart.js
+// Importeer de benodigde modules
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
+import styles from "./analyse.module.css";
 
-const ReasonChart = ({ data }) => {
+// Definieer een aparte functiecomponent voor het diagram
+const UnsubscribeReasonChart = ({ reasonData }) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
+    if (reasonData.length > 0) {
+      showChart();
+    }
+  }, [reasonData]);
+
+  const showChart = () => {
     const svg = d3.select(chartRef.current);
 
-    const customData = data.map((item) => item.count);
-    const reasons = data.map((item) => item.reason);
+    const customData = reasonData.map((item) => item.count);
+    const reasons = reasonData.map((item) => item.reason);
 
     const barHeight = 20;
     const width = 300;
@@ -21,14 +29,14 @@ const ReasonChart = ({ data }) => {
 
     const x = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (d) => d.count)])
+      .domain([0, d3.max(reasonData, (d) => d.count)])
       .range([margin.left, width - margin.right]);
 
     const y = d3
       .scaleBand()
-      .domain(d3.sort(data, (d) => -d.count).map((d) => d.reason))
+      .domain(d3.sort(reasonData, (d) => -d.count).map((d) => d.reason))
       .rangeRound([margin.top, height - margin.bottom])
-      .padding(0.1);
+      .padding(0.2);
 
     svg
       .attr("viewBox", `0 0 ${width} ${height}`)
@@ -44,7 +52,7 @@ const ReasonChart = ({ data }) => {
       .attr("y", (d, i) => y(reasons[i]))
       .attr("width", (d) => x(d) - margin.left)
       .attr("height", y.bandwidth)
-      .attr("fill", "green");
+      .attr("fill", "#E800E9");
 
     svg
       .append("g")
@@ -55,9 +63,17 @@ const ReasonChart = ({ data }) => {
       .append("g")
       .attr("transform", `translate(0,${height - margin.bottom})`)
       .call(d3.axisBottom(x).ticks(d3.max(customData) / 1));
-  }, [data]);
 
-  return <svg viewBox="0 0 60 55" width="200" height="100" ref={chartRef} />;
+    svg
+      .append("text")
+      .attr("x", width / 2)
+      .attr("y", margin.top / 2)
+      .attr("text-anchor", "middle")
+      .style("font-size", "16px")
+      .text("Aantal afmeldredenen");
+  };
+
+  return <svg className={`${styles.chart}`} ref={chartRef} />;
 };
 
-export default ReasonChart;
+export default UnsubscribeReasonChart;
