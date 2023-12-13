@@ -42,7 +42,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 6 uur ex pauze | Vandaag was ook Pim er weer in de ochtend voor een retrospective. Vooral bezig geweest met documentatie verder voor de tussentijdse beoordeling. | Groepsgenoten indien relevant | Documentatie diagrammen maken ging best goed. Workshop en boek over software guidebook waren goed van toepassing. |b:smiley:,  :satisfied:, | https://github.com/HANICA-DWA/project-sep23-nyala/commit/b3707dd1fe3fe9f34911adca9cb8d19224be6098, https://github.com/HANICA-DWA/project-sep23-nyala/commit/cacd55d521da2434c9cacc2410b07911020ecc52, https://github.com/HANICA-DWA/project-sep23-nyala/commit/14d40256013cb3dd0175020c5772fe8c2dc5670a |
 | | | | | | |
 
 
@@ -53,5 +53,5 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 4.5 ex pauze | Vandaag was de sprint review en planning. Frits had ons tussentijds beoordeeld. Verder heb ik na de gesprekken de figma designs aangepast aan de sprint backlog. Email opgesteld om te versturen naar product owner voor beoordeling van sprint backlog en figma designs | Groepsgenoten indien relevant | Tussentijde beoordeling resultaat was dat we op onze duplicatie moesten letten. Dit wisten wij zelf ook al en pakken we op in de postgame. Verder was het een goede voldoende waar we blij mee zijn |:smiley:, ::satisfied:, | [link naar de resultaten](https://github.com/link-naar-de-commit) |
 | | | | | | |
