@@ -29,6 +29,7 @@ const UnsubscribeReasonChart = ({ reasonData }) => {
     const x = d3
       .scaleLinear()
       .domain([0, d3.max(reasonData, (d) => d.count)])
+      .nice()
       .range([margin.left, width - margin.right]);
 
     const y = d3
@@ -42,7 +43,8 @@ const UnsubscribeReasonChart = ({ reasonData }) => {
       .attr("width", width)
       .attr("height", height);
 
-    svg
+    // Voeg tooltips toe aan de balken
+    const bars = svg
       .selectAll("rect")
       .data(customData)
       .enter()
@@ -51,7 +53,38 @@ const UnsubscribeReasonChart = ({ reasonData }) => {
       .attr("y", (d, i) => y(reasons[i]))
       .attr("width", (d) => x(d) - margin.left)
       .attr("height", y.bandwidth)
-      .attr("fill", "#E800E9");
+      .attr("fill", "#E800E9")
+      .on("mouseover", function (event, d, i) {
+        d3.select(this).attr("fill", "#FF00FF");
+
+        // Toon tooltip met aantal
+        svg
+          .append("text")
+          .attr("class", "tooltip")
+          .attr("x", x(d))
+          .attr("y", y(reasons[i]) + y.bandwidth() / 2)
+          .attr("dy", "0.35em")
+          .attr("text-anchor", "middle") // center the text
+          .style("font-size", "8px")
+          .text(d);
+      })
+      .on("mouseout", function () {
+        d3.select(this).attr("fill", "#E800E9");
+
+        // Verwijder de tooltip
+        svg.select(".tooltip").remove();
+      });
+
+    // svg
+    //   .selectAll("text")
+    //   .data(customData)
+    //   .enter()
+    //   .append("text")
+    //   .attr("x", (d) => x(d) - 10)
+    //   .attr("y", (d, i) => y(reasons[i]) + y.bandwidth() / 2)
+    //   .attr("dy", "0.35em")
+    //   .style("font-size", "8px")
+    //   .text((d) => d);
 
     svg
       .append("g")
@@ -61,7 +94,18 @@ const UnsubscribeReasonChart = ({ reasonData }) => {
     svg
       .append("g")
       .attr("transform", `translate(0,${height - margin.bottom})`)
-      .call(d3.axisBottom(x).ticks(d3.max(customData) / 1));
+      .call(
+        d3
+          .axisBottom(x)
+          .ticks(d3.max(customData) / 100)
+          .tickValues(
+            d3.range(
+              0,
+              d3.max(customData) + 1,
+              getTickInterval(d3.max(customData))
+            )
+          )
+      );
 
     svg
       .append("text")
@@ -70,6 +114,20 @@ const UnsubscribeReasonChart = ({ reasonData }) => {
       .attr("text-anchor", "middle")
       .style("font-size", "16px")
       .text("Aantal afmeldredenen");
+  };
+
+  const getTickInterval = (maxValue) => {
+    if (maxValue > 1000) {
+      return 1000;
+    } else if (maxValue > 500) {
+      return 500;
+    } else if (maxValue > 100) {
+      return 100;
+    } else if (maxValue > 50) {
+      return 50;
+    } else {
+      return 10;
+    }
   };
 
   return <svg className={`${styles.chart}`} ref={chartRef} />;
