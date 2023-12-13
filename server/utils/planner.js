@@ -13,7 +13,14 @@ async function sendEmail(email) {
     },
   });
 
+  if (email.subscribers.length === 0) {
+    console.log("No subscribers found");
+    return false;
+  }
+
   try {
+    const results = [];
+
     for (const subscriber of email.subscribers) {
       const mailOptions = {
         from: "xtend@svxtend.nl",
@@ -34,11 +41,15 @@ async function sendEmail(email) {
       <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
         <p>
           Bekijk de online versie van deze e-mail
-          <a href="http://localhost:3000/onlineEmail/${email.id}/${subscriber.id}" style="text-decoration: none; color: #007BFF;">
+          <a href="http://localhost:3000/onlineEmail/${email.id}/${
+          subscriber.id
+        }" style="text-decoration: none; color: #007BFF;">
             hier
           </a>.
         </p>
-        <a href="http://localhost:3000/unsubscribe/${subscriber.id}" style="text-decoration: none; color: #333;">
+        <a href="http://localhost:3000/unsubscribe/${
+          subscriber.id
+        }" style="text-decoration: none; color: #333;">
           Uitschrijven
         </a>
       </div>
@@ -46,20 +57,24 @@ async function sendEmail(email) {
         `,
       };
 
-      await new Promise((resolve, reject) => {
+      const sendEmailPromise = await new Promise((resolve, reject) => {
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
             console.error("Failed to send email:", error);
             reject(error);
           } else {
             console.log("Email sent:", info.response);
-            resolve();
+            resolve(info.response);
           }
         });
       });
+
+      results.push(sendEmailPromise);
     }
 
-    return true;
+    const responses = await Promise.all(results);
+
+    return responses.every(response => !!response);
   } catch (error) {
     console.error("Error sending email:", error);
     return false;
@@ -88,7 +103,11 @@ async function checkEvents() {
       const success = await sendEmail(email);
 
       if (success) {
+        email.status = "Verzonden";
         email.sended = true;
+        await email.save();
+      } else {
+        email.status = "Mislukt";
         await email.save();
       }
     }
