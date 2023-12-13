@@ -234,7 +234,7 @@ function TemplateCard(props) {
             </div>
           </Card.Body>
         </Card>
-        {showAnalytics && <AnalyticsPanelCard />}
+        {showAnalytics && <AnalyticsPanelCard id={template.id}/>}
       </Col>
 
       <Modal show={showDeleteModal} onHide={cancelDelete}>

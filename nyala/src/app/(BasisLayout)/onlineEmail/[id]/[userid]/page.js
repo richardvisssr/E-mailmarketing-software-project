@@ -1,15 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
-import Loading from "@/app/loading";
+import Loading from "@/app/(BasisLayout)/loading";
 
 export default function Page({ params }) {
   const { id } = params;
   const { userid } = params;
   const [email, setEmail] = useState(null);
-  const [subscriber, setSubscriber] = useState(null);
 
   useEffect(() => {
-    // Fetch email
     fetch(`http://localhost:3001/mail/getEmail/${id}`)
       .then((response) => response.json())
       .then((data) => {
@@ -18,6 +16,10 @@ export default function Page({ params }) {
       .catch((error) => {
         console.error("Error fetching email:", error);
       });
+      fetch(`http://localhost:3001/trackOnlineView/${id}`)
+      .then((data) => {
+        console.log(data);
+      })
   }, []);
 
   return (
