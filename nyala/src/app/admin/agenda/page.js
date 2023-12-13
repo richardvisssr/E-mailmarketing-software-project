@@ -4,7 +4,7 @@ import MailCalendar from "@/components/calender/CalendarComponent";
 import React, { useEffect, useState } from "react";
 
 function Page() {
-  const socket  = new WebSocket("ws://localhost:55881/socket");
+  const socket  = new WebSocket("ws://localhost:8000/socket");
   const [emails, setEmails] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [shouldUpdate, setShouldUpdate] = useState(false);
