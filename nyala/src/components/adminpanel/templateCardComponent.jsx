@@ -3,13 +3,15 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import styles from "./button.module.css";
 import Button from "react-bootstrap/Button";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import Modal from "react-bootstrap/Modal";
 import SelectMailingLists from "../email/SendMail";
 import { nanoid } from "nanoid";
 import AlertComponent from "../alert/AlertComponent";
-import sendDataToSendEmail from "../emailService";
+import sendDataToSendEmail from "../EmailService";
+import AnalyticsPanelCard from "./AnalyticsPanelCard";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
@@ -27,12 +29,16 @@ function TemplateCard(props) {
   const [subject, setSubject] = useState("");
   const [showHeader, setShowHeader] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   const router = useRouter();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const toggleAnalyticsCard = () => {
+    setShowAnalytics((prevVisibility) => !prevVisibility);
+  };
   const setNewTime = (event) => {
     setDateTime(event.target.value);
   };
@@ -187,7 +193,7 @@ function TemplateCard(props) {
   return (
     <>
       <Col key={template.id} style={{ width: "16rem" }}>
-        <Card ref={cardRef}>
+        <Card ref={cardRef} className="shadow">
           <Button variant="danger" onClick={handleDelete}>
             Verwijderen
           </Button>
@@ -199,7 +205,7 @@ function TemplateCard(props) {
             />
           )} */}
 
-          <Card.Body>
+          <Card.Body style={{ marginTop: "1.5rem"}}>
             <Card.Title>{template.title}</Card.Title>
             <div className="d-flex justify-content-between">
               <Button
@@ -210,6 +216,13 @@ function TemplateCard(props) {
               >
                 Aanpassen
               </Button>
+              <div
+                className={`ms-auto clickable`}
+                onClick={toggleAnalyticsCard}
+                style={{ color: 'black', fontSize: '20px', cursor: 'pointer'}}
+              >
+                <i class="bi bi-caret-down-fill"></i>
+              </div>
               <Button
                 variant="primary"
                 className={`ms-auto ${styles.knopPrimary}`}
@@ -221,6 +234,7 @@ function TemplateCard(props) {
             </div>
           </Card.Body>
         </Card>
+        {showAnalytics && <AnalyticsPanelCard />}
       </Col>
 
       <Modal show={showDeleteModal} onHide={cancelDelete}>
