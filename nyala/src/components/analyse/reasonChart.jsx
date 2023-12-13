@@ -75,17 +75,6 @@ const UnsubscribeReasonChart = ({ reasonData }) => {
         svg.select(".tooltip").remove();
       });
 
-    // svg
-    //   .selectAll("text")
-    //   .data(customData)
-    //   .enter()
-    //   .append("text")
-    //   .attr("x", (d) => x(d) - 10)
-    //   .attr("y", (d, i) => y(reasons[i]) + y.bandwidth() / 2)
-    //   .attr("dy", "0.35em")
-    //   .style("font-size", "8px")
-    //   .text((d) => d);
-
     svg
       .append("g")
       .attr("transform", `translate(${margin.left},0)`)
