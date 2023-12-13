@@ -140,6 +140,51 @@ router.put("/change/:subscriber", async (req, res) => {
   }
 });
 
+router.put("/update/:list", async (req, res) => {
+  const prevList = req.params.list;
+  const { name } = req.body;
+
+  try {
+    const subscribers = await Subscriber.find({ subscription: prevList });
+
+    if (!name) {
+      return res.status(400).send({ message: "No new name provided" });
+    }
+
+    if (name === prevList) {
+      return res.status(400).send({ message: "New name is the same" });
+    }
+
+    if (name.trim() !== name) {
+      return res.status(400).send({ message: "New name contains spaces" });
+    }
+
+    if (
+      subscribers.some((subscriber) => subscriber.subscription.includes(name))
+    ) {
+      return res.status(400).send({ message: "New name already exists" });
+    }
+
+    const updatedSubscribers = subscribers.map((subscriber) => {
+      const index = subscriber.subscription.indexOf(prevList);
+      if (index !== -1) {
+        const updatedSubscription = [...subscriber.subscription];
+        updatedSubscription[index] = name;
+        subscriber.subscription = updatedSubscription;
+      }
+      return subscriber;
+    });
+
+    await Promise.all(
+      updatedSubscribers.map((subscriber) => subscriber.save())
+    );
+
+    res.status(200).json({ message: "Subscriber updated" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 router.delete("/unsubscribe", async (req, res) => {
   const { email } = req.body;
   try {
