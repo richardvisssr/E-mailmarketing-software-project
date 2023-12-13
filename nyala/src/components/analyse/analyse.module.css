@@ -1,6 +1,6 @@
 .quarterPageContainer {
-  width: 50vw; /* 25% of viewport width */
-  height: 50vh; /* 25% of viewport height */
+  width: 50vw;
+  height: 50vh;
 }
 
 .chart {
