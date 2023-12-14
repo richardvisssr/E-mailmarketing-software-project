@@ -8,6 +8,11 @@ router.post("/sendEmail", async (req, res) => {
   try {
     const { html, subscribers, subject, showHeader, id } = req.body;
 
+    if (subscribers.length === 0) {
+      res.status(400).json({ error: "No subscribers found" });
+      return;
+    }
+    
     let transporter = nodemailer.createTransport({
       host: "145.74.104.216",
       port: 1025,
