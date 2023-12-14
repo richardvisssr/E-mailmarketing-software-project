@@ -33,7 +33,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| rond af op uren, of halve uren | https://github.com/HANICA-DWA/project-sep23-nyala/issues/148, https://github.com/HANICA-DWA/project-sep23-nyala/issues/186 . Gister lang bezig geweest met het analiseren van aantal kliks op een verzonden mail maar mocht helaas niet baten. Er was een specifieke manier om dit te doen en theoretisch gezien moest het allemaal werken en met postman werkte het ook maar in de praktijk werkte het in onze applicaite helaas niet. Toen ben ik daarna begonnen met een soort gelijke taak waarvan ik de oude code veelal kon overnemen.| Groepsgenoten indien relevant | Documenten gelezen en het zou allemaal moeten werken met de taak waarmee ik bezig was maar mocht niet baten. Ben wel verstadnig geweest om snel nieuwe taak op te pakken en niet te lang blijven hangen. |:rage:, :face_exhaling: :scream:| https://github.com/HANICA-DWA/project-sep23-nyala/commit/d8365e54aeaa0ea11f9ddb24044c0bb4f5086535, https://github.com/HANICA-DWA/project-sep23-nyala/commit/c96222e0a83bbd7c924aa2acffd8fec8d2321784, https://github.com/HANICA-DWA/project-sep23-nyala/commit/7fc4eeda5bba8c0ca03a8bf7f810d0dce57fb58b|
 | | | | | | |
 
 ## Donderdag 14 december
