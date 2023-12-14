@@ -133,9 +133,13 @@ function TemplateCard(props) {
         message: "Mail is succesvol verstuurd.",
       }));
       setShow(false);
+    } else {
+      setNotification({
+        type: "error",
+        message: "Er zijn geen lijsten geselecteerd!",
+      });
     }
   };
-  // console.log(subscribers);
 
   const handlePlanMail = async () => {
     if (!subject || subject.trim() === "") {
