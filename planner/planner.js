@@ -3,7 +3,7 @@ const http = require("http");
 const ws = require("ws");
 const express = require("express");
 const session = require("express-session");
-const { PlannedEmail } = require("../model/emailEditor");
+const { PlannedEmail } = require("../server/model/emailEditor");
 
 const host = process.env.HOST || "127.0.0.1";
 const port = 8000;

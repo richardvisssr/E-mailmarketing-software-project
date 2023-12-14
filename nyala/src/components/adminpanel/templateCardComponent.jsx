@@ -109,7 +109,6 @@ function TemplateCard(props) {
   };
 
   const handlePlanMail = async () => {
-    console.log(subscribers);
     if (!subject || subject.trim() === "") {
       setNotification({
         type: "error",
