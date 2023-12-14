@@ -65,7 +65,7 @@ const UnsubscribeReasonChart = ({ reasonData }) => {
     svg
       .append("g")
       .attr("transform", `translate(0,${height - margin.bottom})`)
-      .call(d3.axisBottom(x).tickValues(d3.ticks(0, d3.max(count), 5))); // Adjust the tick count as needed
+      .call(d3.axisBottom(x).tickValues(d3.ticks(0, d3.max(count), 5)));
 
     svg
       .append("text")
