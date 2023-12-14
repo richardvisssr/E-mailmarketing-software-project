@@ -1,6 +1,6 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import AlertComponent from "../alert/AlertComponent";
 import UnsubscribeReasonChart from "./reasonChart";
 import styles from "./analyse.module.css";
@@ -16,6 +16,15 @@ export default function AnalysePanel() {
     try {
       const response = await fetch("http://localhost:3001/unsubscribeReasons");
       const data = await response.json();
+
+      if (data.length === 0) {
+        setNotification({
+          type: "error",
+          message:
+            "Er zijn nog geen redenen om uit te schrijven om weer te geven",
+        });
+        return;
+      }
 
       const reasonCounts = {};
       data.forEach((item) => {
@@ -46,13 +55,19 @@ export default function AnalysePanel() {
   }, []);
 
   return (
-    <div>
-      <AlertComponent notification={notification} />
-      <div
-        className={`container-lg ${styles.quarterPageContainer} position-fixed top-30`}
-      >
-        <UnsubscribeReasonChart reasonData={reasonData} />
-      </div>
-    </div>
+    <Container fluid>
+      <Row>
+        <Col>
+          <AlertComponent notification={notification} />
+          <UnsubscribeReasonChart reasonData={reasonData} />
+        </Col>
+        <Col></Col>
+      </Row>
+
+      <Row>
+        <Col></Col>
+        <Col></Col>
+      </Row>
+    </Container>
   );
 }
