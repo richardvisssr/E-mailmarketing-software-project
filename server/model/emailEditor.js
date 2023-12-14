@@ -54,7 +54,7 @@ const plannedEmailSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  sended: {
+  sent: {
     type: Boolean,
     required: true,
   },

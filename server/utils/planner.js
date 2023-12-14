@@ -118,20 +118,20 @@ async function sendEmail(email) {
   }
 }
 
-// Function to check for events and send email if necessary
-async function checkEvents() {
+// Function to check for emails and send email if necessary
+async function checkEmails() {
   const currentDate = new Date();
   const formattedDate = currentDate.toISOString().slice(0, -7) + "00.000+00:00";
 
-  console.log("Checking for events at", formattedDate);
+  console.log("Checking for emails at", formattedDate);
 
   const emails = await PlannedEmail.find({
     date: { $lte: formattedDate },
-    sended: false,
+    sent: false,
   });
 
   if (emails.length === 0) {
-    console.log("No events found");
+    console.log("No emails found");
     return;
   }
 
@@ -141,9 +141,9 @@ async function checkEvents() {
 
       if (success) {
         email.status = "Verzonden";
-        email.sended = true;
+        email.sent = true;
         await email.save();
-        sendWebsocketMessage({ type: "update", message: "Email sended" });
+        sendWebsocketMessage({ type: "update", message: "Email sent" });
       } else {
         email.status = "Mislukt";
         await email.save();
@@ -151,9 +151,9 @@ async function checkEvents() {
       }
     }
   } catch (error) {
-    console.error("Error checking events:", error);
+    console.error("Error checking emails:", error);
   }
 }
 
-// Run the checkEvents function every minute
-setInterval(checkEvents, 60000);
+// Run the checkEmails function every minute
+setInterval(checkEmails, 60000);
