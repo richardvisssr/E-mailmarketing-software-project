@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import styles from "./analyse.module.css";
@@ -6,13 +8,14 @@ const UnsubscribeReasonChart = ({ reasonData }) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
-    if (reasonData.length > 0) {
+    if (reasonData && reasonData.length > 0) {
       showChart();
     }
   }, [reasonData]);
 
   const showChart = () => {
     const svg = d3.select(chartRef.current);
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     const count = reasonData.map((item) => item.count);
     const reasons = reasonData.map((item) => item.reason);
@@ -49,13 +52,7 @@ const UnsubscribeReasonChart = ({ reasonData }) => {
       .attr("y", (d, i) => y(reasons[i]))
       .attr("width", (d) => x(d) - margin.left)
       .attr("height", y.bandwidth)
-      .attr("fill", "#E800E9")
-      .on("mouseover", function (event, d, i) {
-        d3.select(this).attr("fill", "#FF00FF");
-      })
-      .on("mouseout", function () {
-        d3.select(this).attr("fill", "#E800E9");
-      });
+      .attr("fill", (d, i) => color(i));
 
     svg
       .append("g")
@@ -73,7 +70,7 @@ const UnsubscribeReasonChart = ({ reasonData }) => {
       .attr("y", margin.top / 2)
       .attr("text-anchor", "middle")
       .style("font-size", "16px")
-      .text("Aantal afmeldredenen");
+      .text("Aantal uitschrijvingen per reden");
   };
   return <svg className={`${styles.chart}`} ref={chartRef} />;
 };

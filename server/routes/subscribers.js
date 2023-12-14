@@ -1,7 +1,7 @@
 "use strict";
 
 const express = require("express");
-const { Subscriber, Unsubscriber } = require("../model/subscribers");
+const { Subscriber, Unsubscriber, Category } = require("../model/subscribers");
 const router = express.Router();
 
 router.get("/unsubscribeReasons", async (req, res) => {
@@ -29,6 +29,18 @@ router.get("/subscribers/all", async (req, res) => {
   try {
     const subscribers = await Subscriber.find();
     res.status(200).send(subscribers);
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
+router.get("/unsubscribe/count", async (req, res) => {
+  try {
+    const categories = await Category.find();
+    const array = categories.map((element) => {
+      return { name: element.name, count: element.count };
+    });
+    res.status(200).send(array);
   } catch (error) {
     res.status(500).send({ message: "Internal server error" });
   }

@@ -23,8 +23,21 @@ const unsubscribe = new mongoose.Schema({
   },
 });
 
+const categories = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  count: {
+    type: Number,
+    required: true,
+  },
+});
+
 const Subscriber = mongoose.model("Subscriber", subscribers);
 const Unsubscriber = mongoose.model("Unsubscribe", unsubscribe);
+const Category = mongoose.model("Category", categories);
 
 // const sub = new Subscriber({
 //   email: "Maaadddtt@jfc.nl",
@@ -34,4 +47,4 @@ const Unsubscriber = mongoose.model("Unsubscribe", unsubscribe);
 
 // sub.save();
 
-module.exports = { Subscriber, Unsubscriber };
+module.exports = { Subscriber, Unsubscriber, Category };
