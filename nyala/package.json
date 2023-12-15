@@ -20,7 +20,8 @@
     "react": "^18",
     "react-bootstrap": "^2.9.1",
     "react-calendar": "^4.6.1",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "ws": "^8.15.1"
   },
   "devDependencies": {
     "jest": "^29.7.0",

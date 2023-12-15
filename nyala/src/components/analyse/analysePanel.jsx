@@ -7,8 +7,10 @@ import MailListChart from "./MaillistChart";
 import styles from "./analyse.module.css";
 
 export default function AnalysePanel() {
+  const socket = new WebSocket("ws://127.0.0.1:7002/socket");
   const [reasonData, setReasonData] = useState([]);
   const [mailListData, setMailListData] = useState([]);
+  const [change, setChange] = useState(false);
   const [reasonNotification, setReasonNotification] = useState({
     type: "",
     message: "",
@@ -20,6 +22,22 @@ export default function AnalysePanel() {
   const [notification, setNotification] = useState({
     type: "",
     message: "",
+  });
+
+  socket.addEventListener("open", (event) => {});
+
+  socket.addEventListener("message", (event) => {
+    try {
+      const message = JSON.parse(event.data);
+      if (message.type === "unsubscribe") {
+        setChange(true);
+      }
+    } catch (error) {
+      setNotification({
+        type: "error",
+        message: "Error fetching unsubscribe reasons",
+      });
+    }
   });
 
   const getUnsubscribeReasons = async () => {
@@ -65,7 +83,6 @@ export default function AnalysePanel() {
       const response = await fetch("http://localhost:3001/unsubscribe/count");
       const data = await response.json();
 
-      console.log(data);
       setMailListData(data);
 
       if (data.length === 0) {
@@ -86,7 +103,8 @@ export default function AnalysePanel() {
   useEffect(() => {
     getUnsubscribeReasons();
     getMailList();
-  }, []);
+    setChange(false);
+  }, [change]);
 
   return (
     <Container>

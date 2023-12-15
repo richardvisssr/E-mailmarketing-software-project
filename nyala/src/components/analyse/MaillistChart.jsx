@@ -4,20 +4,24 @@ import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import styles from "./analyse.module.css";
 
-const MailListChart = ({ mailListData }) => {
+const MailListChart = ({ mailListData, refreshChart }) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
     if (mailListData && mailListData.length > 0) {
       showChart();
     }
-  }, [mailListData]);
+  }, [mailListData, refreshChart]);
 
   const showChart = () => {
     const svg = d3.select(chartRef.current);
 
+    svg.selectAll("*").remove();
+
     const name = mailListData.map((item) => item.name);
     const count = mailListData.map((item) => item.count);
+
+    const total = count.reduce((a, b) => a + b, 0);
 
     const width = 400;
     const height = 400;
@@ -39,24 +43,52 @@ const MailListChart = ({ mailListData }) => {
       .value((d) => d)
       .sort(null);
 
+    var div = d3
+      .select("body")
+      .append("div")
+      .attr("class", "tooltip-donut")
+      .style("opacity", 0);
+
     const arcs = svg
-      .selectAll("arc")
+      .selectAll("path")
       .data(pie(count))
       .enter()
       .append("g")
-      .attr("class", "arc")
-      .attr("transform", `translate(${width / 2}, ${height / 2})`);
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
     arcs
       .append("path")
       .attr("d", arc)
-      .attr("fill", (d, i) => color(i));
+      .attr("fill", function (d, i) {
+        return color(i);
+      })
+      .on("mouseover", function (event, d) {
+        d3.select(this).transition().duration("50").attr("opacity", ".85");
+        div.transition().duration(50).style("opacity", 1);
+
+        let [x, y] = d3.pointer(event); // Dynamically get mouse position
+
+        let percentage = Math.round((d.data / total) * 100);
+        div
+          .html(`${d.data} (${percentage}%)`)
+          .style("left", x + "px")
+          .style("top", y + "px");
+      })
+      .on("mouseout", function () {
+        d3.select(this).transition().duration("50").attr("opacity", "1");
+        div.transition().duration("50").style("opacity", 0);
+      });
 
     arcs
       .append("text")
-      .attr("transform", (d) => `translate(${arc.centroid(d)})`)
-      .attr("text-anchor", "middle")
-      .text((d) => d.data);
+      .attr("transform", function (d) {
+        return "translate(" + arc.centroid(d) + ")";
+      })
+      .attr("dy", ".35em")
+      .style("text-anchor", "middle")
+      .text(function (d) {
+        return d.data;
+      });
 
     svg
       .append("text")

@@ -14,6 +14,11 @@ export default function UnsubscribeForm({ userid }) {
   const [selectedSubs, setSelectedSubs] = useState([]);
   const [subs, setSubs] = useState([]);
   const [warning, setWarning] = useState({ type: "", message: "" });
+  const [message, setMessage] = useState({
+    type: "unsubscribe",
+    reason: "",
+    subscriptions: [],
+  });
 
   // Dit zijn de redenen gekregen van de PO
   const reasons = [

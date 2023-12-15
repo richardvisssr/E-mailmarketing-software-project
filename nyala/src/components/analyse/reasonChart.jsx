@@ -15,6 +15,7 @@ const UnsubscribeReasonChart = ({ reasonData }) => {
 
   const showChart = () => {
     const svg = d3.select(chartRef.current);
+    svg.selectAll("*").remove();
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     const count = reasonData.map((item) => item.count);
