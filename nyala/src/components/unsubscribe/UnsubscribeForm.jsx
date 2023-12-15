@@ -5,7 +5,7 @@ import styles from "./UnsubscribeForm.module.css";
 import SubscriptionForm from "../categories/CategoriesComponent";
 import AlertComponent from "../alert/AlertComponent";
 
-export default function UnsubscribeForm({ userid }) {
+export default function UnsubscribeForm({ userid, emailid }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [reason, setReason] = useState("");
@@ -192,7 +192,7 @@ export default function UnsubscribeForm({ userid }) {
                 "unsubscribedSubs",
                 JSON.stringify(selectedSubs)
               );
-              router.push("../unsubscribed");
+              router.push(`/analyse/unsubscribe/${emailid}/${userid}`);
             }
           }
         } else {
@@ -204,7 +204,7 @@ export default function UnsubscribeForm({ userid }) {
                 "unsubscribedSubs",
                 JSON.stringify(selectedSubs)
               );
-              router.push("../unsubscribed");
+              router.push(`/analyse/unsubscribe/${emailid}/${userid}`);
             }
           }
         }

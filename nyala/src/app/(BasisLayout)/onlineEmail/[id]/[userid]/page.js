@@ -1,11 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import Loading from "@/app/(BasisLayout)/loading";
+import AlertComponent from "@/components/alert/AlertComponent";
 
 export default function Page({ params }) {
-  const { id } = params;
-  const { userid } = params;
+  const { id, userid } = params;
   const [email, setEmail] = useState(null);
+  const [notification, setNotification] = useState({ type: "", message: "" });
 
   useEffect(() => {
     fetch(`http://localhost:3001/mail/getEmail/${id}`)
@@ -14,22 +15,21 @@ export default function Page({ params }) {
         setEmail(data);
       })
       .catch((error) => {
-        console.error("Error fetching email:", error);
+        setNotification({ type: "error", message: "Error fetching email." });
       });
-      fetch(`http://localhost:3001/trackOnlineView/${id}`)
-      .then((data) => {
-        console.log(data);
-      })
   }, []);
 
   return (
     <main>
+      {notification.type && notification.message && (
+        <AlertComponent type={notification.type} message={notification.message} />
+      )}
+
       {email ? (
         <div>
           <div
             dangerouslySetInnerHTML={{ __html: email.html }}
             style={{
-
               textAlign: "center",
               padding: "10px",
             }}
@@ -41,7 +41,6 @@ export default function Page({ params }) {
               backgroundColor: "#f1f1f1",
               fontFamily: "Arial",
               textAlign: "center",
-
             }}
           >
             <a
@@ -57,7 +56,7 @@ export default function Page({ params }) {
           </div>
         </div>
       ) : (
-        <Loading/>
+        <Loading />
       )}
     </main>
   );

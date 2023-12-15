@@ -1,6 +1,7 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
 const { PlannedEmail } = require("../model/emailEditor");
+const { sendWebSocketMessage } = require("../utils/websockets");
 
 const router = express.Router();
 
@@ -44,13 +45,13 @@ router.post("/sendEmail", async (req, res) => {
       <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
         <p>
           Bekijk de online versie van deze e-mail
-          <a href="http://localhost:3000/onlineEmail/${id}/${
+          <a href="http://localhost:3000/analyse/onlineEmail/${id}/${
           subscriber._id
         }" style="text-decoration: none; color: #007BFF;">
             hier
           </a>.
         </p>
-        <a href="http://localhost:3000/unsubscribe/${
+        <a href="http://localhost:3000/unsubscribe/${id}/${
           subscriber._id
         }" style="text-decoration: none;">
           Uitschrijven
@@ -63,6 +64,7 @@ router.post("/sendEmail", async (req, res) => {
       await transporter.sendMail(mailOptions);
       sentSubscribers.push(subscriber.email);
     }
+    sendWebSocketMessage({ type: "sendEmail", templateId: id });
     res.status(200).json({ success: true });
   } catch (error) {
     res.status(500).json({ error: "Error sending email" });
@@ -89,6 +91,7 @@ router.put("/planMail", async (req, res) => {
       planMail.date = date;
       planMail.subject = subject;
       await planMail.save();
+
       res.status(200).send("Mail planned successfully");
     } else {
       const newPlanMail = new PlannedEmail({
