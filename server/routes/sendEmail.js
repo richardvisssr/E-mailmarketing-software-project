@@ -76,7 +76,8 @@ router.post("/sendEmail", async (req, res) => {
 
 router.put("/planMail", async (req, res) => {
   try {
-    const { id, title, html, subs, date, showHeader, subject } = req.body;
+    const { id, title, html, subs, date, showHeader, headerText, subject } =
+      req.body;
     const subscribers = subs.map((subscriberArray) => {
       const subscriber = subscriberArray[0];
       return {
@@ -85,8 +86,7 @@ router.put("/planMail", async (req, res) => {
         email: subscriber.email,
       };
     });
-
-    console.log(subscribers);
+    
     const planMail = await PlannedEmail.findOne({ id });
 
     if (planMail) {
@@ -96,6 +96,7 @@ router.put("/planMail", async (req, res) => {
       planMail.subscribers = subscribers;
       planMail.date = date;
       planMail.subject = subject;
+      planMail.headerText = headerText;
       await planMail.save();
       res.status(200).send("Mail planned successfully");
     } else {
