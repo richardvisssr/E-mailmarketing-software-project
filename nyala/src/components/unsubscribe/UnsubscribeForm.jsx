@@ -93,6 +93,35 @@ export default function UnsubscribeForm({ userid }) {
     }
   };
 
+  const saveUnsubscribedSubs = async () => {
+    try {
+      const unsubscribedSubs = await fetch(
+        "http://localhost:3001/unsubscribe/lists",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            subscriptions: selectedSubs,
+          }),
+        }
+      );
+
+      if (unsubscribedSubs.status === 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      setWarning({
+        type: "error",
+        message: "Er ging iets mis met het uitschrijven.",
+      });
+      return false;
+    }
+  };
+
   // Reden van uitschrijven toevoegen aan de database
   const handleReasonSubmit = async () => {
     try {
@@ -182,7 +211,8 @@ export default function UnsubscribeForm({ userid }) {
       try {
         if (subs.length === selectedSubs.length) {
           const complete = await handleCompleteUnsubscribe();
-          if (complete) {
+          const save = await saveUnsubscribedSubs();
+          if (complete && save) {
             const reason = await handleReasonSubmit();
             if (reason) {
               localStorage.setItem(
@@ -193,8 +223,9 @@ export default function UnsubscribeForm({ userid }) {
             }
           }
         } else {
-          const sub = await handleUnsubscribe();
-          if (sub) {
+          const complete = await handleUnsubscribe();
+          const save = await saveUnsubscribedSubs();
+          if (complete && save) {
             const reason = await handleReasonSubmit();
             if (reason) {
               localStorage.setItem(

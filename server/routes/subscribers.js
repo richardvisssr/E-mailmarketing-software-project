@@ -34,18 +34,6 @@ router.get("/subscribers/all", async (req, res) => {
   }
 });
 
-router.get("/unsubscribe/count", async (req, res) => {
-  try {
-    const categories = await Category.find();
-    const array = categories.map((element) => {
-      return { name: element.name, count: element.count };
-    });
-    res.status(200).send(array);
-  } catch (error) {
-    res.status(500).send({ message: "Internal server error" });
-  }
-});
-
 router.post("/subscribers/add", async (req, res) => {
   try {
     const { email, name, subscriptions } = req.body;

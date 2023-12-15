@@ -16,7 +16,8 @@ const subscriberRouter = require("./routes/subscribers");
 const emailEditorRouter = require("./routes/emailEditor");
 const mailListRouter = require("./routes/mailLists");
 const sendMailRouter = require("./routes/sendEmail");
-const adminpanelRouter = require('./routes/templateRoutes');
+const adminpanelRouter = require("./routes/templateRoutes");
+const unsubscribeAnalyticsRouter = require("./routes/unsubcsribeAnalytics");
 
 const app = express();
 
@@ -33,10 +34,11 @@ app.use(express.json());
 
 // Hier komen de app.use voor routes
 app.use("/", subscriberRouter);
-app.use('/', adminpanelRouter);
+app.use("/", adminpanelRouter);
 app.use("/mail", emailEditorRouter);
 app.use("/mail", mailListRouter);
 app.use("/", sendMailRouter);
+app.use("/", unsubscribeAnalyticsRouter);
 
 const httpServer = http.createServer(app);
 const webSocketServer = new ws.Server({ noServer: true, path: "/socket" });
@@ -82,4 +84,4 @@ const server = app.listen(port, host, async () => {
   console.log(`Database started on http://${addressInfo}:${portInfo}`);
 });
 
-module.exports = {app, server, httpServer};
+module.exports = { app, server, httpServer };
