@@ -36,21 +36,11 @@ export default function HeaderComponent() {
           <span className="fs-4 text-dark">|</span>
           <li className="nav-item">
             <Link
-              href="/admin/subscribers"
+              href="/admin/overview"
               className={`${styles.linky} nav-link`}
               aria-current="page"
             >
-              Ledenlijst
-            </Link>
-          </li>
-          <span className="fs-4 text-dark">|</span>
-          <li className="nav-item">
-            <Link
-              href="/admin/maillists"
-              className={`${styles.linky} nav-link`}
-              aria-current="page"
-            >
-              Mailinglijsten
+              Overzichtspagina
             </Link>
           </li>
           <span className="fs-4 text-dark">|</span>

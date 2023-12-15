@@ -143,6 +143,7 @@ export default function UnsubscribeForm({ userid }) {
             <SubscriptionForm
               subscribers={data.subscription}
               setValue={changeValue}
+              selectedSubscribers={selectedSubs}
             />
           );
         })

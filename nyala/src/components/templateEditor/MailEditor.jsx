@@ -4,13 +4,14 @@ import dynamic from "next/dynamic";
 import { Modal, Button, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
 import { nanoid } from "nanoid";
-import sendDataToSendEmail from "../emailService";
+import sendDataToSendEmail from "../EmailService";
 import AlertComponent from "../alert/AlertComponent";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
 const MailEditor = ({ id }) => {
   const editorRef = useRef(null);
+  const [headerText, setHeaderText] = useState("");
   const [show, setShow] = useState(false);
   const [mails, setMails] = useState([]);
   const [title, setTitle] = useState("");
@@ -36,11 +37,22 @@ const MailEditor = ({ id }) => {
     setSentData(data);
   };
 
+  const handleHeaderTextChange = (e) => {
+    if (e.target.value.trim() === "") {
+      setModalNotification({
+        type: "error",
+        message: "Header mag niet leeg zijn.",
+      });
+      return;
+    }
+    setHeaderText(e.target.value);
+  };
+
   const handleSubjectChange = (e) => {
     if (e.target.value.trim() === "") {
       setModalNotification({
         type: "error",
-        message: "Onderwerp mag niet leeg zijn",
+        message: "Onderwerp mag niet leeg zijn.",
       });
       return;
     }
@@ -53,6 +65,7 @@ const MailEditor = ({ id }) => {
 
   const handleClose = () => {
     setShow(false);
+    setShowHeader(false);
   };
   const handleShow = () => setShow(true);
 
@@ -69,9 +82,11 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           setNotification({
             type: "error",
-            message: "Er ging iets fout met het opslaan van het design",
+            message: "Er ging iets fout met het opslaan van het design.",
           });
+          return;
         }
+        setShow(false);
         setNotification({
           type: "success",
           message: "Design is succesvol opgeslagen!",
@@ -79,7 +94,7 @@ const MailEditor = ({ id }) => {
       } catch (error) {
         setNotification({
           type: "error",
-          message: `Er ging iets fout met het opslaan van het design`,
+          message: `Er ging iets fout met het opslaan van het design.`,
         });
       }
     });
@@ -101,13 +116,14 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           setNotification({
             type: "error",
-            message: "Er ging iets fout met het opslaan van de html",
+            message: "Er ging iets fout met het opslaan van de html.",
           });
         }
+        setShow(false);
       } catch (error) {
         setNotification({
           type: "error",
-          message: `Error tijdens het opslaan van de html`,
+          message: `Error tijdens het opslaan van de html.`,
         });
       }
     });
@@ -128,13 +144,14 @@ const MailEditor = ({ id }) => {
         if (!response.ok) {
           setNotification({
             type: "error",
-            message: "Er ging iets fout met het versturen van de mail",
+            message: "Er ging iets fout met het versturen van de mail.",
           });
         }
+        setShow(false);
       } catch (error) {
         setNotification({
           type: "error",
-          message: `Er ging iets mis met het versturen van de mail`,
+          message: `Er ging iets mis met het versturen van de mail.`,
         });
       }
       handleShow();
@@ -174,7 +191,7 @@ const MailEditor = ({ id }) => {
     } catch (error) {
       setNotification({
         type: "error",
-        message: `Er is iets misgegaan bij het laden van de mail`,
+        message: `Er is iets misgegaan bij het laden van de mail.`,
       });
     } finally {
       editorRef.current = editor;
@@ -197,11 +214,18 @@ const MailEditor = ({ id }) => {
         sentData.subscribersData,
         subject,
         showHeader,
+        headerText,
         id
       );
-      setModalNotification({
+      setShow(false);
+      setNotification({
         type: "success",
-        message: "Mail is succesvol verstuurd",
+        message: "Mail is succesvol verstuurd.",
+      });
+    } else {
+      setModalNotification({
+        type: "error",
+        message: "Er zijn geen lijsten geselecteerd!",
       });
     }
   };
@@ -233,6 +257,7 @@ const MailEditor = ({ id }) => {
             subs: sentData.subscribersData,
             date: dateTime,
             showHeader: showHeader,
+            headerText: headerText,
             subject: subject,
           }),
         });
@@ -242,13 +267,19 @@ const MailEditor = ({ id }) => {
             message: "Er is iets fout gegaan tijdens het inplannen",
           });
         }
-        setModalNotification({
+        setShow(false);
+        setNotification({
           type: "success",
-          message: "Mail is succesvol ingepland",
+          message: "Mail is succesvol ingepland.",
         });
       } catch (error) {
         setEmailSent(false);
       }
+    } else {
+      setNotification({
+        type: "error",
+        message: "Er zijn geen lijsten geselecteerd!",
+      });
     }
   };
 
@@ -330,6 +361,25 @@ const MailEditor = ({ id }) => {
             />
             <label className="form-check-label">Header toevoegen</label>
           </div>
+          {showHeader && (
+            <div className="p-2 gap-3 d-flex flex-column justify-content-center">
+              <label className="form-label">
+                Gebruik {"{name}"} om naam toe te voegen en {"{image}"} om xtend
+                logo toe te voegen
+              </label>
+              <textarea
+                value={headerText}
+                onChange={handleHeaderTextChange}
+                placeholder="Voer header tekst in"
+                className="form-control text-center"
+                rows="4"
+                style={{
+                  whiteSpace: "pre-line",
+                  fontFamily: "Arial, sans-serif",
+                }}
+              />
+            </div>
+          )}
           <SelectMailingLists
             id={id}
             setEmails={setMails}
