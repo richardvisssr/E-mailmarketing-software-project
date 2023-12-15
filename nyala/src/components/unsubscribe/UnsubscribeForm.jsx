@@ -34,6 +34,7 @@ export default function UnsubscribeForm({ userid }) {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({ email: email }),
         }
       );
@@ -63,6 +64,7 @@ export default function UnsubscribeForm({ userid }) {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({
             email: email,
             subscriptions: selectedSubs,
@@ -104,6 +106,7 @@ export default function UnsubscribeForm({ userid }) {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ reden: geselecteerdeReden }),
       });
 

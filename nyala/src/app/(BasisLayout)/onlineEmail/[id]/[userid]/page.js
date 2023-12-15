@@ -10,7 +10,9 @@ export default function Page({ params }) {
 
   useEffect(() => {
     // Fetch email
-    fetch(`http://localhost:3001/mail/getEmail/${id}`)
+    fetch(`http://localhost:3001/mail/getEmail/${id}`, {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => {
         setEmail(data);

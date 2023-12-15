@@ -54,6 +54,7 @@ export default function EmailForm({
           <SubscriptionForm
             subscribers={lists}
             setValue={handleCheckboxChange}
+            selectedSubscribers={initialValues.subscribers}
           />
         ) : (
           <p>Er zijn geen maillijsten.</p>

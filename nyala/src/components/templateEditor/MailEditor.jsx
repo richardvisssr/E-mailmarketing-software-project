@@ -77,6 +77,7 @@ const MailEditor = ({ id }) => {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({ design, id, title }),
         });
         if (!response.ok) {
@@ -111,6 +112,7 @@ const MailEditor = ({ id }) => {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({ html: html, id: id }),
         });
         if (!response.ok) {
@@ -139,6 +141,7 @@ const MailEditor = ({ id }) => {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({ html: html, id: id }),
         });
         if (!response.ok) {
@@ -168,9 +171,7 @@ const MailEditor = ({ id }) => {
         `http://localhost:3001/mail/loadDesign/${id}`,
         {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          credentials: "include",
         }
       );
 
@@ -247,6 +248,7 @@ const MailEditor = ({ id }) => {
       try {
         const response = await fetch(" http://localhost:3001/planMail", {
           method: "PUT",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },

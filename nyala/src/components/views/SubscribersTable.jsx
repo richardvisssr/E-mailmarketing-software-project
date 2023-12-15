@@ -28,7 +28,10 @@ export default function SubscribersTable() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:3001/subscribers/all")
+    fetch("http://localhost:3001/subscribers/all", {
+      method: "GET",
+      credentials: "include"
+    })
       .then((response) => response.json())
       .then((data) => setSubscribers(data))
       .catch(() =>
@@ -144,6 +147,7 @@ export default function SubscribersTable() {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(updatedData),
     })
       .then((response) => response.json())
@@ -224,6 +228,7 @@ export default function SubscribersTable() {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({ email: email }),
     })
       .then((response) => response.json())

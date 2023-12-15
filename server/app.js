@@ -3,6 +3,7 @@
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
+const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const http = require("http");
 const ws = require("ws");
@@ -23,11 +24,14 @@ const app = express();
 
 app.use(cors({ origin: true, credentials: true }));
 app.options("*", cors({ origin: true, credentials: true }));
+app.use(cookieParser());
 app.use(bodyParser.json());
 const sessionParser = session({
   saveUninitialized: false,
   secret: "$eCuRiTy",
   resave: false,
+  cookie: { secure: false, maxAge: 86400000, httpOnly: true },
+  credentials: true,
 });
 app.use(sessionParser);
 app.use(express.json());

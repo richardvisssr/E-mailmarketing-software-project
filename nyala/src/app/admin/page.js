@@ -13,18 +13,30 @@ import styles from "@/components/adminpanel/button.module.css";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
 import AlertComponent from "@/components/alert/AlertComponent";
+import Cookies from "js-cookie";
 
 function Page() {
   const [templates, setTemplates] = useState({});
   const [notification, setNotification] = useState({ type: "", message: "" });
+  const [masterKey, setMasterKey] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://127.0.0.1:3001/templates");
+  const login = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/login", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      // Assuming your login endpoint returns a success status code, e.g., 200
+      if (response.status === 200) {
+        const response = await fetch("http://localhost:3001/templates", {
+          method: "GET",
+          credentials: "include",
+        });
+
         const jsonData = await response.json();
         const templateObject = {};
 
@@ -36,18 +48,24 @@ function Page() {
             title: template.title,
           };
         });
+
         setTemplates(templateObject);
         setIsLoading(false);
-      } catch (error) {
-        setNotification({
-          type: "error",
-          message:
-            "Er is een fout opgetreden bij het ophalen van de templates...",
-        });
+      } else {
+        console.error("Login failed");
+        // Handle login failure if needed
       }
-    };
+    } catch (error) {
+      setNotification({
+        type: "error",
+        message:
+          "Er is een fout opgetreden bij het ophalen van de templates...",
+      });
+    }
+  };
 
-    fetchData();
+  useEffect(() => {
+    login();
   }, []);
 
   function generateUniqueShortId() {

@@ -94,7 +94,9 @@ function TemplateCard(props) {
     const fetchHtmlContent = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:3001/templates/${template.id}`
+          `http://127.0.0.1:3001/templates/${template.id}`, {
+            credentials: "include",
+          }
         );
         const data = await response.json();
         setHtml(data.html);
@@ -156,6 +158,7 @@ function TemplateCard(props) {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({
             id: generateUniqueShortId(),
             title: template.title,
@@ -210,6 +213,7 @@ function TemplateCard(props) {
   const confirmDelete = () => {
     fetch(`http://localhost:3001/template/${template.id}`, {
       method: "DELETE",
+      credentials: "include",
     })
       .then(() => {
         onDelete(template.id);

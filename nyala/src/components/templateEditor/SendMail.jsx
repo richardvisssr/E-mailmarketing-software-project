@@ -12,7 +12,9 @@ function SelectMailingLists(props) {
   const [notification, setNotification] = useState({ type: "", message: "" });
 
   useEffect(() => {
-    fetch("http://localhost:3001/mail/getList")
+    fetch("http://localhost:3001/mail/getList", {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => setMailingLists(data))
       .catch((error) =>
@@ -29,7 +31,10 @@ function SelectMailingLists(props) {
         fetch(
           `http://localhost:3001/subscribers?selectedMailingList=${selectedMailingList.join(
             ","
-          )}`
+          )}`,
+          {
+            credentials: "include",
+          }
         )
           .then((response) => response.json())
           .catch((error) => {
@@ -39,7 +44,9 @@ function SelectMailingLists(props) {
             });
             return [];
           }),
-        fetch(`http://localhost:3001/mail/getEmail/${id}`)
+        fetch(`http://localhost:3001/mail/getEmail/${id}`, {
+            credentials: "include",
+        })
           .then((response) => response.json())
           .catch((error) => {
             setNotification({
@@ -93,6 +100,7 @@ function SelectMailingLists(props) {
               headers: {
                 "Content-Type": "application/json",
               },
+              credentials: "include",
               body: JSON.stringify({
                 html: html,
                 subscribers: subscribers,
@@ -108,6 +116,7 @@ function SelectMailingLists(props) {
               headers: {
                 "Content-Type": "application/json",
               },
+              credentials: "include",
               body: JSON.stringify({
                 html: html,
                 id: id,

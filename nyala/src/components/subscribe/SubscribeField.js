@@ -90,7 +90,10 @@ export default function SubscribeField(props) {
      */
     const fetchlists = async () => {
       try {
-        const response = await fetch("http://localhost:3001/mail/getList");
+        const response = await fetch("http://localhost:3001/mail/getList", {
+          method: "GET",
+          credentials: "include",
+        });
         const body = await response.json();
         if (!response.ok) {
           setErrorNotification(FETCH_PROBLEM);
@@ -121,6 +124,7 @@ export default function SubscribeField(props) {
                 Accept: "application/json",
                 "Content-Type": "application/json",
               },
+              credentials: "include",
               body: JSON.stringify({
                 email: data.email,
                 name: data.name,

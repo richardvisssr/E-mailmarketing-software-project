@@ -12,6 +12,7 @@ async function sendDataToSendEmail(
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
         html,
         subscribers,

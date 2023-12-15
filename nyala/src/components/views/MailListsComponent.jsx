@@ -32,7 +32,10 @@ export default function MailListComponent() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:3001/mail/getList")
+    fetch("http://localhost:3001/mail/getList", {
+      method: "GET",
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => setMailLists(data[0].mailList))
       .catch(() =>
@@ -48,7 +51,10 @@ export default function MailListComponent() {
     const fetchSubscribers = async () => {
       const promises = mailLists.map((mailList) =>
         fetch(
-          `http://localhost:3001/subscribers?selectedMailingList=${mailList}`
+          `http://localhost:3001/subscribers?selectedMailingList=${mailList}`, {
+            method: "GET",
+            credentials: "include"
+          }
         ).then((response) => response.json())
       );
 

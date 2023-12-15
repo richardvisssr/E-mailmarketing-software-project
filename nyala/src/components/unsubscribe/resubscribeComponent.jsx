@@ -44,6 +44,7 @@ export default function ResubscribeComponent({}) {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({ email: email, subscriptions: subs }),
         }
       );

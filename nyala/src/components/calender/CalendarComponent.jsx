@@ -51,6 +51,7 @@ function MailCalendar(props) {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
         id: id,
         date: emailDate,

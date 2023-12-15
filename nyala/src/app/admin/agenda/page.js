@@ -32,6 +32,7 @@ function Page() {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
         });
         const jsonData = await response.json();
 
@@ -55,6 +56,7 @@ function Page() {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
     })
       .then((response) => handleDeleteResponse(response))
       .catch((error) => {

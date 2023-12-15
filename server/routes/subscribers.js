@@ -5,23 +5,35 @@ const { Subscriber, Unsubscriber } = require("../model/subscribers");
 const router = express.Router();
 
 router.get("/subscribers", async (req, res) => {
-  const selectedMailingList = req.query.selectedMailingList.split(",");
-  try {
-    const subscribers = await Subscriber.find({
-      subscription: { $in: selectedMailingList },
-    });
-    res.status(200).send(subscribers);
-  } catch (error) {
-    res.status(500).send({ message: "Internal server error" });
+  const masterKeyFromCookies = req.cookies.masterKey;
+  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  } else {
+    const selectedMailingList = req.query.selectedMailingList.split(",");
+    try {
+      const subscribers = await Subscriber.find({
+        subscription: { $in: selectedMailingList },
+      });
+      res.status(200).send(subscribers);
+    } catch (error) {
+      res.status(500).send({ message: "Internal server error" });
+    }
   }
 });
 
 router.get("/subscribers/all", async (req, res) => {
-  try {
-    const subscribers = await Subscriber.find();
-    res.status(200).send(subscribers);
-  } catch (error) {
-    res.status(500).send({ message: "Internal server error" });
+  const masterKeyFromCookies = req.cookies.masterKey;
+  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  } else {
+    try {
+      const subscribers = await Subscriber.find();
+      res.status(200).send(subscribers);
+    } catch (error) {
+      res.status(500).send({ message: "Internal server error" });
+    }
   }
 });
 
@@ -124,7 +136,13 @@ async function handleSubscriberRequest(req, res, isEdit) {
  * @param {import('express').Response} res - The Express response object.
  */
 router.post("/subscribers/add", async (req, res) => {
-  await handleSubscriberRequest(req, res, false);
+  const masterKeyFromCookies = req.cookies.masterKey;
+  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  } else {
+    await handleSubscriberRequest(req, res, false);
+  }
 });
 
 /**
@@ -133,194 +151,272 @@ router.post("/subscribers/add", async (req, res) => {
  * @param {import('express').Response} res - The Express response object.
  */
 router.put("/subscribers/edit", async (req, res) => {
-  await handleSubscriberRequest(req, res, true);
-});
-
-router.get("/:subscriber/subs", async (req, res) => {
-  const { subscriber } = req.params;
-
-  try {
-    const sub = await Subscriber.findOne({ _id: subscriber });
-
-    if (!sub) {
-      return res.status(404).send({ message: "Subscriber not found" });
-    }
-
-    return res.status(200).send(sub);
-  } catch (error) {
-    return res.status(500).send({ message: "Internal server error" });
+  const masterKeyFromCookies = req.cookies.masterKey;
+  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  } else {
+    await handleSubscriberRequest(req, res, true);
   }
 });
 
-router.post("/reason", async (req, res) => {
-  const { reden } = req.body;
+router.get("/:subscriber/subs", async (req, res) => {
+  const masterKeyFromCookies = req.cookies.masterKey;
+  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  } else {
+    const { subscriber } = req.params;
 
-  try {
-    const unsubscriber = new Unsubscriber({
-      reason: reden,
-    });
-    await unsubscriber.save();
-    return res.status(200).send({ message: "Reason added" });
-  } catch (err) {
-    res.status(500).json({ message: "Internal Server Error" });
+    try {
+      const sub = await Subscriber.findOne({ _id: subscriber });
+
+      if (!sub) {
+        return res.status(404).send({ message: "Subscriber not found" });
+      }
+
+      return res.status(200).send(sub);
+    } catch (error) {
+      return res.status(500).send({ message: "Internal server error" });
+    }
+  }
+});
+
+//TODO subscriber die uitschrijft
+router.post("/reason", async (req, res) => {
+  const masterKeyFromCookies = req.cookies.masterKey;
+  const userKeyCookies = req.cookies.userKey;
+
+  if (
+    (!masterKeyFromCookies && !userKeyCookies) ||
+    (masterKeyFromCookies !== undefined &&
+      masterKeyFromCookies !== req.session.masterKey) ||
+    (userKeyCookies !== undefined && userKeyCookies !== req.session.userKey)
+  ) {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  } else {
+    const { reden } = req.body;
+
+    try {
+      const unsubscriber = new Unsubscriber({
+        reason: reden,
+      });
+      await unsubscriber.save();
+      return res.status(200).send({ message: "Reason added" });
+    } catch (err) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
   }
 });
 
 router.put("/subscribers/add", async (req, res) => {
-  const { email, subscriptions } = req.body;
-  try {
-    await Subscriber.findOneAndUpdate(
-      { email: email },
-      { $addToSet: { subscription: subscriptions } },
-      { upsert: true }
-    );
+  const masterKeyFromCookies = req.cookies.masterKey;
+  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  } else {
+    const { email, subscriptions } = req.body;
+    try {
+      await Subscriber.findOneAndUpdate(
+        { email: email },
+        { $addToSet: { subscription: subscriptions } },
+        { upsert: true }
+      );
 
-    res.status(200).json({ message: "Subscriber updated" });
-  } catch (err) {
-    res.status(500).json({ message: "Internal Server Error" });
+      res.status(200).json({ message: "Subscriber updated" });
+    } catch (err) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
   }
 });
 
 router.put("/change/:subscriber", async (req, res) => {
-  const prevEmail = req.params.subscriber;
-  const { name, email } = req.body;
+  const masterKeyFromCookies = req.cookies.masterKey;
+  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  } else {
+    const prevEmail = req.params.subscriber;
+    const { name, email } = req.body;
 
-  try {
-    const selectedSubscriber = await Subscriber.findOne({
-      email: prevEmail,
-    });
+    try {
+      const selectedSubscriber = await Subscriber.findOne({
+        email: prevEmail,
+      });
 
-    if (!selectedSubscriber) {
-      return res.status(404).send({ message: "Subscriber not found" });
+      if (!selectedSubscriber) {
+        return res.status(404).send({ message: "Subscriber not found" });
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res
+          .status(400)
+          .json({ message: "Bad Request: Invalid email format" });
+      }
+
+      selectedSubscriber.name = name;
+      selectedSubscriber.email = email;
+
+      await selectedSubscriber.save();
+
+      res.status(200).json({ message: "Subscriber updated" });
+    } catch (err) {
+      res.status(500).json({ message: "Internal Server Error" });
     }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return res
-        .status(400)
-        .json({ message: "Bad Request: Invalid email format" });
-    }
-
-    selectedSubscriber.name = name;
-    selectedSubscriber.email = email;
-
-    await selectedSubscriber.save();
-
-    res.status(200).json({ message: "Subscriber updated" });
-  } catch (err) {
-    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
 router.put("/update/:list", async (req, res) => {
-  const prevList = req.params.list;
-  const { name } = req.body;
+  const masterKeyFromCookies = req.cookies.masterKey;
+  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  } else {
+    const prevList = req.params.list;
+    const { name } = req.body;
 
-  try {
-    const subscribers = await Subscriber.find({ subscription: prevList });
+    try {
+      const subscribers = await Subscriber.find({ subscription: prevList });
 
-    if (!name) {
-      return res.status(400).send({ message: "No new name provided" });
-    }
-
-    if (name === prevList) {
-      return res.status(400).send({ message: "New name is the same" });
-    }
-
-    if (name.trim() !== name) {
-      return res.status(400).send({ message: "New name contains spaces" });
-    }
-
-    if (
-      subscribers.some((subscriber) => subscriber.subscription.includes(name))
-    ) {
-      return res.status(400).send({ message: "New name already exists" });
-    }
-
-    const updatedSubscribers = subscribers.map((subscriber) => {
-      const index = subscriber.subscription.indexOf(prevList);
-      if (index !== -1) {
-        const updatedSubscription = [...subscriber.subscription];
-        updatedSubscription[index] = name;
-        subscriber.subscription = updatedSubscription;
+      if (!name) {
+        return res.status(400).send({ message: "No new name provided" });
       }
-      return subscriber;
-    });
 
-    await Promise.all(
-      updatedSubscribers.map((subscriber) => subscriber.save())
-    );
+      if (name === prevList) {
+        return res.status(400).send({ message: "New name is the same" });
+      }
 
-    res.status(200).json({ message: "Subscriber updated" });
-  } catch (err) {
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
+      if (name.trim() !== name) {
+        return res.status(400).send({ message: "New name contains spaces" });
+      }
 
-router.delete("/unsubscribe", async (req, res) => {
-  const { email } = req.body;
-  try {
-    const subscriber = await Subscriber.findOneAndDelete({
-      email: email,
-    });
-    if (!subscriber) {
-      return res.status(404).send({ message: "Subscriber not found" });
-    }
-    return res.status(200).send({ message: "Subscriber removed" });
-  } catch (error) {
-    return res.status(500).send(error);
-  }
-});
+      if (
+        subscribers.some((subscriber) => subscriber.subscription.includes(name))
+      ) {
+        return res.status(400).send({ message: "New name already exists" });
+      }
 
-router.delete("/unsubscribe/subs", async (req, res) => {
-  const { email, subscriptions } = req.body;
+      const updatedSubscribers = subscribers.map((subscriber) => {
+        const index = subscriber.subscription.indexOf(prevList);
+        if (index !== -1) {
+          const updatedSubscription = [...subscriber.subscription];
+          updatedSubscription[index] = name;
+          subscriber.subscription = updatedSubscription;
+        }
+        return subscriber;
+      });
 
-  try {
-    const subscriber = await Subscriber.findOne({ email: email });
-
-    if (!subscriber) {
-      return res.status(404).send({ message: "Subscriber not found" });
-    }
-
-    if (subscriptions && subscriptions.length > 0) {
-      subscriber.subscription = subscriber.subscription.filter(
-        (subscription) => !subscriptions.includes(subscription)
+      await Promise.all(
+        updatedSubscribers.map((subscriber) => subscriber.save())
       );
-    } else {
-      return res.status(400).send({ message: "No subscriptions provided" });
+
+      res.status(200).json({ message: "Subscriber updated" });
+    } catch (err) {
+      res.status(500).json({ message: "Internal Server Error" });
     }
+  }
+});
 
-    await subscriber.save();
+//TODO subscriber
+router.delete("/unsubscribe", async (req, res) => {
+  const masterKeyFromCookies = req.cookies.masterKey;
+  const userKeyCookies = req.cookies.userKey;
 
-    return res
-      .status(200)
-      .send({ message: "subscriptions removed successfully" });
-  } catch (error) {
-    return res.status(500).send(error);
+  if (
+    (!masterKeyFromCookies && !userKeyCookies) ||
+    (masterKeyFromCookies !== undefined &&
+      masterKeyFromCookies !== req.session.masterKey) ||
+    (userKeyCookies !== undefined && userKeyCookies !== req.session.userKey)
+  ) {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  } else {
+    const { email } = req.body;
+    try {
+      const subscriber = await Subscriber.findOneAndDelete({
+        email: email,
+      });
+      if (!subscriber) {
+        return res.status(404).send({ message: "Subscriber not found" });
+      }
+      return res.status(200).send({ message: "Subscriber removed" });
+    } catch (error) {
+      return res.status(500).send(error);
+    }
+  }
+});
+
+//TODO subscriber
+router.delete("/unsubscribe/subs", async (req, res) => {
+  const masterKeyFromCookies = req.cookies.masterKey;
+  const userKeyCookies = req.cookies.userKey;
+
+  if (
+    (!masterKeyFromCookies && !userKeyCookies) ||
+    (masterKeyFromCookies !== undefined &&
+      masterKeyFromCookies !== req.session.masterKey) ||
+    (userKeyCookies !== undefined && userKeyCookies !== req.session.userKey)
+  ) {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  } else {
+    const { email, subscriptions } = req.body;
+
+    try {
+      const subscriber = await Subscriber.findOne({ email: email });
+
+      if (!subscriber) {
+        return res.status(404).send({ message: "Subscriber not found" });
+      }
+
+      if (subscriptions && subscriptions.length > 0) {
+        subscriber.subscription = subscriber.subscription.filter(
+          (subscription) => !subscriptions.includes(subscription)
+        );
+      } else {
+        return res.status(400).send({ message: "No subscriptions provided" });
+      }
+
+      await subscriber.save();
+
+      return res
+        .status(200)
+        .send({ message: "subscriptions removed successfully" });
+    } catch (error) {
+      return res.status(500).send(error);
+    }
   }
 });
 
 router.delete("/unsubscribe/:subscription", async (req, res) => {
-  const { subscription } = req.params;
+  const masterKeyFromCookies = req.cookies.masterKey;
+  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  } else {
+    const { subscription } = req.params;
 
-  try {
-    const subscribers = await Subscriber.find({ subscription: subscription });
+    try {
+      const subscribers = await Subscriber.find({ subscription: subscription });
 
-    if (subscribers.length === 0) {
-      return res.status(404).send({ message: "No subscribers found" });
+      if (subscribers.length === 0) {
+        return res.status(404).send({ message: "No subscribers found" });
+      }
+
+      for (const subscriber of subscribers) {
+        subscriber.subscription = subscriber.subscription.filter(
+          (sub) => sub !== subscription
+        );
+        await subscriber.save();
+      }
+
+      return res
+        .status(200)
+        .send({ message: "Subscription removed for all subscribers" });
+    } catch (error) {
+      return res.status(500).send({ message: "Internal server error" });
     }
-
-    for (const subscriber of subscribers) {
-      subscriber.subscription = subscriber.subscription.filter(
-        (sub) => sub !== subscription
-      );
-      await subscriber.save();
-    }
-
-    return res
-      .status(200)
-      .send({ message: "Subscription removed for all subscribers" });
-  } catch (error) {
-    return res.status(500).send({ message: "Internal server error" });
   }
 });
 
