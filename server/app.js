@@ -43,29 +43,21 @@ app.use("/afbeelding", afbeeldingRouter);
 const httpServer = http.createServer(app);
 const webSocketServer = new ws.Server({ noServer: true, path: "/socket" });
 
+webSocketServer.on("connection", (socket, req) => {
+  socket.on("message", (message) => {
+    console.log("WebSocket message received:", message);
+  });
+
+  socket.on("error", (error) => {
+    console.error("WebSocket error:", error);
+  });
+});
+
 httpServer.on("upgrade", (req, networkSocket, head) => {
   sessionParser(req, {}, () => {
     webSocketServer.handleUpgrade(req, networkSocket, head, (newWebSocket) => {
       webSocketServer.emit("connection", newWebSocket, req);
     });
-  });
-});
-
-app.use(express.static(path.join(__dirname, "client-side")));
-
-webSocketServer.on("connection", (socket, req) => {
-  console.log("WebSocket connection established");
-
-  socket.on("message", (message) => {
-    try {
-      console.log("Buurman & Buurman are in the house!");
-    } catch (error) {
-      console.error("Error parsing WebSocket message:", error);
-    }
-  });
-
-  socket.on("error", (error) => {
-    console.error("There was an error: " + error);
   });
 });
 
@@ -84,4 +76,4 @@ const server = app.listen(port, host, async () => {
   console.log(`Database started on http://${addressInfo}:${portInfo}`);
 });
 
-module.exports = {app, server, httpServer};
+module.exports = {app, server, httpServer, webSocketServer};

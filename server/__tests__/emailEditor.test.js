@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const { Design, Email } = require("../model/emailEditor");
 
 const router = require("../routes/emailEditor");
-const app = express();
+const { app, httpServer, server } = require("../app");
 app.use(express.json());
 app.use("/mail", router);
 
@@ -26,6 +26,9 @@ afterAll(async () => {
   if (mongoose.connection.readyState !== 0) {
     await mongoose.disconnect();
   }
+
+  httpServer.close();
+  server.close();
 });
 
 describe("Email Editor Routes", () => {

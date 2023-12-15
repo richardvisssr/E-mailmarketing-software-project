@@ -18,10 +18,12 @@ Dat taken van mij op tijd af zijn en er geen last minute verassingen zullen onts
 Ik ga mijn agenda steeds beter gebruiken, en actief bezig zijn het onderhouden van het project bord zodat ik goed in beeld hou wat er gebeuren moet.
 
 ### Om mijn leerdoel te bereiken ga ik de volgende acties op de volgende momenten uitvoeren:
-
+* Acties:
+    - Regelmatig mijn agenda bijwerken en prioriteiten stellen.
+    - Dagelijks het projectbord updaten met de voortgang en nieuwe taken.
 ### Om mijn leerdoel te bereiken ga ik hulp vragen aan de volgende personen:
 Mijn teamgenoten
 
 ### Ik heb mijn leerdoel bereikt als (formuleer meetbare criteria):
-Wanneer ik afspraken duidelijk voor ogen heb in mijn agenda en project bord.
+Ik beschouw mijn leerdoel als bereikt als ik binnen de komende 4 weken minstens 90% van mijn afspraken en taken concreet en meetbaar inplan en bijhoud in zowel mijn agenda als projectbord.
 

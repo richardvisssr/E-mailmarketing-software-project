@@ -72,8 +72,8 @@ function TemplateCard(props) {
 
   useEffect(() => {
     if (sentData.subscribersData) {
-      sentData.subscribersData.map((sub) => {
-        setSubscribers([sub]);
+      sentData.subscribersData.forEach((sub) => {
+        setSubscribers((prev) => [...prev, [sub]]);
       });
     }
   }, [sentData]);
@@ -230,7 +230,7 @@ function TemplateCard(props) {
         setShowDeleteModal(false);
       });
   };
-
+  
   return (
     <>
       <Col key={template.id} style={{ width: "16rem" }}>

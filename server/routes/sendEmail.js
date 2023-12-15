@@ -92,6 +92,8 @@ router.put("/planMail", async (req, res) => {
         email: subscriber.email,
       };
     });
+
+    console.log(subscribers);
     const planMail = await PlannedEmail.findOne({ id });
 
     if (planMail) {
@@ -111,7 +113,7 @@ router.put("/planMail", async (req, res) => {
         html,
         subscribers,
         date,
-        sended: false,
+        sent: false,
         showHeader,
         headerText,
         subject,

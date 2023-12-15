@@ -1,16 +1,16 @@
 .customContainer .button {
-  background-color: #a66cf2;
-  color: white;
-  transform: scale(1, 1);
-  transition: transform 0.25s, color 0.25s, background-color 0.25s;
-}
-
-.customContainer .button:hover {
-  transform: scale(1.1, 1.1);
-  background-color: #a66cf2;
-  color: white;
-}
-
-.head span {
-  text-decoration:underline;
-}
+    background-color: #a66cf2;
+    color: white;
+    transform: scale(1, 1);
+    transition: transform 0.25s, color 0.25s, background-color 0.25s;
+  }
+  
+  .customContainer .button:hover {
+    transform: scale(1.1, 1.1);
+    background-color: #a66cf2;
+    color: white;
+  }
+  
+  .head span {
+    text-decoration:underline;
+  }

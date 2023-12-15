@@ -1,6 +1,6 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
-const { app } = require("../app");
+const { app, httpServer, server } = require("../app");
 
 const { Subscriber } = require("../model/subscribers");
 const { response } = require("express");
@@ -38,6 +38,8 @@ describe("Subscribers routes test", () => {
       await mongoose.disconnect();
     }
 
+    httpServer.close();
+    server.close();
   });
 
   test("Internal server error when adding a subscriber", async () => {
