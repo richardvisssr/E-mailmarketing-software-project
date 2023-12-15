@@ -13,6 +13,11 @@ router.post("/sendEmail", async (req, res) => {
     const imagePath = path.join(__dirname, "xtend-logo.webp");
     const imageAsBase64 = fs.readFileSync(imagePath, { encoding: "base64" });
 
+    if (subscribers.length === 0) {
+      res.status(400).json({ error: "No subscribers found" });
+      return;
+    }
+    
     let transporter = nodemailer.createTransport({
       host: "145.74.104.216",
       port: 1025,
@@ -85,15 +90,15 @@ router.put("/planMail", async (req, res) => {
   try {
     const { id, title, html, subs, date, showHeader, headerText, subject } =
       req.body;
-    const subscribers = subs.map((subscriber) => {
+    const subscribers = subs.map((subscriberArray) => {
+      const subscriber = subscriberArray[0];
       return {
         id: subscriber._id,
         name: subscriber.name,
         email: subscriber.email,
       };
     });
-
-    console.log(subscribers);
+    
     const planMail = await PlannedEmail.findOne({ id });
 
     if (planMail) {

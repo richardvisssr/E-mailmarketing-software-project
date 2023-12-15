@@ -4,6 +4,7 @@ const ws = require("ws");
 const express = require("express");
 const session = require("express-session");
 const { PlannedEmail } = require("../server/model/emailEditor");
+const config = require("../config/config.json");
 
 const host = process.env.HOST || "127.0.0.1";
 const port = 8000;
@@ -155,5 +156,4 @@ async function checkEmails() {
   }
 }
 
-// Run the checkEmails function every minute
-setInterval(checkEmails, 60000);
+setInterval(checkEmails, JSON.parse(config.updateInterval));
