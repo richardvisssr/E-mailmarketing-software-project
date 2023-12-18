@@ -48,8 +48,7 @@ function TemplateCard(props) {
       setNotification({
         type: "error",
         message:
-          "Er is een fout opgetreden bij het verwerken van het WebSocket-bericht.",
-        error,
+          "Er is een fout opgetreden bij het verwerken van het WebSocket-bericht."
       });
     }
   });
