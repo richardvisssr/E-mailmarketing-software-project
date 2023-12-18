@@ -214,6 +214,8 @@ const MailEditor = ({ id }) => {
       });
       return;
     }
+
+    
     editorRef.current.exportHtml(async (data) => {
       const { html } = data;
       setHtml(html);
@@ -227,6 +229,7 @@ const MailEditor = ({ id }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            mailId: id,
             id: generateUniqueShortId(),
             title: title,
             html: html,

@@ -14,10 +14,10 @@ import sendDataToSendEmail from "../EmailService";
 import AnalyticsPanelCard from "./AnalyticsPanelCard";
 
 function TemplateCard(props) {
+  const socket = new WebSocket("ws://localhost:7002/socket");
   const cardRef = useRef(null);
   const { template, onDelete } = props;
   const [show, setShow] = useState(false);
-  const [image, setImage] = useState("");
   const [html, setHtml] = useState("");
   const [sentData, setSentData] = useState([]);
   const [planned, setPlanned] = useState(false);
@@ -32,6 +32,26 @@ function TemplateCard(props) {
   const [showAnalytics, setShowAnalytics] = useState(false);
 
   const router = useRouter();
+
+  socket.addEventListener("open", (event) => {});
+
+  socket.addEventListener("message", (event) => {
+    try {
+      const message = JSON.parse(event.data);
+      const templateId = message.templateId;
+      const currentTemplateId = template.id;
+
+      if (message.type === "sendEmail" && templateId === currentTemplateId) {
+        setEmailSent(true);
+      }
+    } catch (error) {
+      setNotification({
+        type: "error",
+        message:
+          "Er is een fout opgetreden bij het verwerken van het WebSocket-bericht."
+      });
+    }
+  });
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -61,7 +81,6 @@ function TemplateCard(props) {
 
   useEffect(() => {
     setPlanned(false);
-    setEmailSent(false);
     setEmails([]);
     setDateTime("");
     setSubscribers([]);
@@ -78,6 +97,14 @@ function TemplateCard(props) {
           `http://127.0.0.1:3001/templates/${template.id}`
         );
         const data = await response.json();
+        if (!data || !data.html) {
+          setNotification({
+            type: "error",
+            message: "Design is nog niet opgeslagen en is leeg",
+          });
+          return;
+        }
+
         setHtml(data.html);
       } catch (error) {
         setNotification({
@@ -90,11 +117,34 @@ function TemplateCard(props) {
     fetchHtmlContent();
   }, [template.id]);
 
+  useEffect(() => {
+    fetch(`http://127.0.0.1:3001/isMailSended/${template.id}`, {})
+      .then((data) => {
+        if (data.status === 200) {
+          setEmailSent(true);
+        }
+      })
+      .catch((error) => {
+        setNotification({
+          type: "error",
+          message: "Er ging iets mis met het ophalen van de data",
+        });
+      });
+  }, []);
+
   const handleSendEmailClick = async () => {
     if (!subject || subject.trim() === "") {
       setNotification({
         type: "error",
         message: "Onderwerp mag niet leeg zijn!",
+      });
+      return;
+    }
+
+    if (!html || html.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Design is nog niet opgeslagen en is leeg",
       });
       return;
     }
@@ -122,6 +172,15 @@ function TemplateCard(props) {
       });
       return;
     }
+
+    if (!html || html.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Design is nog niet opgeslagen en is leeg",
+      });
+      return;
+    }
+
     if (mails.length > 0) {
       try {
         const response = await fetch(" http://localhost:3001/planMail", {
@@ -130,6 +189,7 @@ function TemplateCard(props) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            mailId: template.id,
             id: generateUniqueShortId(),
             title: template.title,
             html: html,
@@ -149,12 +209,12 @@ function TemplateCard(props) {
           type: "success",
           message: "Mail is succesvol ingepland",
         });
+        socket.send("Email send");
       } catch (error) {
         setNotification({
           type: "error",
           message: "Er is iets misgegaan bij het versturen van de mail",
         });
-        setEmailSent(false);
       }
     }
   };
@@ -184,7 +244,10 @@ function TemplateCard(props) {
         setShowDeleteModal(false);
       })
       .catch((error) => {
-        console.error("Error deleting template:", error);
+        setNotification({
+          type: "error",
+          message: "Er ging iets mis met het verwijderen van de template"
+        });
         // Handle error as needed
         setShowDeleteModal(false);
       });
@@ -205,7 +268,7 @@ function TemplateCard(props) {
             />
           )} */}
 
-          <Card.Body style={{ marginTop: "1.5rem"}}>
+          <Card.Body style={{ marginTop: "1.5rem" }}>
             <Card.Title>{template.title}</Card.Title>
             <div className="d-flex justify-content-between">
               <Button
@@ -216,13 +279,19 @@ function TemplateCard(props) {
               >
                 Aanpassen
               </Button>
-              <div
-                className={`ms-auto clickable`}
-                onClick={toggleAnalyticsCard}
-                style={{ color: 'black', fontSize: '20px', cursor: 'pointer'}}
-              >
-                <i class="bi bi-caret-down-fill"></i>
-              </div>
+              {emailSent && (
+                <div
+                  className={`ms-auto clickable`}
+                  onClick={toggleAnalyticsCard}
+                  style={{
+                    color: "black",
+                    fontSize: "20px",
+                    cursor: "pointer",
+                  }}
+                >
+                  <i className="bi bi-caret-down-fill"></i>
+                </div>
+              )}
               <Button
                 variant="primary"
                 className={`ms-auto ${styles.knopPrimary}`}
@@ -234,7 +303,7 @@ function TemplateCard(props) {
             </div>
           </Card.Body>
         </Card>
-        {showAnalytics && <AnalyticsPanelCard />}
+        {showAnalytics && <AnalyticsPanelCard id={template.id} />}
       </Col>
 
       <Modal show={showDeleteModal} onHide={cancelDelete}>

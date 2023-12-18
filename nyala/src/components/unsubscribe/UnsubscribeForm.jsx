@@ -5,7 +5,7 @@ import styles from "./UnsubscribeForm.module.css";
 import SubscriptionForm from "../categories/CategoriesComponent";
 import AlertComponent from "../alert/AlertComponent";
 
-export default function UnsubscribeForm({ userid }) {
+export default function UnsubscribeForm({ userid, emailid }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [reason, setReason] = useState("");
@@ -169,7 +169,7 @@ export default function UnsubscribeForm({ userid }) {
     }
   };
 
-  const handleeigenRedenChange = (e) => {
+  const handleEigenRedenChange = (e) => {
     setCustomReason(e.target.value);
   };
 
@@ -192,7 +192,7 @@ export default function UnsubscribeForm({ userid }) {
                 "unsubscribedSubs",
                 JSON.stringify(selectedSubs)
               );
-              router.push("../unsubscribed");
+              router.push(`/analyse/unsubscribe/${emailid}/${userid}`);
             }
           }
         } else {
@@ -204,7 +204,7 @@ export default function UnsubscribeForm({ userid }) {
                 "unsubscribedSubs",
                 JSON.stringify(selectedSubs)
               );
-              router.push("../unsubscribed");
+              router.push(`/analyse/unsubscribe/${emailid}/${userid}`);
             }
           }
         }
@@ -244,7 +244,7 @@ export default function UnsubscribeForm({ userid }) {
                         className="form-control"
                         placeholder="Typ hier uw reden"
                         value={customReason}
-                        onChange={handleeigenRedenChange}
+                        onChange={handleEigenRedenChange}
                       />
                     </div>
                   )}

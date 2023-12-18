@@ -34,11 +34,15 @@ async function sendEmail(email) {
       <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
         <p>
           Bekijk de online versie van deze e-mail
-          <a href="http://localhost:3000/onlineEmail/${email.id}/${subscriber.id}" style="text-decoration: none; color: #007BFF;">
+          <a href="http://localhost:3000/analyse/onlineEmail/${email.mailId}/${
+          subscriber.id
+        }" style="text-decoration: none; color: #007BFF;">
             hier
           </a>.
         </p>
-        <a href="http://localhost:3000/unsubscribe/${subscriber.id}" style="text-decoration: none; color: #333;">
+        <a href="http://localhost:3000/unsubscribe/${email.mailId}/${
+          subscriber.id
+        }" style="text-decoration: none; color: #333;">
           Uitschrijven
         </a>
       </div>
@@ -77,7 +81,6 @@ async function checkEvents() {
     date: { $lte: formattedDate },
     sended: false,
   });
-
   if (emails.length === 0) {
     console.log("No events found");
     return;
@@ -85,6 +88,7 @@ async function checkEvents() {
 
   try {
     for (const email of emails) {
+      console.log(email);
       const success = await sendEmail(email);
 
       if (success) {
