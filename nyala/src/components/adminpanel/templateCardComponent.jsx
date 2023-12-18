@@ -47,7 +47,8 @@ function TemplateCard(props) {
     } catch (error) {
       setNotification({
         type: "error",
-        message: "Er is iets misgegaan bij het versturen van de mail",
+        message:
+          "Er is een fout opgetreden bij het verwerken van het WebSocket-bericht.",
         error,
       });
     }
@@ -109,9 +110,7 @@ function TemplateCard(props) {
       } catch (error) {
         setNotification({
           type: "error",
-          message:
-            error.message ||
-            "Er is iets misgegaan bij het ophalen van de template",
+          message: "Er is iets misgegaan bij het ophalen van de template",
         });
       }
     };
@@ -248,8 +247,7 @@ function TemplateCard(props) {
       .catch((error) => {
         setNotification({
           type: "error",
-          message: "Er ging iets mis met het verwijderen van de template",
-          error,
+          message: "Er ging iets mis met het verwijderen van de template"
         });
         // Handle error as needed
         setShowDeleteModal(false);
