@@ -21,10 +21,10 @@ const TrackingPage = ({ params }) => {
           setNotification({ type: "error", message: error.message });
         });
     }
-    if(url === "unsubscribe") {
+    if (url === "unsubscribe") {
       fetch(`http://localhost:3001/trackUnsubscribe/${mailid}`)
         .then(() => {
-          // router.push(`/${url}/${userid}`);
+          router.push(`/${url}/${mailid}/${userid}`);
         })
         .catch((error) => {
           setNotification({ type: "error", message: error.message });

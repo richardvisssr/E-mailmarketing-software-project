@@ -1,14 +1,13 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
-const { PlannedEmail } = require("../model/emailEditor");
-const { sendWebSocketMessage } = require("../utils/websockets");
+const { PlannedEmail, Email } = require("../model/emailEditor");
+const { sendWebsocketMessage } = require("../utils/websockets");
 
 const router = express.Router();
 
 router.post("/sendEmail", async (req, res) => {
   try {
     const { html, subscribers, subject, showHeader, id } = req.body;
-
     let transporter = nodemailer.createTransport({
       host: "145.74.104.216",
       port: 1025,
@@ -64,16 +63,29 @@ router.post("/sendEmail", async (req, res) => {
       await transporter.sendMail(mailOptions);
       sentSubscribers.push(subscriber.email);
     }
-    sendWebSocketMessage({ type: "sendEmail", templateId: id });
+    sendWebsocketMessage({ type: "sendEmail", templateId: id });
     res.status(200).json({ success: true });
   } catch (error) {
     res.status(500).json({ error: "Error sending email" });
   }
 });
 
+router.get("/isMailSended/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const email = await Email.findOne({ id });
+    
+    if (email) {
+      res.status(200).send("Mail is sended");
+    } 
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 router.put("/planMail", async (req, res) => {
   try {
-    const { id, title, html, subs, date, showHeader, subject } = req.body;
+    const { mailId ,id, title, html, subs, date, showHeader, subject } = req.body;
     const subscribers = subs.map((subscriber) => {
       return {
         id: subscriber._id,
@@ -84,6 +96,7 @@ router.put("/planMail", async (req, res) => {
     const planMail = await PlannedEmail.findOne({ id });
 
     if (planMail) {
+      planMail.mailId = mailId;
       planMail.id = id;
       planMail.title = title;
       planMail.html = html;
@@ -95,6 +108,7 @@ router.put("/planMail", async (req, res) => {
       res.status(200).send("Mail planned successfully");
     } else {
       const newPlanMail = new PlannedEmail({
+        mailId,
         id,
         title,
         html,

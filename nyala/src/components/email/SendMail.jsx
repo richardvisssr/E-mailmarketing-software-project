@@ -102,20 +102,20 @@ function SelectMailingLists(props) {
             }
           );
 
-          const secondResponse = await fetch(
-            "http://localhost:3001/mail/sendEmail",
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                html: html,
-                id: id,
-                subscribers: subscribers,
-              }),
-            }
-          );
+          // const secondResponse = await fetch(
+          //   "http://localhost:3001/mail/sendEmail",
+          //   {
+          //     method: "PUT",
+          //     headers: {
+          //       "Content-Type": "application/json",
+          //     },
+          //     body: JSON.stringify({
+          //       html: html,
+          //       id: id,
+          //       subscribers: subscribers,
+          //     }),
+          //   }
+          // );
 
           if (!response.ok || !secondResponse.ok) {
             setNotification({

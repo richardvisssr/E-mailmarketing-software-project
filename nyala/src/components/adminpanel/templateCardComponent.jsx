@@ -34,21 +34,22 @@ function TemplateCard(props) {
   const router = useRouter();
 
   socket.addEventListener("open", (event) => {});
-  
+
   socket.addEventListener("message", (event) => {
     try {
-      if (typeof event.data === "string") {
-        const message = JSON.parse(event.data);
-        const templateId = message.templateId;
-        const currentTemplateId = template.id;
+      const message = JSON.parse(event.data);
+      const templateId = message.templateId;
+      const currentTemplateId = template.id;
 
-        if (message.type === "sendEmail" && templateId === currentTemplateId) {
-          setEmailSent(true);
-          console.log(emailSent);
-        }
+      if (message.type === "sendEmail" && templateId === currentTemplateId) {
+        setEmailSent(true);
       }
     } catch (error) {
-      console.error("Error parsing WebSocket message:", error);
+      setNotification({
+        type: "error",
+        message: "Er is iets misgegaan bij het versturen van de mail",
+        error,
+      });
     }
   });
 
@@ -80,7 +81,6 @@ function TemplateCard(props) {
 
   useEffect(() => {
     setPlanned(false);
-    setEmailSent(false);
     setEmails([]);
     setDateTime("");
     setSubscribers([]);
@@ -97,11 +97,21 @@ function TemplateCard(props) {
           `http://127.0.0.1:3001/templates/${template.id}`
         );
         const data = await response.json();
+        if (!data || !data.html) {
+          setNotification({
+            type: "error",
+            message: "Design is nog niet opgeslagen en is leeg",
+          });
+          return;
+        }
+
         setHtml(data.html);
       } catch (error) {
         setNotification({
           type: "error",
-          message: "Er is iets misgegaan bij het ophalen van de template",
+          message:
+            error.message ||
+            "Er is iets misgegaan bij het ophalen van de template",
         });
       }
     };
@@ -109,11 +119,34 @@ function TemplateCard(props) {
     fetchHtmlContent();
   }, [template.id]);
 
+  useEffect(() => {
+    fetch(`http://127.0.0.1:3001/isMailSended/${template.id}`, {})
+      .then((data) => {
+        if (data.status === 200) {
+          setEmailSent(true);
+        }
+      })
+      .catch((error) => {
+        setNotification({
+          type: "error",
+          message: "Er ging iets mis met het ophalen van de data",
+        });
+      });
+  }, []);
+
   const handleSendEmailClick = async () => {
     if (!subject || subject.trim() === "") {
       setNotification({
         type: "error",
         message: "Onderwerp mag niet leeg zijn!",
+      });
+      return;
+    }
+
+    if (!html || html.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Design is nog niet opgeslagen en is leeg",
       });
       return;
     }
@@ -141,6 +174,15 @@ function TemplateCard(props) {
       });
       return;
     }
+
+    if (!html || html.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Design is nog niet opgeslagen en is leeg",
+      });
+      return;
+    }
+
     if (mails.length > 0) {
       try {
         const response = await fetch(" http://localhost:3001/planMail", {
@@ -149,6 +191,7 @@ function TemplateCard(props) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            mailId: template.id,
             id: generateUniqueShortId(),
             title: template.title,
             html: html,
@@ -203,7 +246,11 @@ function TemplateCard(props) {
         setShowDeleteModal(false);
       })
       .catch((error) => {
-        console.error("Error deleting template:", error);
+        setNotification({
+          type: "error",
+          message: "Er ging iets mis met het verwijderen van de template",
+          error,
+        });
         // Handle error as needed
         setShowDeleteModal(false);
       });
@@ -245,7 +292,7 @@ function TemplateCard(props) {
                     cursor: "pointer",
                   }}
                 >
-                  <i class="bi bi-caret-down-fill"></i>
+                  <i className="bi bi-caret-down-fill"></i>
                 </div>
               )}
               <Button

@@ -169,7 +169,7 @@ export default function UnsubscribeForm({ userid, emailid }) {
     }
   };
 
-  const handleeigenRedenChange = (e) => {
+  const handleEigenRedenChange = (e) => {
     setCustomReason(e.target.value);
   };
 
@@ -244,7 +244,7 @@ export default function UnsubscribeForm({ userid, emailid }) {
                         className="form-control"
                         placeholder="Typ hier uw reden"
                         value={customReason}
-                        onChange={handleeigenRedenChange}
+                        onChange={handleEigenRedenChange}
                       />
                     </div>
                   )}

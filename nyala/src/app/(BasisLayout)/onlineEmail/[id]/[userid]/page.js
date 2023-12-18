@@ -49,7 +49,7 @@ export default function Page({ params }) {
                 textAlign: "center",
                 padding: "10px",
               }}
-              href={`http://localhost:3000/unsubscribe/${userid}`}
+              href={`http://localhost:3000/unsubscribe/${id}/${userid}`}
             >
               Uitschrijven
             </a>

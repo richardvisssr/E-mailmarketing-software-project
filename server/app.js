@@ -8,14 +8,14 @@ const http = require("http");
 const path = require("path");
 
 const host = process.env.HOST || "127.0.0.1";
-const port = process.env.PORT || 3001;
+const port = 3001;
 
 // Hier komen de requires voor de routes
 const subscriberRouter = require("./routes/subscribers");
 const emailEditorRouter = require("./routes/emailEditor");
 const mailListRouter = require("./routes/mailLists");
 const sendMailRouter = require("./routes/sendEmail");
-const adminpanelRouter = require('./routes/templateRoutes');
+const adminpanelRouter = require("./routes/templateRoutes");
 const emailAnalyticsRouter = require("./routes/emailAnalytics");
 
 const app = express();
@@ -33,7 +33,7 @@ app.use(express.json());
 
 // Hier komen de app.use voor routes
 app.use("/", subscriberRouter);
-app.use('/', adminpanelRouter);
+app.use("/", adminpanelRouter);
 app.use("/mail", emailEditorRouter);
 app.use("/mail", mailListRouter);
 app.use("/", sendMailRouter);
@@ -42,11 +42,6 @@ app.use("/", emailAnalyticsRouter);
 const httpServer = http.createServer(app);
 
 app.use(express.static(path.join(__dirname, "client-side")));
-
-httpServer.listen(() => {
-  const port = httpServer.address().port;
-  console.log(`Listening on http://${host}:${port}`);
-});
 
 const server = app.listen(port, host, async () => {
   console.log("> connecting");
