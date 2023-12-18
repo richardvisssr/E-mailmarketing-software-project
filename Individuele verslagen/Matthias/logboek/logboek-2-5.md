@@ -36,7 +36,7 @@
 
 | Uren | Taak                               | Met Wie | Resultaten                                      | Emotie | Link                                           |
 |------|------------------------------------|---------|-------------------------------------------------|--------|------------------------------------------------|
-| Niks | Ik heb thuis zitten uitzieken       |         | 💊                                               |        |                                                |
+| Niks | Ik heb thuis zitten uitzieken       |         |                                               |   💊      |                                                |
 
 ## Vrijdag 8 december
 
