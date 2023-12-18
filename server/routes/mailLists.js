@@ -1,5 +1,6 @@
 const express = require("express");
 const mailList = require("../model/mailList");
+const { Category } = require("../model/subscribers");
 const router = express.Router();
 
 router.get("/getList", async (req, res) => {
@@ -58,6 +59,15 @@ router.put("/updateListName", async (req, res) => {
     existingList.mailList = existingList.mailList.map((mail) =>
       mail === name ? newName : mail
     );
+
+    const list = await Category.findOne({ name: name });
+
+    if (!list) {
+      return res.status(404).json({ message: "List not found" });
+    }
+
+    list.name = newName;
+    await list.save();
     await existingList.save();
 
     res
