@@ -27,14 +27,18 @@ function Page() {
     try {
       const response = await fetch("http://localhost:3001/login", {
         method: "POST",
-        credentials: "include",
       });
 
+      const data = await response.json();
       // Assuming your login endpoint returns a success status code, e.g., 200
       if (response.status === 200) {
+        const token = data.token;
+        Cookies.set("token", token, { secure: true, sameSite: "strict", domain: 'localhost', path: '/'});
         const response = await fetch("http://localhost:3001/templates", {
           method: "GET",
-          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         const jsonData = await response.json();
@@ -68,6 +72,7 @@ function Page() {
     login();
   }, []);
 
+  Cookies.get("masterKey");
   function generateUniqueShortId() {
     return nanoid(); // Generates a unique short ID
   }

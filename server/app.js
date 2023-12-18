@@ -8,11 +8,34 @@ const bodyParser = require("body-parser");
 const http = require("http");
 const ws = require("ws");
 const path = require("path");
+const jwt = require("jsonwebtoken");
+const secretKey = "eyJzdWIiOiJ1c2VyMTIzNDUiLCJpYXQiOjE3MDI4ODczNjAsImV4cCI6MT";
 
 const host = process.env.HOST || "127.0.0.1";
 const port = process.env.PORT || 3001;
 
+function verifyToken(req, res, next) {
+  console.log(req.body);
+  const token = req.headers.authorization.split(" ")[1];
+
+  if (!token) {
+    res.status(401).send({ message: "Unauthorized: token missing" });
+    return;
+  }
+
+  jwt.verify(token, secretKey, (err, decoded) => {
+    if (err) {
+      res.status(401).send({ message: "Unauthorized: invalid token" });
+      return;
+    }
+
+    req.userId = decoded.sub;
+    next();
+  });
+}
+
 // Hier komen de requires voor de routes
+const loginRouter = require("./routes/loginRouter");
 const subscriberRouter = require("./routes/subscribers");
 const emailEditorRouter = require("./routes/emailEditor");
 const mailListRouter = require("./routes/mailLists");
@@ -36,7 +59,13 @@ const sessionParser = session({
 app.use(sessionParser);
 app.use(express.json());
 
+app.use("/", (req, res, next) => {
+  console.log("HTTP request", req.method, req.url, req.body);
+  next();
+});
 // Hier komen de app.use voor routes
+app.use("/", loginRouter);
+app.use("/", verifyToken);
 app.use("/", subscriberRouter);
 app.use('/', adminpanelRouter);
 app.use("/mail", emailEditorRouter);

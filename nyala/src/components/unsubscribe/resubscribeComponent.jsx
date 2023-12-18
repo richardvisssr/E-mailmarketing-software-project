@@ -3,10 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import styles from "./resubscribeComponent.module.css";
+import Cookies from "js-cookie";
 
 export default function ResubscribeComponent({}) {
   const router = useRouter();
   const [warning, setWarning] = useState({ type: "", bericht: "" });
+  const token = Cookies.get("token");
 
   useEffect(() => {
     setWarning({
@@ -43,6 +45,7 @@ export default function ResubscribeComponent({}) {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
           body: JSON.stringify({ email: email, subscriptions: subs }),

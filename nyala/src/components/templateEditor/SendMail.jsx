@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import SubscriptionForm from "../categories/CategoriesComponent";
 import AlertComponent from "../alert/AlertComponent";
+import Cookies from "js-cookie";
 
 function SelectMailingLists(props) {
   const { id } = props;
@@ -10,10 +11,14 @@ function SelectMailingLists(props) {
   const [subscribers, setSubscribers] = useState([]);
   const [html, setHtml] = useState("");
   const [notification, setNotification] = useState({ type: "", message: "" });
+  const token = Cookies.get("token");
 
   useEffect(() => {
     fetch("http://localhost:3001/mail/getList", {
       credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((response) => response.json())
       .then((data) => setMailingLists(data))
@@ -34,6 +39,9 @@ function SelectMailingLists(props) {
           )}`,
           {
             credentials: "include",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         )
           .then((response) => response.json())
@@ -46,6 +54,9 @@ function SelectMailingLists(props) {
           }),
         fetch(`http://localhost:3001/mail/getEmail/${id}`, {
             credentials: "include",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
         })
           .then((response) => response.json())
           .catch((error) => {
@@ -99,6 +110,7 @@ function SelectMailingLists(props) {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
               },
               credentials: "include",
               body: JSON.stringify({
@@ -115,6 +127,7 @@ function SelectMailingLists(props) {
               method: "PUT",
               headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
               },
               credentials: "include",
               body: JSON.stringify({

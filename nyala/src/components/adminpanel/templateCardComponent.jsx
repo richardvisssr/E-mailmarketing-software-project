@@ -10,6 +10,7 @@ import SelectMailingLists from "../templateEditor/SendMail";
 import { nanoid } from "nanoid";
 import AlertComponent from "../alert/AlertComponent";
 import sendDataToSendEmail from "../emailService";
+import Cookies from "js-cookie";
 
 function TemplateCard(props) {
   const cardRef = useRef(null);
@@ -28,6 +29,7 @@ function TemplateCard(props) {
   const [subject, setSubject] = useState("");
   const [showHeader, setShowHeader] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const token = Cookies.get("token");
 
   const router = useRouter();
 
@@ -96,11 +98,15 @@ function TemplateCard(props) {
         const response = await fetch(
           `http://127.0.0.1:3001/templates/${template.id}`, {
             credentials: "include",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
         const data = await response.json();
         setHtml(data.html);
       } catch (error) {
+        console.log(error);
         setNotification({
           type: "error",
           message: "Er is iets misgegaan bij het ophalen van de template.",
@@ -152,18 +158,22 @@ function TemplateCard(props) {
       return;
     }
     if (mails.length > 0) {
+      console.log(subscribers);
       try {
         const response = await fetch(" http://localhost:3001/planMail", {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
           body: JSON.stringify({
             id: generateUniqueShortId(),
             title: template.title,
             html: html,
-            subs: subscribers,
+            subs: [
+              subscribers
+            ],
             date: dateTime,
             showHeader: showHeader,
             headerText: headerText,
@@ -214,6 +224,9 @@ function TemplateCard(props) {
     fetch(`http://localhost:3001/template/${template.id}`, {
       method: "DELETE",
       credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then(() => {
         onDelete(template.id);

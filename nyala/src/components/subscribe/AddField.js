@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import AlertComponent from "../alert/AlertComponent";
 import EmailForm from "./EmailForm";
 import Spinner from "../spinner/Spinner";
+import Cookies from "js-cookie";
 
 /**
  * Messages to show when an error occurs.
@@ -82,6 +83,12 @@ export default function AddField() {
     });
   };
 
+  /**
+   * State hook for managing the token.
+   * @type {string}
+   *  */
+  const token = Cookies.get("token");
+
   useEffect(() => {
     /**
      * Function to fetch mailing lists from the server.
@@ -91,6 +98,9 @@ export default function AddField() {
         const response = await fetch("http://localhost:3001/mail/getList", {
           method: "GET",
           credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
         const body = await response.json();
         if (!response.ok) {
@@ -121,6 +131,7 @@ export default function AddField() {
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
               },
               credentials: "include",
               body: JSON.stringify({

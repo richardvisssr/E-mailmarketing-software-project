@@ -6,6 +6,7 @@ import SelectMailingLists from "./SendMail";
 import { nanoid } from "nanoid";
 import sendDataToSendEmail from "../EmailService";
 import AlertComponent from "../alert/AlertComponent";
+import Cookies from "js-cookie";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
@@ -27,6 +28,7 @@ const MailEditor = ({ id }) => {
     type: "",
     message: "",
   });
+  const token = Cookies.get("token");
 
   useEffect(() => {
     setPlanned(false);
@@ -76,6 +78,7 @@ const MailEditor = ({ id }) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
           },
           credentials: "include",
           body: JSON.stringify({ design, id, title }),
@@ -111,6 +114,7 @@ const MailEditor = ({ id }) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
           },
           credentials: "include",
           body: JSON.stringify({ html: html, id: id }),
@@ -140,6 +144,7 @@ const MailEditor = ({ id }) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
           },
           credentials: "include",
           body: JSON.stringify({ html: html, id: id }),
@@ -172,6 +177,9 @@ const MailEditor = ({ id }) => {
         {
           method: "GET",
           credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -251,6 +259,7 @@ const MailEditor = ({ id }) => {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             id: generateUniqueShortId(),

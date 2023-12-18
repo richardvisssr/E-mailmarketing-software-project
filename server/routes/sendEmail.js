@@ -7,57 +7,51 @@ const fs = require("fs");
 const router = express.Router();
 
 router.post("/sendEmail", async (req, res) => {
-  const masterKeyFromCookies = req.cookies.masterKey;
-  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
-    res.status(401).send({ message: "Unauthorized" });
-    return;
-  } else {
-    try {
-      const { html, subscribers, subject, showHeader, headerText, id } =
-        req.body;
+  try {
+    const { html, subscribers, subject, showHeader, headerText, id } = req.body;
 
-      const imagePath = path.join(__dirname, "xtend-logo.webp");
-      const imageAsBase64 = fs.readFileSync(imagePath, { encoding: "base64" });
+    const imagePath = path.join(__dirname, "xtend-logo.webp");
+    const imageAsBase64 = fs.readFileSync(imagePath, { encoding: "base64" });
 
-      if (subscribers.length === 0) {
-        res.status(400).json({ error: "No subscribers found" });
-        return;
+    if (subscribers.length === 0) {
+      res.status(400).json({ error: "No subscribers found" });
+      return;
+    }
+
+    let transporter = nodemailer.createTransport({
+      host: "145.74.104.216",
+      port: 1025,
+      secure: false,
+      auth: {
+        user: "your_email@gmail.com",
+        pass: "your_email_password",
+      },
+    });
+
+    let sentSubscribers = [];
+
+    for (const subscriber of subscribers) {
+      let personalizedHeaderText = headerText.replace(
+        "{name}",
+        subscriber.name
+      );
+
+      personalizedHeaderText = personalizedHeaderText.replace(/\n/g, "<br>");
+
+      personalizedHeaderText = personalizedHeaderText.replace(
+        "{image}",
+        `<img src="data:image/webp;base64,${imageAsBase64}" alt="Xtend Logo" style="width: 100px; height: auto;" />`
+      );
+
+      if (sentSubscribers.includes(subscriber.email)) {
+        continue;
       }
 
-      let transporter = nodemailer.createTransport({
-        host: "145.74.104.216",
-        port: 1025,
-        secure: false,
-        auth: {
-          user: "your_email@gmail.com",
-          pass: "your_email_password",
-        },
-      });
-
-      let sentSubscribers = [];
-
-      for (const subscriber of subscribers) {
-        let personalizedHeaderText = headerText.replace(
-          "{name}",
-          subscriber.name
-        );
-
-        personalizedHeaderText = personalizedHeaderText.replace(/\n/g, "<br>");
-
-        personalizedHeaderText = personalizedHeaderText.replace(
-          "{image}",
-          `<img src="data:image/webp;base64,${imageAsBase64}" alt="Xtend Logo" style="width: 100px; height: auto;" />`
-        );
-
-        if (sentSubscribers.includes(subscriber.email)) {
-          continue;
-        }
-
-        let mailOptions = {
-          from: '"Xtend" <info@svxtend.nl>',
-          to: subscriber.email,
-          subject: `${subject}`,
-          html: `
+      let mailOptions = {
+        from: '"Xtend" <juleskoster17@gmail.com>',
+        to: subscriber.email,
+        subject: `${subject}`,
+        html: `
         <div style="text-align: center; padding: 10px; font-family: 'Arial', sans-serif;">
         ${showHeader ? ` ${personalizedHeaderText}` : ""}
         </div>
@@ -68,8 +62,8 @@ router.post("/sendEmail", async (req, res) => {
         <p>
           Bekijk de online versie van deze e-mail
           <a href="http://localhost:3000/onlineEmail/${id}/${
-            subscriber._id
-          }" style="text-decoration: none; color: #007BFF;">
+          subscriber._id
+        }" style="text-decoration: none; color: #007BFF;">
             hier
           </a>.
         </p>
@@ -81,120 +75,101 @@ router.post("/sendEmail", async (req, res) => {
       </div>
       
         `,
-        };
+      };
 
-        await transporter.sendMail(mailOptions);
-        sentSubscribers.push(subscriber.email);
-      }
-      res.status(200).json({ success: true });
-    } catch (error) {
-      res.status(500).json({ error: "Error sending email" });
+      await transporter.sendMail(mailOptions);
+      sentSubscribers.push(subscriber.email);
     }
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error sending email" });
   }
 });
 
 router.put("/planMail", async (req, res) => {
-  const masterKeyFromCookies = req.cookies.masterKey;
-  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
-    res.status(401).send({ message: "Unauthorized" });
-    return;
-  } else {
-    try {
-      const { id, title, html, subs, date, showHeader, headerText, subject } =
-        req.body;
-      const subscribers = subs.map((subscriberArray) => {
-        const subscriber = subscriberArray[0];
-        return {
-          id: subscriber._id,
-          name: subscriber.name,
-          email: subscriber.email,
-        };
+  console.log(req.body);
+  try {
+    const { id, title, html, subs, date, showHeader, headerText, subject } =
+      req.body;
+
+      console.log(subs[0]._id);
+    const subscribers = subs.map((subscriberArray) => {
+      const subscriber = subscriberArray[0];
+      console.log(subscriber);
+      return {
+        id: subscriber._id,
+        name: subscriber.name,
+        email: subscriber.email,
+      };
+    });
+
+    const planMail = await PlannedEmail.findOne({ id });
+
+    if (planMail) {
+      planMail.id = id;
+      planMail.title = title;
+      planMail.html = html;
+      planMail.subscribers = subscribers;
+      planMail.date = date;
+      planMail.subject = subject;
+      planMail.headerText = headerText;
+      await planMail.save();
+      res.status(200).send("Mail planned successfully");
+    } else {
+      const newPlanMail = new PlannedEmail({
+        id,
+        title,
+        html,
+        subscribers,
+        date,
+        sent: false,
+        showHeader,
+        headerText,
+        subject,
       });
-
-      const planMail = await PlannedEmail.findOne({ id });
-
-      if (planMail) {
-        planMail.id = id;
-        planMail.title = title;
-        planMail.html = html;
-        planMail.subscribers = subscribers;
-        planMail.date = date;
-        planMail.subject = subject;
-        planMail.headerText = headerText;
-        await planMail.save();
-        res.status(200).send("Mail planned successfully");
-      } else {
-        const newPlanMail = new PlannedEmail({
-          id,
-          title,
-          html,
-          subscribers,
-          date,
-          sent: false,
-          showHeader,
-          headerText,
-          subject,
-        });
-        await newPlanMail.save();
-        res.status(200).send("Mail planned successfully");
-      }
-    } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
+      await newPlanMail.save();
+      res.status(200).send("Mail planned successfully");
     }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
 router.get("/plannedMails", async (req, res) => {
-  const masterKeyFromCookies = req.cookies.masterKey;
-  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
-    res.status(401).send({ message: "Unauthorized" });
-    return;
-  } else {
-    try {
-      const plannedMails = await PlannedEmail.find();
-      res.status(200).json({ plannedMails });
-    } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
-    }
+  try {
+    const plannedMails = await PlannedEmail.find();
+    res.status(200).json({ plannedMails });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
 router.delete("/planMail/:id", async (req, res) => {
-  const masterKeyFromCookies = req.cookies.masterKey;
-  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
-    res.status(401).send({ message: "Unauthorized" });
-    return;
-  } else {
-    try {
-      const { id } = req.params;
-      await PlannedEmail.findOneAndDelete({ id });
-      res.status(200).send("Mail deleted successfully");
-    } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
-    }
+  try {
+    const { id } = req.params;
+    await PlannedEmail.findOneAndDelete({ id });
+    res.status(200).send("Mail deleted successfully");
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
 router.put("/updateMail", async (req, res) => {
-  const masterKeyFromCookies = req.cookies.masterKey;
-  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
-    res.status(401).send({ message: "Unauthorized" });
-    return;
-  } else {
-    try {
-      const { id, date } = req.body;
+  try {
+    const { id, date } = req.body;
 
-      const mail = await PlannedEmail.findOne({ id });
-      if (mail) {
-        mail.date = date;
-        await mail.save();
-        res.status(200).send("Mail updated successfully");
-      } else {
-        res.status(404).send("Mail not found");
-      }
-    } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
+    const mail = await PlannedEmail.findOne({ id });
+    if (mail) {
+      mail.date = date;
+      await mail.save();
+      res.status(200).send("Mail updated successfully");
+    } else {
+      res.status(404).send("Mail not found");
     }
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import AlertComponent from "../alert/AlertComponent";
 import EmailForm from "./EmailForm";
 import Spinner from "../spinner/Spinner";
+import Cookies from "js-cookie";
 
 /**
  * Messages to show when an error occurs.
@@ -81,6 +82,8 @@ export default function SubscribeField(props) {
     });
   };
 
+  const token = Cookies.get("token");
+
   /**
    * Effect hook for fetching mailing lists and updating state.
    */
@@ -90,17 +93,35 @@ export default function SubscribeField(props) {
      */
     const fetchlists = async () => {
       try {
-        const response = await fetch("http://localhost:3001/mail/getList", {
+        const response = await fetch("http://localhost:3001/tempAuth", {
           method: "GET",
-          credentials: "include",
         });
-        const body = await response.json();
-        if (!response.ok) {
-          setErrorNotification(FETCH_PROBLEM);
-        } else if (!body[0] || body[0].mailList === undefined) {
-          setErrorNotification(NO_LISTS_MADE);
-        } else {
-          setLists(body[0].mailList);
+
+        const data = await response.json();
+
+        if (response.status === 200) {
+          const token = data.token;
+          Cookies.set("token", token, {
+            secure: true,
+            sameSite: "strict",
+            domain: "localhost",
+            path: "/",
+          });
+          const response = await fetch("http://localhost:3001/mail/getList", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const body = await response.json();
+          if (!response.ok) {
+            setErrorNotification(FETCH_PROBLEM);
+          } else if (!body[0] || body[0].mailList === undefined) {
+            setErrorNotification(NO_LISTS_MADE);
+          } else {
+            setLists(body[0].mailList);
+          }
         }
       } catch (error) {
         setErrorNotification(FETCH_PROBLEM);
@@ -123,6 +144,7 @@ export default function SubscribeField(props) {
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
               },
               credentials: "include",
               body: JSON.stringify({
@@ -210,7 +232,7 @@ export default function SubscribeField(props) {
       ) : lists.includes(list) ? (
         <div className="d-flex justify-content-center align-items-center py-5">
           <div>
-          <h1 className="text-center mb-2">Abonneren</h1>
+            <h1 className="text-center mb-2">Abonneren</h1>
             <AlertComponent notification={notification} />
             <EmailForm
               handleSubmit={handleSubmit}

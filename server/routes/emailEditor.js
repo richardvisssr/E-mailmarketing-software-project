@@ -3,129 +3,92 @@ const { PlannedEmail, Design, Email } = require("../model/emailEditor");
 const router = express.Router();
 
 router.get("/loadDesign/:id", async (req, res) => {
-  const masterKeyFromCookies = req.cookies.masterKey;
-  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
-    res.status(401).send({ message: "Unauthorized" });
-    return;
-  } else {
-    try {
-      const design = await Design.findOne({ id: req.params.id });
+  try {
+    const design = await Design.findOne({ id: req.params.id });
 
-      const responseData = {
-        design: design.design,
-        title: design.title,
-      };
+    const responseData = {
+      design: design.design,
+      title: design.title,
+    };
 
-      res.json(responseData);
-    } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
-    }
+    res.json(responseData);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
 router.put("/saveDesign", async (req, res) => {
-  const masterKeyFromCookies = req.cookies.masterKey;
-  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
-    res.status(401).send({ message: "Unauthorized" });
-    return;
-  } else {
-    const id = req.body.id;
-    const design = req.body.design;
-    const title = req.body.title;
+  const id = req.body.id;
+  const design = req.body.design;
+  const title = req.body.title;
 
-    try {
-      const existingDesign = await Design.findOne({ id });
-      if (existingDesign) {
-        existingDesign.design = design;
-        await existingDesign.save();
-        res.status(200).send("Design updated successfully");
-      } else {
-        const newDesign = new Design({ id, design, title });
-        await newDesign.save();
-        res.status(200).send("Design saved successfully");
-      }
-    } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
+  try {
+    const existingDesign = await Design.findOne({ id });
+    if (existingDesign) {
+      existingDesign.design = design;
+      await existingDesign.save();
+      res.status(200).send("Design updated successfully");
+    } else {
+      const newDesign = new Design({ id, design, title });
+      await newDesign.save();
+      res.status(200).send("Design saved successfully");
     }
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
 router.put("/sendEmail", async (req, res) => {
-  const masterKeyFromCookies = req.cookies.masterKey;
-  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
-    res.status(401).send({ message: "Unauthorized" });
-    return;
-  } else {
-    const id = req.body.id;
-    const html = req.body.html;
-    const subscribers = req.body.subscribers;
-    try {
-      const existingHtml = await Email.findOneAndUpdate(
-        { id },
-        { html, subscribers },
-        { upsert: true, new: true }
-      );
+  const id = req.body.id;
+  const html = req.body.html;
+  const subscribers = req.body.subscribers;
+  try {
+    const existingHtml = await Email.findOneAndUpdate(
+      { id },
+      { html, subscribers },
+      { upsert: true, new: true }
+    );
 
-      if (existingHtml) {
-        res.status(200).send("Design updated successfully");
-      }
-    } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
+    if (existingHtml) {
+      res.status(200).send("Design updated successfully");
     }
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
 router.get("/getEmail/:id", async (req, res) => {
-  const masterKeyFromCookies = req.cookies.masterKey;
-  const userKeyCookies = req.cookies.userKey;
+  try {
+    let email = await Email.findOne({ id: req.params.id });
 
-  if (
-    (!masterKeyFromCookies && !userKeyCookies) ||
-    (masterKeyFromCookies !== undefined &&
-      masterKeyFromCookies !== req.session.masterKey) ||
-    (userKeyCookies !== undefined && userKeyCookies !== req.session.userKey)
-  ) {
-    res.status(401).send({ message: "Unauthorized" });
-    return;
-  } else {
-    try {
-      let email = await Email.findOne({ id: req.params.id });
-
-      if (!email) {
-        email = await PlannedEmail.findOne({ id: req.params.id });
-      }
-
-      if (email) {
-        res.json(email);
-      } else {
-        res.status(404).json({ error: "Email not found" });
-      }
-    } catch (err) {
-      res.status(500).json({ error: "Internal server error" });
+    if (!email) {
+      email = await PlannedEmail.findOne({ id: req.params.id });
     }
+
+    if (email) {
+      res.json(email);
+    } else {
+      res.status(404).json({ error: "Email not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
 router.get("/subscribers/:id", async (req, res) => {
-  const masterKeyFromCookies = req.cookies.masterKey;
-  if (!masterKeyFromCookies || masterKeyFromCookies !== req.session.masterKey) {
-    res.status(401).send({ message: "Unauthorized" });
-    return;
-  } else {
-    const { id } = req.params;
-    try {
-      const email = await Email.findOne({ "subscribers._id": id });
-      if (email) {
-        const subscriber = email.subscribers.find(
-          (sub) => sub._id.toString() === id
-        );
-        res.status(200).send(subscriber);
-      } else {
-        res.status(404).send({ message: "Subscriber not found" });
-      }
-    } catch (error) {
-      res.status(500).send({ message: "Internal server error" });
+  const { id } = req.params;
+  try {
+    const email = await Email.findOne({ "subscribers._id": id });
+    if (email) {
+      const subscriber = email.subscribers.find(
+        (sub) => sub._id.toString() === id
+      );
+      res.status(200).send(subscriber);
+    } else {
+      res.status(404).send({ message: "Subscriber not found" });
     }
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error" });
   }
 });
 
