@@ -27,3 +27,23 @@
     flex-direction: column;
     align-items: center;
 }
+
+.buttonNav {
+  cursor: pointer;
+  color: black;
+}
+
+.buttonNav:focus,
+.buttonNav:active,
+.buttonNav:hover {
+  color: #8657C3;
+}
+
+.currentPage {
+  color: black;
+  cursor: default;
+}
+
+.currentPage:hover {
+  color: #8657C3;
+}

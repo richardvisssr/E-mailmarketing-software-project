@@ -82,7 +82,7 @@ export default function HeaderComponent() {
         className={`${styles.linky} ${styles.settings} nav-link`}
         aria-current="page"
       >
-        <i class="bi bi-gear-fill"></i>
+        <i className="bi bi-gear-fill"></i>
       </Link>
     </header>
   );

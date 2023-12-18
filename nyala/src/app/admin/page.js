@@ -21,12 +21,22 @@ function Page() {
   const [masterKey, setMasterKey] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [tokenExists, setTokenExists] = useState(false);
   const router = useRouter();
+  const headers = {
+    'Content-Type': 'application/json',
+  };
 
   const login = async () => {
     try {
+      if (Cookies.get("token")) {
+        setTokenExists(true);
+        headers['Authorization'] = `Bearer ${Cookies.get("token")}`;
+      }
+      
       const response = await fetch("http://localhost:3001/login", {
         method: "POST",
+        headers: headers,
       });
 
       const data = await response.json();

@@ -1,8 +1,10 @@
 const jwt = require("jsonwebtoken");
 const express = require("express");
 const router = express.Router();
-const secretKey = "eyJzdWIiOiJ1c2VyMTIzNDUiLCJpYXQiOjE3MDI4ODczNjAsImV4cCI6MT";
+const secretKey = "z576lkp4tMzGqP0KOINOE+De3ajsPJChBk+bhJ9XoxF9VJG4E0Da+g==";
 const config = require("../../config/config.json");
+
+const { Activity } = require("../model/activityModel");
 
 function generateAccessToken(id) {
   const payload = {
@@ -25,22 +27,59 @@ function generateTempAccessToken(id) {
 }
 
 router.post("/login", async (req, res) => {
-  const token = generateAccessToken("user12345");
-  // if (req.session.masterKey) {
-  //   res.status(200).send({ success: true, masterKey: req.session.masterKey });
-  //   return;
-  // }
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split(" ")[1];
 
-  // const masterKey = uid(20);
-  // req.session.masterKey = masterKey;
-  // res.cookie("masterKey", masterKey, { maxAge: 86400000, httpOnly: true });
+    jwt.verify(token, secretKey, (err, decoded) => {
+      if (err) {
+        const newToken = generateAccessToken("user12345");
 
-  res.status(200).send({ success: true, token: token });
+        if (JSON.parse(config.enableActivity)) {
+          const loginActivity = new Activity({
+            device: req.headers["user-agent"],
+            location:
+              req.headers["x-forwarded-for"] || req.connection.remoteAddress,
+            ip: req.headers["x-forwarded-for"] || req.connection.remoteAddress,
+            time: new Date(),
+          });
+
+          try {
+            loginActivity.save();
+          } catch (error) {
+            console.error(error);
+          }
+        }
+
+        return res.status(200).send({ success: true, token: newToken });
+      }
+
+      return res.status(200).send({ success: true, token: token });
+    });
+  } else {
+    const token = generateAccessToken("user12345");
+
+    if (JSON.parse(config.enableActivity)) {
+      const loginActivity = new Activity({
+        device: req.headers["user-agent"],
+        location:
+          req.headers["x-forwarded-for"] || req.connection.remoteAddress,
+        ip: req.headers["x-forwarded-for"] || req.connection.remoteAddress,
+        time: new Date(),
+      });
+
+      try {
+        loginActivity.save();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    return res.status(200).send({ success: true, token: token });
+  }
 });
 
 router.get("/tempAuth", (req, res) => {
-    const token = generateTempAccessToken("user12345");
-    res.status(200).send({ success: true, token: token });
+  const token = generateTempAccessToken("user12345");
+  res.status(200).send({ success: true, token: token });
 });
 
 module.exports = router;

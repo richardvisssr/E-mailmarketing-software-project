@@ -8,8 +8,6 @@ const bodyParser = require("body-parser");
 const http = require("http");
 const ws = require("ws");
 const path = require("path");
-const jwt = require("jsonwebtoken");
-const secretKey = "eyJzdWIiOiJ1c2VyMTIzNDUiLCJpYXQiOjE3MDI4ODczNjAsImV4cCI6MT";
 const configFilePath = path.join(__dirname, "../config/config.json");
 
 const host = process.env.HOST || "127.0.0.1";
@@ -33,31 +31,15 @@ function restartServer() {
   });
 }
 
-function verifyToken(req, res, next) {
-  const token = req.headers.authorization.split(" ")[1];
-
-  if (!token) {
-    res.status(401).send({ message: "Unauthorized: token missing" });
-    return;
-  }
-
-  jwt.verify(token, secretKey, (err, decoded) => {
-    if (err) {
-      res.status(401).send({ message: "Unauthorized: invalid token" });
-      return;
-    }
-
-    req.userId = decoded.sub;
-    next();
-  });
-}
-
 fs.watch(configFilePath, (eventType, filename) => {
   if (eventType === "change") {
     console.log(`Config file ${filename} changed`);
     restartServer();
   }
 });
+
+// Hier komen de requires voor de utils
+const verifyToken = require("./utils/verifyToken");
 
 // Hier komen de requires voor de routes
 const settingsRouter = require("./routes/settingsRoute");
@@ -66,8 +48,8 @@ const subscriberRouter = require("./routes/subscribers");
 const emailEditorRouter = require("./routes/emailEditor");
 const mailListRouter = require("./routes/mailLists");
 const sendMailRouter = require("./routes/sendEmail");
-const adminpanelRouter = require('./routes/templateRoutes');
-const afbeeldingRouter = require('./routes/afbeeldingRouter');
+const adminpanelRouter = require("./routes/templateRoutes");
+const afbeeldingRouter = require("./routes/afbeeldingRouter");
 
 const app = express();
 
@@ -90,7 +72,7 @@ app.use("/", loginRouter);
 app.use("/", verifyToken);
 app.use("/", settingsRouter);
 app.use("/", subscriberRouter);
-app.use('/', adminpanelRouter);
+app.use("/", adminpanelRouter);
 app.use("/mail", emailEditorRouter);
 app.use("/mail", mailListRouter);
 app.use("/", sendMailRouter);
@@ -132,4 +114,4 @@ let server = app.listen(port, host, async () => {
   console.log(`Database started on http://${addressInfo}:${portInfo}`);
 });
 
-module.exports = {app, server, httpServer, webSocketServer};
+module.exports = { app, server, httpServer, webSocketServer };
