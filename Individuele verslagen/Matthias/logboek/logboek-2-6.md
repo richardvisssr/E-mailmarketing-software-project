@@ -14,7 +14,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| 7 uur | Feedback sprint review |  | Tegen wat problemen aangelopen, zoals kleine bugfixes die meer tijd in beslag namen dan verwacht | [Commit](https://github.com/HANICA-DWA/project-sep23-nyala/commit/54716a076606bcca6a90353b10540228a865c39d) |
+| 7 uur | Feedback sprint review |  | Tegen wat problemen aangelopen, zoals kleine bugfixes die meer tijd in beslag namen dan verwacht | ⏮️ | [Commit](https://github.com/HANICA-DWA/project-sep23-nyala/commit/54716a076606bcca6a90353b10540228a865c39d) |
 
 ## Dinsdag 12 december
 
