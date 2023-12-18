@@ -20,6 +20,15 @@ router.post("/sendEmail", async (req, res) => {
 
     let sentSubscribers = [];
 
+    const analysisPageUrl = `http://localhost:3000/analyse/`;
+
+    const personalizedHtmlText = html.replace(
+      /href="([^"]*)"/g,
+      function (match, originalUrl) {
+        return `href="${analysisPageUrl}${encodeURIComponent(originalUrl)}/${id}/1"`;
+      }
+    );
+
     for (const subscriber of subscribers) {
       if (sentSubscribers.includes(subscriber.email)) {
         continue;
@@ -39,7 +48,7 @@ router.post("/sendEmail", async (req, res) => {
         }
         </div>
         <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
-        ${html}
+        ${personalizedHtmlText}
       </div>
       <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
         <p>
@@ -74,10 +83,10 @@ router.get("/isMailSended/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const email = await Email.findOne({ id });
-    
+
     if (email) {
       res.status(200).send("Mail has been sent");
-    } 
+    }
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
@@ -85,7 +94,8 @@ router.get("/isMailSended/:id", async (req, res) => {
 
 router.put("/planMail", async (req, res) => {
   try {
-    const { mailId ,id, title, html, subs, date, showHeader, subject } = req.body;
+    const { mailId, id, title, html, subs, date, showHeader, subject } =
+      req.body;
     const subscribers = subs.map((subscriber) => {
       return {
         id: subscriber._id,

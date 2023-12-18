@@ -18,7 +18,11 @@ const TrackingPage = ({ params }) => {
           router.push(`/${url}/${mailid}/${userid}`);
         })
         .catch((error) => {
-          setNotification({ type: "error", message: "Er is een fout opgetreden bij het bijhouden van de online weergave." });
+          setNotification({
+            type: "error",
+            message:
+              "Er is een fout opgetreden bij het bijhouden van de online weergave.",
+          });
         });
     }
     if (url === "unsubscribe") {
@@ -27,8 +31,15 @@ const TrackingPage = ({ params }) => {
           router.push(`/${url}/${mailid}/${userid}`);
         })
         .catch((error) => {
-          setNotification({ type: "error", message: "Er is een fout opgetreden bij het verwerken van uw uitschrijving." });
+          setNotification({
+            type: "error",
+            message:
+              "Er is een fout opgetreden bij het verwerken van uw uitschrijving.",
+          });
         });
+    } else {
+      console.log("redirect");
+      window.location.href= url;
     }
   }, []);
 
