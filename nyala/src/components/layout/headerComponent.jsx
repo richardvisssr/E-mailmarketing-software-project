@@ -77,6 +77,13 @@ export default function HeaderComponent() {
           <span className="fs-4 text-dark">|</span>
         </ul>
       </div>
+      <Link
+        href="/admin/settings"
+        className={`${styles.linky} ${styles.settings} nav-link`}
+        aria-current="page"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </Link>
     </header>
   );
 }

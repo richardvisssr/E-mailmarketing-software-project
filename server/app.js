@@ -1,5 +1,5 @@
 "use strict";
-
+const fs = require("fs");
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
@@ -10,12 +10,30 @@ const ws = require("ws");
 const path = require("path");
 const jwt = require("jsonwebtoken");
 const secretKey = "eyJzdWIiOiJ1c2VyMTIzNDUiLCJpYXQiOjE3MDI4ODczNjAsImV4cCI6MT";
+const configFilePath = path.join(__dirname, "../config/config.json");
 
 const host = process.env.HOST || "127.0.0.1";
 const port = process.env.PORT || 3001;
 
+function restartServer() {
+  server.close(() => {
+    console.log("Server restarting due to config.json changes");
+
+    const newServer = app.listen(port, host, () => {
+      console.log("> connecting");
+      console.log("> connected");
+
+      const serverInfo = newServer.address();
+      const addressInfo = serverInfo.address;
+      const portInfo = serverInfo.port;
+      console.log(`Database started on http://${addressInfo}:${portInfo}`);
+    });
+
+    server = newServer;
+  });
+}
+
 function verifyToken(req, res, next) {
-  console.log(req.body);
   const token = req.headers.authorization.split(" ")[1];
 
   if (!token) {
@@ -34,7 +52,15 @@ function verifyToken(req, res, next) {
   });
 }
 
+fs.watch(configFilePath, (eventType, filename) => {
+  if (eventType === "change") {
+    console.log(`Config file ${filename} changed`);
+    restartServer();
+  }
+});
+
 // Hier komen de requires voor de routes
+const settingsRouter = require("./routes/settingsRoute");
 const loginRouter = require("./routes/loginRouter");
 const subscriberRouter = require("./routes/subscribers");
 const emailEditorRouter = require("./routes/emailEditor");
@@ -59,13 +85,10 @@ const sessionParser = session({
 app.use(sessionParser);
 app.use(express.json());
 
-app.use("/", (req, res, next) => {
-  console.log("HTTP request", req.method, req.url, req.body);
-  next();
-});
 // Hier komen de app.use voor routes
 app.use("/", loginRouter);
 app.use("/", verifyToken);
+app.use("/", settingsRouter);
 app.use("/", subscriberRouter);
 app.use('/', adminpanelRouter);
 app.use("/mail", emailEditorRouter);
@@ -99,7 +122,7 @@ httpServer.listen(() => {
   console.log(`Listening on http://${host}:${port}`);
 });
 
-const server = app.listen(port, host, async () => {
+let server = app.listen(port, host, async () => {
   console.log("> connecting");
   console.log("> connected");
 

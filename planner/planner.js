@@ -4,8 +4,9 @@ const ws = require("ws");
 const express = require("express");
 const session = require("express-session");
 const { PlannedEmail } = require("../server/model/emailEditor");
-const config = require("../config/config.json");
+const fs = require("fs");
 
+let config = require("../config/config.json");
 const host = process.env.HOST || "127.0.0.1";
 const port = 8000;
 const app = express();
@@ -112,7 +113,7 @@ async function sendEmail(email) {
 
     const responses = await Promise.all(results);
 
-    return responses.every(response => !!response);
+    return responses.every((response) => !!response);
   } catch (error) {
     console.error("Error sending email:", error);
     return false;
@@ -148,7 +149,10 @@ async function checkEmails() {
       } else {
         email.status = "Mislukt";
         await email.save();
-        sendWebsocketMessage({ type: "update", message: "Failed to send email" });
+        sendWebsocketMessage({
+          type: "update",
+          message: "Failed to send email",
+        });
       }
     }
   } catch (error) {
@@ -156,4 +160,54 @@ async function checkEmails() {
   }
 }
 
-setInterval(checkEmails, JSON.parse(config.updateInterval));
+// Function to reload configuration
+function reloadConfig() {
+  try {
+    const configPath = "../config/config.json";
+    const configFile = require.resolve(configPath);
+
+    // Check if the file exists and is not empty
+    if (fs.existsSync(configFile) && fs.statSync(configFile).size > 0) {
+      delete require.cache[configFile];
+      config = require(configPath);
+      console.log("Config reloaded:", config);
+      clearInterval(emailCheckInterval);
+      startEmailCheckInterval();
+    } else {
+      console.error("Config file is empty or does not exist.");
+    }
+  } catch (error) {
+    console.error("Error reloading config:", error);
+  }
+}
+
+// Debounce function
+function debounce(func, delay) {
+  let timeoutId;
+  return function () {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(func, delay);
+  };
+}
+
+// Watch for changes to the config file with debounce
+const debouncedReloadConfig = debounce(reloadConfig, 1000);
+
+// Watch for changes to the config file
+fs.watch("../config/config.json", (event, filename) => {
+  if (event === "change") {
+    console.log("Config file changed. Reloading...");
+    debouncedReloadConfig();
+  }
+});
+
+function startEmailCheckInterval() {
+  emailCheckInterval = setInterval(
+    checkEmails,
+    JSON.parse(config.updateInterval)
+  );
+}
+
+// Start the email check interval initially
+let emailCheckInterval;
+startEmailCheckInterval();

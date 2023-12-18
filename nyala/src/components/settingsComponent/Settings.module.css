@@ -1,0 +1,29 @@
+.container {
+    background: white;
+  width: 540px;
+  height: 420px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.logo {
+  float: right;
+  margin-right: 12px;
+  margin-top: 12px;
+  font-family: "Nunito Sans", sans-serif;
+  color: #3dbb3d;
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+}
+
+.debugBorder {
+  border: 2px;
+  border-style: dashed;
+}
+
+.settings {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const express = require("express");
 const router = express.Router();
 const secretKey = "eyJzdWIiOiJ1c2VyMTIzNDUiLCJpYXQiOjE3MDI4ODczNjAsImV4cCI6MT";
+const config = require("../../config/config.json");
 
 function generateAccessToken(id) {
   const payload = {
@@ -17,7 +18,7 @@ function generateTempAccessToken(id) {
   const payload = {
     sub: id,
     iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + 60 * 5,
+    exp: JSON.parse(config.expireTime),
   };
 
   return jwt.sign(payload, secretKey);
