@@ -54,21 +54,10 @@ export default function AnalysePanel() {
         return;
       }
 
-      const reasonCounts = {};
-      data.forEach((item) => {
-        const reason = item.reason;
-        if (reasonCounts[reason]) {
-          reasonCounts[reason] += 1;
-        } else {
-          reasonCounts[reason] = 1;
-        }
-      });
-
       setReasonData(
-        Object.entries(reasonCounts).map(([reason, count]) => ({
-          reason,
-          count,
-        }))
+        data.map((item) => {
+          return { reason: item.reason, count: item.count };
+        })
       );
     } catch (error) {
       setNotification({

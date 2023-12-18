@@ -21,6 +21,10 @@ const unsubscribe = new mongoose.Schema({
     type: String,
     required: false,
   },
+  count: {
+    type: Number,
+    required: true,
+  },
 });
 
 const categories = new mongoose.Schema({

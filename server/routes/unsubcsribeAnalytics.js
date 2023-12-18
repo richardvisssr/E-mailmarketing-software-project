@@ -20,8 +20,11 @@ router.get("/unsubscribe/count", async (req, res) => {
 router.get("/unsubscribeReasons", async (req, res) => {
   try {
     const reason = await Unsubscriber.find();
+    const array = reason.map((element) => {
+      return { reason: element.reason, count: element.count };
+    });
 
-    res.status(200).send(reason);
+    res.status(200).send(array);
   } catch (error) {
     res.status(500).send({ message: "Internal server error" });
   }
@@ -54,19 +57,19 @@ router.put("/unsubscribe/lists", async (req, res) => {
   }
 });
 
-router.post("/reason", async (req, res) => {
+router.put("/reason", async (req, res) => {
   const { reden } = req.body;
 
   try {
-    const unsubscriber = new Unsubscriber({
-      reason: reden,
-    });
-    await unsubscriber.save();
+    const reason = await Unsubscriber.findOne({ reason: reden });
 
-    sendWebsocketMessage({
-      type: "unsubscribeReason",
-      data: reden,
-    });
+    if (!reason) {
+      const newReason = new Unsubscriber({ reason: reden, count: 1 });
+      await newReason.save();
+    } else {
+      reason.count += 1;
+      await reason.save();
+    }
 
     return res.status(200).send({ message: "Reason added" });
   } catch (err) {
