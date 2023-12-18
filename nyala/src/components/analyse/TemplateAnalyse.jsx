@@ -6,9 +6,10 @@ import AlertComponent from "../alert/AlertComponent";
 
 export default function TemplateAnalyse({ id }) {
   const socket = new WebSocket("ws://127.0.0.1:7002/socket");
-  const [onlineViews, setOnlineViews] = useState(0);
+  const [stats, setStats] = useState(0);
   const [viewChange, setViewChange] = useState(false);
   const [notification, setNotification] = useState({ type: "", message: "" });
+  const [clicked, setClicked] = useState(false);
 
   socket.addEventListener("open", (event) => {});
 
@@ -37,7 +38,7 @@ export default function TemplateAnalyse({ id }) {
   const getStats = async () => {
     fetch(`http://localhost:3001/stats/${id}`)
       .then((response) => response.json())
-      .then((data) => setOnlineViews(data[id]))
+      .then((data) => setStats(data[id]))
       .catch((error) =>
         setNotification({
           type: "error",
@@ -47,11 +48,33 @@ export default function TemplateAnalyse({ id }) {
       );
   };
 
+  const handleClick = () => {
+    setClicked(true);
+  };
+
   return (
     <div>
       <AlertComponent notification={notification} />
+      <div className="text-end mx-auto mt-2 me-5">
+        <i
+          className="bi bi-arrow-down-up"
+          style={{ fontSize: "2rem" }}
+          onClick={handleClick}
+        ></i>
+      </div>
       <div className="w-50 mx-auto mt-5">
-        <ProgressBar text="Het aantal online views" count={5} total={10} />
+        <ProgressBar
+          text="Het aantal online views"
+          count={stats.opened}
+          total={20}
+        />
+      </div>
+      <div className="w-50 mx-auto mt-5">
+        <ProgressBar
+          text="Het aantal uitgeschreven personen"
+          count={stats.unsubscribed}
+          total={10}
+        />
       </div>
     </div>
   );
