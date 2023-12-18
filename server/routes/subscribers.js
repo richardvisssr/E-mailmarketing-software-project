@@ -25,44 +25,115 @@ router.get("/subscribers/all", async (req, res) => {
   }
 });
 
-router.post("/subscribers/add", async (req, res) => {
+/**
+ * Validates the input data.
+ * @param {string} email - The email address.
+ * @param {string} name - The subscriber's name.
+ * @param {Array} subscriptions - The array of subscriptions.
+ * @returns {boolean} True if the input is valid, false otherwise.
+ */
+function validateInput(email, name, subscriptions) {
+  return email && name && subscriptions && Array.isArray(subscriptions);
+}
+
+/**
+ * Checks if the email has a valid format.
+ * @param {string} email - The email address.
+ * @returns {boolean} True if the email has a valid format, false otherwise.
+ */
+function isValidEmailFormat(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+/**
+ * Checks if a subscriber with the given email already exists.
+ * @param {string} email - The email address.
+ * @returns {Promise<Object>} The existing subscriber or null if not found.
+ */
+async function checkExistingSubscriber(email) {
+  return await Subscriber.findOne({ email });
+}
+
+/**
+ * Creates a new subscriber object.
+ * @param {string} email - The email address.
+ * @param {string} name - The subscriber's name.
+ * @param {Array} subscriptions - The array of subscriptions.
+ * @returns {Object} The new subscriber object.
+ */
+function createNewSubscriber(email, name, subscriptions) {
+  return new Subscriber({
+    email,
+    name,
+    subscription: subscriptions,
+  });
+}
+
+/**
+ * Handles the common logic for adding or editing a subscriber.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {boolean} isEdit - Indicates whether it's an edit operation.
+ */
+async function handleSubscriberRequest(req, res, isEdit) {
   try {
     const { email, name, subscriptions } = req.body;
 
-    if (!email || !name || !subscriptions || !Array.isArray(subscriptions)) {
+    const isValidInput = validateInput(email, name, subscriptions);
+    if (!isValidInput) {
       return res.status(400).json({ message: "Bad Request: Invalid input" });
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!isValidEmailFormat(email)) {
       return res
         .status(400)
         .json({ message: "Bad Request: Invalid email format" });
     }
 
-    const existingSubscriber = await Subscriber.findOne({ email });
+    const existingSubscriber = await checkExistingSubscriber(email);
 
     if (existingSubscriber) {
-      existingSubscriber.subscription = Array.from(
-        new Set([...existingSubscriber.subscription, ...subscriptions])
-      );
+      if (isEdit) {
+        existingSubscriber.subscription = Array.from(
+          new Set([...existingSubscriber.subscription, ...subscriptions])
+        );
 
-      await existingSubscriber.save();
-      res
-        .status(200)
-        .json({ message: "Subscriptions added to existing subscriber" });
+        await existingSubscriber.save();
+        res
+          .status(200)
+          .json({ message: "Subscriptions added to existing subscriber" });
+      } else {
+        res.status(400).json({ message: "Bad Request: Email already used" });
+      }
     } else {
-      const newSubscriber = new Subscriber({
-        email,
-        name,
-        subscription: subscriptions,
-      });
-
+      const newSubscriber = createNewSubscriber(email, name, subscriptions);
       await newSubscriber.save();
-      res.status(200).json({ message: "New subscriber added" });
+      res.status(200).json({
+        message: isEdit ? "Subscriber updated" : "New subscriber added",
+      });
     }
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: "Internal Server Error" });
   }
+}
+
+/**
+ * Handles the POST request to add a new subscriber.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ */
+router.post("/subscribers/add", async (req, res) => {
+  await handleSubscriberRequest(req, res, false);
+});
+
+/**
+ * Handles the PUT request to edit a subscriber's information.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ */
+router.put("/subscribers/edit", async (req, res) => {
+  await handleSubscriberRequest(req, res, true);
 });
 
 router.get("/:subscriber/subs", async (req, res) => {
@@ -119,6 +190,51 @@ router.put("/change/:subscriber", async (req, res) => {
     selectedSubscriber.email = email;
 
     await selectedSubscriber.save();
+
+    res.status(200).json({ message: "Subscriber updated" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.put("/update/:list", async (req, res) => {
+  const prevList = req.params.list;
+  const { name } = req.body;
+
+  try {
+    const subscribers = await Subscriber.find({ subscription: prevList });
+
+    if (!name) {
+      return res.status(400).send({ message: "No new name provided" });
+    }
+
+    if (name === prevList) {
+      return res.status(400).send({ message: "New name is the same" });
+    }
+
+    if (name.trim() !== name) {
+      return res.status(400).send({ message: "New name contains spaces" });
+    }
+
+    if (
+      subscribers.some((subscriber) => subscriber.subscription.includes(name))
+    ) {
+      return res.status(400).send({ message: "New name already exists" });
+    }
+
+    const updatedSubscribers = subscribers.map((subscriber) => {
+      const index = subscriber.subscription.indexOf(prevList);
+      if (index !== -1) {
+        const updatedSubscription = [...subscriber.subscription];
+        updatedSubscription[index] = name;
+        subscriber.subscription = updatedSubscription;
+      }
+      return subscriber;
+    });
+
+    await Promise.all(
+      updatedSubscribers.map((subscriber) => subscriber.save())
+    );
 
     res.status(200).json({ message: "Subscriber updated" });
   } catch (err) {

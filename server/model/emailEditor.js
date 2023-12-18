@@ -54,7 +54,7 @@ const plannedEmailSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  sended: {
+  sent: {
     type: Boolean,
     required: true,
   },
@@ -62,10 +62,19 @@ const plannedEmailSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
+  headerText: {
+    type: String,
+    required: false,
+  },
   subject: {
     type: String,
     required: true,
   },
+  status: {
+    type: String,
+    enum: ["Verzonden", "In afwachting", "Mislukt"],
+    default: "In afwachting",
+  }
 });
 
 const PlannedEmail = mongoose.model("PlannedEmail", plannedEmailSchema);

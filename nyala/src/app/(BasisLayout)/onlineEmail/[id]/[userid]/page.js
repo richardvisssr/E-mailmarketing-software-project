@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Loading from "@/app/(BasisLayout)/loading";
 
 export default function Page({ params }) {
   const { id } = params;
