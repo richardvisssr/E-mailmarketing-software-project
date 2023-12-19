@@ -14,6 +14,11 @@ export default function UnsubscribeForm({ userid, emailid }) {
   const [selectedSubs, setSelectedSubs] = useState([]);
   const [subs, setSubs] = useState([]);
   const [warning, setWarning] = useState({ type: "", message: "" });
+  const [message, setMessage] = useState({
+    type: "unsubscribe",
+    reason: "",
+    subscriptions: [],
+  });
 
   // Dit zijn de redenen gekregen van de PO
   const reasons = [
@@ -93,18 +98,44 @@ export default function UnsubscribeForm({ userid, emailid }) {
     }
   };
 
+  const saveUnsubscribedSubs = async () => {
+    try {
+      const unsubscribedSubs = await fetch(
+        "http://localhost:3001/unsubscribe/lists",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            subscriptions: selectedSubs,
+          }),
+        }
+      );
+
+      if (unsubscribedSubs.status === 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      setWarning({
+        type: "error",
+        message: "Er ging iets mis met het uitschrijven.",
+      });
+      return false;
+    }
+  };
+
   // Reden van uitschrijven toevoegen aan de database
   const handleReasonSubmit = async () => {
-    const geselecteerdeReden =
-      reason === "Anders" ? customReason : reason === "" ? null : reason;
-
     try {
       const reasonResponse = await fetch("http://localhost:3001/reason", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ reden: geselecteerdeReden }),
+        body: JSON.stringify({ reden: reason }),
       });
 
       if (reasonResponse.status === 200) {
@@ -143,6 +174,7 @@ export default function UnsubscribeForm({ userid, emailid }) {
             <SubscriptionForm
               subscribers={data.subscription}
               setValue={changeValue}
+              selectedSubscribers={selectedSubs}
             />
           );
         })
@@ -185,7 +217,8 @@ export default function UnsubscribeForm({ userid, emailid }) {
       try {
         if (subs.length === selectedSubs.length) {
           const complete = await handleCompleteUnsubscribe();
-          if (complete) {
+          const save = await saveUnsubscribedSubs();
+          if (complete && save) {
             const reason = await handleReasonSubmit();
             if (reason) {
               localStorage.setItem(
@@ -196,8 +229,9 @@ export default function UnsubscribeForm({ userid, emailid }) {
             }
           }
         } else {
-          const sub = await handleUnsubscribe();
-          if (sub) {
+          const complete = await handleUnsubscribe();
+          const save = await saveUnsubscribedSubs();
+          if (complete && save) {
             const reason = await handleReasonSubmit();
             if (reason) {
               localStorage.setItem(

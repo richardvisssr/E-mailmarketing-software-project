@@ -1,13 +1,19 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
 const { PlannedEmail, Email } = require("../model/emailEditor");
+const path = require("path");
+const fs = require("fs");
 const { sendWebsocketMessage } = require("../utils/websockets");
 
 const router = express.Router();
 
 router.post("/sendEmail", async (req, res) => {
   try {
-    const { html, subscribers, subject, showHeader, id } = req.body;
+    const { html, subscribers, subject, showHeader, headerText, id } = req.body;
+
+    const imagePath = path.join(__dirname, "xtend-logo.webp");
+    const imageAsBase64 = fs.readFileSync(imagePath, { encoding: "base64" });
+
     let transporter = nodemailer.createTransport({
       host: "145.74.104.216",
       port: 1025,
@@ -21,6 +27,18 @@ router.post("/sendEmail", async (req, res) => {
     let sentSubscribers = [];
 
     for (const subscriber of subscribers) {
+      let personalizedHeaderText = headerText.replace(
+        "{name}",
+        subscriber.name
+      );
+
+      personalizedHeaderText = personalizedHeaderText.replace(/\n/g, "<br>");
+
+      personalizedHeaderText = personalizedHeaderText.replace(
+        "{image}",
+        `<img src="data:image/webp;base64,${imageAsBase64}" alt="Xtend Logo" style="width: 100px; height: auto;" />`
+      );
+
       if (sentSubscribers.includes(subscriber.email)) {
         continue;
       }
@@ -31,14 +49,9 @@ router.post("/sendEmail", async (req, res) => {
         subject: `${subject}`,
         html: `
         <div style="text-align: center; padding: 10px; font-family: 'Arial', sans-serif;">
-        ${
-          showHeader
-            ? `<h1 style="color: #333; font-size: 24px;">Xtend</h1>
-             <h2 style="color: #666; font-size: 20px;">Beste ${subscriber.name}, hierbij een nieuwe bericht</h2>`
-            : ""
-        }
+        ${showHeader ? ` ${personalizedHeaderText}` : ""}
         </div>
-        <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
+        <div style=" padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
         ${html}
       </div>
       <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
@@ -74,10 +87,10 @@ router.get("/isMailSended/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const email = await Email.findOne({ id });
-    
+
     if (email) {
       res.status(200).send("Mail has been sent");
-    } 
+    }
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
@@ -85,7 +98,17 @@ router.get("/isMailSended/:id", async (req, res) => {
 
 router.put("/planMail", async (req, res) => {
   try {
-    const { mailId ,id, title, html, subs, date, showHeader, subject } = req.body;
+    const {
+      mailId,
+      id,
+      title,
+      html,
+      subs,
+      date,
+      showHeader,
+      headerText,
+      subject,
+    } = req.body;
     const subscribers = subs.map((subscriber) => {
       return {
         id: subscriber._id,
@@ -93,6 +116,8 @@ router.put("/planMail", async (req, res) => {
         email: subscriber.email,
       };
     });
+
+    console.log(subscribers);
     const planMail = await PlannedEmail.findOne({ id });
 
     if (planMail) {
@@ -103,6 +128,7 @@ router.put("/planMail", async (req, res) => {
       planMail.subscribers = subscribers;
       planMail.date = date;
       planMail.subject = subject;
+      planMail.headerText = headerText;
       await planMail.save();
 
       res.status(200).send("Mail planned successfully");
@@ -114,8 +140,9 @@ router.put("/planMail", async (req, res) => {
         html,
         subscribers,
         date,
-        sended: false,
+        sent: false,
         showHeader,
+        headerText,
         subject,
       });
       await newPlanMail.save();

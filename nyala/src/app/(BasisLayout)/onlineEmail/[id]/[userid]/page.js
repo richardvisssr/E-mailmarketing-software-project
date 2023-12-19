@@ -15,14 +15,20 @@ export default function Page({ params }) {
         setEmail(data);
       })
       .catch((error) => {
-        setNotification({ type: "error", message: "Er is een fout opgetreden bij het ophalen van de e-mail." });
+        setNotification({
+          type: "error",
+          message: "Er is een fout opgetreden bij het ophalen van de e-mail.",
+        });
       });
   }, []);
 
   return (
     <main>
       {notification.type && notification.message && (
-        <AlertComponent type={notification.type} message={notification.message} />
+        <AlertComponent
+          type={notification.type}
+          message={notification.message}
+        />
       )}
 
       {email ? (

@@ -1,6 +1,13 @@
-async function sendDataToSendEmail(html, subscribers, subject, showHeader, id) {
+async function sendDataToSendEmail(
+  html,
+  subscribers,
+  subject,
+  showHeader,
+  headerText,
+  id
+) {
   try {
-    const response = await fetch("http://localhost:3001/sendEmail", {
+    const response = await fetch("http://localhost:3001/sendEmail", { 
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -10,6 +17,7 @@ async function sendDataToSendEmail(html, subscribers, subject, showHeader, id) {
         subscribers,
         subject,
         showHeader,
+        headerText,
         id,
       }),
     });
