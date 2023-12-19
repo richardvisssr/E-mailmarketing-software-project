@@ -76,7 +76,7 @@ router.get("/isMailSended/:id", async (req, res) => {
     const email = await Email.findOne({ id });
     
     if (email) {
-      res.status(200).send("Mail is sended");
+      res.status(200).send("Mail has been sent");
     } 
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
