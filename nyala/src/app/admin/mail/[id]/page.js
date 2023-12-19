@@ -1,5 +1,5 @@
 import React from "react";
-import MailEditor from "@/components/email/MailEditor";
+import MailEditor from "@/components/templateEditor/MailEditor";
 
 export default function Page({ params }) {
   return (

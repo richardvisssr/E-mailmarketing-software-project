@@ -25,6 +25,7 @@ beforeEach(async () => {
     sended: false,
     showHeader: true,
     subject: "testSubject",
+    status: "In afwachting"
   };
 
   await PlannedEmail.create(plannedEmailData);
