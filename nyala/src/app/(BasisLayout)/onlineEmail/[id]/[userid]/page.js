@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Loading from "@/app/(BasisLayout)/loading";
 import AlertComponent from "@/components/alert/AlertComponent";
+import styles from "./onlineEmail.module.css";
 
 export default function Page({ params }) {
   const { id, userid } = params;
@@ -10,45 +11,47 @@ export default function Page({ params }) {
 
   useEffect(() => {
     fetch(`http://localhost:3001/mail/getEmail/${id}`)
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Er is een fout opgetreden bij het ophalen van de e-mail.");
+        }
+        return response.json();
+      })
       .then((data) => {
-        setEmail(data);
+        // Replace href attributes in the email's HTML
+        const analysisPageUrl = `http://localhost:3000/analyse/`;
+        const personalizedHtmlText = data.html.replace(
+          /href="([^"]*)"/g,
+          function (match, originalUrl) {
+            return `href="${analysisPageUrl}${encodeURIComponent(
+              originalUrl
+            )}/${id}/1"`;
+          }
+        );
+
+        setEmail(personalizedHtmlText);
       })
       .catch((error) => {
-        setNotification({ type: "error", message: "Er is een fout opgetreden bij het ophalen van de e-mail." });
+        setNotification({
+          type: "error",
+          message: error.message,
+        });
       });
   }, []);
 
   return (
     <main>
-      {notification.type && notification.message && (
-        <AlertComponent type={notification.type} message={notification.message} />
-      )}
+      {notification.message && <AlertComponent notification={notification} />}
 
       {email ? (
         <div>
           <div
-            dangerouslySetInnerHTML={{ __html: email.html }}
-            style={{
-              textAlign: "center",
-              padding: "10px",
-            }}
+            className={styles.emailContent}
+            dangerouslySetInnerHTML={{ __html: email }}
           />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              backgroundColor: "#f1f1f1",
-              fontFamily: "Arial",
-              textAlign: "center",
-            }}
-          >
+          <div className={styles.unsubscribeContainer}>
             <a
-              style={{
-                backgroundColor: "#f1f1f1",
-                textAlign: "center",
-                padding: "10px",
-              }}
+              className={styles.unsubscribeLink}
               href={`http://localhost:3000/unsubscribe/${id}/${userid}`}
             >
               Uitschrijven
