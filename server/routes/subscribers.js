@@ -152,6 +152,7 @@ router.get("/:subscriber/subs", async (req, res) => {
   }
 });
 
+//TODO subscriber die uitschrijft
 router.post("/reason", async (req, res) => {
   const { reden } = req.body;
 
@@ -256,6 +257,7 @@ router.put("/update/:list", async (req, res) => {
   }
 });
 
+//TODO subscriber
 router.delete("/unsubscribe", async (req, res) => {
   const { email } = req.body;
   try {
@@ -271,6 +273,7 @@ router.delete("/unsubscribe", async (req, res) => {
   }
 });
 
+//TODO subscriber
 router.delete("/unsubscribe/subs", async (req, res) => {
   const { email, subscriptions } = req.body;
 

@@ -5,6 +5,7 @@ import { Modal, Form, Button } from "react-bootstrap";
 import styles from "./Calendar.module.css";
 import AlertComponent from "../alert/AlertComponent";
 import TableRowComponent from "./TableRowComponent";
+import Cookies from "js-cookie";
 
 function MailCalendar(props) {
   const emails = props.emails;
@@ -18,6 +19,7 @@ function MailCalendar(props) {
   const currentYear = date.getFullYear();
   const currentMonth = date.getMonth();
   const [notification, setNotification] = useState({ type: "", message: "" });
+  const token = Cookies.get("token");
 
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
   const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
@@ -50,6 +52,10 @@ function MailCalendar(props) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+      },
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         id: id,

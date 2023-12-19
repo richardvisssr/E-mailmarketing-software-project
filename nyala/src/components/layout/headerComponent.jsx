@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./HeaderComponent.module.css";
@@ -76,6 +77,13 @@ export default function HeaderComponent() {
           <span className="fs-4 text-dark">|</span>
         </ul>
       </div>
+      <Link
+        href="/admin/settings"
+        className={`${styles.linky} ${styles.settings} nav-link`}
+        aria-current="page"
+      >
+        <i className="bi bi-gear-fill"></i>
+      </Link>
     </header>
   );
 }

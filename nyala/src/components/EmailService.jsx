@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 async function sendDataToSendEmail(
   html,
   subscribers,
@@ -6,12 +8,15 @@ async function sendDataToSendEmail(
   headerText,
   id
 ) {
+  const token = Cookies.get("token");
   try {
     const response = await fetch("http://localhost:3001/sendEmail", { 
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
+      credentials: "include",
       body: JSON.stringify({
         html,
         subscribers,

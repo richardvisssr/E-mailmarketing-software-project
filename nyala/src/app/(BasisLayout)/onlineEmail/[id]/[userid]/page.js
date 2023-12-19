@@ -1,33 +1,72 @@
 "use client";
 import { useEffect, useState } from "react";
 import Loading from "@/app/(BasisLayout)/loading";
+import Cookies from "js-cookie";
+import AlertComponent from "@/components/alert/AlertComponent";
 
 export default function Page({ params }) {
   const { id } = params;
   const { userid } = params;
   const [email, setEmail] = useState(null);
+  const [notification, setNotification] = useState({ type: "", message: "" });
   const [subscriber, setSubscriber] = useState(null);
+  const token = Cookies.get("token");
 
   useEffect(() => {
     // Fetch email
-    fetch(`http://localhost:3001/mail/getEmail/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setEmail(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching email:", error);
+    const getAuth = async () => {
+      const response = await fetch("http://localhost:3001/tempAuth", {
+        method: "GET",
       });
+
+      const data = await response.json();
+
+      if (response.status === 200) {
+        const token = data.token;
+        Cookies.set("token", token, {
+          secure: true,
+          sameSite: "strict",
+          domain: "localhost",
+          path: "/",
+        });
+
+        const response = await fetch(
+          `http://localhost:3001/mail/getEmail/${id}`,
+          {
+            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setEmail(data);
+          })
+          .catch((error) => {
+              setNotification({
+                type: "error",
+                message: "Er is iets foutgegaan tijdens het inzien van de mail",
+          });
+        });
+      }
+    };
+
+    getAuth();
   }, []);
 
   return (
     <main>
+      {notification != "" && (
+        <AlertComponent
+          notification={notification}
+        />
+      )}
       {email ? (
         <div>
           <div
             dangerouslySetInnerHTML={{ __html: email.html }}
             style={{
-
               textAlign: "center",
               padding: "10px",
             }}
@@ -39,7 +78,6 @@ export default function Page({ params }) {
               backgroundColor: "#f1f1f1",
               fontFamily: "Arial",
               textAlign: "center",
-
             }}
           >
             <a
@@ -55,7 +93,7 @@ export default function Page({ params }) {
           </div>
         </div>
       ) : (
-        <Loading/>
+        <Loading />
       )}
     </main>
   );

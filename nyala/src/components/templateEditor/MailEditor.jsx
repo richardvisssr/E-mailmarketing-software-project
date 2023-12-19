@@ -6,6 +6,7 @@ import SelectMailingLists from "./SendMail";
 import { nanoid } from "nanoid";
 import sendDataToSendEmail from "../EmailService";
 import AlertComponent from "../alert/AlertComponent";
+import Cookies from "js-cookie";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
@@ -27,6 +28,7 @@ const MailEditor = ({ id }) => {
     type: "",
     message: "",
   });
+  const token = Cookies.get("token");
 
   useEffect(() => {
     setPlanned(false);
@@ -76,7 +78,9 @@ const MailEditor = ({ id }) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
           },
+          credentials: "include",
           body: JSON.stringify({ design, id, title }),
         });
         if (!response.ok) {
@@ -110,7 +114,9 @@ const MailEditor = ({ id }) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
           },
+          credentials: "include",
           body: JSON.stringify({ html: html, id: id }),
         });
         if (!response.ok) {
@@ -138,7 +144,9 @@ const MailEditor = ({ id }) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
           },
+          credentials: "include",
           body: JSON.stringify({ html: html, id: id }),
         });
         if (!response.ok) {
@@ -168,8 +176,9 @@ const MailEditor = ({ id }) => {
         `http://localhost:3001/mail/loadDesign/${id}`,
         {
           method: "GET",
+          credentials: "include",
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -247,8 +256,10 @@ const MailEditor = ({ id }) => {
       try {
         const response = await fetch(" http://localhost:3001/planMail", {
           method: "PUT",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             id: generateUniqueShortId(),

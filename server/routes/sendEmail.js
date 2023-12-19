@@ -13,6 +13,11 @@ router.post("/sendEmail", async (req, res) => {
     const imagePath = path.join(__dirname, "xtend-logo.webp");
     const imageAsBase64 = fs.readFileSync(imagePath, { encoding: "base64" });
 
+    if (subscribers.length === 0) {
+      res.status(400).json({ error: "No subscribers found" });
+      return;
+    }
+
     let transporter = nodemailer.createTransport({
       host: "145.74.104.216",
       port: 1025,
@@ -77,6 +82,7 @@ router.post("/sendEmail", async (req, res) => {
     }
     res.status(200).json({ success: true });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error sending email" });
   }
 });
@@ -85,7 +91,9 @@ router.put("/planMail", async (req, res) => {
   try {
     const { id, title, html, subs, date, showHeader, headerText, subject } =
       req.body;
-    const subscribers = subs.map((subscriber) => {
+
+    const subscribers = subs.map((subscriberArray) => {
+      const subscriber = subscriberArray[0];
       return {
         id: subscriber._id,
         name: subscriber.name,
@@ -93,7 +101,6 @@ router.put("/planMail", async (req, res) => {
       };
     });
 
-    console.log(subscribers);
     const planMail = await PlannedEmail.findOne({ id });
 
     if (planMail) {
@@ -122,6 +129,7 @@ router.put("/planMail", async (req, res) => {
       res.status(200).send("Mail planned successfully");
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Internal server error" });
   }
 });

@@ -75,7 +75,6 @@ router.get("/getEmail/:id", async (req, res) => {
   }
 });
 
-
 router.get("/subscribers/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -92,6 +91,5 @@ router.get("/subscribers/:id", async (req, res) => {
     res.status(500).send({ message: "Internal server error" });
   }
 });
-
 
 module.exports = router;

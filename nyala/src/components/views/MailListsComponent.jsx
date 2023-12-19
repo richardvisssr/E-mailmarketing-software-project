@@ -7,6 +7,7 @@ import styles from "./Views.module.css";
 import AlertComponent from "../alert/AlertComponent";
 import MailListAccordion from "./MailListAcordionComponent";
 import ModelComponent from "./ModelComponent";
+import Cookies from "js-cookie";
 
 export default function MailListComponent() {
   const [mailLists, setMailLists] = useState([]);
@@ -30,9 +31,16 @@ export default function MailListComponent() {
     type: "",
     message: "",
   });
+  const token = Cookies.get("token");
 
   useEffect(() => {
-    fetch("http://localhost:3001/mail/getList")
+    fetch("http://localhost:3001/mail/getList", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => setMailLists(data[0].mailList))
       .catch(() =>
@@ -48,7 +56,13 @@ export default function MailListComponent() {
     const fetchSubscribers = async () => {
       const promises = mailLists.map((mailList) =>
         fetch(
-          `http://localhost:3001/subscribers?selectedMailingList=${mailList}`
+          `http://localhost:3001/subscribers?selectedMailingList=${mailList}`, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         ).then((response) => response.json())
       );
 
@@ -224,6 +238,7 @@ export default function MailListComponent() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ name: list }),
       })
@@ -251,6 +266,7 @@ export default function MailListComponent() {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           email: email,
@@ -311,6 +327,7 @@ export default function MailListComponent() {
                 method: "PUT",
                 headers: {
                   "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({ name, newName }),
               }
@@ -355,6 +372,7 @@ export default function MailListComponent() {
               method: "PUT",
               headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
               },
               body: JSON.stringify({ name }),
             });
@@ -405,6 +423,7 @@ export default function MailListComponent() {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ name: list }),
       });
@@ -427,6 +446,7 @@ export default function MailListComponent() {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
       setNotification({

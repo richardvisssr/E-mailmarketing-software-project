@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import SubscriptionForm from "../categories/CategoriesComponent";
 import AlertComponent from "../alert/AlertComponent";
+import Cookies from "js-cookie";
 
 function SelectMailingLists(props) {
   const { id } = props;
@@ -10,9 +11,15 @@ function SelectMailingLists(props) {
   const [subscribers, setSubscribers] = useState([]);
   const [html, setHtml] = useState("");
   const [notification, setNotification] = useState({ type: "", message: "" });
+  const token = Cookies.get("token");
 
   useEffect(() => {
-    fetch("http://localhost:3001/mail/getList")
+    fetch("http://localhost:3001/mail/getList", {
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => setMailingLists(data))
       .catch((error) =>
@@ -29,7 +36,13 @@ function SelectMailingLists(props) {
         fetch(
           `http://localhost:3001/subscribers?selectedMailingList=${selectedMailingList.join(
             ","
-          )}`
+          )}`,
+          {
+            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         )
           .then((response) => response.json())
           .catch((error) => {
@@ -39,7 +52,12 @@ function SelectMailingLists(props) {
             });
             return [];
           }),
-        fetch(`http://localhost:3001/mail/getEmail/${id}`)
+        fetch(`http://localhost:3001/mail/getEmail/${id}`, {
+            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+        })
           .then((response) => response.json())
           .catch((error) => {
             setNotification({
@@ -92,7 +110,9 @@ function SelectMailingLists(props) {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
               },
+              credentials: "include",
               body: JSON.stringify({
                 html: html,
                 subscribers: subscribers,
@@ -107,7 +127,9 @@ function SelectMailingLists(props) {
               method: "PUT",
               headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
               },
+              credentials: "include",
               body: JSON.stringify({
                 html: html,
                 id: id,

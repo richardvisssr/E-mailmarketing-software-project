@@ -10,11 +10,13 @@ function TableRowComponent(props) {
       <td>{props.formatTime(mail.date)}</td>
       <td>{mail.status}</td>
       <td className="text-end">
-        <i
-          className={`bi bi-calendar-week-fill ${styles.icon}`}
-          onClick={() => props.handleOpenModal(mail.id, mail.title)}
-          style={{ cursor: "pointer" }}
-        ></i>
+        {mail.status !== "Verzonden" && (
+          <i
+            className={`bi bi-calendar-week-fill ${styles.icon}`}
+            onClick={() => props.handleOpenModal(mail.id, mail.title)}
+            style={{ cursor: "pointer" }}
+          ></i>
+        )}
         <i
           className={`bi bi-trash3-fill ${styles.icon}`}
           onClick={() => props.deleteMail(mail.id)}

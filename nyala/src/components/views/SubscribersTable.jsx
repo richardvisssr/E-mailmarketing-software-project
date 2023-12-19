@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import AlertComponent from "../alert/AlertComponent";
 import ModelComponent from "./ModelComponent";
 import styles from "./Views.module.css";
+import Cookies from "js-cookie";
 
 export default function SubscribersTable() {
   const [subscribers, setSubscribers] = useState([]);
@@ -26,9 +27,16 @@ export default function SubscribersTable() {
     email: " ",
     name: " ",
   });
+  const token = Cookies.get("token");
 
   useEffect(() => {
-    fetch("http://localhost:3001/subscribers/all")
+    fetch("http://localhost:3001/subscribers/all", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => setSubscribers(data))
       .catch(() =>
@@ -143,7 +151,9 @@ export default function SubscribersTable() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
+      credentials: "include",
       body: JSON.stringify(updatedData),
     })
       .then((response) => response.json())
@@ -223,7 +233,9 @@ export default function SubscribersTable() {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
+      credentials: "include",
       body: JSON.stringify({ email: email }),
     })
       .then((response) => response.json())
