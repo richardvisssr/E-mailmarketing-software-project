@@ -35,7 +35,7 @@ export default function AnalysePanel() {
     } catch (error) {
       setNotification({
         type: "error",
-        message: "Error fetching unsubscribe reasons",
+        message: "Er ging iets mis bij het ontvangen van de data",
       });
     }
   });
@@ -62,7 +62,7 @@ export default function AnalysePanel() {
     } catch (error) {
       setNotification({
         type: "error",
-        message: "Error fetching unsubscribe reasons",
+        message: "Er ging iets mis bij het ophalen van de data",
       });
     }
   };
@@ -84,7 +84,7 @@ export default function AnalysePanel() {
     } catch (error) {
       setListNotifcation({
         type: "error",
-        message: "Error fetching mail list",
+        message: "Er ging iets mis bij het ophalen van de data",
       });
     }
   };
