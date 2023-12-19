@@ -49,7 +49,7 @@ function TemplateCard(props) {
       setNotification({
         type: "error",
         message:
-          "Er is een fout opgetreden bij het verwerken van het WebSocket-bericht."
+          "Er is een fout opgetreden bij het verwerken van het WebSocket-bericht.",
       });
     }
   });
@@ -238,7 +238,7 @@ function TemplateCard(props) {
           ...prevNotification,
           type: "success",
           message: "Mail is succesvol ingepland",
-        });
+        }));
         socket.send("Email send");
       } catch (error) {
         props.setNotification((prevNotification) => ({
@@ -283,17 +283,17 @@ function TemplateCard(props) {
         props.setNotification((prevNotification) => ({
           ...prevNotification,
           type: "error",
-          message: "Er is iets misgegaan tijdens het verwijderen!"
+          message: "Er is iets misgegaan tijdens het verwijderen!",
         }));
         setNotification({
           type: "error",
-          message: "Er ging iets mis met het verwijderen van de template"
+          message: "Er ging iets mis met het verwijderen van de template",
         });
         // Handle error as needed
         setShowDeleteModal(false);
       });
   };
-  
+
   return (
     <>
       <Col key={template.id} style={{ width: "16rem" }}>

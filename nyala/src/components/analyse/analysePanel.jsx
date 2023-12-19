@@ -107,15 +107,6 @@ export default function AnalysePanel() {
           <MailListChart mailListData={mailListData} />
         </Col>
       </Row>
-
-      <Row>
-        <Col sm={6}>
-          <h1> test </h1>
-        </Col>
-        <Col sm={6}>
-          <h1> test </h1>
-        </Col>
-      </Row>
     </Container>
   );
 }
