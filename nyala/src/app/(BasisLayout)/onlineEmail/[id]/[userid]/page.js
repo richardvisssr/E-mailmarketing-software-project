@@ -13,7 +13,10 @@ export default function Page({ params }) {
     fetch(`http://localhost:3001/mail/getEmail/${id}`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Er is een fout opgetreden bij het ophalen van de e-mail.");
+          setNotification({
+            type: "error",
+            message: "Er is een fout opgetreden bij het ophalen van de e-mail.",
+          });
         }
         return response.json();
       })
@@ -34,7 +37,7 @@ export default function Page({ params }) {
       .catch((error) => {
         setNotification({
           type: "error",
-          message: error.message,
+          message: "Er is een fout opgetreden bij het ophalen van de e-mail.",
         });
       });
   }, []);

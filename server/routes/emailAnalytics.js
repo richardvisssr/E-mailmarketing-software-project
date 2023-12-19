@@ -22,7 +22,6 @@ router.get("/trackOnlineView/:emailId", async (req, res) => {
     analytics.opened += 1;
     await analytics.save();
 
-    console.log(`New count for email ID ${emailId}: ${analytics.opened}`);
     if (res.statusCode === 200) {
       sendWebsocketMessage({
         type: "trackOnlineView",
@@ -32,7 +31,6 @@ router.get("/trackOnlineView/:emailId", async (req, res) => {
     }
     return res.status(200).send();
   } catch (error) {
-    console.error(error);
     return res.status(500).send("An error occurred");
   }
 });
@@ -58,9 +56,6 @@ router.get("/trackHyperlinks/:link/:emailId", async (req, res) => {
 
     await analytics.save();
 
-    console.log(
-      `New count for link ${link} in email ID ${emailId}: ${linkObj.count}`
-    );
     if (res.statusCode === 200) {
       sendWebsocketMessage({
         type: "trackHyperlinks",
@@ -71,7 +66,6 @@ router.get("/trackHyperlinks/:link/:emailId", async (req, res) => {
     }
     return res.status(200).send();
   } catch (error) {
-    console.error(error);
     return res.status(500).send("An error occurred");
   }
 });
@@ -88,7 +82,6 @@ router.get("/trackUnsubscribe/:emailId", async (req, res) => {
     analytics.unsubscribed += 1;
     await analytics.save();
 
-    console.log(`New count for email ID ${emailId}: ${analytics.unsubscribed}`);
     if (res.statusCode === 200) {
       sendWebsocketMessage({
         type: "trackUnsubscribe",
@@ -98,7 +91,6 @@ router.get("/trackUnsubscribe/:emailId", async (req, res) => {
     }
     return res.status(200).send();
   } catch (error) {
-    console.error(error);
     return res.status(500).send("An error occurred");
   }
 });
@@ -109,7 +101,6 @@ router.get("/stats/:emailId", async (req, res) => {
   const analytics = await EmailAnalytics.findOne({ emailId });
 
   if (!analytics) {
-    console.log(`No analytics data found for emailId: ${emailId}`);
     return res.json({
       [emailId]: {
         opened: 0,

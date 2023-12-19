@@ -33,7 +33,10 @@ const TrackingPage = ({ params }) => {
     fetch(trackUrl)
       .then((response) => {
         if (!response.ok) {
-          throw new Error(errorMessage);
+          setNotification({
+            type: "error",
+            message: 'Er is een fout opgetreden bij het bijhouden van de online weergave.',
+          });
         }
         return response;
       })
@@ -48,8 +51,7 @@ const TrackingPage = ({ params }) => {
       .catch((error) => {
         setNotification({
           type: "error",
-          message: errorMessage,
-          error,
+          message: 'Er is een fout opgetreden bij het bijhouden van de online weergave.',
         });
       });
   }, []);
