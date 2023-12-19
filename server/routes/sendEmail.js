@@ -48,7 +48,7 @@ router.post("/sendEmail", async (req, res) => {
       }
 
       let mailOptions = {
-        from: '"Xtend" <juleskoster17@gmail.com>',
+        from: '"Xtend" <info@svxtend.nl>',
         to: subscriber.email,
         subject: `${subject}`,
         html: `
@@ -88,15 +88,12 @@ router.post("/sendEmail", async (req, res) => {
 });
 
 router.put("/planMail", async (req, res) => {
-  console.log(req.body);
   try {
     const { id, title, html, subs, date, showHeader, headerText, subject } =
       req.body;
 
-      console.log(subs[0]._id);
     const subscribers = subs.map((subscriberArray) => {
       const subscriber = subscriberArray[0];
-      console.log(subscriber);
       return {
         id: subscriber._id,
         name: subscriber.name,

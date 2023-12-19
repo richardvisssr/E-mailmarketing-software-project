@@ -18,7 +18,7 @@ export default function ApiKeyButton({ apiKey }) {
   return (
     <>
       <button className="btn btn-primary btn-sm me-1" onClick={handleCopy}>
-        Kopieër
+        Kopieer
       </button>
 
       <Modal show={show} onHide={handleClose}>

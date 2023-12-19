@@ -9,33 +9,55 @@ const http = require("http");
 const ws = require("ws");
 const path = require("path");
 const configFilePath = path.join(__dirname, "../config/config.json");
+let debounceTimer;
+let isRestarting = false;
 
 const host = process.env.HOST || "127.0.0.1";
 const port = process.env.PORT || 3001;
 
 function restartServer() {
-  server.close(() => {
-    console.log("Server restarting due to config.json changes");
+  if (isRestarting) {
+    console.log("Server is already restarting. Skipping this attempt.");
+    return;
+  }
 
-    const newServer = app.listen(port, host, () => {
-      console.log("> connecting");
-      console.log("> connected");
+  isRestarting = true;
 
-      const serverInfo = newServer.address();
-      const addressInfo = serverInfo.address;
-      const portInfo = serverInfo.port;
-      console.log(`Database started on http://${addressInfo}:${portInfo}`);
-    });
+  server.close((error) => {
+    isRestarting = false;
 
-    server = newServer;
+    if (error) {
+      console.error("Error closing the server:", error);
+    } else {
+      console.log("Server closed successfully. Restarting...");
+
+      setTimeout(() => {
+        const newServer = app.listen(port, host, () => {
+          console.log("> connecting");
+          console.log("> connected");
+
+          const serverInfo = newServer.address();
+          const addressInfo = serverInfo.address;
+          const portInfo = serverInfo.port;
+          console.log(`Database started on http://${addressInfo}:${portInfo}`);
+        });
+
+        server = newServer;
+      }, 1000);
+    }
   });
 }
 
-fs.watch(configFilePath, (eventType, filename) => {
-  if (eventType === "change") {
-    console.log(`Config file ${filename} changed`);
-    restartServer();
+fs.watch(configFilePath, () => {
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
   }
+
+  debounceTimer = setTimeout(() => {
+    console.log(`Config file ${configFilePath} changed`);
+    restartServer();
+    debounceTimer = null;
+  }, 1000);
 });
 
 // Hier komen de requires voor de utils

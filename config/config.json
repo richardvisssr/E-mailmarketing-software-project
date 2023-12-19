@@ -1,5 +1,5 @@
 {
-  "updateInterval": 1800000,
+  "updateInterval": 900000,
   "expireTime": 3600000,
-  "enableActivity": false
+  "enableActivity": true
 }

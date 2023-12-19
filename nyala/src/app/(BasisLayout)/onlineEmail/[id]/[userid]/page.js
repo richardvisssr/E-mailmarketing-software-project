@@ -2,11 +2,13 @@
 import { useEffect, useState } from "react";
 import Loading from "@/app/(BasisLayout)/loading";
 import Cookies from "js-cookie";
+import AlertComponent from "@/components/alert/AlertComponent";
 
 export default function Page({ params }) {
   const { id } = params;
   const { userid } = params;
   const [email, setEmail] = useState(null);
+  const [notification, setNotification] = useState({ type: "", message: "" });
   const [subscriber, setSubscriber] = useState(null);
   const token = Cookies.get("token");
 
@@ -42,10 +44,11 @@ export default function Page({ params }) {
             setEmail(data);
           })
           .catch((error) => {
-            console.error("Error fetching email:", error);
+              setNotification({
+                type: "error",
+                message: "Er is iets foutgegaan tijdens het inzien van de mail",
           });
-
-
+        });
       }
     };
 
@@ -54,6 +57,11 @@ export default function Page({ params }) {
 
   return (
     <main>
+      {notification != "" && (
+        <AlertComponent
+          notification={notification}
+        />
+      )}
       {email ? (
         <div>
           <div

@@ -66,8 +66,7 @@ function Page() {
         setTemplates(templateObject);
         setIsLoading(false);
       } else {
-        console.error("Login failed");
-        // Handle login failure if needed
+        router.push("/admin");
       }
     } catch (error) {
       setNotification({

@@ -106,7 +106,6 @@ function TemplateCard(props) {
         const data = await response.json();
         setHtml(data.html);
       } catch (error) {
-        console.log(error);
         setNotification({
           type: "error",
           message: "Er is iets misgegaan bij het ophalen van de template.",
@@ -158,7 +157,6 @@ function TemplateCard(props) {
       return;
     }
     if (mails.length > 0) {
-      console.log(subscribers);
       try {
         const response = await fetch(" http://localhost:3001/planMail", {
           method: "PUT",
