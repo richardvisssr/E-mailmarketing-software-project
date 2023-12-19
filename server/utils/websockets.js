@@ -1,19 +1,16 @@
-const express = require("express");
 const http = require("http");
 const ws = require("ws");
+const express = require("express");
 const session = require("express-session");
 
-const app = express();
 const host = process.env.HOST || "127.0.0.1";
 const port = 7002;
-
-app.use(express.json());
+const app = express();
 const sessionParser = session({
   saveUninitialized: false,
-  secret: "$eCuRiTy",
+  secret: "$eCuRiTY",
   resave: false,
 });
-app.use(sessionParser);
 
 const httpServer = http.createServer(app);
 const webSocketServer = new ws.Server({ noServer: true, path: "/socket" });
@@ -39,4 +36,4 @@ function sendWebsocketMessage(message) {
   });
 }
 
-module.exports = { sendWebsocketMessage, app, httpServer };
+module.exports = { sendWebsocketMessage, httpServer };

@@ -8,7 +8,7 @@ const http = require("http");
 const path = require("path");
 
 const host = process.env.HOST || "127.0.0.1";
-const port = process.env.PORT || 3001;
+const port = 3001;
 
 // Hier komen de requires voor de routes
 const subscriberRouter = require("./routes/subscribers");
@@ -16,6 +16,7 @@ const emailEditorRouter = require("./routes/emailEditor");
 const mailListRouter = require("./routes/mailLists");
 const sendMailRouter = require("./routes/sendEmail");
 const adminpanelRouter = require("./routes/templateRoutes");
+const emailAnalyticsRouter = require("./routes/emailAnalytics");
 const unsubscribeAnalyticsRouters = require("./routes/unsubcsribeAnalytics");
 const afbeeldingRouter = require("./routes/afbeeldingRouter");
 
@@ -38,6 +39,7 @@ app.use("/", adminpanelRouter);
 app.use("/mail", emailEditorRouter);
 app.use("/mail", mailListRouter);
 app.use("/", sendMailRouter);
+app.use("/", emailAnalyticsRouter);
 app.use("/", unsubscribeAnalyticsRouters);
 app.use("/afbeelding", afbeeldingRouter);
 
