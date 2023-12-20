@@ -20,7 +20,7 @@ function generateTempAccessToken(id) {
   const payload = {
     sub: id,
     iat: Math.floor(Date.now() / 1000),
-    exp: JSON.parse(config.expireTime),
+    exp: Math.floor(Date.now() + JSON.parse(config.expireTime)) / 1000,
   };
 
   return jwt.sign(payload, secretKey);

@@ -31,14 +31,12 @@ router.put("/settings", async (req, res) => {
     const currentConfig = require(config);
 
     const { intervalTime, expirationTime, activityLog } = req.body;
-    console.log(activityLog);
     currentConfig.updateInterval =
       transformToMiliseconds(intervalTime) || currentConfig.updateInterval;
     currentConfig.expireTime =
       transformToMiliseconds(expirationTime) || currentConfig.expireTime;
     currentConfig.enableActivity = activityLog;
 
-    console.log(currentConfig);
     fs.writeFileSync(config, JSON.stringify(currentConfig, null, 2));
 
     res.status(200).send({ message: "Settings updated" });
