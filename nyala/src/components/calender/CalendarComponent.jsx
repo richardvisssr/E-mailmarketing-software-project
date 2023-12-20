@@ -184,7 +184,7 @@ function MailCalendar(props) {
             <div className="form-check mb-3">
               {" "}
               <input
-                className="form-check-input"
+                className={`me-2 control ${styles.customSelect}`}
                 type="checkbox"
                 id="showFutureMailsCheckbox"
                 checked={showFutureMails}
@@ -239,16 +239,17 @@ function MailCalendar(props) {
                       </td>
                     </tr>
                   ) : (
-                  filteredMails.map((mail) => (
-                    <TableRowComponent
-                      mail={mail}
-                      formatSubject={formatSubject}
-                      formatDate={formatDate}
-                      formatTime={formatTime}
-                      handleOpenModal={handleOpenModal}
-                      deleteMail={props.deleteMail}
-                    />
-                  )))}
+                    filteredMails.map((mail) => (
+                      <TableRowComponent
+                        mail={mail}
+                        formatSubject={formatSubject}
+                        formatDate={formatDate}
+                        formatTime={formatTime}
+                        handleOpenModal={handleOpenModal}
+                        deleteMail={props.deleteMail}
+                      />
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

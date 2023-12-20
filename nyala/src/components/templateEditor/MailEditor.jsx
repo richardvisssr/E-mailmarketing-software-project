@@ -4,9 +4,10 @@ import dynamic from "next/dynamic";
 import { Modal, Button, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
 import { nanoid } from "nanoid";
-import sendDataToSendEmail from "../EmailService";
+// import sendDataToSendEmail from "../EmailService";
 import AlertComponent from "../alert/AlertComponent";
 import Cookies from "js-cookie";
+import styles from "./MailEditor.module.css";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
@@ -316,10 +317,13 @@ const MailEditor = ({ id }) => {
         />
       </div>
       <div className="p-2 gap-3 d-flex justify-content-center">
-        <button onClick={saveDesign} className="btn btn-primary">
+        <button
+          onClick={saveDesign}
+          className={`btn ${styles.buttonSecondary} `}
+        >
           Design Opslaan
         </button>
-        <button onClick={sendEmail} className="btn btn-primary">
+        <button onClick={sendEmail} className={`btn ${styles.buttonPrimary} `}>
           Email Versturen
         </button>
       </div>
@@ -343,7 +347,7 @@ const MailEditor = ({ id }) => {
           </div>
           <div className="form-check">
             <input
-              className="form-check-input"
+              className={`me-2 control ${styles.customSelect}`}
               type="checkbox"
               onChange={() => setShowHeader(!showHeader)}
             />
@@ -376,9 +380,10 @@ const MailEditor = ({ id }) => {
           <label className="form-label">Wil je de mail vooruit plannen?</label>
           <div className="form-check">
             <input
-              className="form-check-input"
+              className={`me-2 control ${styles.customSelect}`}
               type="checkbox"
               onChange={() => setPlanned(!planned)}
+              style={{ accentColor: "#a66cf2" }}
             />
             <label className="form-check-label">Ja</label>
           </div>
@@ -399,12 +404,15 @@ const MailEditor = ({ id }) => {
         </Modal.Body>
         <Modal.Footer>
           <Button
-            variant="primary"
             onClick={planned ? handlePlanMail : handleSendEmailClick}
+            className={`btn ${styles.buttonPrimary}`}
           >
             {planned ? "Inplannen" : "Mail versturen"}
           </Button>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button
+            onClick={handleClose}
+            className={`btn ${styles.buttonSecondary}`}
+          >
             Annuleren
           </Button>
         </Modal.Footer>
