@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import style from "./Settings.module.css";
+import styles from "./Settings.module.css";
 import Cookies from "js-cookie";
 import Spinner from "../spinner/Spinner";
 import ApiKeyButton from "./ApiKeyButton";
@@ -325,7 +325,7 @@ function SettingsComponent() {
                             <div className="custom-control custom-switch">
                               <input
                                 type="checkbox"
-                                className="custom-control-input"
+                                className={`me-2 control ${styles.customSelect}`}
                                 id="activityLog"
                                 onChange={handleChecked}
                                 checked={checked}
@@ -351,7 +351,7 @@ function SettingsComponent() {
                           <div className="col-auto">
                             <ApiKeyButton apiKey={apiToken} />
                             <button
-                              className="btn btn-primary btn-sm"
+                              className={`btn ${styles.buttonPrimary} btn-sm`}
                               onClick={handleGenerate}
                             >
                               <i className="bi bi-arrow-repeat"></i>
@@ -464,7 +464,7 @@ function SettingsComponent() {
                       <ul className="pagination justify-content-center">
                         <li className="page-item">
                           <a
-                            className={`page-link ${style.buttonNav}`}
+                            className={`page-link ${styles.buttonNav}`}
                             aria-label="Previous"
                             onClick={prevPage}
                           >
@@ -472,13 +472,13 @@ function SettingsComponent() {
                           </a>
                         </li>
                         <li className="page-item">
-                          <a className={`page-link ${style.currentPage}`}>
+                          <a className={`page-link ${styles.currentPage}`}>
                             {currentPage}
                           </a>
                         </li>
                         <li className="page-item">
                           <a
-                            className={`page-link ${style.buttonNav}`}
+                            className={`page-link ${styles.buttonNav}`}
                             aria-label="Next"
                             onClick={nextPage}
                           >

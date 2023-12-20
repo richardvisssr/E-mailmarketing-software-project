@@ -35,10 +35,10 @@ function TemplateCard(props) {
 
   const handleClose = () => {
     {
-    setShowHeader(false);
-    setShow(false);
-    setNotification({type: "", message: ""});
-  }
+      setShowHeader(false);
+      setShow(false);
+      setNotification({ type: "", message: "" });
+    }
   };
   const handleShow = () => setShow(true);
 
@@ -96,7 +96,8 @@ function TemplateCard(props) {
     const fetchHtmlContent = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:3001/templates/${template.id}`, {
+          `http://127.0.0.1:3001/templates/${template.id}`,
+          {
             credentials: "include",
             headers: {
               Authorization: `Bearer ${token}`,
@@ -169,9 +170,7 @@ function TemplateCard(props) {
             id: generateUniqueShortId(),
             title: template.title,
             html: html,
-            subs: [
-              subscribers
-            ],
+            subs: [subscribers],
             date: dateTime,
             showHeader: showHeader,
             headerText: headerText,
@@ -239,13 +238,13 @@ function TemplateCard(props) {
         props.setNotification((prevNotification) => ({
           ...prevNotification,
           type: "error",
-          message: "Er is iets misgegaan tijdens het verwijderen!"
+          message: "Er is iets misgegaan tijdens het verwijderen!",
         }));
         // Handle error as needed
         setShowDeleteModal(false);
       });
   };
-  
+
   return (
     <>
       <Col key={template.id} style={{ width: "16rem" }}>
@@ -327,7 +326,7 @@ function TemplateCard(props) {
           </div>
           <div className="form-check">
             <input
-              className="form-check-input"
+              className={`me-2 control ${styles.customSelect}`}
               type="checkbox"
               onChange={() => setShowHeader(!showHeader)}
             />
@@ -361,7 +360,7 @@ function TemplateCard(props) {
           <label className="form-label">Wil je de mail vooruit plannen?</label>
           <div className="form-check">
             <input
-              className="form-check-input"
+              className={`me-2 control ${styles.customSelect}`}
               type="checkbox"
               onChange={() => setPlanned(!planned)}
             />
@@ -384,12 +383,15 @@ function TemplateCard(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button
-            variant="primary"
+            className={`btn ${styles.knopPrimary}`}
             onClick={planned ? handlePlanMail : handleSendEmailClick}
           >
             {planned ? "Inplannen" : "Mail versturen"}
           </Button>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button
+            className={`btn ${styles.knopSecondary}`}
+            onClick={handleClose}
+          >
             Annuleren
           </Button>
         </Modal.Footer>

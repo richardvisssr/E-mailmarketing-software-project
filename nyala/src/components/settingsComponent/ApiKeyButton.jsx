@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Modal } from "react-bootstrap";
+import styles from "./Settings.module.css";
 
 export default function ApiKeyButton({ apiKey }) {
   const [show, setShow] = useState(false);
@@ -17,7 +18,10 @@ export default function ApiKeyButton({ apiKey }) {
 
   return (
     <>
-      <button className="btn btn-primary btn-sm me-1" onClick={handleCopy}>
+      <button
+        className={`btn ${styles.buttonPrimary} btn-sm me-1`}
+        onClick={handleCopy}
+      >
         Kopieer
       </button>
 
