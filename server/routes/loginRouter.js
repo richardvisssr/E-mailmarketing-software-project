@@ -10,7 +10,7 @@ function generateAccessToken(id) {
   const payload = {
     sub: id,
     iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + 60 * 60,
+    exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
   };
 
   return jwt.sign(payload, secretKey);
