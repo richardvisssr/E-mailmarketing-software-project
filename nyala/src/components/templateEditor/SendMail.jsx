@@ -53,10 +53,10 @@ function SelectMailingLists(props) {
             return [];
           }),
         fetch(`http://localhost:3001/mail/getEmail/${id}`, {
-            credentials: "include",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
           .then((response) => response.json())
           .catch((error) => {
@@ -176,28 +176,6 @@ function SelectMailingLists(props) {
         setValue={handleMailingChange}
         selectedSubscribers={selectedMailingList}
       />
-
-      {selectedMailingList.length > 0 && (
-        <div className="mt-4">
-          <h2 className="h4">Abonnees van geselecteerde mailinglijst:</h2>
-          <table className="table table-bordered">
-            <thead className="table-dark">
-              <tr>
-                <th>Naam</th>
-                <th>Email</th>
-              </tr>
-            </thead>
-            <tbody>
-              {subscribers.map((subscriber) => (
-                <tr key={subscriber._id}>
-                  <td>{subscriber.name}</td>
-                  <td>{subscriber.email}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
     </div>
   );
 }
