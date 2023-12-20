@@ -4,13 +4,14 @@ import { Container, Row, Col } from "react-bootstrap";
 import AlertComponent from "../alert/AlertComponent";
 import UnsubscribeReasonChart from "./ReasonChart";
 import MailListChart from "./MaillistChart";
-import styles from "./analyse.module.css";
+import Cookies from "js-cookie";
 
 export default function AnalysePanel() {
   const socket = new WebSocket("ws://127.0.0.1:7002/socket");
   const [reasonData, setReasonData] = useState([]);
   const [mailListData, setMailListData] = useState([]);
   const [change, setChange] = useState(false);
+  const token = Cookies.get("token");
   const [reasonNotification, setReasonNotification] = useState({
     type: "",
     message: "",
@@ -42,7 +43,7 @@ export default function AnalysePanel() {
 
   const getUnsubscribeReasons = async () => {
     try {
-      const response = await fetch("http://localhost:3001/unsubscribeReasons");
+  const response = await fetch("http://localhost:3001/unsubscribeReasons", {headers : {Authorization: `Bearer ${token}`}});
       const data = await response.json();
 
       if (data.length === 0) {
@@ -69,7 +70,7 @@ export default function AnalysePanel() {
 
   const getMailList = async () => {
     try {
-      const response = await fetch("http://localhost:3001/unsubscribe/count");
+      const response = await fetch("http://localhost:3001/unsubscribe/count", {headers : {Authorization: `Bearer ${token}`}});
       const data = await response.json();
 
       setMailListData(data);
