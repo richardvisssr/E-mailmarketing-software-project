@@ -29,5 +29,5 @@ Ik ga hierbij mijn groepsgenoten vragen om hulp om de taak goed in te delen
 
 
 ### Ik heb mijn leerdoel bereikt als (formuleer meetbare criteria):
-Ik in het vervolg een taak van te voren kan opdelen in een duidelijk stappenplan.
+Ik in het vervolg een taak van te voren kan opdelen in een duidelijk stappenplan. Ik heb als theorie hierbij gevonden de Plan Do Check Act (PDCA), met deze manier van werken breng je meer structuur aan in plaats van gewoon te beginnen met je toegewezen taak, dit doe je doordat je echt stap voor stap voor je begin duidelijk maakt wat je to do's zijn en vervolgens dit uitwerkt.
 
