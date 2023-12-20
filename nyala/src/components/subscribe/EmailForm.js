@@ -51,7 +51,6 @@ export default function EmailForm({
       />
       {typeof handleCheckboxChange === "function" ? (
         Array.isArray(lists) && lists.length > 0 ? (
-          console.log(initialValues.list),
           <SubscriptionForm
             subscribers={lists}
             setValue={handleCheckboxChange}
