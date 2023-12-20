@@ -41,10 +41,11 @@ export default function Page({ params }) {
         )
           .then((response) => response.json())
           .then((data) => {
+            console.log(data)
             // Loop over each subscriber
             data.subscribers.forEach((subscriber) => {
               // Only personalize the header text for the matching subscriber
-              if (userid === subscriber._id) {
+              if (userid === subscriber.id || userid === subscriber._id) {
                 let personalizedHeaderText = data.headerText.replace(
                   "{name}",
                   subscriber.name
@@ -80,6 +81,8 @@ export default function Page({ params }) {
 
     getAuth();
   }, []);
+
+
 
   return (
     <main>

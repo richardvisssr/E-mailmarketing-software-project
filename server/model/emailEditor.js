@@ -87,10 +87,6 @@ const plannedEmailSchema = new mongoose.Schema({
     enum: ["Verzonden", "In afwachting", "Mislukt"],
     default: "In afwachting",
   },
-  headerText: {
-    type: String,
-    required: false,
-  },
 });
 
 const PlannedEmail = mongoose.model("PlannedEmail", plannedEmailSchema);
