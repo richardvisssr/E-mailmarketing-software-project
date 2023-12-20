@@ -170,7 +170,7 @@ function TemplateCard(props) {
             id: generateUniqueShortId(),
             title: template.title,
             html: html,
-            subs: [subscribers],
+            subs: subscribers,
             date: dateTime,
             showHeader: showHeader,
             headerText: headerText,

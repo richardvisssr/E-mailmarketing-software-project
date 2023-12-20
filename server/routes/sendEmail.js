@@ -91,7 +91,6 @@ router.put("/planMail", async (req, res) => {
   try {
     const { id, title, html, subs, date, showHeader, headerText, subject } =
       req.body;
-
     const subscribers = subs.map((subscriberArray) => {
       const subscriber = subscriberArray[0];
       return {
@@ -102,7 +101,6 @@ router.put("/planMail", async (req, res) => {
     });
 
     const planMail = await PlannedEmail.findOne({ id });
-
     if (planMail) {
       planMail.id = id;
       planMail.title = title;

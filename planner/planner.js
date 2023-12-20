@@ -5,6 +5,7 @@ const express = require("express");
 const session = require("express-session");
 const { PlannedEmail } = require("../server/model/emailEditor");
 const fs = require("fs");
+const path = require("path");
 
 let config = require("../config/config.json");
 const host = process.env.HOST || "127.0.0.1";
@@ -42,6 +43,9 @@ function sendWebsocketMessage(message) {
 
 // Function to send email
 async function sendEmail(email) {
+  const imagePath = path.join(__dirname, "xtend-logo.webp");
+  const imageAsBase64 = fs.readFileSync(imagePath, { encoding: "base64" });
+
   const transporter = nodemailer.createTransport({
     host: "145.74.104.216",
     port: 1025,
@@ -52,27 +56,33 @@ async function sendEmail(email) {
     },
   });
 
-  if (email.subscribers.length === 0) {
-    console.log("No subscribers found");
-    return false;
-  }
+  let sentSubscribers = [];
 
   try {
-    const results = [];
-
     for (const subscriber of email.subscribers) {
-      const mailOptions = {
-        from: "xtend@svxtend.nl",
+      let personalizedHeaderText = email.headerText.replace(
+        "{name}",
+        subscriber.name
+      );
+
+      personalizedHeaderText = personalizedHeaderText.replace(/\n/g, "<br>");
+
+      personalizedHeaderText = personalizedHeaderText.replace(
+        "{image}",
+        `<img src="data:image/webp;base64,${imageAsBase64}" alt="Xtend Logo" style="width: 100px; height: auto;" />`
+      );
+
+      if (sentSubscribers.includes(subscriber.email)) {
+        continue;
+      }
+
+      let mailOptions = {
+        from: '"Xtend" <info@svxtend.nl>',
         to: subscriber.email,
-        subject: email.subject,
+        subject: `${email.subject}`,
         html: `
         <div style="text-align: center; padding: 10px; font-family: 'Arial', sans-serif;">
-          <h1 style="color: #333; font-size: 24px;">Xtend</h1>
-          ${
-            email.showHeader
-              ? `<h2 style="color: #666; font-size: 20px;">Beste ${subscriber.name}, hierbij een nieuwe bericht</h2>`
-              : ""
-          }
+        ${email.showHeader ? ` ${personalizedHeaderText}` : ""}
         </div>
         <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
         ${email.html}
@@ -88,7 +98,7 @@ async function sendEmail(email) {
         </p>
         <a href="http://localhost:3000/unsubscribe/${
           subscriber.id
-        }" style="text-decoration: none; color: #333;">
+        }" style="text-decoration: none;">
           Uitschrijven
         </a>
       </div>
@@ -96,24 +106,20 @@ async function sendEmail(email) {
         `,
       };
 
-      const sendEmailPromise = await new Promise((resolve, reject) => {
+      await new Promise((resolve, reject) => {
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
             console.error("Failed to send email:", error);
             reject(error);
           } else {
             console.log("Email sent:", info.response);
-            resolve(info.response);
+            resolve();
           }
         });
       });
-
-      results.push(sendEmailPromise);
     }
 
-    const responses = await Promise.all(results);
-
-    return responses.every((response) => !!response);
+    return true;
   } catch (error) {
     console.error("Error sending email:", error);
     return false;

@@ -140,31 +140,8 @@ const MailEditor = ({ id }) => {
     editorRef.current.exportHtml(async (data) => {
       const { html } = data;
       setHtml(html);
-      try {
-        const response = await fetch("http://localhost:3001/mail/sendEmail", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${token}`,
-          },
-          credentials: "include",
-          body: JSON.stringify({ html: html, id: id }),
-        });
-        if (!response.ok) {
-          setNotification({
-            type: "error",
-            message: "Er ging iets fout met het versturen van de mail.",
-          });
-        }
-        setShow(false);
-      } catch (error) {
-        setNotification({
-          type: "error",
-          message: `Er ging iets mis met het versturen van de mail.`,
-        });
-      }
-      handleShow();
     });
+    handleShow();
   };
 
   const onReady = () => {
