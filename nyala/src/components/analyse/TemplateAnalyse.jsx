@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import ProgressBar from "./ProgressBar";
+import HyperlinkChart from "./HyperLinkChart";
 import AlertComponent from "../alert/AlertComponent";
 
 export default function TemplateAnalyse({ id }) {
@@ -18,7 +19,8 @@ export default function TemplateAnalyse({ id }) {
       const message = JSON.parse(event.data);
       if (
         message.type === "trackOnlineView" ||
-        message.type === "trackUnsubscribe"
+        message.type === "trackUnsubscribe" ||
+        message.type === "trackHyperlinks"
       ) {
         setViewChange(true);
       }
@@ -48,20 +50,9 @@ export default function TemplateAnalyse({ id }) {
       );
   };
 
-  const handleClick = () => {
-    setClicked(true);
-  };
-
   return (
     <div>
       <AlertComponent notification={notification} />
-      <div className="text-end mx-auto mt-2 me-5">
-        <i
-          className="bi bi-arrow-down-up"
-          style={{ fontSize: "2rem" }}
-          onClick={handleClick}
-        ></i>
-      </div>
       <div className="w-50 mx-auto mt-5">
         <ProgressBar
           text="Het aantal online views"
@@ -75,6 +66,9 @@ export default function TemplateAnalyse({ id }) {
           count={stats.unsubscribed}
           total={10}
         />
+      </div>
+      <div className="w-50 mx-auto mt-5">
+        <HyperlinkChart linkData={stats.links} />
       </div>
     </div>
   );
