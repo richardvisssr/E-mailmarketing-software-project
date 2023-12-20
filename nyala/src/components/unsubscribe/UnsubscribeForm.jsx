@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import styles from "./UnsubscribeForm.module.css";
 import SubscriptionForm from "../categories/CategoriesComponent";
 import AlertComponent from "../alert/AlertComponent";
+import Cookies from "js-cookie";
 
 export default function UnsubscribeForm({ userid }) {
   const router = useRouter();
@@ -14,6 +15,7 @@ export default function UnsubscribeForm({ userid }) {
   const [selectedSubs, setSelectedSubs] = useState([]);
   const [subs, setSubs] = useState([]);
   const [warning, setWarning] = useState({ type: "", message: "" });
+  const token = Cookies.get("token");
 
   // Dit zijn de redenen gekregen van de PO
   const reasons = [
@@ -33,7 +35,9 @@ export default function UnsubscribeForm({ userid }) {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
+          credentials: "include",
           body: JSON.stringify({ email: email }),
         }
       );
@@ -62,7 +66,9 @@ export default function UnsubscribeForm({ userid }) {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
+          credentials: "include",
           body: JSON.stringify({
             email: email,
             subscriptions: selectedSubs,
@@ -103,7 +109,9 @@ export default function UnsubscribeForm({ userid }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
+        credentials: "include",
         body: JSON.stringify({ reden: geselecteerdeReden }),
       });
 
@@ -122,31 +130,58 @@ export default function UnsubscribeForm({ userid }) {
   };
 
   useEffect(() => {
-    try {
-      fetch(`http://localhost:3001/${userid}/subs`)
-        .then((response) => {
-          if (!response.ok) {
-            setWarning({
-              type: "error",
-              message: "Vul een geldige email in.",
-            });
-            throw new Error(
-              `Something went wrong with fetching the subs: ${response.status} ${response.statusText}`
+    const getAuth = async () => {
+      const response = await fetch("http://localhost:3001/tempAuth", {
+        method: "GET",
+      });
+
+      const data = await response.json();
+
+      if (response.status === 200) {
+        const token = data.token;
+        Cookies.set("token", token, {
+          secure: true,
+          sameSite: "strict",
+          domain: "localhost",
+          path: "/",
+        });
+
+        const response = await fetch(`http://localhost:3001/${userid}/subs`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+        })
+          .then((response) => {
+            if (!response.ok) {
+              setWarning({
+                type: "error",
+                message: "Vul een geldige email in.",
+              });
+              throw new Error(
+                `Something went wrong with fetching the subs: ${response.status} ${response.statusText}`
+              );
+            }
+            return response.json();
+          })
+          .then((data) => {
+            setSubs(data.subscription);
+            setEmail(data.email);
+            setSubscribersList(
+              <SubscriptionForm
+                subscribers={data.subscription}
+                setValue={changeValue}
+                selectedSubscribers={selectedSubs}
+              />
             );
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setSubs(data.subscription);
-          setEmail(data.email);
-          setSubscribersList(
-            <SubscriptionForm
-              subscribers={data.subscription}
-              setValue={changeValue}
-            />
-          );
-        })
-        .catch(() => {});
+          })
+          .catch(() => {});
+      }
+    }
+    try {
+      getAuth();
     } catch (error) {}
   }, []);
 

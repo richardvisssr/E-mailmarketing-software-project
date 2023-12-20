@@ -1,45 +1,117 @@
 "use strict";
-
+const fs = require("fs");
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
+const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const http = require("http");
 const ws = require("ws");
 const path = require("path");
+const configFilePath = path.join(__dirname, "../config/config.json");
+let debounceTimer;
+let isRestarting = false;
 
 const host = process.env.HOST || "127.0.0.1";
 const port = process.env.PORT || 3001;
 
+function restartServer() {
+  if (isRestarting) {
+    console.log("Server is already restarting. Skipping this attempt.");
+    return;
+  }
+
+  isRestarting = true;
+
+  server.close((error) => {
+    isRestarting = false;
+
+    if (error) {
+      console.error("Error closing the server:", error);
+    } else {
+      console.log("Server closed successfully. Restarting...");
+
+      setTimeout(() => {
+        const newServer = app.listen(port, host, () => {
+          console.log("> connecting");
+          console.log("> connected");
+
+          const serverInfo = newServer.address();
+          const addressInfo = serverInfo.address;
+          const portInfo = serverInfo.port;
+          console.log(`Database started on http://${addressInfo}:${portInfo}`);
+        });
+
+        server = newServer;
+      }, 1000);
+    }
+  });
+}
+
+fs.watch(configFilePath, () => {
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+  }
+
+  debounceTimer = setTimeout(() => {
+    console.log(`Config file ${configFilePath} changed`);
+    restartServer();
+    debounceTimer = null;
+  }, 1000);
+});
+
+// Hier komen de requires voor de utils
+const verifyToken = require("./utils/verifyToken");
+
 // Hier komen de requires voor de routes
+const settingsRouter = require("./routes/settingsRoute");
+const loginRouter = require("./routes/loginRouter");
 const subscriberRouter = require("./routes/subscribers");
 const emailEditorRouter = require("./routes/emailEditor");
 const mailListRouter = require("./routes/mailLists");
 const sendMailRouter = require("./routes/sendEmail");
-const adminpanelRouter = require('./routes/templateRoutes');
+const adminpanelRouter = require("./routes/templateRoutes");
+const afbeeldingRouter = require("./routes/afbeeldingRouter");
 
 const app = express();
 
 app.use(cors({ origin: true, credentials: true }));
 app.options("*", cors({ origin: true, credentials: true }));
+app.use(cookieParser());
 app.use(bodyParser.json());
 const sessionParser = session({
   saveUninitialized: false,
   secret: "$eCuRiTy",
   resave: false,
+  cookie: { secure: false, maxAge: 86400000, httpOnly: true },
+  credentials: true,
 });
 app.use(sessionParser);
 app.use(express.json());
 
 // Hier komen de app.use voor routes
+app.use("/", loginRouter);
+app.use("/", verifyToken);
+app.use("/", settingsRouter);
 app.use("/", subscriberRouter);
-app.use('/', adminpanelRouter);
+app.use("/", adminpanelRouter);
 app.use("/mail", emailEditorRouter);
 app.use("/mail", mailListRouter);
 app.use("/", sendMailRouter);
+app.use("/afbeelding", afbeeldingRouter);
 
 const httpServer = http.createServer(app);
 const webSocketServer = new ws.Server({ noServer: true, path: "/socket" });
+
+webSocketServer.on("connection", (socket, req) => {
+  socket.on("message", (message) => {
+    console.log("WebSocket message received:", message);
+  });
+
+  socket.on("error", (error) => {
+    console.error("WebSocket error:", error);
+  });
+});
 
 httpServer.on("upgrade", (req, networkSocket, head) => {
   sessionParser(req, {}, () => {
@@ -49,30 +121,12 @@ httpServer.on("upgrade", (req, networkSocket, head) => {
   });
 });
 
-app.use(express.static(path.join(__dirname, "client-side")));
-
-webSocketServer.on("connection", (socket, req) => {
-  console.log("WebSocket connection established");
-
-  socket.on("message", (message) => {
-    try {
-      console.log("Buurman & Buurman are in the house!");
-    } catch (error) {
-      console.error("Error parsing WebSocket message:", error);
-    }
-  });
-
-  socket.on("error", (error) => {
-    console.error("There was an error: " + error);
-  });
-});
-
 httpServer.listen(() => {
   const port = httpServer.address().port;
   console.log(`Listening on http://${host}:${port}`);
 });
 
-const server = app.listen(port, host, async () => {
+let server = app.listen(port, host, async () => {
   console.log("> connecting");
   console.log("> connected");
 
@@ -82,4 +136,4 @@ const server = app.listen(port, host, async () => {
   console.log(`Database started on http://${addressInfo}:${portInfo}`);
 });
 
-module.exports = {app, server, httpServer};
+module.exports = { app, server, httpServer, webSocketServer };

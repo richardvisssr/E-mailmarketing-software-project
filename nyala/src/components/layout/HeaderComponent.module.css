@@ -44,3 +44,8 @@
   background-color: #a66cf2;
   color: white;
 }
+
+.settings {
+  position: absolute;
+  right: 1rem;
+}

@@ -1,9 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Table } from "react-bootstrap";
+import { Table, Row, Col, Container } from "react-bootstrap";
 import { Modal, Form, Button } from "react-bootstrap";
 import styles from "./Calendar.module.css";
 import AlertComponent from "../alert/AlertComponent";
+import TableRowComponent from "./TableRowComponent";
+import Cookies from "js-cookie";
 
 function MailCalendar(props) {
   const emails = props.emails;
@@ -13,9 +15,11 @@ function MailCalendar(props) {
   const [emailDate, setEmailDate] = useState("");
   const [emailTitle, setEmailTitle] = useState("");
   const [id, setId] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const currentYear = date.getFullYear();
   const currentMonth = date.getMonth();
   const [notification, setNotification] = useState({ type: "", message: "" });
+  const token = Cookies.get("token");
 
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
   const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
@@ -49,6 +53,10 @@ function MailCalendar(props) {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         id: id,
         date: emailDate,
@@ -81,14 +89,34 @@ function MailCalendar(props) {
     setDate(nextMonth);
   };
 
-  const filteredMails = emails.plannedMails.filter((email) => {
-    const emailDate = new Date(email.date);
-    return (
-      (!showFutureMails || emailDate.getTime() >= new Date().getTime()) &&
-      emailDate.getTime() >= firstDayOfMonth.getTime() &&
-      emailDate.getTime() <= lastDayOfMonth.getTime()
-    );
-  });
+  const filteredMails = emails.plannedMails
+    .filter((email) => {
+      const emailDate = new Date(email.date);
+
+      if (showFutureMails) {
+        return emailDate.getTime() >= new Date().getTime();
+      } else if (statusFilter !== "") {
+        return (
+          email.status === statusFilter &&
+          emailDate.getTime() >= firstDayOfMonth.getTime() &&
+          emailDate.getTime() <= lastDayOfMonth.getTime()
+        );
+      } else {
+        return (
+          emailDate.getTime() >= firstDayOfMonth.getTime() &&
+          emailDate.getTime() <= lastDayOfMonth.getTime()
+        );
+      }
+    })
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+  const formatSubject = (subject) => {
+    if (subject.length > 50) {
+      return subject.substring(0, 50) + "...";
+    } else {
+      return subject;
+    }
+  };
 
   const formatTime = (dateString) => {
     const options = {
@@ -119,79 +147,114 @@ function MailCalendar(props) {
         <div className="col-auto">
           <i
             className={`bi bi-arrow-left-circle-fill ${styles.icon}`}
-            onClick={handlePreviousMonth}
+            onClick={() => {
+              handlePreviousMonth();
+              setShowFutureMails(false);
+            }}
           ></i>
         </div>
         <div className="col-auto">
-          <h4 className="mb-0 ms-1">{`${date
-            .toLocaleString("default", {
-              month: "long",
-            })
-            .charAt(0)
-            .toUpperCase()}${date
-            .toLocaleString("default", {
-              month: "long",
-            })
-            .slice(1)} ${currentYear}`}</h4>
+          <div className={styles.monthContainer}>
+            <h4 className="mb-0 ms-1">{`${date
+              .toLocaleString("default", {
+                month: "long",
+              })
+              .charAt(0)
+              .toUpperCase()}${date
+              .toLocaleString("default", {
+                month: "long",
+              })
+              .slice(1)} ${currentYear}`}</h4>
+          </div>
         </div>
         <div className="col-auto">
           <i
             className={`bi bi-arrow-right-circle-fill ${styles.icon}`}
-            onClick={handleNextMonth}
+            onClick={() => {
+              handleNextMonth();
+              setShowFutureMails(false);
+            }}
           ></i>
         </div>
       </div>
 
-      <div className="table-responsive p-5">
-        <div className="form-check mb-3">
-          {" "}
-          <input
-            className="form-check-input"
-            type="checkbox"
-            id="showFutureMailsCheckbox"
-            checked={showFutureMails}
-            onChange={() => setShowFutureMails(!showFutureMails)}
-          />
-          <label className="form-check-label" htmlFor="showFutureMailsCheckbox">
-            Toon toekomstige mails
-          </label>
-        </div>
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">Event</th>
-              <th scope="col">Datum</th>
-              <th scope="col">Tijd</th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredMails.map((mail) => (
-              <tr key={mail.date}>
-                <td>{mail.title}</td>
-                <td>{formatDate(mail.date)}</td>
-                <td>{formatTime(mail.date)}</td>
-                <td className="text-end">
-                  <i
-                    className={`bi bi-calendar-week-fill ${styles.icon}`}
-                    onClick={() => handleOpenModal(mail.id, mail.title)}
-                    style={{ cursor: "pointer" }}
-                  ></i>
-                  <i
-                    className={`bi bi-trash3-fill ${styles.icon}`}
-                    onClick={() => props.deleteMail(mail.id)}
-                    style={{
-                      marginLeft: "2em",
-                      marginRight: "1em",
-                      cursor: "pointer",
-                    }}
-                  ></i>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <Container>
+        <Row>
+          <Col md={4}>
+            <div className="form-check mb-3">
+              {" "}
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="showFutureMailsCheckbox"
+                checked={showFutureMails}
+                onChange={() => {
+                  setShowFutureMails(!showFutureMails);
+                  setStatusFilter("");
+                  setDate(new Date());
+                }}
+              />
+              <label
+                className="form-check-label"
+                htmlFor="showFutureMailsCheckbox"
+              >
+                Toon toekomstige mails
+              </label>
+            </div>
+            <div className="form-group mb-3">
+              <label htmlFor="statusFilterSelect">Filter op status:</label>
+              <select
+                className="form-select"
+                id="statusFilterSelect"
+                value={statusFilter}
+                onChange={(e) => {
+                  setStatusFilter(e.target.value);
+                  setShowFutureMails(false);
+                }}
+              >
+                <option value="">Alle</option>
+                <option value="In afwachting">In afwachting</option>
+                <option value="Verzonden">Verzonden</option>
+                <option value="Mislukt">Mislukt</option>
+              </select>
+            </div>
+          </Col>
+          <Col md={8}>
+            <div className="table-responsive p-5">
+              <table className="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Email</th>
+                    <th scope="col">Datum</th>
+                    <th scope="col">Tijd</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredMails.length === 0 ? (
+                    <tr>
+                      <td colSpan="5" className="text-center">
+                        Er zijn geen mails gevonden
+                      </td>
+                    </tr>
+                  ) : (
+                  filteredMails.map((mail) => (
+                    <TableRowComponent
+                      mail={mail}
+                      formatSubject={formatSubject}
+                      formatDate={formatDate}
+                      formatTime={formatTime}
+                      handleOpenModal={handleOpenModal}
+                      deleteMail={props.deleteMail}
+                    />
+                  )))}
+                </tbody>
+              </table>
+            </div>
+          </Col>
+        </Row>
+      </Container>
 
       <Modal show={showModal} onHide={handleCloseModal}>
         <AlertComponent notification={notification} />

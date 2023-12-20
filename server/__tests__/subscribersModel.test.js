@@ -2,6 +2,7 @@
 
 const mongoose = require("mongoose");
 const { Subscriber } = require("../model/subscribers");
+const { httpServer, server } = require("../app");
 
 describe("Subscriber Model Tests", () => {
   let testMail = "test@example.com";
@@ -32,6 +33,9 @@ describe("Subscriber Model Tests", () => {
     if (mongoose.connection.readyState !== 0) {
       await mongoose.disconnect();
     }
+
+    httpServer.close();
+    server.close();
   });
 
   test("abonnement can be added", async () => {

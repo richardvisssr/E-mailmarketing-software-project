@@ -42,10 +42,14 @@ router.put("/sendEmail", async (req, res) => {
   const id = req.body.id;
   const html = req.body.html;
   const subscribers = req.body.subscribers;
+  const subject = req.body.subject;
+  const showHeader = req.body.showHeader;
+  const headerText = req.body.headerText;
+
   try {
     const existingHtml = await Email.findOneAndUpdate(
       { id },
-      { html, subscribers },
+      { html, subscribers, subject, showHeader, headerText },
       { upsert: true, new: true }
     );
 
@@ -75,7 +79,6 @@ router.get("/getEmail/:id", async (req, res) => {
   }
 });
 
-
 router.get("/subscribers/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -92,6 +95,5 @@ router.get("/subscribers/:id", async (req, res) => {
     res.status(500).send({ message: "Internal server error" });
   }
 });
-
 
 module.exports = router;

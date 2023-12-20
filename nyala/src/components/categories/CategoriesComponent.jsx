@@ -1,6 +1,6 @@
 import styles from "./categoriesComponent.module.css";
 
-const SubscriptionForm = ({ subscribers, setValue }) => {
+const SubscriptionForm = ({ subscribers, setValue, selectedSubscribers }) => {
   try {
     if (!subscribers || !Array.isArray(subscribers)) {
       throw new Error("Invalid or missing subscribers data");
@@ -19,6 +19,7 @@ const SubscriptionForm = ({ subscribers, setValue }) => {
                   value={subscription}
                   className={`me-2 control ${styles.customSelect}`}
                   onChange={setValue}
+                  checked={selectedSubscribers.includes(subscription)}
                 />
                 {subscription}
               </label>

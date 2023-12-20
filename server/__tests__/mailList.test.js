@@ -2,6 +2,7 @@
 
 const mongoose = require("mongoose");
 require("../model/mailList");
+const { httpServer, server } = require("../app");
 
 const MailList = mongoose.model("mailList");
 
@@ -28,6 +29,9 @@ describe("MailList Model Tests", () => {
     if (mongoose.connection.readyState !== 0) {
       await mongoose.disconnect();
     }
+
+    httpServer.close();
+    server.close();
   });
 
   test("MailList Add test", async () => {
