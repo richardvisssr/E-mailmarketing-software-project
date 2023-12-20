@@ -224,6 +224,8 @@ const MailEditor = ({ id }) => {
       });
       return;
     }
+
+    
     editorRef.current.exportHtml(async (data) => {
       const { html } = data;
       setHtml(html);
@@ -239,6 +241,7 @@ const MailEditor = ({ id }) => {
             authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
+            mailId: id,
             id: generateUniqueShortId(),
             title: title,
             html: html,

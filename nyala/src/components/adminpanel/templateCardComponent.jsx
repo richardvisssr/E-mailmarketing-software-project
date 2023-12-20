@@ -3,21 +3,23 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import styles from "./button.module.css";
 import Button from "react-bootstrap/Button";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import Modal from "react-bootstrap/Modal";
 import SelectMailingLists from "../templateEditor/SendMail";
 import { nanoid } from "nanoid";
 import AlertComponent from "../alert/AlertComponent";
-import sendDataToSendEmail from "../emailService";
 import Cookies from "js-cookie";
+import sendDataToSendEmail from "../EmailService";
+import AnalyticsPanelCard from "./AnalyticsPanelCard";
 
 function TemplateCard(props) {
+  const socket = new WebSocket("ws://localhost:7002/socket");
   const cardRef = useRef(null);
   const [headerText, setHeaderText] = useState("");
   const { template, onDelete } = props;
   const [show, setShow] = useState(false);
-  const [image, setImage] = useState("");
   const [html, setHtml] = useState("");
   const [sentData, setSentData] = useState([]);
   const [planned, setPlanned] = useState(false);
@@ -30,18 +32,36 @@ function TemplateCard(props) {
   const [showHeader, setShowHeader] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const token = Cookies.get("token");
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   const router = useRouter();
 
-  const handleClose = () => {
-    {
-    setShowHeader(false);
-    setShow(false);
-    setNotification({type: "", message: ""});
-  }
-  };
+  socket.addEventListener("open", (event) => {});
+
+  socket.addEventListener("message", (event) => {
+    try {
+      const message = JSON.parse(event.data);
+      const templateId = message.templateId;
+      const currentTemplateId = template.id;
+
+      if (message.type === "sendEmail" && templateId === currentTemplateId) {
+        setEmailSent(true);
+      }
+    } catch (error) {
+      setNotification({
+        type: "error",
+        message:
+          "Er is een fout opgetreden bij het verwerken van het WebSocket-bericht.",
+      });
+    }
+  });
+
+  const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const toggleAnalyticsCard = () => {
+    setShowAnalytics((prevVisibility) => !prevVisibility);
+  };
   const setNewTime = (event) => {
     setDateTime(event.target.value);
   };
@@ -82,7 +102,6 @@ function TemplateCard(props) {
 
   useEffect(() => {
     setPlanned(false);
-    setEmailSent(false);
     setEmails([]);
     setDateTime("");
     setSubscribers([]);
@@ -104,6 +123,14 @@ function TemplateCard(props) {
           }
         );
         const data = await response.json();
+        if (!data || !data.html) {
+          setNotification({
+            type: "error",
+            message: "Design is nog niet opgeslagen en is leeg",
+          });
+          return;
+        }
+
         setHtml(data.html);
       } catch (error) {
         setNotification({
@@ -116,11 +143,34 @@ function TemplateCard(props) {
     fetchHtmlContent();
   }, [template.id]);
 
+  useEffect(() => {
+    fetch(`http://127.0.0.1:3001/isMailSended/${template.id}`, {})
+      .then((data) => {
+        if (data.status === 200) {
+          setEmailSent(true);
+        }
+      })
+      .catch((error) => {
+        setNotification({
+          type: "error",
+          message: "Er ging iets mis met het ophalen van de data",
+        });
+      });
+  }, []);
+
   const handleSendEmailClick = async () => {
     if (!subject || subject.trim() === "") {
       setNotification({
         type: "error",
         message: "Onderwerp mag niet leeg zijn!",
+      });
+      return;
+    }
+
+    if (!html || html.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Design is nog niet opgeslagen en is leeg",
       });
       return;
     }
@@ -156,6 +206,15 @@ function TemplateCard(props) {
       });
       return;
     }
+
+    if (!html || html.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Design is nog niet opgeslagen en is leeg",
+      });
+      return;
+    }
+
     if (mails.length > 0) {
       try {
         const response = await fetch(" http://localhost:3001/planMail", {
@@ -166,6 +225,7 @@ function TemplateCard(props) {
           },
           credentials: "include",
           body: JSON.stringify({
+            mailId: template.id,
             id: generateUniqueShortId(),
             title: template.title,
             html: html,
@@ -186,16 +246,15 @@ function TemplateCard(props) {
         props.setNotification((prevNotification) => ({
           ...prevNotification,
           type: "success",
-          message: "Mail is succesvol ingepland.",
+          message: "Mail is succesvol ingepland",
         }));
-        setShow(false);
+        socket.send("Email send");
       } catch (error) {
         props.setNotification((prevNotification) => ({
           ...prevNotification,
           type: "error",
           message: "Er is iets misgegaan bij het versturen van de mail",
         }));
-        setEmailSent(false);
       }
     }
   };
@@ -237,17 +296,21 @@ function TemplateCard(props) {
         props.setNotification((prevNotification) => ({
           ...prevNotification,
           type: "error",
-          message: "Er is iets misgegaan tijdens het verwijderen!"
+          message: "Er is iets misgegaan tijdens het verwijderen!",
         }));
+        setNotification({
+          type: "error",
+          message: "Er ging iets mis met het verwijderen van de template",
+        });
         // Handle error as needed
         setShowDeleteModal(false);
       });
   };
-  
+
   return (
     <>
       <Col key={template.id} style={{ width: "16rem" }}>
-        <Card ref={cardRef}>
+        <Card ref={cardRef} className="shadow">
           <Button variant="danger" onClick={handleDelete}>
             Verwijderen
           </Button>
@@ -259,7 +322,7 @@ function TemplateCard(props) {
             />
           )} */}
 
-          <Card.Body>
+          <Card.Body style={{ marginTop: "1.5rem" }}>
             <Card.Title>{template.title}</Card.Title>
             <div className="d-flex justify-content-between">
               <Button
@@ -270,6 +333,19 @@ function TemplateCard(props) {
               >
                 Aanpassen
               </Button>
+              {emailSent && (
+                <div
+                  className={`ms-auto clickable`}
+                  onClick={toggleAnalyticsCard}
+                  style={{
+                    color: "black",
+                    fontSize: "20px",
+                    cursor: "pointer",
+                  }}
+                >
+                  <i className="bi bi-caret-down-fill"></i>
+                </div>
+              )}
               <Button
                 variant="primary"
                 className={`ms-auto ${styles.knopPrimary}`}
@@ -281,6 +357,7 @@ function TemplateCard(props) {
             </div>
           </Card.Body>
         </Card>
+        {showAnalytics && <AnalyticsPanelCard id={template.id} />}
       </Col>
 
       <Modal show={showDeleteModal} onHide={cancelDelete}>

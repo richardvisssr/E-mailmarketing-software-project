@@ -5,15 +5,14 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
 function Page() {
-  const socket  = new WebSocket("ws://localhost:8000/socket");
+  const socket = new WebSocket("ws://localhost:8000/socket");
   const [emails, setEmails] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [shouldUpdate, setShouldUpdate] = useState(false);
   const [notification, setNotification] = useState({ type: "", message: "" });
   const token = Cookies.get("token");
 
-  socket.addEventListener("open", (event) => {
-  });
+  socket.addEventListener("open", (event) => {});
 
   socket.addEventListener("message", (event) => {
     try {
@@ -22,7 +21,7 @@ function Page() {
         setShouldUpdate(true);
       }
     } catch (error) {
-      console.error("Error parsing WebSocket message:", error);
+      console.error("Error parsing WebSocket message");
     }
   });
 

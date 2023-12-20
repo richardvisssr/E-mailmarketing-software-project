@@ -6,14 +6,13 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const http = require("http");
-const ws = require("ws");
 const path = require("path");
 const configFilePath = path.join(__dirname, "../config/config.json");
 let debounceTimer;
 let isRestarting = false;
 
 const host = process.env.HOST || "127.0.0.1";
-const port = process.env.PORT || 3001;
+const port = 3001;
 
 function restartServer() {
   if (isRestarting) {
@@ -71,6 +70,8 @@ const emailEditorRouter = require("./routes/emailEditor");
 const mailListRouter = require("./routes/mailLists");
 const sendMailRouter = require("./routes/sendEmail");
 const adminpanelRouter = require("./routes/templateRoutes");
+const emailAnalyticsRouter = require("./routes/emailAnalytics");
+const unsubscribeAnalyticsRouters = require("./routes/unsubcsribeAnalytics");
 const afbeeldingRouter = require("./routes/afbeeldingRouter");
 
 const app = express();
@@ -98,33 +99,13 @@ app.use("/", adminpanelRouter);
 app.use("/mail", emailEditorRouter);
 app.use("/mail", mailListRouter);
 app.use("/", sendMailRouter);
+app.use("/", emailAnalyticsRouter);
+app.use("/", unsubscribeAnalyticsRouters);
 app.use("/afbeelding", afbeeldingRouter);
 
 const httpServer = http.createServer(app);
-const webSocketServer = new ws.Server({ noServer: true, path: "/socket" });
 
-webSocketServer.on("connection", (socket, req) => {
-  socket.on("message", (message) => {
-    console.log("WebSocket message received:", message);
-  });
-
-  socket.on("error", (error) => {
-    console.error("WebSocket error:", error);
-  });
-});
-
-httpServer.on("upgrade", (req, networkSocket, head) => {
-  sessionParser(req, {}, () => {
-    webSocketServer.handleUpgrade(req, networkSocket, head, (newWebSocket) => {
-      webSocketServer.emit("connection", newWebSocket, req);
-    });
-  });
-});
-
-httpServer.listen(() => {
-  const port = httpServer.address().port;
-  console.log(`Listening on http://${host}:${port}`);
-});
+app.use(express.static(path.join(__dirname, "client-side")));
 
 let server = app.listen(port, host, async () => {
   console.log("> connecting");
@@ -136,4 +117,4 @@ let server = app.listen(port, host, async () => {
   console.log(`Database started on http://${addressInfo}:${portInfo}`);
 });
 
-module.exports = { app, server, httpServer, webSocketServer };
+module.exports = { app, server, httpServer };

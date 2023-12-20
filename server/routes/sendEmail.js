@@ -1,8 +1,9 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
-const { PlannedEmail } = require("../model/emailEditor");
+const { PlannedEmail, Email } = require("../model/emailEditor");
 const path = require("path");
 const fs = require("fs");
+const { sendWebsocketMessage } = require("../utils/websockets");
 
 const router = express.Router();
 
@@ -30,6 +31,17 @@ router.post("/sendEmail", async (req, res) => {
 
     let sentSubscribers = [];
 
+    const analysisPageUrl = `http://localhost:3000/analyse/`;
+
+    const personalizedHtmlText = html.replace(
+      /href="([^"]*)"/g,
+      function (match, originalUrl) {
+        return `href="${analysisPageUrl}${encodeURIComponent(
+          originalUrl
+        )}/${id}/1"`;
+      }
+    );
+
     for (const subscriber of subscribers) {
       let personalizedHeaderText = headerText.replace(
         "{name}",
@@ -55,19 +67,19 @@ router.post("/sendEmail", async (req, res) => {
         <div style="text-align: center; padding: 10px; font-family: 'Arial', sans-serif;">
         ${showHeader ? ` ${personalizedHeaderText}` : ""}
         </div>
-        <div style=" padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
-        ${html}
+        <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
+        ${personalizedHtmlText}
       </div>
       <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
         <p>
           Bekijk de online versie van deze e-mail
-          <a href="http://localhost:3000/onlineEmail/${id}/${
+          <a href="http://localhost:3000/analyse/onlineEmail/${id}/${
           subscriber._id
         }" style="text-decoration: none; color: #007BFF;">
             hier
           </a>.
         </p>
-        <a href="http://localhost:3000/unsubscribe/${
+        <a href="http://localhost:3000/unsubscribe/${id}/${
           subscriber._id
         }" style="text-decoration: none;">
           Uitschrijven
@@ -80,10 +92,24 @@ router.post("/sendEmail", async (req, res) => {
       await transporter.sendMail(mailOptions);
       sentSubscribers.push(subscriber.email);
     }
+    sendWebsocketMessage({ type: "sendEmail", templateId: id });
     res.status(200).json({ success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error sending email" });
+  }
+});
+
+router.get("/isMailSended/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const email = await Email.findOne({ id });
+
+    if (email) {
+      res.status(200).send("Mail has been sent");
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -102,6 +128,7 @@ router.put("/planMail", async (req, res) => {
 
     const planMail = await PlannedEmail.findOne({ id });
     if (planMail) {
+      planMail.mailId = mailId;
       planMail.id = id;
       planMail.title = title;
       planMail.html = html;
@@ -110,9 +137,11 @@ router.put("/planMail", async (req, res) => {
       planMail.subject = subject;
       planMail.headerText = headerText;
       await planMail.save();
+
       res.status(200).send("Mail planned successfully");
     } else {
       const newPlanMail = new PlannedEmail({
+        mailId,
         id,
         title,
         html,

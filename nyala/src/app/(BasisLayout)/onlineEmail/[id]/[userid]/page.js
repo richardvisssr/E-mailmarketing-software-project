@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import Loading from "@/app/(BasisLayout)/loading";
 import Cookies from "js-cookie";
 import AlertComponent from "@/components/alert/AlertComponent";
+import styles from "./onlineEmail.module.css";
 
 export default function Page({ params }) {
-  const { id } = params;
-  const { userid } = params;
+  const { id, userid } = params;
   const [email, setEmail] = useState(null);
   const [notification, setNotification] = useState({ type: "", message: "" });
   const [subscriber, setSubscriber] = useState(null);
@@ -99,28 +99,13 @@ export default function Page({ params }) {
             />
           )}
           <div
-            dangerouslySetInnerHTML={{ __html: email.html }}
-            style={{
-              textAlign: "center",
-              padding: "10px",
-            }}
+            className={styles.emailContent}
+            dangerouslySetInnerHTML={{ __html: email }}
           />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              backgroundColor: "#f1f1f1",
-              fontFamily: "Arial",
-              textAlign: "center",
-            }}
-          >
+          <div className={styles.unsubscribeContainer}>
             <a
-              style={{
-                backgroundColor: "#f1f1f1",
-                textAlign: "center",
-                padding: "10px",
-              }}
-              href={`http://localhost:3000/unsubscribe/${userid}`}
+              className={styles.unsubscribeLink}
+              href={`http://localhost:3000/unsubscribe/${id}/${userid}`}
             >
               Uitschrijven
             </a>

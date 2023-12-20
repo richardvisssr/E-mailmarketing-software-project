@@ -45,6 +45,10 @@ const emailSchema = new mongoose.Schema({
 });
 
 const plannedEmailSchema = new mongoose.Schema({
+  mailId: {
+    type: String,
+    required: true,
+  },
   id: {
     type: String,
     required: true,

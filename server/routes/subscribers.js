@@ -1,7 +1,7 @@
 "use strict";
 
 const express = require("express");
-const { Subscriber, Unsubscriber } = require("../model/subscribers");
+const { Subscriber, Unsubscriber, Category } = require("../model/subscribers");
 const router = express.Router();
 
 router.get("/subscribers", async (req, res) => {
@@ -149,21 +149,6 @@ router.get("/:subscriber/subs", async (req, res) => {
     return res.status(200).send(sub);
   } catch (error) {
     return res.status(500).send({ message: "Internal server error" });
-  }
-});
-
-//TODO subscriber die uitschrijft
-router.post("/reason", async (req, res) => {
-  const { reden } = req.body;
-
-  try {
-    const unsubscriber = new Unsubscriber({
-      reason: reden,
-    });
-    await unsubscriber.save();
-    return res.status(200).send({ message: "Reason added" });
-  } catch (err) {
-    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
