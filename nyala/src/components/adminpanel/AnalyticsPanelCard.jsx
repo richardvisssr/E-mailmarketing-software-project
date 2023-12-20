@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import AlertComponent from "../alert/AlertComponent";
+import { useRouter } from "next/navigation";
+import styles from "@/components/adminpanel/button.module.css";
 
 const AnalyticsPanelCard = (props) => {
   const [socket, setSocket] = useState(null);
+  const router = useRouter();
   const [openedOnlineEmails, setOpenedOnlineEmails] = useState(0);
   const [unsubscribe, setUnsubscribe] = useState(0);
   const [openedLinks, setOpenedLinks] = useState(0);
@@ -74,9 +77,15 @@ const AnalyticsPanelCard = (props) => {
       {notification.message && <AlertComponent notification={notification} />}
 
       <div className="small-card p-2 bg-light d-grid gap-2 rounded shadow-lg">
-        <p className="mb-0">Uitgeschreven: {unsubscribe}</p>
-        <p className="mb-0">Online weergaven: {openedOnlineEmails}</p>
-        <p className="mb-0">Links geopend: {openedLinks}</p>
+        <div className="card-body">
+          <p className="mb-0">Uitgeschreven: {unsubscribe}</p>
+          <p className="mb-0">Online weergaven: {openedOnlineEmails}</p>
+          <p className="mb-0">Links geopend: {openedLinks}</p>
+        </div>
+        <p onClick={handleClick} className={`${styles.linkText}`}>
+          {" "}
+          Bekijk hier meer
+        </p>
       </div>
     </>
   );

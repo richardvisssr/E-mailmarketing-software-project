@@ -7,7 +7,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import Modal from "react-bootstrap/Modal";
-import SelectMailingLists from "../email/SendMail";
+import SelectMailingLists from "../templateEditor/SendMail";
 import { nanoid } from "nanoid";
 import AlertComponent from "../alert/AlertComponent";
 import sendDataToSendEmail from "../EmailService";
@@ -16,6 +16,7 @@ import AnalyticsPanelCard from "./AnalyticsPanelCard";
 function TemplateCard(props) {
   const socket = new WebSocket("ws://localhost:7002/socket");
   const cardRef = useRef(null);
+  const [headerText, setHeaderText] = useState("");
   const { template, onDelete } = props;
   const [show, setShow] = useState(false);
   const [html, setHtml] = useState("");
@@ -48,7 +49,7 @@ function TemplateCard(props) {
       setNotification({
         type: "error",
         message:
-          "Er is een fout opgetreden bij het verwerken van het WebSocket-bericht."
+          "Er is een fout opgetreden bij het verwerken van het WebSocket-bericht.",
       });
     }
   });
@@ -63,7 +64,25 @@ function TemplateCard(props) {
     setDateTime(event.target.value);
   };
 
+  const handleHeaderTextChange = (e) => {
+    if (e.target.value.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Header mag niet leeg zijn",
+      });
+      return;
+    }
+    setHeaderText(e.target.value);
+  };
+
   const handleSubjectChange = (e) => {
+    if (e.target.value.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Onderwerp mag niet leeg zijn",
+      });
+      return;
+    }
     setSubject(e.target.value);
   };
 
@@ -73,8 +92,8 @@ function TemplateCard(props) {
 
   useEffect(() => {
     if (sentData.subscribersData) {
-      sentData.subscribersData.map((sub) => {
-        setSubscribers([sub]);
+      sentData.subscribersData.forEach((sub) => {
+        setSubscribers((prev) => [...prev, [sub]]);
       });
     }
   }, [sentData]);
@@ -109,7 +128,7 @@ function TemplateCard(props) {
       } catch (error) {
         setNotification({
           type: "error",
-          message: "Er is iets misgegaan bij het ophalen van de template",
+          message: "Er is iets misgegaan bij het ophalen van de template.",
         });
       }
     };
@@ -155,11 +174,19 @@ function TemplateCard(props) {
         sentData.subscribersData,
         subject,
         showHeader,
+        headerText,
         template.id
       );
-      setNotification({
+      props.setNotification((prevNotification) => ({
+        ...prevNotification,
         type: "success",
-        message: "Mail is succesvol verstuurd",
+        message: "Mail is succesvol verstuurd.",
+      }));
+      setShow(false);
+    } else {
+      setNotification({
+        type: "error",
+        message: "Er zijn geen lijsten geselecteerd!",
       });
     }
   };
@@ -196,25 +223,29 @@ function TemplateCard(props) {
             subs: subscribers,
             date: dateTime,
             showHeader: showHeader,
+            headerText: headerText,
             subject: subject,
           }),
         });
         if (!response.ok) {
-          setNotification({
+          props.setNotification((prevNotification) => ({
+            ...prevNotification,
             type: "error",
             message: "Er is iets misgegaan bij het versturen van de mail",
-          });
+          }));
         }
-        setNotification({
+        props.setNotification((prevNotification) => ({
+          ...prevNotification,
           type: "success",
           message: "Mail is succesvol ingepland",
-        });
+        }));
         socket.send("Email send");
       } catch (error) {
-        setNotification({
+        props.setNotification((prevNotification) => ({
+          ...prevNotification,
           type: "error",
           message: "Er is iets misgegaan bij het versturen van de mail",
-        });
+        }));
       }
     }
   };
@@ -242,11 +273,21 @@ function TemplateCard(props) {
       .then(() => {
         onDelete(template.id);
         setShowDeleteModal(false);
+        props.setNotification((prevNotification) => ({
+          ...prevNotification,
+          type: "success",
+          message: "Template is succesvol verwijderd.",
+        }));
       })
       .catch((error) => {
+        props.setNotification((prevNotification) => ({
+          ...prevNotification,
+          type: "error",
+          message: "Er is iets misgegaan tijdens het verwijderen!",
+        }));
         setNotification({
           type: "error",
-          message: "Er ging iets mis met het verwijderen van de template"
+          message: "Er ging iets mis met het verwijderen van de template",
         });
         // Handle error as needed
         setShowDeleteModal(false);
@@ -354,6 +395,26 @@ function TemplateCard(props) {
             />
             <label className="form-check-label">Header toevoegen</label>
           </div>
+          {showHeader && (
+            <div className="p-2 gap-3 d-flex flex-column justify-content-center">
+              <label className="form-label">
+                Gebruik {"{name}"} om naam toe te voegen, {"{image}"} om xtend
+                logo toe te voegen
+              </label>
+              <textarea
+                value={headerText}
+                onChange={handleHeaderTextChange}
+                placeholder="Voer header tekst in"
+                className="form-control text-center"
+                wrap="hard"
+                rows="4" // Set the number of rows as needed
+                style={{
+                  whiteSpace: "pre-wrap", // Behoudt witruimte inclusief nieuwe regels
+                  fontFamily: "Arial, sans-serif",
+                }}
+              />
+            </div>
+          )}
           <SelectMailingLists
             id={template.id}
             setEmails={setEmails}

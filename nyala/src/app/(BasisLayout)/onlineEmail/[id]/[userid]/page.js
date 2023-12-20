@@ -39,6 +39,10 @@ export default function Page({ params }) {
           type: "error",
           message: "Er is een fout opgetreden bij het ophalen van de e-mail.",
         });
+        setNotification({
+          type: "error",
+          message: "Er is een fout opgetreden bij het ophalen van de e-mail.",
+        });
       });
   }, []);
 
