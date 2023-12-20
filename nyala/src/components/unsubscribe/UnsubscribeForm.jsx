@@ -179,11 +179,11 @@ export default function UnsubscribeForm({ userid }) {
           })
           .catch(() => {});
       }
-    }
+    };
     try {
       getAuth();
     } catch (error) {}
-  }, []);
+  }, [selectedSubs]);
 
   const changeValue = (event) => {
     const { value, checked } = event.target;
