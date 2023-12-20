@@ -72,6 +72,10 @@ const AnalyticsPanelCard = (props) => {
     });
   }, [socket, id]);
 
+  const handleClick = () => {
+    router.push(`/admin/analyse/${id}`);
+  };
+
   return (
     <>
       {notification.message && <AlertComponent notification={notification} />}
