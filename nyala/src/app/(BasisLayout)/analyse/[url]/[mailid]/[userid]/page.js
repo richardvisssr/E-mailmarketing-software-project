@@ -12,35 +12,54 @@ const TrackingPage = ({ params }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (url === "onlineEmail") {
-      fetch(`http://localhost:3001/trackOnlineView/${mailid}`)
-        .then(() => {
-          router.push(`/${url}/${mailid}/${userid}`);
-        })
-        .catch((error) => {
-          setNotification({ type: "error", message: "Er is een fout opgetreden bij het bijhouden van de online weergave." });
-        });
+    let trackUrl = "";
+    let errorMessage = "";
+
+    switch (url) {
+      case "onlineEmail":
+        trackUrl = `http://localhost:3001/trackOnlineView/${mailid}`;
+        errorMessage = "Er is een fout opgetreden bij het bijhouden van de online weergave.";
+        break;
+      case "unsubscribe":
+        trackUrl = `http://localhost:3001/trackUnsubscribe/${mailid}`;
+        errorMessage = "Er is een fout opgetreden bij het verwerken van uw uitschrijving.";
+        break;
+      default:
+        trackUrl = `http://localhost:3001/trackHyperlinks/${url}/${mailid}`;
+        errorMessage = "Er is een fout opgetreden bij het bijhouden van de hyperlinks.";
+        break;
     }
-    if (url === "unsubscribe") {
-      fetch(`http://localhost:3001/trackUnsubscribe/${mailid}`)
-        .then(() => {
+
+    fetch(trackUrl)
+      .then((response) => {
+        if (!response.ok) {
+          setNotification({
+            type: "error",
+            message: 'Er is een fout opgetreden bij het bijhouden van de online weergave.',
+          });
+        }
+        return response;
+      })
+      .then(() => {
+        if (url === "onlineEmail" || url === "unsubscribe") {
           router.push(`/${url}/${mailid}/${userid}`);
-        })
-        .catch((error) => {
-          setNotification({ type: "error", message: "Er is een fout opgetreden bij het verwerken van uw uitschrijving." });
+        } else {
+          const decodedUrl = decodeURIComponent(url);
+          router.push(decodedUrl);
+        }
+      })
+      .catch((error) => {
+        setNotification({
+          type: "error",
+          message: 'Er is een fout opgetreden bij het bijhouden van de online weergave.',
         });
-    }
+      });
   }, []);
 
   return (
     <>
       <Loading />
-      {notification.message && (
-        <AlertComponent
-          type={notification.type}
-          message={notification.message}
-        />
-      )}
+      {notification.message && <AlertComponent notification={notification} />}
     </>
   );
 };

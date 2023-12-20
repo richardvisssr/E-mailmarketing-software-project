@@ -15,6 +15,16 @@ async function sendEmail(email) {
 
   try {
     for (const subscriber of email.subscribers) {
+      const analysisPageUrl = `http://localhost:3000/analyse/`;
+
+      const personalizedHtmlText = email.html.replace(
+        /href="([^"]*)"/g,
+        function (match, originalUrl) {
+          return `href="${analysisPageUrl}${encodeURIComponent(
+            originalUrl
+          )}/${email.mailId}/1"`;
+        }
+      );
       const mailOptions = {
         from: "xtend@svxtend.nl",
         to: subscriber.email,
@@ -29,7 +39,7 @@ async function sendEmail(email) {
           }
         </div>
         <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
-        ${email.html}
+        ${personalizedHtmlText}
       </div>
       <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
         <p>

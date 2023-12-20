@@ -26,6 +26,17 @@ router.post("/sendEmail", async (req, res) => {
 
     let sentSubscribers = [];
 
+    const analysisPageUrl = `http://localhost:3000/analyse/`;
+
+    const personalizedHtmlText = html.replace(
+      /href="([^"]*)"/g,
+      function (match, originalUrl) {
+        return `href="${analysisPageUrl}${encodeURIComponent(
+          originalUrl
+        )}/${id}/1"`;
+      }
+    );
+
     for (const subscriber of subscribers) {
       let personalizedHeaderText = headerText.replace(
         "{name}",
@@ -51,8 +62,8 @@ router.post("/sendEmail", async (req, res) => {
         <div style="text-align: center; padding: 10px; font-family: 'Arial', sans-serif;">
         ${showHeader ? ` ${personalizedHeaderText}` : ""}
         </div>
-        <div style=" padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
-        ${html}
+        <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
+        ${personalizedHtmlText}
       </div>
       <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
         <p>

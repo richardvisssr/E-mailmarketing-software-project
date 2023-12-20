@@ -1,0 +1,18 @@
+.emailContent {
+    text-align: center;
+    padding: 10px;
+  }
+  
+  .unsubscribeContainer {
+    display: flex;
+    justify-content: center;
+    background-color: #f1f1f1;
+    font-family: Arial;
+    text-align: center;
+  }
+  
+  .unsubscribeLink {
+    background-color: #f1f1f1;
+    text-align: center;
+    padding: 10px;
+  }
