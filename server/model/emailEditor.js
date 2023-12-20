@@ -22,12 +22,24 @@ const emailSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  headerText: {
+    type: String,
+    required: false,
+  },
   html: {
     type: String,
     required: true,
   },
   subscribers: {
     type: Array,
+    required: true,
+  },
+  subject: {
+    type: String,
+    required: true,
+  },
+  showHeader: {
+    type: Boolean,
     required: true,
   },
 });
