@@ -11,15 +11,15 @@ Door minder op de voorgrond te staan komen andere teamleden actiever in het gesp
 
 
 ### Dit ging goed:
-Terughouder zijn in een gesprek
+Terughoudend zijn in een gesprek
 
 
 ### Dit kon beter:
-Andere aanmoedigen en controleren in de groep om te controleren hoe het volgens hun het gesprek gaat en of zij zich nog op hun gemak voelen
+Andere aanmoedigen en in de groep controleren hoe het volgens hun het gesprek gaat en of zij zich nog op hun gemak voelen
 
 
 ### Ik heb mijn leerdoel wel/niet bereikt omdat, onderbouw aan de hand van concrete voorbeelden/situaties uit praktijk (STARRT):
-Tijdens de laatste met onze scrum coach, waarvan hij ook bewust was dat ik meer op de achtergrond moest staan, ging het al een stuk beter. Het ging over de kwaliteit van onze code omdat frits ziek was, nam hij die taak over. Andere teamleden kwamen vaker aan het woordt en het gesprek ging dieper op ons project in. Dit omdat meer teamleden actiever meededen en zelf ook meer de diepte ingingen. In plaats van dat ik probeer te vertellen en het alleen gaat over waar ik verstand van heb.
+Tijdens de laatste met onze scrum coach, waarvan hij ook bewust was dat ik meer op de achtergrond moest staan, ging het al een stuk beter. Het ging over de kwaliteit van onze code omdat Frits , onze project leider, ziek was, nam hij die taak over. Andere teamleden kwamen vaker aan het woordt en het gesprek ging dieper op ons project in. Dit omdat meer teamleden actiever meededen en zelf ook meer de diepte ingingen. In plaats van dat ik probeer te vertellen en het alleen gaat over waar ik verstand van heb.
 
 
 ### Het effect op mijn eigen ontwikkeling was:
