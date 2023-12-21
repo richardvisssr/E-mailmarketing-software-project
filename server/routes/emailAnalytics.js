@@ -48,7 +48,7 @@ router.get("/trackHyperlinks/:link/:emailId", async (req, res) => {
     let linkObj = analytics.links.find((l) => l.link === link);
 
     if (!linkObj) {
-      linkObj = { link, count: 1 };
+      linkObj = { link, count: 0 };
       analytics.links.push(linkObj);
     }
 
