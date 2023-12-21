@@ -187,12 +187,15 @@ router.put("/updateMail", async (req, res) => {
     const mail = await PlannedEmail.findOne({ id });
     if (mail) {
       mail.date = date;
+      mail.mailId = id;
+      mail.sent = false;
       await mail.save();
       res.status(200).send("Mail updated successfully");
     } else {
       res.status(404).send("Mail not found");
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
