@@ -67,7 +67,7 @@ const UnsubscribeReasonChart = ({ linkData }) => {
       .call(
         d3
           .axisBottom(x)
-          .tickValues(d3.ticks(0, d3.max(count), 5))
+          .tickValues(d3.ticks(0, d3.max(count), 3))
           .tickFormat(d3.format(".0f"))
       );
 
