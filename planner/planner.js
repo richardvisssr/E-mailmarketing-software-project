@@ -101,13 +101,13 @@ async function sendEmail(email) {
       <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
         <p>
           Bekijk de online versie van deze e-mail
-          <a href="http://localhost:3000/analyse/onlineEmail/${email.id}/${
+          <a href="http://localhost:3000/analyse/onlineEmail/${email.mailId}/${
           subscriber.id
         }" style="text-decoration: none; color: #007BFF;">
             hier
           </a>.
         </p>
-        <a href="http://localhost:3000/unsubscribe/${
+        <a href="http://localhost:3000/unsubscribe/${email.mailId}/${
           subscriber.id
         }" style="text-decoration: none;">
           Uitschrijven

@@ -41,6 +41,16 @@ export default function Page({ params }) {
         )
           .then((response) => response.json())
           .then((data) => {
+            const analysisPageUrl = `http://localhost:3000/analyse/`;
+            const personalizedHtmlText = data.html.replace(
+              /href="([^"]*)"/g,
+              function (match, originalUrl) {
+                return `href="${analysisPageUrl}${encodeURIComponent(
+                  originalUrl
+                )}/${id}/1"`;
+              }
+            );
+
             // Loop over each subscriber
             data.subscribers.forEach((subscriber) => {
               // Only personalize the header text for the matching subscriber
@@ -64,6 +74,7 @@ export default function Page({ params }) {
                 setEmail({
                   ...data,
                   headerText: personalizedHeaderText,
+                  html: personalizedHtmlText,
                 });
               }
             });

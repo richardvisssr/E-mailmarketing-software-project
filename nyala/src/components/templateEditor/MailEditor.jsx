@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { Modal, Button, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
 import { nanoid } from "nanoid";
-// import sendDataToSendEmail from "../EmailService";
+import sendDataToSendEmail from "../EmailService";
 import AlertComponent from "../alert/AlertComponent";
 import Cookies from "js-cookie";
 import styles from "./MailEditor.module.css";
