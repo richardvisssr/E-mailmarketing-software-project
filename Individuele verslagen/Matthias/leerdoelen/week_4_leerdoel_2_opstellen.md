@@ -1,7 +1,7 @@
 # Opstellen leerdoel 2
 
 ### De komende 4 weken ga ik met het volgende leerdoel aan de slag: 
-Ik wil voordat ik aan een taak begin een taak kunnen voor mezelf kunnen indelen en een beeld creeëren van de taak
+Ik wil voordat ik aan een taak begin een taak voor mezelf kunnen indelen en een beeld creeëren van de taak
 
 
 ### Mijn motivatie om aan dit leerdoel te werken is:
