@@ -65,6 +65,17 @@ async function sendEmail(email) {
         subscriber.name
       );
 
+      const analysisPageUrl = `http://localhost:3000/analyse/`;
+
+      const personalizedHtmlText = email.html.replace(
+        /href="([^"]*)"/g,
+        function (match, originalUrl) {
+          return `href="${analysisPageUrl}${encodeURIComponent(
+            originalUrl
+          )}/${email.mailId}/1"`;
+        }
+      );
+
       personalizedHeaderText = personalizedHeaderText.replace(/\n/g, "<br>");
 
       personalizedHeaderText = personalizedHeaderText.replace(
@@ -85,12 +96,12 @@ async function sendEmail(email) {
         ${email.showHeader ? ` ${personalizedHeaderText}` : ""}
         </div>
         <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
-        ${email.html}
+        ${personalizedHtmlText}
       </div>
       <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
         <p>
           Bekijk de online versie van deze e-mail
-          <a href="http://localhost:3000/onlineEmail/${email.id}/${
+          <a href="http://localhost:3000/analyse/onlineEmail/${email.id}/${
           subscriber.id
         }" style="text-decoration: none; color: #007BFF;">
             hier
