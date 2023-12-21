@@ -107,6 +107,7 @@ export default function UnsubscribeForm({ userid, emailid }) {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             subscriptions: selectedSubs,

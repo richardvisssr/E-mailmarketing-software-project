@@ -4,13 +4,14 @@ import React, { useState, useEffect } from "react";
 import ProgressBar from "./ProgressBar";
 import HyperlinkChart from "./HyperLinkChart";
 import AlertComponent from "../alert/AlertComponent";
+import Cookies from "js-cookie";
 
 export default function TemplateAnalyse({ id }) {
   const socket = new WebSocket("ws://127.0.0.1:7002/socket");
   const [stats, setStats] = useState(0);
   const [viewChange, setViewChange] = useState(false);
   const [notification, setNotification] = useState({ type: "", message: "" });
-  const [clicked, setClicked] = useState(false);
+  const token = Cookies.get("token");
 
   socket.addEventListener("open", (event) => {});
 
@@ -38,7 +39,7 @@ export default function TemplateAnalyse({ id }) {
   }, [viewChange]);
 
   const getStats = async () => {
-    fetch(`http://localhost:3001/stats/${id}`)
+    fetch(`http://localhost:3001/stats/${id}`,{ headers: { Authorization: `Bearer ${token}` } })
       .then((response) => response.json())
       .then((data) => setStats(data[id]))
       .catch((error) =>

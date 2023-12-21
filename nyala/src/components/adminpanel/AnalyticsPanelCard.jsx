@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import AlertComponent from "../alert/AlertComponent";
 import { useRouter } from "next/navigation";
 import styles from "@/components/adminpanel/button.module.css";
+import Cookies from "js-cookie";
 
 const AnalyticsPanelCard = (props) => {
   const [socket, setSocket] = useState(null);
@@ -11,6 +12,7 @@ const AnalyticsPanelCard = (props) => {
   const [openedLinks, setOpenedLinks] = useState(0);
   const [notification, setNotification] = useState({ type: "", message: "" });
   const id = props.id;
+  const token = Cookies.get("token");
 
   useEffect(() => {
     const socket = new WebSocket("ws://localhost:7002/socket");
@@ -22,7 +24,7 @@ const AnalyticsPanelCard = (props) => {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/stats/${id}`, {})
+    fetch(`http://localhost:3001/stats/${id}`, {headers: {Authorization: `Bearer ${token}`}})
       .then((response) => response.json())
       .then((data) => {
         const key = Object.keys(data)[0];

@@ -4,9 +4,11 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Loading from "@/app/(BasisLayout)/loading";
 import AlertComponent from "@/components/alert/AlertComponent";
+import Cookies from "js-cookie";
 
 const TrackingPage = ({ params }) => {
   const { mailid, userid, url } = params;
+  const token = Cookies.get("token");
   const [notification, setNotification] = useState({ type: "", message: "" });
 
   const router = useRouter();
@@ -30,7 +32,7 @@ const TrackingPage = ({ params }) => {
         break;
     }
 
-    fetch(trackUrl)
+  fetch(trackUrl, {headers: {Authorization: `Bearer ${token}`}})
       .then((response) => {
         if (!response.ok) {
           setNotification({
