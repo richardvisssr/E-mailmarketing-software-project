@@ -7,7 +7,7 @@
 
 ## Mijn motivatie om aan dit leerdoel te werken is:
 
-Ik wil anderen meer ruimte geven om hun ideeën te delen en bij te dragen aan ons team. Soms merk ik dat ik te snel reageer op wat anderen zeggen. Door even te wachten en actief te luisteren, hoop ik mijn teamleden aan te moedigen om hun eigen mening te uiten. Ik ga oefenen met minder dominant zijn en echt luisteren naar anderen voordat ik mijn eigen mening deel.
+Ik wil anderen meer ruimte geven om hun ideeën te delen en bij te dragen aan ons team. Soms merk ik dat ik te snel reageer op wat anderen zeggen. Door even te wachten en actief te luisteren, hoop ik mijn teamleden aan te moedigen om hun eigen mening te uiten. Ik ga oefenen met minder dominant zijn en actief luisteren naar anderen voordat ik mijn eigen mening deel.
 >> dit is beperkte analyse, ga je dat actief doen, of leun je naar achteren (en waarom)
 
 ## Dit leerdoel levert het volgende op voor mij:
