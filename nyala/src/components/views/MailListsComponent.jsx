@@ -390,14 +390,6 @@ export default function MailListComponent() {
               message: "De lijst is succesvol bijgewerkt.",
             });
 
-            setMailLists((prevLists) => {
-              const updatedLists = [...prevLists];
-              const index = updatedLists.findIndex((list) => list === list);
-              if (index !== -1) {
-                updatedLists[index] = name;
-              }
-              return updatedLists;
-            });
           } catch (error) {
             setNotification({
               type: "error",
