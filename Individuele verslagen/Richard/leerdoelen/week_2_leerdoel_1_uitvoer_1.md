@@ -6,7 +6,7 @@ _Beschrijf wat je -tot nu toe- hebt gedaan om te werken aan je persoonlijke leer
 Ik heb bewust gewerkt aan mijn spreekgedrag tijdens Scrum ceremonies, met als doel meer ruimte te bieden aan mijn teamleden. Tijdens sprint reviews met de product owner heb ik actief gewacht en anderen de kans gegeven om als eerste ideeën te delen. Ik heb gemerkt dat de dynamiek afhangt van de situatie, en soms nam ik het voortouw als anderen terughoudend waren.
 
 ### Welke acties op welke momenten heb je uitgevoerd? 
-Bij belangrijke Scrum ceremonies heb ik actief gewacht met het delen van mijn mening, en ik heb anderen aangemoedigd om eerst te spreken. Tijdens een gesprek met Pim en onze scrum coach heb ik besproken hoe ik meer naar de achtergrond kan stappen en anderen de ruimte kan geven. Ik heb mijn aanpak aangepast op basis van deze inzichten. 
+Bij belangrijke Scrum ceremonies heb ik gewacht met het delen van mijn mening, waardoor ik anderen aanmoedig om eerst te spreken. Tijdens een gesprek met Pim en onze scrum coach heb ik besproken hoe ik meer naar de achtergrond kan stappen en anderen de ruimte kan geven. Ik heb mijn aanpak aangepast op basis van deze inzichten. 
 
 ### Wie heb je om hulp gevraagd?
 Ik heb Pim om advies gevraagd en besproken hoe ik meer op de achtergrond kan blijven. Onze scrum coach gaf me inzicht in de dynamiek van het team en waarom anderen mogelijk terughoudend zijn. Dit heeft me geholpen mijn aanpak aan te passen.
