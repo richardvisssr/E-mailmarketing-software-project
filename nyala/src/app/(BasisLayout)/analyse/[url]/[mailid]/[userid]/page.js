@@ -20,31 +20,36 @@ const TrackingPage = ({ params }) => {
     switch (url) {
       case "onlineEmail":
         trackUrl = `http://localhost:3001/trackOnlineView/${mailid}`;
-        errorMessage = "Er is een fout opgetreden bij het bijhouden van de online weergave.";
+        errorMessage =
+          "Er is een fout opgetreden bij het bijhouden van de online weergave.";
         break;
       case "unsubscribe":
         trackUrl = `http://localhost:3001/trackUnsubscribe/${mailid}`;
-        errorMessage = "Er is een fout opgetreden bij het verwerken van uw uitschrijving.";
+        errorMessage =
+          "Er is een fout opgetreden bij het verwerken van uw uitschrijving.";
         break;
       default:
         trackUrl = `http://localhost:3001/trackHyperlinks/${url}/${mailid}`;
-        errorMessage = "Er is een fout opgetreden bij het bijhouden van de hyperlinks.";
+        errorMessage =
+          "Er is een fout opgetreden bij het bijhouden van de hyperlinks.";
         break;
     }
 
-  fetch(trackUrl, {headers: {Authorization: `Bearer ${token}`}})
+    fetch(trackUrl, { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => {
         if (!response.ok) {
           setNotification({
             type: "error",
-            message: 'Er is een fout opgetreden bij het bijhouden van de online weergave.',
+            message: "Er is een fout opgetreden bij het doorsturen.",
           });
         }
         return response;
       })
       .then(() => {
-        if (url === "onlineEmail" || url === "unsubscribe") {
+        if (url === "onlineEmail") {
           router.push(`/${url}/${mailid}/${userid}`);
+        } else if (url === "unsubscribe") {
+          router.push(`/unsubscribed`);
         } else {
           const decodedUrl = decodeURIComponent(url);
           router.push(decodedUrl);
@@ -53,7 +58,7 @@ const TrackingPage = ({ params }) => {
       .catch((error) => {
         setNotification({
           type: "error",
-          message: 'Er is een fout opgetreden bij het bijhouden van de online weergave.',
+          message: "Er is een fout opgetreden bij het doorsturen.",
         });
       });
   }, []);
