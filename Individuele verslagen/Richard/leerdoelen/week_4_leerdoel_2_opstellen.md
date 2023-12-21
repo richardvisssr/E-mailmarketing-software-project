@@ -4,22 +4,27 @@
 Ik wil mijn concentratie verbeteren om doelgerichter en efficiënter aan mijn taak te kunnen werken
 
 ## Mijn motivatie om aan dit leerdoel te werken is:
-Ten eerste had ik last van te groten taken waardoor het onoverzichtelijk werd hoe ik het beste kon beginnen en waar te eindigen waardoor je teveel door elkaar gaat doen. Ook had ik last in sprint 2 van dat de user stories klaar waren en we aan kleinere taken gingen die niet persé aan een user storie gekoppeld was om dit uit development te pullen en dan daarna meteen, als de taak klaar was, terug in development te zetten. Maar dit gaf veel bugs omdat er geen user storie was om eerst alle taken bij elkaar te testen voordat het in development ging.
-
+Eerst liep ik vast bij grote taken, waardoor het allemaal wat chaotisch werd en ik niet goed wist waar te beginnen en te eindigen. Dat leidde tot te lange werkuurtjes. Ook merkte ik tijdens sprint 2 dat het werken aan kleinere taken zonder directe koppeling aan user stories problemen veroorzaakte bij het testen en integreren met development
+.
 ## Dit leerdoel levert het volgende op voor mij:
-Zodat later goede namen voor mijzelf kan teruglezen en functie kan uitbreiden zonder in de war te raken
+Het zal me helpen om efficiënter te werken en de kwaliteit van mijn code te verbeteren. Met een gestructureerde aanpak kan ik beter nadenken over de implementatie van mijn code.
 
 ## Dit leerdoel levert het volgende op voor mijn team:
-Betere namen zorgen voor beter en sneller werk kan worden met mijn code voor mijn teamleden
+Betere codekwaliteit zorgt voor overzichtelijke code, waardoor mijn team gemakkelijker met mijn code kan werken en erop kan voortbouwen.
 
 ## Ik ga op de volgende manier(en) werken aan mijn leerdoel:
-Vragen aan mijn teamleden of de namen duidelijk zijn als ze de code reviewen
+Ik ga gebruik maken van PDCA: 
+
+Plan: maak een plan, want een doel zonder plan is ijdele hoop
+Do: voer het plan uit en verzamel betrouwbare (proces)data
+Check: ga na of de resultaten voldoen aan de doelen & KPI’s
+Actualize: stuur de uitvoering bij & schaal op of af
 
 ## Om mijn leerdoel te bereiken ga ik de volgende acties op de volgende momenten uitvoeren:
-Als mijn teamleden mijn code reviewen of ze mijn namen willen controleren of het duidelijk is voor ze of niet
+Ik ga kleinere taken creëren of duidelijkere beschrijvingen met eventueel een plan van aanpak toevoegen aan grotere taken. Ook ga ik tussendoor testen en controleren, vooral bij taken met zowel front-end als back-end aspecten.
 
 ## Om mijn leerdoel te bereiken ga ik hulp vragen aan de volgende personen:
-Al mijn teamleden want iedereen reviewed wel mijn code
+Ik ga hulp vragen aan Mark, onze quality manager, en aan Jules. Jules werkt al bij een software development bedrijf. Mark kan me helpen bij het controleren van mijn code, en Jules heeft altijd waardevolle inzichten over het schrijven van kwalitatieve code.
 
 ## Ik heb mijn leerdoel bereikt als (formuleer meetbare criteria):
-Mijn leerdoel is bereikt wanneer mijn teamleden consistent aangeven in de comment van github dat de namen van functies en endpoints duidelijk en begrijpelijk zijn tijdens code reviews.
+Succes betekent voor mij meer commits, het vermijden van het direct mergen van kleine taken naar dev, en het hebben van duidelijke beschrijvingen bij grotere taken. Ik meet mijn succes ook aan het aantal pull requests dat ik indien om mijn taken te laten controleren.
