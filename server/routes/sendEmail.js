@@ -115,7 +115,7 @@ router.get("/isMailSended/:id", async (req, res) => {
 
 router.put("/planMail", async (req, res) => {
   try {
-    const { id, title, html, subs, date, showHeader, headerText, subject } =
+    const { mailId, id, title, html, subs, date, showHeader, headerText, subject } =
       req.body;
     const subscribers = subs.map((subscriberArray) => {
       const subscriber = subscriberArray[0];

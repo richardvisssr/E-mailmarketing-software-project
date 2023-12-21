@@ -60,3 +60,7 @@
   box-shadow: 0 0 0 0 rgba(1, 65, 255, 0.4);
   animation: pulse 2s infinite;
 }
+
+.customSelect {
+  accent-color: #a66cf2;
+}

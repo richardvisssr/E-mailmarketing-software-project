@@ -41,7 +41,6 @@ export default function Page({ params }) {
         )
           .then((response) => response.json())
           .then((data) => {
-            console.log(data)
             // Loop over each subscriber
             data.subscribers.forEach((subscriber) => {
               // Only personalize the header text for the matching subscriber
@@ -100,7 +99,7 @@ export default function Page({ params }) {
           )}
           <div
             className={styles.emailContent}
-            dangerouslySetInnerHTML={{ __html: email }}
+            dangerouslySetInnerHTML={{ __html: email.html }}
           />
           <div className={styles.unsubscribeContainer}>
             <a

@@ -115,7 +115,8 @@ function TemplateCard(props) {
     const fetchHtmlContent = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:3001/templates/${template.id}`, {
+          `http://127.0.0.1:3001/templates/${template.id}`,
+          {
             credentials: "include",
             headers: {
               Authorization: `Bearer ${token}`,
@@ -402,7 +403,7 @@ function TemplateCard(props) {
           </div>
           <div className="form-check">
             <input
-              className="form-check-input"
+              className={`me-2 control ${styles.customSelect}`}
               type="checkbox"
               onChange={() => setShowHeader(!showHeader)}
             />
@@ -436,7 +437,7 @@ function TemplateCard(props) {
           <label className="form-label">Wil je de mail vooruit plannen?</label>
           <div className="form-check">
             <input
-              className="form-check-input"
+              className={`me-2 control ${styles.customSelect}`}
               type="checkbox"
               onChange={() => setPlanned(!planned)}
             />
@@ -459,12 +460,15 @@ function TemplateCard(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button
-            variant="primary"
+            className={`btn ${styles.knopPrimary}`}
             onClick={planned ? handlePlanMail : handleSendEmailClick}
           >
             {planned ? "Inplannen" : "Mail versturen"}
           </Button>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button
+            className={`btn ${styles.knopSecondary}`}
+            onClick={handleClose}
+          >
             Annuleren
           </Button>
         </Modal.Footer>
