@@ -1,10 +1,10 @@
 # Opstellen leerdoel 2
 
 ## De komende 4 weken ga ik met het volgende leerdoel aan de slag: 
-Mijn namen van functies en endpoints verbeteren zodat mijn teamleden en ikzelf later niet in de war raken van wat de endpoints en functies doen 
+Ik wil mijn concentratie verbeteren om doelgerichter en efficiënter aan mijn taak te kunnen werken
 
 ## Mijn motivatie om aan dit leerdoel te werken is:
-Omdat ik al een paar keer als feedback heb ontvangen dat de namen niet duidelijk zijn 
+Ten eerste had ik last van te groten taken waardoor het onoverzichtelijk werd hoe ik het beste kon beginnen en waar te eindigen waardoor je teveel door elkaar gaat doen. Ook had ik last in sprint 2 van dat de user stories klaar waren en we aan kleinere taken gingen die niet persé aan een user storie gekoppeld was om dit uit development te pullen en dan daarna meteen, als de taak klaar was, terug in development te zetten. Maar dit gaf veel bugs omdat er geen user storie was om eerst alle taken bij elkaar te testen voordat het in development ging.
 
 ## Dit leerdoel levert het volgende op voor mij:
 Zodat later goede namen voor mijzelf kan teruglezen en functie kan uitbreiden zonder in de war te raken
