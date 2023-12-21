@@ -79,7 +79,7 @@ const UnsubscribeReasonChart = ({ linkData }) => {
       .style("font-size", "16px")
       .text("Aantal keren dat er op een link is geklikt");
   };
-  return <svg className={`${styles.chart}`} ref={chartRef} />;
+  return <svg className={`${styles.barChart}`} ref={chartRef} />;
 };
 
 export default UnsubscribeReasonChart;
