@@ -249,6 +249,7 @@ function TemplateCard(props) {
           type: "success",
           message: "Mail is succesvol ingepland",
         }));
+        setShow(false);
         socket.send("Email send");
       } catch (error) {
         props.setNotification((prevNotification) => ({

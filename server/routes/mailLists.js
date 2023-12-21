@@ -37,6 +37,7 @@ router.put("/updateListName", async (req, res) => {
     const existingList = await mailList.findOne({ mailList: name });
 
     if (!existingList) {
+      console.log("No existing list");
       return res.status(404).json({ message: "List not found" });
     }
 
@@ -60,9 +61,10 @@ router.put("/updateListName", async (req, res) => {
       mail === name ? newName : mail
     );
 
-    const list = await Category.findOne({ name: name });
+    const list = await Category.findOne({ name: name }); // DIT GAAT FOUT
 
     if (!list) {
+      console.log("No list");
       return res.status(404).json({ message: "List not found" });
     }
 
