@@ -205,11 +205,11 @@ export default function UnsubscribeForm({ userid, emailid }) {
           })
           .catch(() => {});
       }
-    }
+    };
     try {
       getAuth();
     } catch (error) {}
-  }, []);
+  }, [selectedSubs]);
 
   const changeValue = (event) => {
     const { value, checked } = event.target;

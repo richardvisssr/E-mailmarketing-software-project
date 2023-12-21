@@ -3,10 +3,14 @@
 }
 
 .icon:hover {
-  color: #a66cf2; /* Set the color you want on hover */
+  color: #a66cf2;
 }
 
 .monthContainer {
-  min-width: 200px; /* You can adjust this value based on your design */
+  min-width: 200px;
   text-align: center;
+}
+
+.customSelect {
+  accent-color: #a66cf2;
 }
