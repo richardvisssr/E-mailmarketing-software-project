@@ -1,5 +1,5 @@
 const express = require("express");
-const mailList = require("../model/mailList");
+const { mailList } = require("../model/mailList");
 const { Category } = require("../model/subscribers");
 const router = express.Router();
 
@@ -24,6 +24,7 @@ router.put("/addList", async (req, res) => {
     existingList.mailList.push(name);
     const updatedList = await existingList.save();
 
+    await Category.create({ name: name });
     res.json(updatedList);
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
