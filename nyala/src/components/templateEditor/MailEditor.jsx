@@ -226,7 +226,6 @@ const MailEditor = ({ id }) => {
       return;
     }
 
-    
     editorRef.current.exportHtml(async (data) => {
       const { html } = data;
       setHtml(html);
