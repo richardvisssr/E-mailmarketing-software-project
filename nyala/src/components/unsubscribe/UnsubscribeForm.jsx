@@ -133,11 +133,12 @@ export default function UnsubscribeForm({ userid, emailid }) {
   const handleReasonSubmit = async () => {
     try {
       const reasonResponse = await fetch("http://localhost:3001/reason", {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        credentials: "include",
         body: JSON.stringify({ reden: reason }),
       });
 
