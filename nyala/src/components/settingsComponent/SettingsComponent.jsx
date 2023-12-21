@@ -11,6 +11,7 @@ function SettingsComponent() {
   const [expirationTime, setExpirationTime] = useState("");
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState(false);
+  const [update, setUpdate] = useState(false);
   const [shouldUpdateInterval, setUpdateInterval] = useState(false);
   const [shouldUpdateExpiration, setUpdateExpiration] = useState(false);
   const [shouldUpdateActivityLog, setUpdateActivityLog] = useState(false);
@@ -66,6 +67,7 @@ function SettingsComponent() {
         const data = await response.json();
         Cookies.set("apiToken", data.token);
         apiToken = data.token;
+        setUpdate(!update);
       } else {
         setNotification({
           type: "error",
@@ -156,7 +158,7 @@ function SettingsComponent() {
             .then((data) => {
               Cookies.set("apiToken", data.token);
               apiToken = data.token;
-
+              setUpdate(!update);
               setLoading(false);
             });
         }
@@ -169,7 +171,7 @@ function SettingsComponent() {
       }
     };
     retrieveSettings();
-  }, []);
+  }, [update]);
 
   useEffect(() => {
     const updateInterval = async () => {
