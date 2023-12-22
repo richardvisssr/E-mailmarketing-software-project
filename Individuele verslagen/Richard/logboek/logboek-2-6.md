@@ -42,7 +42,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 6.5 ex pauze |https://github.com/HANICA-DWA/project-sep23-nyala/issues/186 Vandaag bezig geweest met het opzetten van de analyse panel voor het online weergeven en uischrijven per email. Nu nog alleen nog via server opgeslagen en niet met database. Als een persoon in zijn mail zijn link opend om online te weergeven wordt hij doorgestuurd naar analyse pagina die waarde verhoogt in server. | Groepsgenoten indien relevant | Enezijds goed om niet meteen naar databse te sturen en lagen gescheiden te houden. Hierdoor kan ik eerst de functionaliteit testen.  |:smiley:, :satisfied:,  | [link naar de resultaten] https://github.com/HANICA-DWA/project-sep23-nyala/commit/a15b1e13f8d7788b4358fe02462180ed1f7f1446 |
 | | | | | | |
 
 ## Vrijdag 15 december
@@ -51,5 +51,5 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| 6.5 | https://github.com/HANICA-DWA/project-sep23-nyala/issues/186 vandaag begonnen met het versturen naar database zodat gegevens ook opgeslagen worden. Was nog wel beetje een uitdaging om gegevens te verwerken naar database. Ook geregeld dat voor geplannede mails de functionaliteit ook werkt omdat deze een andere endpoint heeft en andere database collection. Heb veel moeten aanpassen om het ook bij geplannede mails te laten werken | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  :smiley:, :rage: :satisfied: | https://github.com/HANICA-DWA/project-sep23-nyala/commit/c5df62d7b11a7640fcd01a415833a3a6712aaed8#diff-676cb09a758d2691219a1c5a9fceaeb573641d43222c484868c48d7b7a07983b |
 | | | | | | |
