@@ -27,29 +27,29 @@
 | 5.50 uur ex pauze en status gesprek met Bart | [Issue 6](https://github.com/HANICA-DWA/project-sep23-nyala/issues/6) - De email moest online kunnen worden geopend voor het geval het in de email niet goed is weergegeven. Er is een link onderaan de pagina waarin er wordt verwezen naar een lege pagina waar de HTML van de email wordt opgehaald aan de hand van een ID | Groepsgenoten indien relevant | Subscribers opslaan via database ipv front end opslaan en meesturen via URL voor het uitschrijven. Eerst wel over nagedacht maar eerst gekozen voor front end manier maar later door security redenen toch aanpassen naar database en dan ophalen.  |:smiley:, :rage:, :scream:, :satisfied: | [Pull Request Commits 1](https://github.com/HANICA-DWA/project-sep23-nyala/pull/116/commits/a24456daa42a09c1ac89ec4a57642ecba3e5705a), [Pull Request Commits 2](https://github.com/HANICA-DWA/project-sep23-nyala/pull/116/commits/21d31d4e7bdc54d7023e88dc4c8126c23e536bdd) |
 | | | | | | |
 
-## Woensdag 29 december
+### Woensdag 29 december
 
-> Eventueel informatieve algemene opmerkingen over deze dag.
-
-| Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
-|---|---|---|---|---|---|
-| 4 uur | [Issue 6](https://github.com/HANICA-DWA/project-sep23-nyala/issues/6), [Issue 117](https://github.com/HANICA-DWA/project-sep23-nyala/issues/117) - De online email moest beveiligd worden zodat als subscribers zich willen afmelden via de meegestuurde mail niet direct hun email in de URL wordt getoond maar hun ID en de email via een fetch wordt opgehaald bij het unsubscriben. Hierbij heb ik gebruik gemaakt om subscribers mee te sturen naar de databse als email wordt opgeslagen die veronzden moet worden. Daarna heb ik een taak aangemaakt om templates te kunnen verwijderen | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [Commit 1](https://github.com/HANICA-DWA/project-sep23-nyala/commit/4f7cbfede75d9108e42120976b8f19830623e0a3), [Commit 2](https://github.com/HANICA-DWA/project-sep23-nyala/commit/0d9fccaac5fa348622454347db3fbae478199076) |
-| | | | | | |
-
-## Donderdag 30 december
-
-> Eventueel informatieve algemene opmerkingen over deze dag.
+#### Algemene opmerkingen
+*Voeg hier eventuele informatieve algemene opmerkingen over deze dag toe.*
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
-|---|---|---|---|---|---|
-| 6 uur ex pauze | [Issue 117] https://github.com/HANICA-DWA/project-sep23-nyala/issues/117, Vandaag bezig geweest met template verwijderen Ging snel en vlot. Na review nog wat aanapssingen gedaan. Terwijl ik de taak aan het maken was heb ik ook nog wat andere aanpassingen gedaan zoals code opschonen en goede eroor handling toegevoegd. Verder bezig geweest voor individueel tussentijds verslag. | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | https://github.com/HANICA-DWA/project-sep23-nyala/commit/eb04fb9291e3cfc68f2ea8a7b7e5b430d2888214, https://github.com/HANICA-DWA/project-sep23-nyala/commit/62cc13f0914b8b03be3c52317628b6aba49ddbe2|
-| | | | | | |
+|------|-------|---------|------------|--------|------|
+| 4 uur | [Issue 6](https://github.com/HANICA-DWA/project-sep23-nyala/issues/6), [Issue 117](https://github.com/HANICA-DWA/project-sep23-nyala/issues/117) - De online email moest beveiligd worden zodat als subscribers zich willen afmelden via de meegestuurde mail niet direct hun email in de URL wordt getoond maar hun ID en de email via een fetch wordt opgehaald bij het unsubscriben. Hierbij heb ik gebruik gemaakt om subscribers mee te sturen naar de database als email wordt opgeslagen die verzonden moet worden. Daarna heb ik een taak aangemaakt om templates te kunnen verwijderen | Groepsgenoten indien relevant | Belangrijke inhoudelijke overwegingen en/of leerpunten, puzzels, frustraties, etc.  | :smiley: | [Commit 1](https://github.com/HANICA-DWA/project-sep23-nyala/commit/4f7cbfede75d9108e42120976b8f19830623e0a3), [Commit 2](https://github.com/HANICA-DWA/project-sep23-nyala/commit/0d9fccaac5fa348622454347db3fbae478199076) |
 
-## Vrijdag 1 december
+### Donderdag 30 december
 
-> Eventueel informatieve algemene opmerkingen over deze dag.
+#### Algemene opmerkingen
+*Voeg hier eventuele informatieve algemene opmerkingen over deze dag toe.*
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
-|---|---|---|---|---|---|
-| 6 uur ex pauze | Taak was code doorlopen en zelf verbeteringen zoeken, Zoals bugs gefixt die in development zaten, Delete template aangepast zodat hij ook uit de state wordt verwijderd. Automatiseren van gegevens ophalen en email plaatsen op de unsubscribe pagina voor subscribers om te deabboneren vanuit de email. | Matthias. Unsubscribe is voornamlijk zijn funcionaliteit. | Dacht dat ik een goede endpoint had gebruikt voor het unsibscriben en ophalen van gegevens maar dat bleek op het einde niet zo te zijn dus aan het einde van de dag nog moeten fixen omdat we niet wisten waar het probleem vandaan kwam. Toen oude code maar weer terug gezet en maandag mee verder.  |:rage:, Lange (voor mijn gevoel) vermoeide dag | https://github.com/HANICA-DWA/project-sep23-nyala/commit/b5cb44fc586ee092166a83b356f69c5267558169, https://github.com/HANICA-DWA/project-sep23-nyala/commit/312dee2dcde8bbf7dd71b95355265f08144a27a7, https://github.com/HANICA-DWA/project-sep23-nyala/commit/d1de47977f8f53da5ead274f6437ca7585fe8273, https://github.com/HANICA-DWA/project-sep23-nyala/commit/fc8c1d7b77c4af3c1645e232b62fc800a07522cf, https://github.com/HANICA-DWA/project-sep23-nyala/commit/0c3e6bd591f030344bc0a412f8c0fecc1f6983b6, https://github.com/HANICA-DWA/project-sep23-nyala/commit/74f4f5dd188c7b6d5351c8d56905781db850214f|
-| | | | | | |
+|------|-------|---------|------------|--------|------|
+| 6 uur ex pauze | [Issue 117](https://github.com/HANICA-DWA/project-sep23-nyala/issues/117) - Vandaag bezig geweest met template verwijderen. Ging snel en vlot. Na review nog wat aanpassingen gedaan. Terwijl ik de taak aan het maken was, heb ik ook nog wat andere aanpassingen gedaan, zoals code opschonen en goede error handling toegevoegd. Verder bezig geweest voor individueel tussentijds verslag. | Groepsgenoten indien relevant | Belangrijke inhoudelijke overwegingen en/of leerpunten, puzzels, frustraties, etc.  | :satisfied: | [Commit 1](https://github.com/HANICA-DWA/project-sep23-nyala/commit/eb04fb9291e3cfc68f2ea8a7b7e5b430d2888214), [Commit 2](https://github.com/HANICA-DWA/project-sep23-nyala/commit/62cc13f0914b8b03be3c52317628b6aba49ddbe2)|
+
+### Vrijdag 1 december
+
+#### Algemene opmerkingen
+*Voeg hier eventuele informatieve algemene opmerkingen over deze dag toe.*
+
+| Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
+|------|-------|---------|------------|--------|------|
+| 6 uur ex pauze | Taak was code doorlopen en zelf verbeteringen zoeken, zoals bugs gefixt die in development zaten, Delete template aangepast zodat hij ook uit de state wordt verwijderd. Automatiseren van gegevens ophalen en email plaatsen op de unsubscribe pagina voor subscribers om te deabonneren vanuit de email. | Matthias. Unsubscribe is voornamelijk zijn functionaliteit. | Dacht dat ik een goede endpoint had gebruikt voor het unsubscriben en ophalen van gegevens, maar dat bleek op het einde niet zo te zijn dus aan het einde van de dag nog moeten fixen omdat we niet wisten waar het probleem vandaan kwam. Toen oude code maar weer terug gezet en maandag mee verder.  | :rage: Lange (voor mijn gevoel) vermoeide dag | [Commit 1](https://github.com/HANICA-DWA/project-sep23-nyala/commit/b5cb44fc586ee092166a83b356f69c5267558169), [Commit 2](https://github.com/HANICA-DWA/project-sep23-nyala/commit/312dee2dcde8bbf7dd71b95355265f08144a27a7), [Commit 3](https://github.com/HANICA-DWA/project-sep23-nyala/commit/d1de47977f8f53da5ead274f6437ca7585fe8273), [Commit 4](https://github.com/HANICA-DWA/project-sep23-nyala/commit/fc8c1d7b77c4af3c1645e232b62fc800a07522cf), [Commit 5](https://github.com/HANICA-DWA/project-sep23-nyala/commit/0c3e6bd591f030344bc0a412f8c0fecc1f6983b6), [Commit 6](https://github.com/HANICA-DWA/project-sep23-nyala/commit/74f4f5dd188c7b6d5351c8d56905781db850214f)|
