@@ -14,7 +14,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
+| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) Vandaag websockets geimplementeerd in mijn taak omdat het handig is om de analyse in de analyse panel geupdate te zien als een abbonee op een link klikt uit de mail. Deze keer ging websockets beter want snapte er nu al wat meer van in tegenstelling tot vorige week. Nu kon ik mijn kennis sneller toepassen. Daarna toen de webscokets werkten met het update en ontvangen van de gegevens werkte moest ik nog wat error handling toepassen nadat het gereviewed was.  | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
 | | | | | | |
 
 
