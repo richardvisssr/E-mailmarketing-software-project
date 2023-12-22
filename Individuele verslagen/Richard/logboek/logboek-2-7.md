@@ -43,11 +43,9 @@
 ### Algemene opmerkingen
 *Voeg hier eventuele informatieve algemene opmerkingen over deze dag toe.*
 
-| Uren | Taak
-
-  | Met Wie | Resultaten | Emotie | Link |
+| Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |------|-------|---------|------------|--------|------|
-| 7 uur ex. pauze | In de ochtend workshop gehad over end-to-end testen. Verder bezig geweest om de merge van alle userstories in test-dev te laten werken in de branch, dus was de hele dag bezig met fixen en nog meer fixen. Ook kwam onze skills projectbegeleider om onze leerdoelen te reviewen. Omdat er veel is gecommit deze dag heb ik een bij link een link gestuurd van url met mij als author en datum van vandaag | Met iedereen samengewerkt om dev werkend te krijgen voor morgen de sprint review | Communicatie wie wat doet is de key. anders duurt het fixen langer. Nu ging alles redelijk vlekkeloos door goed te communiceren.  |:smiley: :satisfied: | [Commits](https://github.com/HANICA-DWA/project-sep23-nyala/commits/development?author=richardvisssr&since=2023-12-21&until=2023-12-21) |
+| 7 uur ex. pauze | In de ochtend workshop gehad over end-to-end testen. Verder bezig geweest om de merge van alle userstories in test-dev te laten werken in de branch, dus was de hele dag bezig met fixen en nog meer fixen. Ook kwam onze skills projectbegeleider om onze leerdoelen te reviewen. Omdat er veel is gecommit deze dag heb ik een bij link een link gestuurd van url met mij als auteur en datum van vandaag | Met iedereen samengewerkt om dev werkend te krijgen voor morgen de sprint review | Communicatie wie wat doet is de key. anders duurt het fixen langer. Nu ging alles redelijk vlekkeloos door goed te communiceren.  |:smiley: :satisfied: | [Commits](https://github.com/HANICA-DWA/project-sep23-nyala/commits/development?author=richardvisssr&since=2023-12-21&until=2023-12-21) |
 
 ## Vrijdag 22 december
 
@@ -58,3 +56,4 @@
 |------|-------|---------|------------|--------|------|
 | 2 uur | Sprint review en nu vakantie!!! Sprint review ging goed, alleen nog paar opmerkingen en kleine bugs die ik heb genoteerd voor post-game |   |:smiley: :satisfied: | [Notule sprint 3 review](https://github.com/HANICA-DWA/project-sep23-nyala/blob/main/documentatie/Notule%20sprint%203%20review)|
 | | | | | | |
+
