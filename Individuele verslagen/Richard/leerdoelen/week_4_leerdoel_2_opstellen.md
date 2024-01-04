@@ -20,6 +20,8 @@ Do: voer het plan uit en verzamel betrouwbare (proces)data
 Check: ga na of de resultaten voldoen aan de doelen & KPI’s
 Actualize: stuur de uitvoering bij & schaal op of af
 
+Gertjanschop. (2023, May 3). INK-model in PCDA-Cirkel - managementmodellensite. Managementmodellensite. https://managementmodellensite.nl/ink-model-pcda-cirkel/
+
 ## Om mijn leerdoel te bereiken ga ik de volgende acties op de volgende momenten uitvoeren:
 Ik ga kleinere taken creëren of duidelijkere beschrijvingen met eventueel een plan van aanpak toevoegen aan grotere taken. Ook ga ik tussendoor testen en controleren, vooral bij taken met zowel front-end als back-end aspecten.
 
