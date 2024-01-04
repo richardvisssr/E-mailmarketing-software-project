@@ -26,6 +26,8 @@ Het geeft anderen de kans om hun ideeën te delen zonder onderbroken te worden. 
 - Oefenen met actief luisteren en anderen de ruimte geven om te praten.
 - Controleren of mijn benadering in lijn is met wat anderen willen.
 
+Actief luisteren. (2023, Oktober 16). Zorgvoorbeter_Nl. https://www.zorgvoorbeter.nl/kennis-delen/tools/actief-luisteren
+Janse, B. (2023, October 24). Actief luisteren: de uitleg en betekenis - Toolshero. Toolshero. https://www.toolshero.nl/communicatie-modellen/actief-luisteren/
 >> 
 
 ## Om mijn leerdoel te bereiken ga ik de volgende acties op de volgende momenten uitvoeren:
