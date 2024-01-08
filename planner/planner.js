@@ -157,7 +157,16 @@ async function checkEmails() {
   try {
     for (const email of emails) {
       const success = await sendEmail(email);
-
+      if (email.subscribers.length === 0) {
+        email.status = "Mislukt";
+        await email.save();
+        sendWebsocketMessage({
+          type: "update",
+          message: "Failed to send email",
+        });
+        continue;
+      }
+      
       if (success) {
         email.status = "Verzonden";
         email.sent = true;
