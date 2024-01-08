@@ -14,6 +14,7 @@ function MailCalendar(props) {
   const [showFutureMails, setShowFutureMails] = useState(false);
   const [emailDate, setEmailDate] = useState("");
   const [emailTitle, setEmailTitle] = useState("");
+  const [selectBackgroundClass, setSelectBackgroundClass] = useState("");
   const [id, setId] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const currentYear = date.getFullYear();
@@ -24,6 +25,27 @@ function MailCalendar(props) {
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
   const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
   lastDayOfMonth.setHours(23, 59, 59, 999);
+
+  const handleStatusChange = (e) => {
+    const status = e.target.value;
+    setStatusFilter(status);
+    setShowFutureMails(false);
+
+    switch (status) {
+      case 'In afwachting':
+        setSelectBackgroundClass(`${styles.statusPending}`);
+        break;
+      case 'Verzonden':
+        setSelectBackgroundClass(`${styles.statusSuccess}`);
+        break;
+      case 'Mislukt':
+        setSelectBackgroundClass(`${styles.statusError}`);
+        break;
+      default:
+        setSelectBackgroundClass(``);
+        break;
+    }
+  };
 
   const updateEmailDate = (e) => {
     setEmailDate(e.target.value);
@@ -190,6 +212,7 @@ function MailCalendar(props) {
                   setShowFutureMails(!showFutureMails);
                   setStatusFilter("");
                   setDate(new Date());
+                  setSelectBackgroundClass(``);
                 }}
               />
               <label
@@ -202,12 +225,10 @@ function MailCalendar(props) {
             <div className="form-group mb-3">
               <label htmlFor="statusFilterSelect">Filter op status:</label>
               <select
-                className="form-select"
-                id="statusFilterSelect"
+                className={`form-control ${selectBackgroundClass}`}
                 value={statusFilter}
                 onChange={(e) => {
-                  setStatusFilter(e.target.value);
-                  setShowFutureMails(false);
+                  handleStatusChange(e);
                 }}
               >
                 <option value="">Alle</option>
