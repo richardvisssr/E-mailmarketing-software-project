@@ -4,6 +4,7 @@ const ws = require("ws");
 const express = require("express");
 const session = require("express-session");
 const { PlannedEmail } = require("../server/model/emailEditor");
+const EmailAnalytics = require("../server/model/emailAnalytics");
 const fs = require("fs");
 const path = require("path");
 
@@ -70,9 +71,9 @@ async function sendEmail(email) {
       const personalizedHtmlText = email.html.replace(
         /href="([^"]*)"/g,
         function (match, originalUrl) {
-          return `href="${analysisPageUrl}${encodeURIComponent(
-            originalUrl
-          )}/${email.mailId}/1"`;
+          return `href="${analysisPageUrl}${encodeURIComponent(originalUrl)}/${
+            email.mailId
+          }/1"`;
         }
       );
 
@@ -116,6 +117,7 @@ async function sendEmail(email) {
       
         `,
       };
+      sentSubscribers.push(subscriber.email);
 
       await new Promise((resolve, reject) => {
         transporter.sendMail(mailOptions, (error, info) => {
@@ -129,12 +131,32 @@ async function sendEmail(email) {
         });
       });
     }
+    const emailAnalytics = await createOrUpdateEmailAnalytics(
+      email.mailId,
+      sentSubscribers
+    );
 
     return true;
   } catch (error) {
     console.error("Error sending email:", error);
     return false;
   }
+}
+
+async function createOrUpdateEmailAnalytics(id, sentSubscribers) {
+  let emailAnalytics = await EmailAnalytics.findOne({ emailId: id });
+
+  if (emailAnalytics) {
+    emailAnalytics.recipientCount += sentSubscribers.length;
+  } else {
+    emailAnalytics = new EmailAnalytics({
+      emailId: id,
+      recipientCount: sentSubscribers.length,
+    });
+  }
+  await emailAnalytics.save();
+
+  return emailAnalytics;
 }
 
 // Function to check for emails and send email if necessary
@@ -159,6 +181,7 @@ async function checkEmails() {
       const success = await sendEmail(email);
 
       if (success) {
+        sendWebsocketMessage({ type: "sendEmail", templateId: emails.mail });
         email.status = "Verzonden";
         email.sent = true;
         await email.save();
