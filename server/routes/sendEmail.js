@@ -3,6 +3,7 @@ const nodemailer = require("nodemailer");
 const { PlannedEmail, Email } = require("../model/emailEditor");
 const path = require("path");
 const fs = require("fs");
+const cheerio = require("cheerio");
 const { sendWebsocketMessage } = require("../utils/websockets");
 
 const router = express.Router();
@@ -13,6 +14,57 @@ router.post("/sendEmail", async (req, res) => {
 
     const imagePath = path.join(__dirname, "xtend-logo.webp");
     const imageAsBase64 = fs.readFileSync(imagePath, { encoding: "base64" });
+
+    const $ = cheerio.load(html);
+    const bodyBackground = $("body").css("background-color");
+  
+    function getReadableTextColor(bodyBackground) {
+      // Convert hex color to RGB
+      const rgbColor = hexToRgb(bodyBackground);
+  
+      switch (rgbColor) {
+        case "rgb(255, 255, 255)": // White background
+          return "#282828"; // Dark text
+        case "rgb(0, 0, 0)": // Black background
+          return "#ffffff"; // Light text
+        default:
+          // For other background colors, determine the contrast and choose text color accordingly
+          const luminance = calculateLuminance(rgbColor);
+          return luminance > 0.5 ? "#282828" : "#ffffff"; // Use dark text for light backgrounds, and light text for dark backgrounds
+      }
+    }
+  
+    function calculateLuminance(rgbColor) {
+      // Convert RGB color to relative luminance using the formula for sRGB luminance
+      const rgbArray = rgbColor.match(/\d+/g).map(Number);
+      const [r, g, b] = rgbArray.map((value) => {
+        value /= 255;
+        return value <= 0.03928
+          ? value / 12.92
+          : Math.pow((value + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    }
+  
+    function hexToRgb(hexColor) {
+      // Convert hex color to RGB
+      const hex = hexColor.replace(
+        /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
+        (m, r, g, b) => {
+          return "#" + r + r + g + g + b + b;
+        }
+      );
+  
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result
+        ? `rgb(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(
+            result[3],
+            16
+          )})`
+        : null;
+    }
+  
+    const textColor = getReadableTextColor(bodyBackground);
 
     if (subscribers.length === 0) {
       res.status(400).json({ error: "No subscribers found" });
@@ -64,7 +116,7 @@ router.post("/sendEmail", async (req, res) => {
         to: subscriber.email,
         subject: `${subject}`,
         html: `
-        <div style="text-align: center; padding: 10px; font-family: 'Arial', sans-serif;">
+        <div style="text-align: center; padding: 10px; font-family: 'Arial', sans-serif; color: ${textColor}">
         ${showHeader ? ` ${personalizedHeaderText}` : ""}
         </div>
         <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
