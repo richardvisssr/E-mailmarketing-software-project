@@ -122,7 +122,7 @@ router.post("/sendEmail", async (req, res) => {
         <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
         ${personalizedHtmlText}
       </div>
-      <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
+      <div style="background-color: #ffffff; font-family: 'Arial', sans-serif; text-align: center; padding: 10px; color: #000000">
         <p>
           Bekijk de online versie van deze e-mail
           <a href="http://localhost:3000/analyse/onlineEmail/${id}/${

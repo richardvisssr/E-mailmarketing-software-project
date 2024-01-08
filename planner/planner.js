@@ -152,7 +152,7 @@ async function sendEmail(email) {
           <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: ${textColor}">
           ${personalizedHtmlText}
         </div>
-        <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
+        <div style="background-color: #fff; font-family: 'Arial', sans-serif; text-align: center; padding: 10px; color: #000">
           <p>
             Bekijk de online versie van deze e-mail
             <a href="http://localhost:3000/analyse/onlineEmail/${
@@ -221,7 +221,6 @@ async function checkEmails() {
         });
         continue;
       }
-
 
       if (success) {
         email.status = "Verzonden";
