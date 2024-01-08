@@ -14,7 +14,7 @@ router.post("/sendEmail", async (req, res) => {
     const imagePath = path.join(__dirname, "xtend-logo.webp");
     const imageAsBase64 = fs.readFileSync(imagePath, { encoding: "base64" });
 
-    if (subscribers.length === 0) {
+    if (subscribers.length < 1) {
       res.status(400).json({ error: "No subscribers found" });
       return;
     }
