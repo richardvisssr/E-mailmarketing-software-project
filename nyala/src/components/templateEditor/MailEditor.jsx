@@ -196,7 +196,7 @@ const MailEditor = ({ id }) => {
     }
 
     if (mails.length > 0) {
-      await sendDataToSendEmail(
+      const post = await sendDataToSendEmail(
         html,
         sentData.subscribersData,
         subject,
@@ -204,11 +204,18 @@ const MailEditor = ({ id }) => {
         headerText,
         id
       );
-      setShow(false);
-      setNotification({
-        type: "success",
-        message: "Mail is succesvol verstuurd.",
-      });
+      if (post === "no_members") {
+        setModalNotification({
+          type: "error",
+          message: "Er zijn geen leden in de geselecteerde lijst(en).",
+        });
+      } else if (post === true) {
+        setShow(false);
+        setNotification({
+          type: "success",
+          message: "Mail is succesvol verstuurd.",
+        });
+      }
     } else {
       setModalNotification({
         type: "error",
@@ -253,10 +260,18 @@ const MailEditor = ({ id }) => {
           }),
         });
         if (!response.ok) {
-          setNotification({
-            type: "error",
-            message: "Er is iets fout gegaan tijdens het inplannen",
-          });
+          console.log("res");
+          if (response.status === 400) {
+            setModalNotification({
+              type: "error",
+              message: "Er zijn geen leden in de geselecteerde lijst(en).",
+            });
+          } else {
+            setNotification({
+              type: "error",
+              message: "Er is iets fout gegaan tijdens het inplannen",
+            });
+          }
         }
         setShow(false);
         setNotification({

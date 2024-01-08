@@ -145,7 +145,9 @@ function TemplateCard(props) {
   }, [template.id]);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:3001/isMailSended/${template.id}`, { headers: { Authorization: `Bearer ${token}` }})
+    fetch(`http://127.0.0.1:3001/isMailSended/${template.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((data) => {
         if (data.status === 200) {
           setEmailSent(true);
@@ -177,7 +179,7 @@ function TemplateCard(props) {
     }
 
     if (mails.length > 0) {
-      await sendDataToSendEmail(
+      const sent = await sendDataToSendEmail(
         html,
         sentData.subscribersData,
         subject,
@@ -185,12 +187,19 @@ function TemplateCard(props) {
         headerText,
         template.id
       );
-      props.setNotification((prevNotification) => ({
-        ...prevNotification,
-        type: "success",
-        message: "Mail is succesvol verstuurd.",
-      }));
-      setShow(false);
+      if (sent === "no_members") {
+        setNotification({
+          type: "error",
+          message: "Er zijn geen leden in de geselecteerde lijst(en).",
+        });
+      } else if (sent === true) {
+        props.setNotification((prevNotification) => ({
+          ...prevNotification,
+          type: "success",
+          message: "Mail is succesvol verstuurd.",
+        }));
+        setShow(false);
+      }
     } else {
       setNotification({
         type: "error",
