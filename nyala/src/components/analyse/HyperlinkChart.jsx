@@ -18,7 +18,15 @@ const UnsubscribeReasonChart = ({ linkData }) => {
     svg.selectAll("*").remove();
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-    const linked = linkData.map((item) => item.link);
+    const linked = linkData.map((item) => {
+      if (item.link.length > 30) {
+        return item.link.substring(0, 30) + "...";
+      } else {
+        return item.link;
+      }
+    });
+
+    const completeLink = linkData.map((item) => item.link);
     const count = linkData.map((item) => item.count);
 
     const barHeight = 20;
@@ -35,7 +43,7 @@ const UnsubscribeReasonChart = ({ linkData }) => {
 
     const y = d3
       .scaleBand()
-      .domain(d3.sort(linkData, (d) => -d.count).map((d) => d.link))
+      .domain(linked)
       .rangeRound([margin.top, height - margin.bottom])
       .padding(0.2);
 
@@ -59,7 +67,9 @@ const UnsubscribeReasonChart = ({ linkData }) => {
     svg
       .append("g")
       .attr("transform", `translate(${margin.left},0)`)
-      .call(d3.axisLeft(y));
+      .call(d3.axisLeft(y))
+      .selectAll("text")
+      .html((d, i) => `<a href="${completeLink[i]}">${linked[i]}</a>`);
 
     svg
       .append("g")
