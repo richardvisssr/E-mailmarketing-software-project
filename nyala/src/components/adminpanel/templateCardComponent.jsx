@@ -247,19 +247,28 @@ function TemplateCard(props) {
           }),
         });
         if (!response.ok) {
+          if (response.status === 400) {
+            setNotification({
+              type: "error",
+              message: "Er zijn geen leden in de geselecteerde lijst(en).",
+            });
+          } else {
+            props.setNotification((prevNotification) => ({
+              ...prevNotification,
+              type: "error",
+              message: "Er is iets misgegaan bij het versturen van de mail",
+            }));
+            setShow(false);
+          }
+        } else {
           props.setNotification((prevNotification) => ({
             ...prevNotification,
-            type: "error",
-            message: "Er is iets misgegaan bij het versturen van de mail",
+            type: "success",
+            message: "Mail is succesvol ingepland",
           }));
+          setShow(false);
+          socket.send("Email send");
         }
-        props.setNotification((prevNotification) => ({
-          ...prevNotification,
-          type: "success",
-          message: "Mail is succesvol ingepland",
-        }));
-        setShow(false);
-        socket.send("Email send");
       } catch (error) {
         props.setNotification((prevNotification) => ({
           ...prevNotification,

@@ -8,8 +8,14 @@ const { sendWebsocketMessage } = require("../utils/websockets");
 const router = express.Router();
 
 const subLengthCheck = (subscribers) => {
-  if (subscribers.length < 1) {
-    return res.status(400).json({ error: "No subscribers found" });
+  try {
+    if (subscribers.length < 1) {
+      return false;
+    } else {
+      return true;
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -19,7 +25,10 @@ router.post("/sendEmail", async (req, res) => {
     const imagePath = path.join(__dirname, "xtend-logo.webp");
     const imageAsBase64 = fs.readFileSync(imagePath, { encoding: "base64" });
 
-    subLengthCheck(subscribers);
+    if (!subLengthCheck(subscribers)) {
+      res.status(400).json({ error: "No subscribers found" });
+      return;
+    }
 
     let transporter = nodemailer.createTransport({
       host: "145.74.104.216",
@@ -129,6 +138,11 @@ router.put("/planMail", async (req, res) => {
       subject,
     } = req.body;
 
+    if (!subLengthCheck(subs)) {
+      res.status(400).json({ error: "No subscribers found" });
+      return;
+    }
+
     const subscribers = subs.map((subscriberArray) => {
       const subscriber = subscriberArray[0];
       return {
@@ -137,8 +151,6 @@ router.put("/planMail", async (req, res) => {
         email: subscriber.email,
       };
     });
-
-    subLengthCheck(subscribers);
 
     const planMail = await PlannedEmail.findOne({ id });
     if (planMail) {

@@ -260,7 +260,6 @@ const MailEditor = ({ id }) => {
           }),
         });
         if (!response.ok) {
-          console.log("res");
           if (response.status === 400) {
             setModalNotification({
               type: "error",
@@ -272,12 +271,13 @@ const MailEditor = ({ id }) => {
               message: "Er is iets fout gegaan tijdens het inplannen",
             });
           }
+        } else {
+          setShow(false);
+          setNotification({
+            type: "success",
+            message: "Mail is succesvol ingepland.",
+          });
         }
-        setShow(false);
-        setNotification({
-          type: "success",
-          message: "Mail is succesvol ingepland.",
-        });
       } catch (error) {
         setEmailSent(false);
       }
