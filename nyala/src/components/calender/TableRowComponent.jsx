@@ -8,7 +8,17 @@ function TableRowComponent(props) {
       <td title={mail.subject}>{props.formatSubject(mail.subject)}</td>
       <td>{props.formatDate(mail.date)}</td>
       <td>{props.formatTime(mail.date)}</td>
-      <td>{mail.status}</td>
+      {
+        <td style={
+          mail.status === "Mislukt"
+            ? { backgroundColor: "#ff00003b" }
+            : mail.status === "Verzonden"
+            ? { backgroundColor: "#00d60019" }
+            : { backgroundColor: "#ffd61f40"}
+        }>
+          {mail.status}
+        </td>
+      }
       <td className="text-end">
         {mail.status !== "Verzonden" && (
           <i

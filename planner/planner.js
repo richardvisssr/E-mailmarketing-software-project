@@ -227,7 +227,7 @@ async function checkEmails() {
         });
         continue;
       }
-
+      
       if (success) {
         email.status = "Verzonden";
         email.sent = true;
