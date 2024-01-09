@@ -67,24 +67,10 @@ function TemplateCard(props) {
   };
 
   const handleHeaderTextChange = (e) => {
-    if (e.target.value.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Header mag niet leeg zijn",
-      });
-      return;
-    }
     setHeaderText(e.target.value);
   };
 
   const handleSubjectChange = (e) => {
-    if (e.target.value.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Onderwerp mag niet leeg zijn",
-      });
-      return;
-    }
     setSubject(e.target.value);
   };
 
@@ -105,6 +91,9 @@ function TemplateCard(props) {
     setEmails([]);
     setDateTime("");
     setSubscribers([]);
+    setSubject("");
+    setHeaderText("");
+    setShowHeader(false);
   }, [show]);
 
   useEffect(() => {
@@ -159,13 +148,13 @@ function TemplateCard(props) {
       });
   }, []);
 
-  const handleSendEmailClick = async () => {
+  const checkIfEmailCanBeSent = () => {
     if (!subject || subject.trim() === "") {
       setNotification({
         type: "error",
         message: "Onderwerp mag niet leeg zijn!",
       });
-      return;
+      return false;
     }
 
     if (!html || html.trim() === "") {
@@ -173,6 +162,20 @@ function TemplateCard(props) {
         type: "error",
         message: "Design is nog niet opgeslagen en is leeg",
       });
+      return false;
+    }
+
+    if (!headerText || headerText.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Header mag niet leeg zijn!",
+      });
+      return false;
+    }
+  };
+
+  const handleSendEmailClick = async () => {
+    if (!checkIfEmailCanBeSent()) {
       return;
     }
 
@@ -200,19 +203,7 @@ function TemplateCard(props) {
   };
 
   const handlePlanMail = async () => {
-    if (!subject || subject.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Onderwerp mag niet leeg zijn!",
-      });
-      return;
-    }
-
-    if (!html || html.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Design is nog niet opgeslagen en is leeg",
-      });
+    if (!checkIfEmailCanBeSent()) {
       return;
     }
 
