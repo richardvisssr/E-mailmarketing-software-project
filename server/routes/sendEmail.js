@@ -1,6 +1,7 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
 const { PlannedEmail, Email } = require("../model/emailEditor");
+const EmailAnalytics = require("../model/emailAnalytics");
 const path = require("path");
 const fs = require("fs");
 const cheerio = require("cheerio");
@@ -8,10 +9,21 @@ const { sendWebsocketMessage } = require("../utils/websockets");
 
 const router = express.Router();
 
+const subLengthCheck = (subscribers) => {
+  try {
+    if (subscribers.length < 1) {
+      return false;
+    } else {
+      return true;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 router.post("/sendEmail", async (req, res) => {
   try {
     const { html, subscribers, subject, showHeader, headerText, id } = req.body;
-
     const imagePath = path.join(__dirname, "xtend-logo.webp");
     const imageAsBase64 = fs.readFileSync(imagePath, { encoding: "base64" });
 
@@ -72,7 +84,7 @@ router.post("/sendEmail", async (req, res) => {
   
     const textColor = getReadableTextColor(bodyBackground);
 
-    if (subscribers.length === 0) {
+    if (!subLengthCheck(subscribers)) {
       res.status(400).json({ error: "No subscribers found" });
       return;
     }
@@ -151,12 +163,33 @@ router.post("/sendEmail", async (req, res) => {
       sentSubscribers.push(subscriber.email);
     }
     sendWebsocketMessage({ type: "sendEmail", templateId: id });
+    const emailAnalytics = await createOrUpdateEmailAnalytics(
+      id,
+      sentSubscribers
+    );
+
     res.status(200).json({ success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error sending email" });
   }
 });
+
+async function createOrUpdateEmailAnalytics(id, sentSubscribers) {
+  let emailAnalytics = await EmailAnalytics.findOne({ emailId: id });
+
+  if (emailAnalytics) {
+    emailAnalytics.recipientCount += sentSubscribers.length;
+  } else {
+    emailAnalytics = new EmailAnalytics({
+      emailId: id,
+      recipientCount: sentSubscribers.length,
+    });
+  }
+  await emailAnalytics.save();
+
+  return emailAnalytics;
+}
 
 router.get("/isMailSended/:id", async (req, res) => {
   try {
@@ -173,8 +206,23 @@ router.get("/isMailSended/:id", async (req, res) => {
 
 router.put("/planMail", async (req, res) => {
   try {
-    const { mailId, id, title, html, subs, date, showHeader, headerText, subject } =
-      req.body;
+    const {
+      mailId,
+      id,
+      title,
+      html,
+      subs,
+      date,
+      showHeader,
+      headerText,
+      subject,
+    } = req.body;
+
+    if (!subLengthCheck(subs)) {
+      res.status(400).json({ error: "No subscribers found" });
+      return;
+    }
+
     const subscribers = subs.map((subscriberArray) => {
       const subscriber = subscriberArray[0];
       return {
