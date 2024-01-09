@@ -5,13 +5,11 @@ const secretKey = "z576lkp4tMzGqP0KOINOE+De3ajsPJChBk+bhJ9XoxF9VJG4E0Da+g==";
 
 async function verifyToken(req, res, next) {
   const token = req.headers.authorization.split(" ")[1];
-
-  if (!token) {
+  const dbToken = await Token.findOne({ token: token });
+  if (!token && !dbToken) {
     res.status(401).send({ message: "Unauthorized: token missing" });
     return;
   }
-
-  const dbToken = await Token.findOne({ token: token });
 
   if (!dbToken) {
     jwt.verify(token, secretKey, (err, decoded) => {

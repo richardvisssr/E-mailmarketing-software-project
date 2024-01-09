@@ -8,8 +8,11 @@ app.use(express.json());
 app.use("/", routes);
 
 const PlannedEmail = mongoose.model("PlannedEmail");
+let token;
 
 beforeAll(async () => {
+  token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3MjI0NjgsImV4cCI6MTcxMjQ5ODQ2OH0.a-WwuZn-jBwTfZi3UIvCrJxr-dU8cyyKAnZZCVAtByU";
   if (mongoose.connection.readyState === 0) {
     await mongoose.connect(`mongodb://localhost:27017/nyala`);
   }
@@ -25,7 +28,7 @@ beforeEach(async () => {
     sended: false,
     showHeader: true,
     subject: "testSubject",
-    status: "In afwachting"
+    status: "In afwachting",
   };
 
   await PlannedEmail.create(plannedEmailData);
@@ -51,6 +54,7 @@ describe("PUT /planMail", () => {
       .send({
         id: "testPlannedEmailId",
         title: "testTitle",
+        mailId: "testMailId",
         html: "<p>Test HTML content</p>",
         subs: [
           { _id: "1234567", name: "test1", email: "test1@gmail.com" },
@@ -59,7 +63,8 @@ describe("PUT /planMail", () => {
         date: new Date(),
         showHeader: true,
         subject: "testSubject",
-      });
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.statusCode).toBe(200);
     expect(response.text).toBe("Mail planned successfully");
@@ -71,13 +76,15 @@ describe("PUT /planMail", () => {
       .send({
         id: "testPlannedEmailId",
         title: "testTitle",
+        mailId: "testMailId",
         html: "<p>Test HTML content</p>",
         subs: [{ _id: "1234567", name: "test1", email: "test@gmail.com" }],
         date: new Date(),
         sended: false,
         showHeader: true,
         subject: "testSubject",
-      });
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.statusCode).toBe(200);
     expect(response.text).toBe("Mail planned successfully");
@@ -89,12 +96,14 @@ describe("PUT /planMail", () => {
       .send({
         id: "testPlannedEmailId2",
         title: "testTitle",
+        mailId: "testMailId",
         html: "<p>Test HTML content</p>",
         subs: [{ _id: "1234568", name: "test1", email: "jan@gmail.com" }],
         date: new Date(),
         showHeader: true,
         subject: "testSubject",
-      });
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.statusCode).toBe(200);
     expect(response.text).toBe("Mail planned successfully");
@@ -118,7 +127,8 @@ describe("PUT /planMail", () => {
         date: new Date(),
         showHeader: true,
         subject: "testSubject",
-      });
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.statusCode).toBe(500);
     expect(response.body).toEqual({ error: "Internal server error" });
@@ -127,7 +137,9 @@ describe("PUT /planMail", () => {
 
 describe("GET /plannedMails", () => {
   it("should respond with an array of planned mails", async () => {
-    const response = await request(app).get("/plannedMails");
+    const response = await request(app)
+      .get("/plannedMails")
+      .set("Authorization", `Bearer ${token}`);
     expect(response.body.plannedMails).toEqual(expect.any(Array));
     expect(response.statusCode).toBe(200);
   });
@@ -137,7 +149,9 @@ describe("GET /plannedMails", () => {
       throw new Error("Internal server error");
     });
 
-    const response = await request(app).get("/plannedMails");
+    const response = await request(app)
+      .get("/plannedMails")
+      .set("Authorization", `Bearer ${token}`);
     expect(response.statusCode).toBe(500);
     expect(response.body).toEqual({ error: "Internal server error" });
   });
@@ -145,7 +159,9 @@ describe("GET /plannedMails", () => {
 
 describe("DELETE /planMail/:id", () => {
   it("should respond with success message when deleting a planned mail", async () => {
-    const response = await request(app).delete("/planMail/testMailId");
+    const response = await request(app)
+      .delete("/planMail/testMailId")
+      .set("Authorization", `Bearer ${token}`);
     expect(response.statusCode).toBe(200);
     expect(response.text).toBe("Mail deleted successfully");
   });
@@ -155,7 +171,9 @@ describe("DELETE /planMail/:id", () => {
       throw new Error("Internal server error");
     });
 
-    const response = await request(app).delete("/planMail/testMailId");
+    const response = await request(app)
+      .delete("/planMail/testMailId")
+      .set("Authorization", `Bearer ${token}`);
     expect(response.statusCode).toBe(500);
     expect(response.body).toEqual({ error: "Internal server error" });
   });
@@ -167,10 +185,13 @@ describe("PUT /updateMail", () => {
       return { save: () => {} };
     });
 
-    const response = await request(app).put("/updateMail").send({
-      id: "testPlannedEmailId",
-      date: new Date(),
-    });
+    const response = await request(app)
+      .put("/updateMail")
+      .send({
+        id: "testPlannedEmailId",
+        date: new Date(),
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.statusCode).toBe(200);
     expect(response.text).toBe("Mail updated successfully");
@@ -181,10 +202,13 @@ describe("PUT /updateMail", () => {
       return null;
     });
 
-    const response = await request(app).put("/updateMail").send({
-      id: "testPlannedEmailId",
-      date: new Date(),
-    });
+    const response = await request(app)
+      .put("/updateMail")
+      .send({
+        id: "testPlannedEmailId",
+        date: new Date(),
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.statusCode).toBe(404);
     expect(response.text).toBe("Mail not found");
@@ -195,10 +219,13 @@ describe("PUT /updateMail", () => {
       throw new Error("Internal server error");
     });
 
-    const response = await request(app).put("/updateMail").send({
-      id: "testPlannedEmailId",
-      date: new Date(),
-    });
+    const response = await request(app)
+      .put("/updateMail")
+      .send({
+        id: "testPlannedEmailId",
+        date: new Date(),
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.statusCode).toBe(500);
     expect(response.body).toEqual({ error: "Internal server error" });

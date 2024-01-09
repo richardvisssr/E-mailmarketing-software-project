@@ -3,9 +3,12 @@ const request = require("supertest");
 const { app, httpServer, server } = require("../app");
 
 const MailList = require("../model/mailList");
+let token;
 
 describe("Mail List API", () => {
   beforeAll(async () => {
+    token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3MjI0NjgsImV4cCI6MTcxMjQ5ODQ2OH0.a-WwuZn-jBwTfZi3UIvCrJxr-dU8cyyKAnZZCVAtByU";
     if (mongoose.connection.readyState === 0) {
       await mongoose.connect("mongodb://127.0.0.1:27017/nyalaTest", {
         useNewUrlParser: true,
@@ -34,7 +37,9 @@ describe("Mail List API", () => {
   });
 
   test("MailList get test", async () => {
-    const response = await request(app).get("/mail/getList");
+    const response = await request(app)
+      .get("/mail/getList")
+      .set("Authorization", `Bearer ${token}`);
 
     const expectedResult = ["Nieuwsbrief", "CMD", "ICT", "Leden"];
 
@@ -44,19 +49,24 @@ describe("Mail List API", () => {
     );
   });
 
-  test('response should be same as created list', async () => {
-    const response = await request(app).get('/mail/getList');
+  test("response should be same as created list", async () => {
+    const response = await request(app)
+      .get("/mail/getList")
+      .set("Authorization", `Bearer ${token}`);
     const expectedResult = ["Nieuwsbrief", "CMD", "ICT", "Leden"];
 
     expect(response.status).toBe(200);
-    expect(response.body[0].mailList).toEqual(expect.arrayContaining(expectedResult));
+    expect(response.body[0].mailList).toEqual(
+      expect.arrayContaining(expectedResult)
+    );
   });
 
   test("MailList add test 200", async () => {
     const newName = "NewList";
     const response = await request(app)
       .put("/mail/addList")
-      .send({ name: newName });
+      .send({ name: newName })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body.mailList).toContain(newName);
@@ -67,7 +77,9 @@ describe("Mail List API", () => {
       throw new Error("Simulated internal server error");
     });
 
-    const response = await request(app).get("/mail/getList");
+    const response = await request(app)
+      .get("/mail/getList")
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(500);
     expect(response.body.message).toBe("Internal server error");
@@ -79,7 +91,8 @@ describe("Mail List API", () => {
 
     const response = await request(app)
       .put("/mail/addList")
-      .send({ name: newName });
+      .send({ name: newName })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(404);
     expect(response.body.message).toBe("List not found");
@@ -93,25 +106,32 @@ describe("Mail List API", () => {
     const newName = "NewList";
     const response = await request(app)
       .put("/mail/addList")
-      .send({ name: newName });
+      .send({ name: newName })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(500);
     expect(response.body.message).toBe("Internal server error");
   });
 
   test("Delete mailList", async () => {
-    const response = await request(app).delete("/mail/deleteList").send({
-      name: "ICT",
-    });
+    const response = await request(app)
+      .delete("/mail/deleteList")
+      .send({
+        name: "ICT",
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body.mailList).not.toBe("ICT");
   });
 
   test("Delete mailList that doesnt exist", async () => {
-    const response = await request(app).delete("/mail/deleteList").send({
-      name: "Bestaat niet",
-    });
+    const response = await request(app)
+      .delete("/mail/deleteList")
+      .send({
+        name: "Bestaat niet",
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(404);
     expect(response.body.message).toBe("List not found");

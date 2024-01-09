@@ -145,7 +145,9 @@ function TemplateCard(props) {
   }, [template.id]);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:3001/isMailSended/${template.id}`, { headers: { Authorization: `Bearer ${token}` }})
+    fetch(`http://127.0.0.1:3001/isMailSended/${template.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((data) => {
         if (data.status === 200) {
           setEmailSent(true);

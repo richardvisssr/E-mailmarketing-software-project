@@ -8,6 +8,7 @@ const router = require("../routes/sendEmail");
 const app = express();
 app.use(express.json());
 app.use("/sendEmail", router);
+let token;
 
 describe("Email Router", () => {
   let testAccount;
@@ -15,6 +16,8 @@ describe("Email Router", () => {
   let subscribers;
 
   beforeAll(async () => {
+    token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3MjI0NjgsImV4cCI6MTcxMjQ5ODQ2OH0.a-WwuZn-jBwTfZi3UIvCrJxr-dU8cyyKAnZZCVAtByU";
     testAccount = await nodemailer.createTestAccount();
     transporter = nodemailer.createTransport({
       host: "smtp.ethereal.email",
@@ -33,7 +36,7 @@ describe("Email Router", () => {
       await mongoose.connect(`mongodb://127.0.0.1:27017/nyalaTest`);
     }
   });
-  
+
   afterEach(async () => {
     await mongoose.disconnect();
   });
@@ -46,13 +49,13 @@ describe("Email Router", () => {
         name: `Subscriber ${index + 1}`,
         subscription: ["ICT", "CMD", "Leden"],
       });
-  
+
       return subscriber.save();
     });
-  
+
     // Wait for all promises to resolve
     subscribers = await Promise.all(subscriberPromises);
-  
+
     // Check that 500 subscribers were added
     const count = await Subscriber.countDocuments({});
     expect(count).toBe(500);
@@ -63,33 +66,32 @@ describe("Email Router", () => {
 
     const response = await request(app)
       .post("/sendEmail/sendEmail")
-      .send({ html: htmlContent, subscribers });
+      .send({ html: htmlContent, subscribers, id })
+    .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
-
-  },150000);
+  }, 150000);
 
   test("should return 404 error for invalid route", async () => {
-    const response = await request(app).get("/sendEmail/invalidRoute");
+    const response = await request(app)
+      .get("/sendEmail/invalidRoute")
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(404);
-
   });
 
   test("should return 500 error for internal server error", async () => {
-
-    jest.spyOn(nodemailer, 'createTransport').mockImplementation(() => {
-      throw new Error('Internal Server Error');
+    jest.spyOn(nodemailer, "createTransport").mockImplementation(() => {
+      throw new Error("Internal Server Error");
     });
 
     const htmlContent = "<p>This is the email content</p>";
 
     const response = await request(app)
       .post("/sendEmail/sendEmail")
-      .send({ html: htmlContent, subscribers });
+      .send({ html: htmlContent, subscribers })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(500);
-
   });
-  
 });

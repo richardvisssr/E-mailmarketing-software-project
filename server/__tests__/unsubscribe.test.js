@@ -4,12 +4,14 @@ const { app, httpServer, server } = require("../app");
 
 const { Subscriber } = require("../model/subscribers");
 const { response } = require("express");
-
+let token;
 
 describe("Subscribers routes test", () => {
   let subscriberEmail;
 
   beforeAll(async () => {
+    token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3MjI0NjgsImV4cCI6MTcxMjQ5ODQ2OH0.a-WwuZn-jBwTfZi3UIvCrJxr-dU8cyyKAnZZCVAtByU";
     if (mongoose.connection.readyState === 0) {
       await mongoose.connect("mongodb:127.0.0.1:27017/nyalaTest", {
         useNewUrlParser: true,
@@ -53,7 +55,8 @@ describe("Subscribers routes test", () => {
         email: "test@example.com",
         name: "Test",
         subscriptions: ["Newsletter", "Members"],
-      });
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ message: "Internal Server Error" });
@@ -62,7 +65,8 @@ describe("Subscribers routes test", () => {
   test("Adding reason to unsubscribe", async () => {
     const response = await request(app)
       .post("/reason")
-      .send({ reden: "Ik wil geen mail meer" });
+      .send({ reden: "Ik wil geen mail meer" })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ message: "Reason added" });
@@ -75,14 +79,17 @@ describe("Subscribers routes test", () => {
         email: subscriberEmail.email,
         name: subscriberEmail.name,
         subscriptions: ["Leden"],
-      });
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ message: "Subscriber updated" });
   });
 
   test("Getting the subscribtions of an subscriber", async () => {
-    const response = await request(app).get(`/${subscriberEmail._id}/subs`);
+    const response = await request(app)
+      .get(`/${subscriberEmail._id}/subs`)
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
   });
@@ -90,7 +97,8 @@ describe("Subscribers routes test", () => {
   test("Removing an user from the database", async () => {
     const response = await request(app)
       .delete("/unsubscribe")
-      .send({ email: subscriberEmail.email });
+      .send({ email: subscriberEmail.email })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ message: "Subscriber removed" });
@@ -99,7 +107,8 @@ describe("Subscribers routes test", () => {
   test("Removing an user that doesn't exist", async () => {
     const response = await request(app)
       .delete("/unsubscribe")
-      .send({ email: "Test@test.nl" });
+      .send({ email: "Test@test.nl" })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Subscriber not found" });
@@ -112,7 +121,8 @@ describe("Subscribers routes test", () => {
         email: subscriberEmail.email,
         name: subscriberEmail.name,
         subscriptions: ["Nieuwsbrief"],
-      });
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
@@ -121,9 +131,12 @@ describe("Subscribers routes test", () => {
   });
 
   test("Removing something without a subscription given", async () => {
-    const response = await request(app).delete("/unsubscribe/subs").send({
-      email: subscriberEmail.email,
-    });
+    const response = await request(app)
+      .delete("/unsubscribe/subs")
+      .send({
+        email: subscriberEmail.email,
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({
@@ -138,7 +151,8 @@ describe("Subscribers routes test", () => {
         email: "Test@tes.nl",
         name: "Test",
         subscriptions: ["Nieuwsbrief"],
-      });
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
@@ -153,7 +167,8 @@ describe("Subscribers routes test", () => {
         email: "test@example.com",
         name: "Test",
         subscriptions: ["Leden", "Nieuwsbrief"],
-      });
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ message: "New subscriber added" });
@@ -164,16 +179,20 @@ describe("Subscribers routes test", () => {
       .post("/subscribers/add")
       .send({
         subscription: ["Leden", "Nieuwsbrief"],
-      });
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ message: "Bad Request: Invalid input" });
   });
 
   test("Adding a subscriber with missing subscription", async () => {
-    const response = await request(app).post("/subscribers/add").send({
-      email: "test@example.com",
-    });
+    const response = await request(app)
+      .post("/subscribers/add")
+      .send({
+        email: "test@example.com",
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ message: "Bad Request: Invalid input" });
@@ -186,7 +205,8 @@ describe("Subscribers routes test", () => {
         email: "invalidemail",
         name: "Test",
         subscriptions: ["Leden", "Nieuwsbrief"],
-      });
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({
@@ -211,7 +231,9 @@ describe("Subscribers routes test", () => {
 
     jest.spyOn(Subscriber, "find").mockResolvedValue(subscribers);
 
-    const response = await request(app).get("/subscribers/all");
+    const response = await request(app)
+      .get("/subscribers/all")
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual(subscribers);
@@ -235,7 +257,8 @@ describe("Subscribers routes test", () => {
         email: subscriberEmail.email,
         name: subscriberEmail.name,
         subscriptions: ["Leden"],
-      });
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
@@ -252,7 +275,8 @@ describe("Subscribers routes test", () => {
       .send({
         name: newName,
         email: newEmail,
-      });
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ message: "Subscriber updated" });
@@ -271,7 +295,8 @@ describe("Subscribers routes test", () => {
       .send({
         name: newName,
         email: newEmail,
-      });
+      })
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({
@@ -286,7 +311,9 @@ describe("Subscribers routes test", () => {
 
     jest.spyOn(Subscriber, "find").mockResolvedValue(subscribers);
 
-    const response = await request(app).delete(`/unsubscribe/${subscription}`);
+    const response = await request(app)
+      .delete(`/unsubscribe/${subscription}`)
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "No subscribers found" });
@@ -303,7 +330,9 @@ describe("Subscribers routes test", () => {
       .spyOn(Subscriber, "find")
       .mockRejectedValue(new Error("Internal server error"));
 
-    const response = await request(app).delete(`/unsubscribe/${subscription}`);
+    const response = await request(app)
+      .delete(`/unsubscribe/${subscription}`)
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ message: "Internal server error" });
@@ -315,15 +344,25 @@ describe("Subscribers routes test", () => {
 
   test("Get all subscribers", async () => {
     const subscribers = [
-      { email: "subscriber1@example.com", name: "Subscriber 1", subscriptions: ["Nieuwsbrief"] },
-      { email: "subscriber2@example.com", name: "Subscriber 2", subscriptions: ["Nieuwsbrief"] },
+      {
+        email: "subscriber1@example.com",
+        name: "Subscriber 1",
+        subscriptions: ["Nieuwsbrief"],
+      },
+      {
+        email: "subscriber2@example.com",
+        name: "Subscriber 2",
+        subscriptions: ["Nieuwsbrief"],
+      },
     ];
 
     const selectedMailingList = ["Nieuwsbrief"];
 
     jest.spyOn(Subscriber, "find").mockResolvedValue(subscribers);
 
-    const response = await request(app).get(`/subscribers?selectedMailingList=${selectedMailingList.join(",")}`);
+    const response = await request(app)
+      .get(`/subscribers?selectedMailingList=${selectedMailingList.join(",")}`)
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual(subscribers);
@@ -334,9 +373,13 @@ describe("Subscribers routes test", () => {
   test("error status 500 when getting all subscribers", async () => {
     const selectedMailingList = ["Nieuwsbrief"];
 
-    jest.spyOn(Subscriber, "find").mockRejectedValue(new Error("Internal server error"));
+    jest
+      .spyOn(Subscriber, "find")
+      .mockRejectedValue(new Error("Internal server error"));
 
-    const response = await request(app).get(`/subscribers?selectedMailingList=${selectedMailingList.join(",")}`);
+    const response = await request(app)
+      .get(`/subscribers?selectedMailingList=${selectedMailingList.join(",")}`)
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ message: "Internal server error" });
@@ -346,7 +389,9 @@ describe("Subscribers routes test", () => {
 
   test("Get subs of subscriber that doesn't exist", async () => {
     const fakeId = "5f9e9b6b0f1b3c1b7c9b1b1b";
-    const response = await request(app).get(`/${fakeId}/subs`);
+    const response = await request(app)
+      .get(`/${fakeId}/subs`)
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Subscriber not found" });
