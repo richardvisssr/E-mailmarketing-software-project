@@ -2,8 +2,7 @@ const express = require("express");
 const request = require("supertest");
 const routes = require("../routes/templateRoutes");
 const mongoose = require("mongoose");
-
-const app = express();
+const { app, httpServer, server } = require("../app");
 app.use(express.json());
 app.use("/", routes);
 
@@ -39,6 +38,9 @@ afterAll(async () => {
   if (mongoose.connection.readyState !== 0) {
     await mongoose.disconnect();
   }
+
+  httpServer.close();
+  server.close();
 });
 
 describe("GET /templates", () => {

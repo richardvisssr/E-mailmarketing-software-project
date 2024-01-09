@@ -22,6 +22,10 @@ const emailSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  headerText: {
+    type: String,
+    required: false,
+  },
   html: {
     type: String,
     required: true,
@@ -30,9 +34,21 @@ const emailSchema = new mongoose.Schema({
     type: Array,
     required: true,
   },
+  subject: {
+    type: String,
+    required: true,
+  },
+  showHeader: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 const plannedEmailSchema = new mongoose.Schema({
+  mailId: {
+    type: String,
+    required: true,
+  },
   id: {
     type: String,
     required: true,
@@ -54,7 +70,7 @@ const plannedEmailSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  sended: {
+  sent: {
     type: Boolean,
     required: true,
   },
@@ -62,9 +78,18 @@ const plannedEmailSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
+  headerText: {
+    type: String,
+    required: false,
+  },
   subject: {
     type: String,
     required: true,
+  },
+  status: {
+    type: String,
+    enum: ["Verzonden", "In afwachting", "Mislukt"],
+    default: "In afwachting",
   },
 });
 

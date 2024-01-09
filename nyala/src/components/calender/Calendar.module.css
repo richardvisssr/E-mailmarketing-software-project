@@ -1,7 +1,28 @@
 .icon {
-    cursor: pointer;
-  }
-  
-  .icon:hover {
-    color: #a66cf2; /* Set the color you want on hover */
-  }
+  cursor: pointer;
+}
+
+.icon:hover {
+  color: #a66cf2;
+}
+
+.monthContainer {
+  min-width: 200px;
+  text-align: center;
+}
+
+.customSelect {
+  accent-color: #a66cf2;
+}
+
+.statusError {
+  background: #ff00003b;
+}
+
+.statusSuccess {
+  background: #00d60019;
+}
+
+.statusPending {
+  background: #ffd61f40;
+}

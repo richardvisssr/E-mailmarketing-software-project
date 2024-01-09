@@ -4,13 +4,16 @@ import dynamic from "next/dynamic";
 import { Modal, Button, Alert } from "react-bootstrap";
 import SelectMailingLists from "./SendMail";
 import { nanoid } from "nanoid";
-import sendDataToSendEmail from "../emailService";
+import sendDataToSendEmail from "../EmailService";
 import AlertComponent from "../alert/AlertComponent";
+import Cookies from "js-cookie";
+import styles from "./MailEditor.module.css";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
 const MailEditor = ({ id }) => {
   const editorRef = useRef(null);
+  const [headerText, setHeaderText] = useState("");
   const [show, setShow] = useState(false);
   const [mails, setMails] = useState([]);
   const [title, setTitle] = useState("");
@@ -26,6 +29,7 @@ const MailEditor = ({ id }) => {
     type: "",
     message: "",
   });
+  const token = Cookies.get("token");
 
   useEffect(() => {
     setPlanned(false);
@@ -36,11 +40,22 @@ const MailEditor = ({ id }) => {
     setSentData(data);
   };
 
+  const handleHeaderTextChange = (e) => {
+    if (e.target.value.trim() === "") {
+      setModalNotification({
+        type: "error",
+        message: "Header mag niet leeg zijn.",
+      });
+      return;
+    }
+    setHeaderText(e.target.value);
+  };
+
   const handleSubjectChange = (e) => {
     if (e.target.value.trim() === "") {
       setModalNotification({
         type: "error",
-        message: "Onderwerp mag niet leeg zijn",
+        message: "Onderwerp mag niet leeg zijn.",
       });
       return;
     }
@@ -53,6 +68,7 @@ const MailEditor = ({ id }) => {
 
   const handleClose = () => {
     setShow(false);
+    setShowHeader(false);
   };
   const handleShow = () => setShow(true);
 
@@ -63,15 +79,19 @@ const MailEditor = ({ id }) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
           },
+          credentials: "include",
           body: JSON.stringify({ design, id, title }),
         });
         if (!response.ok) {
           setNotification({
             type: "error",
-            message: "Er ging iets fout met het opslaan van het design",
+            message: "Er ging iets fout met het opslaan van het design.",
           });
+          return;
         }
+        setShow(false);
         setNotification({
           type: "success",
           message: "Design is succesvol opgeslagen!",
@@ -79,7 +99,7 @@ const MailEditor = ({ id }) => {
       } catch (error) {
         setNotification({
           type: "error",
-          message: `Er ging iets fout met het opslaan van het design`,
+          message: `Er ging iets fout met het opslaan van het design.`,
         });
       }
     });
@@ -95,19 +115,22 @@ const MailEditor = ({ id }) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
           },
+          credentials: "include",
           body: JSON.stringify({ html: html, id: id }),
         });
         if (!response.ok) {
           setNotification({
             type: "error",
-            message: "Er ging iets fout met het opslaan van de html",
+            message: "Er ging iets fout met het opslaan van de html.",
           });
         }
+        setShow(false);
       } catch (error) {
         setNotification({
           type: "error",
-          message: `Error tijdens het opslaan van de html`,
+          message: `Error tijdens het opslaan van de html.`,
         });
       }
     });
@@ -117,28 +140,8 @@ const MailEditor = ({ id }) => {
     editorRef.current.exportHtml(async (data) => {
       const { html } = data;
       setHtml(html);
-      try {
-        const response = await fetch("http://localhost:3001/mail/sendEmail", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ html: html, id: id }),
-        });
-        if (!response.ok) {
-          setNotification({
-            type: "error",
-            message: "Er ging iets fout met het versturen van de mail",
-          });
-        }
-      } catch (error) {
-        setNotification({
-          type: "error",
-          message: `Er ging iets mis met het versturen van de mail`,
-        });
-      }
-      handleShow();
     });
+    handleShow();
   };
 
   const onReady = () => {
@@ -151,8 +154,9 @@ const MailEditor = ({ id }) => {
         `http://localhost:3001/mail/loadDesign/${id}`,
         {
           method: "GET",
+          credentials: "include",
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -174,7 +178,7 @@ const MailEditor = ({ id }) => {
     } catch (error) {
       setNotification({
         type: "error",
-        message: `Er is iets misgegaan bij het laden van de mail`,
+        message: `Er is iets misgegaan bij het laden van de mail.`,
       });
     } finally {
       editorRef.current = editor;
@@ -197,11 +201,18 @@ const MailEditor = ({ id }) => {
         sentData.subscribersData,
         subject,
         showHeader,
+        headerText,
         id
       );
-      setModalNotification({
+      setShow(false);
+      setNotification({
         type: "success",
-        message: "Mail is succesvol verstuurd",
+        message: "Mail is succesvol verstuurd.",
+      });
+    } else {
+      setModalNotification({
+        type: "error",
+        message: "Er zijn geen lijsten geselecteerd!",
       });
     }
   };
@@ -214,6 +225,7 @@ const MailEditor = ({ id }) => {
       });
       return;
     }
+
     editorRef.current.exportHtml(async (data) => {
       const { html } = data;
       setHtml(html);
@@ -223,16 +235,20 @@ const MailEditor = ({ id }) => {
       try {
         const response = await fetch(" http://localhost:3001/planMail", {
           method: "PUT",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
+            mailId: id,
             id: generateUniqueShortId(),
             title: title,
             html: html,
             subs: sentData.subscribersData,
             date: dateTime,
             showHeader: showHeader,
+            headerText: headerText,
             subject: subject,
           }),
         });
@@ -242,13 +258,19 @@ const MailEditor = ({ id }) => {
             message: "Er is iets fout gegaan tijdens het inplannen",
           });
         }
-        setModalNotification({
+        setShow(false);
+        setNotification({
           type: "success",
-          message: "Mail is succesvol ingepland",
+          message: "Mail is succesvol ingepland.",
         });
       } catch (error) {
         setEmailSent(false);
       }
+    } else {
+      setNotification({
+        type: "error",
+        message: "Er zijn geen lijsten geselecteerd!",
+      });
     }
   };
 
@@ -297,10 +319,13 @@ const MailEditor = ({ id }) => {
         />
       </div>
       <div className="p-2 gap-3 d-flex justify-content-center">
-        <button onClick={saveDesign} className="btn btn-primary">
+        <button
+          onClick={saveDesign}
+          className={`btn ${styles.buttonSecondary} `}
+        >
           Design Opslaan
         </button>
-        <button onClick={sendEmail} className="btn btn-primary">
+        <button onClick={sendEmail} className={`btn ${styles.buttonPrimary} `}>
           Email Versturen
         </button>
       </div>
@@ -324,12 +349,31 @@ const MailEditor = ({ id }) => {
           </div>
           <div className="form-check">
             <input
-              className="form-check-input"
+              className={`me-2 control ${styles.customSelect}`}
               type="checkbox"
               onChange={() => setShowHeader(!showHeader)}
             />
             <label className="form-check-label">Header toevoegen</label>
           </div>
+          {showHeader && (
+            <div className="p-2 gap-3 d-flex flex-column justify-content-center">
+              <label className="form-label">
+                Gebruik {"{name}"} om naam toe te voegen en {"{image}"} om xtend
+                logo toe te voegen
+              </label>
+              <textarea
+                value={headerText}
+                onChange={handleHeaderTextChange}
+                placeholder="Voer header tekst in"
+                className="form-control text-center"
+                rows="4"
+                style={{
+                  whiteSpace: "pre-line",
+                  fontFamily: "Arial, sans-serif",
+                }}
+              />
+            </div>
+          )}
           <SelectMailingLists
             id={id}
             setEmails={setMails}
@@ -338,9 +382,10 @@ const MailEditor = ({ id }) => {
           <label className="form-label">Wil je de mail vooruit plannen?</label>
           <div className="form-check">
             <input
-              className="form-check-input"
+              className={`me-2 control ${styles.customSelect}`}
               type="checkbox"
               onChange={() => setPlanned(!planned)}
+              style={{ accentColor: "#a66cf2" }}
             />
             <label className="form-check-label">Ja</label>
           </div>
@@ -361,12 +406,15 @@ const MailEditor = ({ id }) => {
         </Modal.Body>
         <Modal.Footer>
           <Button
-            variant="primary"
             onClick={planned ? handlePlanMail : handleSendEmailClick}
+            className={`btn ${styles.buttonPrimary}`}
           >
             {planned ? "Inplannen" : "Mail versturen"}
           </Button>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button
+            onClick={handleClose}
+            className={`btn ${styles.buttonSecondary}`}
+          >
             Annuleren
           </Button>
         </Modal.Footer>

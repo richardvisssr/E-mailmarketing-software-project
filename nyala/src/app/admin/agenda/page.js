@@ -2,12 +2,28 @@
 import AlertComponent from "@/components/alert/AlertComponent";
 import MailCalendar from "@/components/calender/CalendarComponent";
 import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 function Page() {
+  const socket = new WebSocket("ws://localhost:8000/socket");
   const [emails, setEmails] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [shouldUpdate, setShouldUpdate] = useState(false);
   const [notification, setNotification] = useState({ type: "", message: "" });
+  const token = Cookies.get("token");
+
+  socket.addEventListener("open", (event) => {});
+
+  socket.addEventListener("message", (event) => {
+    try {
+      const message = JSON.parse(event.data);
+      if (message.type === "update") {
+        setShouldUpdate(true);
+      }
+    } catch (error) {
+      console.error("Error parsing WebSocket message");
+    }
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,7 +32,9 @@ function Page() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
+          credentials: "include",
         });
         const jsonData = await response.json();
 
@@ -39,7 +57,9 @@ function Page() {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
+      credentials: "include",
     })
       .then((response) => handleDeleteResponse(response))
       .catch((error) => {

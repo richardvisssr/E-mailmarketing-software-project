@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import SubscriptionForm from "../categories/CategoriesComponent";
-import { Alert } from "react-bootstrap";
 import AlertComponent from "../alert/AlertComponent";
+import Cookies from "js-cookie";
 
 function SelectMailingLists(props) {
   const { id } = props;
@@ -11,9 +11,15 @@ function SelectMailingLists(props) {
   const [subscribers, setSubscribers] = useState([]);
   const [html, setHtml] = useState("");
   const [notification, setNotification] = useState({ type: "", message: "" });
+  const token = Cookies.get("token");
 
   useEffect(() => {
-    fetch("http://localhost:3001/mail/getList")
+    fetch("http://localhost:3001/mail/getList", {
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => setMailingLists(data))
       .catch((error) =>
@@ -30,7 +36,13 @@ function SelectMailingLists(props) {
         fetch(
           `http://localhost:3001/subscribers?selectedMailingList=${selectedMailingList.join(
             ","
-          )}`
+          )}`,
+          {
+            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         )
           .then((response) => response.json())
           .catch((error) => {
@@ -40,7 +52,12 @@ function SelectMailingLists(props) {
             });
             return [];
           }),
-        fetch(`http://localhost:3001/mail/getEmail/${id}`)
+        fetch(`http://localhost:3001/mail/getEmail/${id}`, {
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
           .then((response) => response.json())
           .catch((error) => {
             setNotification({
@@ -93,26 +110,13 @@ function SelectMailingLists(props) {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
               },
+              credentials: "include",
               body: JSON.stringify({
                 html: html,
                 subscribers: subscribers,
                 id: id,
-              }),
-            }
-          );
-
-          const secondResponse = await fetch(
-            "http://localhost:3001/mail/sendEmail",
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                html: html,
-                id: id,
-                subscribers: subscribers,
               }),
             }
           );
@@ -153,29 +157,8 @@ function SelectMailingLists(props) {
       <SubscriptionForm
         subscribers={mailingList[0]?.mailList || []}
         setValue={handleMailingChange}
+        selectedSubscribers={selectedMailingList}
       />
-
-      {selectedMailingList.length > 0 && (
-        <div className="mt-4">
-          <h2 className="h4">Abonnees van geselecteerde mailinglijst:</h2>
-          <table className="table table-bordered">
-            <thead className="table-dark">
-              <tr>
-                <th>Naam</th>
-                <th>Email</th>
-              </tr>
-            </thead>
-            <tbody>
-              {subscribers.map((subscriber) => (
-                <tr key={subscriber._id}>
-                  <td>{subscriber.name}</td>
-                  <td>{subscriber.email}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
     </div>
   );
 }

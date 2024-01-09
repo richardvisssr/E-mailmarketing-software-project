@@ -1,3 +1,4 @@
+const { uid } = require("uid/secure");
 const express = require("express");
 const router = express.Router();
 const { Design, Email } = require("../model/emailEditor");
