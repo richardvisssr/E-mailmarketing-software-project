@@ -106,6 +106,8 @@ router.get("/stats/:emailId", async (req, res) => {
         opened: 0,
         unsubscribed: 0,
         totalLinkClicks: 0,
+        recipientCount: 0,
+        links: [],
       },
     });
   }
@@ -119,6 +121,7 @@ router.get("/stats/:emailId", async (req, res) => {
     [emailId]: {
       opened: analytics.opened,
       unsubscribed: analytics.unsubscribed,
+      recipientCount: analytics.recipientCount,
       totalLinkClicks,
       links: analytics.links,
     },
