@@ -53,16 +53,22 @@ async function sendEmail(email) {
 
   function getReadableTextColor(bodyBackground) {
     // Convert hex color to RGB
-    const rgbColor = hexToRgb(bodyBackground);
+    const rgbColor = () => {
+      if (bodyBackground == "transparent") {
+        return "rgb(255, 255, 255)";
+      } else {
+        return hexToRgb(bodyBackground);
+      }
+    };
 
-    switch (rgbColor) {
+    switch (rgbColor()) {
       case "rgb(255, 255, 255)": // White background
         return "#282828"; // Dark text
       case "rgb(0, 0, 0)": // Black background
         return "#ffffff"; // Light text
       default:
         // For other background colors, determine the contrast and choose text color accordingly
-        const luminance = calculateLuminance(rgbColor);
+        const luminance = calculateLuminance(rgbColor());
         return luminance > 0.5 ? "#282828" : "#ffffff"; // Use dark text for light backgrounds, and light text for dark backgrounds
     }
   }

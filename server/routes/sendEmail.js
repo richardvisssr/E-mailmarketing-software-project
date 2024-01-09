@@ -20,23 +20,29 @@ router.post("/sendEmail", async (req, res) => {
   
     function getReadableTextColor(bodyBackground) {
       // Convert hex color to RGB
-      const rgbColor = hexToRgb(bodyBackground);
+      const rgbColor = () => {
+        if (bodyBackground == "transparent") {
+          return "rgb(255, 255, 255)";
+        } else {
+          return hexToRgb(bodyBackground);
+        }
+      };
   
-      switch (rgbColor) {
+      switch (rgbColor()) {
         case "rgb(255, 255, 255)": // White background
           return "#282828"; // Dark text
         case "rgb(0, 0, 0)": // Black background
           return "#ffffff"; // Light text
         default:
           // For other background colors, determine the contrast and choose text color accordingly
-          const luminance = calculateLuminance(rgbColor);
+          const luminance = calculateLuminance(rgbColor());
           return luminance > 0.5 ? "#282828" : "#ffffff"; // Use dark text for light backgrounds, and light text for dark backgrounds
       }
     }
   
     function calculateLuminance(rgbColor) {
       // Convert RGB color to relative luminance using the formula for sRGB luminance
-      const rgbArray = rgbColor.match(/\d+/g).map(Number);
+      const rgbArray = rgbColor().match(/\d+/g).map(Number);
       const [r, g, b] = rgbArray.map((value) => {
         value /= 255;
         return value <= 0.03928
