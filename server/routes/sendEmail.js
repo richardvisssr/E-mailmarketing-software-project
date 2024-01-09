@@ -1,6 +1,7 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
 const { PlannedEmail, Email } = require("../model/emailEditor");
+const EmailAnalytics = require("../model/emailAnalytics");
 const path = require("path");
 const fs = require("fs");
 const { sendWebsocketMessage } = require("../utils/websockets");
@@ -104,12 +105,33 @@ router.post("/sendEmail", async (req, res) => {
       sentSubscribers.push(subscriber.email);
     }
     sendWebsocketMessage({ type: "sendEmail", templateId: id });
+    const emailAnalytics = await createOrUpdateEmailAnalytics(
+      id,
+      sentSubscribers
+    );
+
     res.status(200).json({ success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error sending email" });
   }
 });
+
+async function createOrUpdateEmailAnalytics(id, sentSubscribers) {
+  let emailAnalytics = await EmailAnalytics.findOne({ emailId: id });
+
+  if (emailAnalytics) {
+    emailAnalytics.recipientCount += sentSubscribers.length;
+  } else {
+    emailAnalytics = new EmailAnalytics({
+      emailId: id,
+      recipientCount: sentSubscribers.length,
+    });
+  }
+  await emailAnalytics.save();
+
+  return emailAnalytics;
+}
 
 router.get("/isMailSended/:id", async (req, res) => {
   try {

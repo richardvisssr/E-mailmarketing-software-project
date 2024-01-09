@@ -93,6 +93,14 @@ async function handleSubscriberRequest(req, res, isEdit) {
     const existingSubscriber = await checkExistingSubscriber(email);
 
     if (existingSubscriber) {
+      if (existingSubscriber.subscription.includes(subscriptions[0])) {
+        return res
+          .status(202)
+          .json({
+            message: "Subscriber already subscribed to particular list",
+          });
+      }
+
       if (isEdit) {
         existingSubscriber.subscription = Array.from(
           new Set([...existingSubscriber.subscription, ...subscriptions])
