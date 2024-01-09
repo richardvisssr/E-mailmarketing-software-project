@@ -1,4 +1,5 @@
 "use client";
+
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import styles from "./button.module.css";
@@ -62,10 +63,16 @@ function TemplateCard(props) {
   const toggleAnalyticsCard = () => {
     setShowAnalytics((prevVisibility) => !prevVisibility);
   };
+
   const setNewTime = (event) => {
     setDateTime(event.target.value);
   };
 
+  /**
+   * Handles changes in the header text input.
+   *
+   * @param {Event} e - The input event containing the new header text value.
+   */
   const handleHeaderTextChange = (e) => {
     if (e.target.value.trim() === "") {
       setNotification({
@@ -77,6 +84,11 @@ function TemplateCard(props) {
     setHeaderText(e.target.value);
   };
 
+  /**
+   * Handles changes in the subject input.
+   *
+   * @param {Event} e - The input event containing the new subject value.
+   */
   const handleSubjectChange = (e) => {
     if (e.target.value.trim() === "") {
       setNotification({
@@ -111,6 +123,20 @@ function TemplateCard(props) {
     router.prefetch(`/mail/${template.id}`);
   }, [router, template.id]);
 
+  /**
+   * Fetches the HTML content of the email template from the server.
+   *
+   * Initiates an asynchronous request to the server to retrieve the HTML content
+   * of the specified email template. If the request is successful, updates the
+   * component state with the retrieved HTML content. If the template has not been
+   * saved or is empty, sets an error notification. If an error occurs during the
+   * fetch process, sets an error notification.
+   *
+   * @async
+   * @function
+   * @throws {Error} If there is an issue with fetching the template content.
+   * @returns {void}
+   */
   useEffect(() => {
     const fetchHtmlContent = async () => {
       try {
@@ -144,8 +170,23 @@ function TemplateCard(props) {
     fetchHtmlContent();
   }, [template.id]);
 
+  /**
+   * Checks if the email associated with the template has been sent.
+   *
+   * Initiates a request to the server to check whether the email associated with
+   * the current template has been sent. If the request is successful and the
+   * status code is 200, sets the `emailSent` state to true. If an error occurs
+   * during the request, sets an error notification.
+   *
+   * @async
+   * @function
+   * @throws {Error} If there is an issue with checking the email sending status.
+   * @returns {void}
+   */
   useEffect(() => {
-    fetch(`http://127.0.0.1:3001/isMailSended/${template.id}`, { headers: { Authorization: `Bearer ${token}` }})
+    fetch(`http://127.0.0.1:3001/isMailSended/${template.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((data) => {
         if (data.status === 200) {
           setEmailSent(true);
@@ -159,6 +200,9 @@ function TemplateCard(props) {
       });
   }, []);
 
+  /**
+   * Sends the email using the provided data.
+   */
   const handleSendEmailClick = async () => {
     if (!subject || subject.trim() === "") {
       setNotification({
@@ -199,6 +243,9 @@ function TemplateCard(props) {
     }
   };
 
+  /**
+   * Plans the email for future sending.
+   */
   const handlePlanMail = async () => {
     if (!subject || subject.trim() === "") {
       setNotification({
@@ -277,6 +324,19 @@ function TemplateCard(props) {
     setShowDeleteModal(false);
   };
 
+  /**
+   * Handles the confirmation of template deletion.
+   *
+   * Initiates the deletion of the current email template by making a DELETE request
+   * to the server. If the deletion is successful, updates the UI and displays a
+   * success notification. If an error occurs during the deletion process,
+   * displays an error notification.
+   *
+   * @async
+   * @function
+   * @throws {Error} If there is an issue with the template deletion process.
+   * @returns {void}
+   */
   const confirmDelete = () => {
     fetch(`http://localhost:3001/template/${template.id}`, {
       method: "DELETE",
@@ -304,7 +364,6 @@ function TemplateCard(props) {
           type: "error",
           message: "Er ging iets mis met het verwijderen van de template",
         });
-        // Handle error as needed
         setShowDeleteModal(false);
       });
   };
@@ -316,14 +375,6 @@ function TemplateCard(props) {
           <Button variant="danger" onClick={handleDelete}>
             Verwijderen
           </Button>
-          {/* {!error && (
-            <Card.Img
-              variant="top"
-              src={image.src}
-              style={{ width: "100%", height: "auto" }}
-            />
-          )} */}
-
           <Card.Body style={{ marginTop: "1.5rem" }}>
             <Card.Title>{template.title}</Card.Title>
             <div className="d-flex justify-content-between">
@@ -422,9 +473,9 @@ function TemplateCard(props) {
                 placeholder="Voer header tekst in"
                 className="form-control text-center"
                 wrap="hard"
-                rows="4" // Set the number of rows as needed
+                rows="4"
                 style={{
-                  whiteSpace: "pre-wrap", // Behoudt witruimte inclusief nieuwe regels
+                  whiteSpace: "pre-wrap",
                   fontFamily: "Arial, sans-serif",
                 }}
               />

@@ -27,6 +27,13 @@ export default function AnalysePanel() {
 
   socket.addEventListener("open", (event) => {});
 
+  /**
+   * Event listener for WebSocket messages. Handles incoming messages and triggers
+   * a state change if the message type is "unsubscribe". Displays an error
+   * notification if there is an issue parsing the message.
+   *
+   * @param {MessageEvent} event - The WebSocket message event.
+   */
   socket.addEventListener("message", (event) => {
     try {
       const message = JSON.parse(event.data);
@@ -41,9 +48,15 @@ export default function AnalysePanel() {
     }
   });
 
+  /**
+   * Fetches and sets the unsubscribe reasons from the server.
+   * Displays an error notification if there is an issue fetching the data.
+   */
   const getUnsubscribeReasons = async () => {
     try {
-  const response = await fetch("http://localhost:3001/unsubscribeReasons", {headers : {Authorization: `Bearer ${token}`}});
+      const response = await fetch("http://localhost:3001/unsubscribeReasons", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await response.json();
 
       if (data.length === 0) {
@@ -68,9 +81,15 @@ export default function AnalysePanel() {
     }
   };
 
+  /**
+   * Fetches and sets the mailing list data from the server.
+   * Displays an error notification if there is an issue fetching the data.
+   */
   const getMailList = async () => {
     try {
-      const response = await fetch("http://localhost:3001/unsubscribe/count", {headers : {Authorization: `Bearer ${token}`}});
+      const response = await fetch("http://localhost:3001/unsubscribe/count", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await response.json();
 
       setMailListData(data);
