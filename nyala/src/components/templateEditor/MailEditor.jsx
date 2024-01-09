@@ -193,10 +193,7 @@ const MailEditor = ({ id }) => {
   };
 
   const handleSendEmailClick = async () => {
-    console.log("handleSendEmailClick");
-
     if (!checkIfEmailCanBeSent()) {
-      console.log("checkIfEmailCanBeSent");
       return;
     }
 
