@@ -165,7 +165,7 @@ function TemplateCard(props) {
       return false;
     }
 
-    if (showHeader && !headerText || headerText.trim() === "") {
+    if (showHeader && headerText.trim() === "") {
       setNotification({
         type: "error",
         message: "Header mag niet leeg zijn!",

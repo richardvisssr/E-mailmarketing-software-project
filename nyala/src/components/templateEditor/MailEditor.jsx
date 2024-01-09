@@ -185,7 +185,7 @@ const MailEditor = ({ id }) => {
       return false;
     }
 
-    if (showHeader && !headerText || headerText.trim() === "") {
+    if (showHeader && headerText.trim() === "") {
       setModalNotification({
         type: "error",
         message: "Header mag niet leeg zijn!",
