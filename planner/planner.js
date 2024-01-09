@@ -3,6 +3,7 @@ const http = require("http");
 const ws = require("ws");
 const express = require("express");
 const session = require("express-session");
+const cheerio = require("cheerio");
 const { PlannedEmail } = require("../server/model/emailEditor");
 const EmailAnalytics = require("../server/model/emailAnalytics");
 const fs = require("fs");
@@ -46,6 +47,64 @@ function sendWebsocketMessage(message) {
 async function sendEmail(email) {
   const imagePath = path.join(__dirname, "xtend-logo.webp");
   const imageAsBase64 = fs.readFileSync(imagePath, { encoding: "base64" });
+  const html = email.html;
+
+  const $ = cheerio.load(html);
+  const bodyBackground = $("body").css("background-color");
+
+  function getReadableTextColor(bodyBackground) {
+    // Convert hex color to RGB
+    const rgbColor = () => {
+      if (bodyBackground == "transparent") {
+        return "rgb(255, 255, 255)";
+      } else {
+        return hexToRgb(bodyBackground);
+      }
+    };
+
+    switch (rgbColor()) {
+      case "rgb(255, 255, 255)": // White background
+        return "#282828"; // Dark text
+      case "rgb(0, 0, 0)": // Black background
+        return "#ffffff"; // Light text
+      default:
+        // For other background colors, determine the contrast and choose text color accordingly
+        const luminance = calculateLuminance(rgbColor());
+        return luminance > 0.5 ? "#282828" : "#ffffff"; // Use dark text for light backgrounds, and light text for dark backgrounds
+    }
+  }
+
+  function calculateLuminance(rgbColor) {
+    // Convert RGB color to relative luminance using the formula for sRGB luminance
+    const rgbArray = rgbColor.match(/\d+/g).map(Number);
+    const [r, g, b] = rgbArray.map((value) => {
+      value /= 255;
+      return value <= 0.03928
+        ? value / 12.92
+        : Math.pow((value + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  }
+
+  function hexToRgb(hexColor) {
+    // Convert hex color to RGB
+    const hex = hexColor.replace(
+      /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
+      (m, r, g, b) => {
+        return "#" + r + r + g + g + b + b;
+      }
+    );
+
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result
+      ? `rgb(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(
+          result[3],
+          16
+        )})`
+      : null;
+  }
+
+  const textColor = getReadableTextColor(bodyBackground);
 
   const transporter = nodemailer.createTransport({
     host: "145.74.104.216",
@@ -59,88 +118,106 @@ async function sendEmail(email) {
 
   let sentSubscribers = [];
 
-  try {
-    for (const subscriber of email.subscribers) {
-      let personalizedHeaderText = email.headerText.replace(
-        "{name}",
-        subscriber.name
-      );
+  if (textColor) {
+    try {
+      for (const subscriber of email.subscribers) {
+        let personalizedHeaderText = email.headerText.replace(
+          "{name}",
+          subscriber.name
+        );
 
-      const analysisPageUrl = `http://localhost:3000/analyse/`;
+        const analysisPageUrl = `http://localhost:3000/analyse/`;
 
-      const personalizedHtmlText = email.html.replace(
-        /href="([^"]*)"/g,
-        function (match, originalUrl) {
-          return `href="${analysisPageUrl}${encodeURIComponent(originalUrl)}/${
-            email.mailId
-          }/1"`;
+        const personalizedHtmlText = email.html.replace(
+          /href="([^"]*)"/g,
+          function (match, originalUrl) {
+            return `href="${analysisPageUrl}${encodeURIComponent(
+              originalUrl
+            )}/${email.mailId}/1"`;
+          }
+        );
+
+        personalizedHeaderText = personalizedHeaderText.replace(/\n/g, "<br>");
+
+        personalizedHeaderText = personalizedHeaderText.replace(
+          "{image}",
+          `<img src="data:image/webp;base64,${imageAsBase64}" alt="Xtend Logo" style="width: 100px; height: auto;" />`
+        );
+
+        if (sentSubscribers.includes(subscriber.email)) {
+          continue;
         }
-      );
 
-      personalizedHeaderText = personalizedHeaderText.replace(/\n/g, "<br>");
-
-      personalizedHeaderText = personalizedHeaderText.replace(
-        "{image}",
-        `<img src="data:image/webp;base64,${imageAsBase64}" alt="Xtend Logo" style="width: 100px; height: auto;" />`
-      );
-
-      if (sentSubscribers.includes(subscriber.email)) {
-        continue;
-      }
-
-      let mailOptions = {
-        from: '"Xtend" <info@svxtend.nl>',
-        to: subscriber.email,
-        subject: `${email.subject}`,
-        html: `
-        <div style="text-align: center; padding: 10px; font-family: 'Arial', sans-serif;">
-        ${email.showHeader ? ` ${personalizedHeaderText}` : ""}
+        let mailOptions = {
+          from: '"Xtend" <info@svxtend.nl>',
+          to: subscriber.email,
+          subject: `${email.subject}`,
+          html: `
+          <div style="text-align: center; padding: 10px; font-family: 'Arial', sans-serif; color: ${textColor}">
+          ${email.showHeader ? ` ${personalizedHeaderText}` : ""}
+          </div>
+          <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: ${textColor}">
+          ${personalizedHtmlText}
         </div>
-        <div style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 16px; color: #333;">
-        ${personalizedHtmlText}
-      </div>
-      <div style="background-color: #f1f1f1; font-family: 'Arial', sans-serif; text-align: center; padding: 10px;">
-        <p>
-          Bekijk de online versie van deze e-mail
-          <a href="http://localhost:3000/analyse/onlineEmail/${email.mailId}/${
-          subscriber.id
-        }" style="text-decoration: none; color: #007BFF;">
-            hier
-          </a>.
-        </p>
-        <a href="http://localhost:3000/unsubscribe/${email.mailId}/${
-          subscriber.id
-        }" style="text-decoration: none;">
-          Uitschrijven
-        </a>
-      </div>
-      
-        `,
-      };
+        <div style="background-color: #fff; font-family: 'Arial', sans-serif; text-align: center; padding: 10px; color: #000">
+          <p>
+            Bekijk de online versie van deze e-mail
+            <a href="http://localhost:3000/analyse/onlineEmail/${
+              email.mailId
+            }/${subscriber.id}" style="text-decoration: none; color: #007BFF;">
+              hier
+            </a>.
+          </p>
+          <a href="http://localhost:3000/unsubscribe/${email.mailId}/${
+            subscriber.id
+          }" style="text-decoration: none;">
+            Uitschrijven
+          </a>
+        </div>
+        
+          `,
+        };
       sentSubscribers.push(subscriber.email);
 
-      await new Promise((resolve, reject) => {
-        transporter.sendMail(mailOptions, (error, info) => {
-          if (error) {
-            console.error("Failed to send email:", error);
-            reject(error);
-          } else {
-            console.log("Email sent:", info.response);
-            resolve();
-          }
+        await new Promise((resolve, reject) => {
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.error("Failed to send email:", error);
+              reject(error);
+            } else {
+              console.log("Email sent:", info.response);
+              resolve();
+            }
+          });
         });
-      });
-    }
+      }
     const emailAnalytics = await createOrUpdateEmailAnalytics(
       email.mailId,
       sentSubscribers
     );
 
-    return true;
-  } catch (error) {
-    console.error("Error sending email:", error);
-    return false;
+      return true;
+    } catch (error) {
+      console.error("Error sending email:", error);
+      return false;
+    }
   }
+}
+
+async function createOrUpdateEmailAnalytics(id, sentSubscribers) {
+  let emailAnalytics = await EmailAnalytics.findOne({ emailId: id });
+
+  if (emailAnalytics) {
+    emailAnalytics.recipientCount += sentSubscribers.length;
+  } else {
+    emailAnalytics = new EmailAnalytics({
+      emailId: id,
+      recipientCount: sentSubscribers.length,
+    });
+  }
+  await emailAnalytics.save();
+
+  return emailAnalytics;
 }
 
 async function createOrUpdateEmailAnalytics(id, sentSubscribers) {

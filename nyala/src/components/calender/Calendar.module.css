@@ -20,6 +20,10 @@
 }
 
 .statusSuccess {
+  background: #282828;
+}
+
+.statusPending {
   background: #00d60019;
 }
 
