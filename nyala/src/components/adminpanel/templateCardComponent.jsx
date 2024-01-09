@@ -152,19 +152,19 @@ function TemplateCard(props) {
 
   const checkIfEmailCanBeSent = () => {
     if (!subject || subject.trim() === "") {
-      setModalNotification({
+      setNotification({
         type: "error",
         message: "Onderwerp mag niet leeg zijn!",
       });
       return false;
     } else if (!html || html.trim() === "") {
-      setModalNotification({
+      setNotification({
         type: "error",
         message: "Design is nog niet opgeslagen en is leeg",
       });
       return false;
     } else if (showHeader && headerText.trim() === "") {
-      setModalNotification({
+      setNotification({
         type: "error",
         message: "Header mag niet leeg zijn!",
       });
