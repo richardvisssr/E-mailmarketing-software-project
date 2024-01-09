@@ -8,14 +8,25 @@ const { sendWebsocketMessage } = require("../utils/websockets");
 
 const router = express.Router();
 
+const subLengthCheck = (subscribers) => {
+  try {
+    if (subscribers.length < 1) {
+      return false;
+    } else {
+      return true;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 router.post("/sendEmail", async (req, res) => {
   try {
     const { html, subscribers, subject, showHeader, headerText, id } = req.body;
-
     const imagePath = path.join(__dirname, "xtend-logo.webp");
     const imageAsBase64 = fs.readFileSync(imagePath, { encoding: "base64" });
 
-    if (subscribers.length === 0) {
+    if (!subLengthCheck(subscribers)) {
       res.status(400).json({ error: "No subscribers found" });
       return;
     }
@@ -148,6 +159,12 @@ router.put("/planMail", async (req, res) => {
       headerText,
       subject,
     } = req.body;
+
+    if (!subLengthCheck(subs)) {
+      res.status(400).json({ error: "No subscribers found" });
+      return;
+    }
+
     const subscribers = subs.map((subscriberArray) => {
       const subscriber = subscriberArray[0];
       return {
