@@ -42,7 +42,7 @@ router.post("/sendEmail", async (req, res) => {
   
     function calculateLuminance(rgbColor) {
       // Convert RGB color to relative luminance using the formula for sRGB luminance
-      const rgbArray = rgbColor().match(/\d+/g).map(Number);
+      const rgbArray = rgbColor.match(/\d+/g).map(Number);
       const [r, g, b] = rgbArray.map((value) => {
         value /= 255;
         return value <= 0.03928

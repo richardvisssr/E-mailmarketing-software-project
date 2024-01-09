@@ -41,24 +41,10 @@ const MailEditor = ({ id }) => {
   };
 
   const handleHeaderTextChange = (e) => {
-    if (e.target.value.trim() === "") {
-      setModalNotification({
-        type: "error",
-        message: "Header mag niet leeg zijn.",
-      });
-      return;
-    }
     setHeaderText(e.target.value);
   };
 
   const handleSubjectChange = (e) => {
-    if (e.target.value.trim() === "") {
-      setModalNotification({
-        type: "error",
-        message: "Onderwerp mag niet leeg zijn.",
-      });
-      return;
-    }
     setSubject(e.target.value);
   };
 
@@ -69,6 +55,10 @@ const MailEditor = ({ id }) => {
   const handleClose = () => {
     setShow(false);
     setShowHeader(false);
+    setHeaderText("");
+    setSubject("");
+    setPlanned(false);
+    setModalNotification({ type: "", message: "" });
   };
   const handleShow = () => setShow(true);
 
@@ -161,14 +151,6 @@ const MailEditor = ({ id }) => {
         }
       );
 
-      // if (!response.ok) {
-      //   setNotification({
-      //     type: "error",
-      //     message: `Er is iets misgegaan bij het laden van de mail`,
-      //   });
-      //   return;
-      // }
-
       const design = await response.json();
 
       if (editorRef.current) {
@@ -186,12 +168,32 @@ const MailEditor = ({ id }) => {
     editorRef.current = editor;
   };
 
-  const handleSendEmailClick = async () => {
+  const checkIfEmailCanBeSent = () => {
     if (!subject || subject.trim() === "") {
       setModalNotification({
         type: "error",
         message: "Onderwerp mag niet leeg zijn!",
       });
+      return false;
+    } else if (!html || html.trim() === "") {
+      setModalNotification({
+        type: "error",
+        message: "Design is nog niet opgeslagen en is leeg",
+      });
+      return false;
+    } else if (showHeader && headerText.trim() === "") {
+      setModalNotification({
+        type: "error",
+        message: "Header mag niet leeg zijn!",
+      });
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const handleSendEmailClick = async () => {
+    if (!checkIfEmailCanBeSent()) {
       return;
     }
 
@@ -218,11 +220,7 @@ const MailEditor = ({ id }) => {
   };
 
   const handlePlanMail = async () => {
-    if (!subject || subject.trim() === "") {
-      setModalNotification({
-        type: "error",
-        message: "Onderwerp mag niet leeg zijn!",
-      });
+    if (!checkIfEmailCanBeSent()) {
       return;
     }
 

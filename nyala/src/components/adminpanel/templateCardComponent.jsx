@@ -67,24 +67,10 @@ function TemplateCard(props) {
   };
 
   const handleHeaderTextChange = (e) => {
-    if (e.target.value.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Header mag niet leeg zijn",
-      });
-      return;
-    }
     setHeaderText(e.target.value);
   };
 
   const handleSubjectChange = (e) => {
-    if (e.target.value.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Onderwerp mag niet leeg zijn",
-      });
-      return;
-    }
     setSubject(e.target.value);
   };
 
@@ -105,6 +91,9 @@ function TemplateCard(props) {
     setEmails([]);
     setDateTime("");
     setSubscribers([]);
+    setSubject("");
+    setHeaderText("");
+    setShowHeader(false);
   }, [show]);
 
   useEffect(() => {
@@ -145,7 +134,9 @@ function TemplateCard(props) {
   }, [template.id]);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:3001/isMailSended/${template.id}`, { headers: { Authorization: `Bearer ${token}` }})
+    fetch(`http://127.0.0.1:3001/isMailSended/${template.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((data) => {
         if (data.status === 200) {
           setEmailSent(true);
@@ -159,20 +150,32 @@ function TemplateCard(props) {
       });
   }, []);
 
-  const handleSendEmailClick = async () => {
+  const checkIfEmailCanBeSent = () => {
     if (!subject || subject.trim() === "") {
       setNotification({
         type: "error",
         message: "Onderwerp mag niet leeg zijn!",
       });
-      return;
-    }
-
-    if (!html || html.trim() === "") {
+      return false;
+    } else if (!html || html.trim() === "") {
       setNotification({
         type: "error",
         message: "Design is nog niet opgeslagen en is leeg",
       });
+      return false;
+    } else if (showHeader && headerText.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Header mag niet leeg zijn!",
+      });
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const handleSendEmailClick = async () => {
+    if (!checkIfEmailCanBeSent()) {
       return;
     }
 
@@ -200,19 +203,7 @@ function TemplateCard(props) {
   };
 
   const handlePlanMail = async () => {
-    if (!subject || subject.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Onderwerp mag niet leeg zijn!",
-      });
-      return;
-    }
-
-    if (!html || html.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Design is nog niet opgeslagen en is leeg",
-      });
+    if (!checkIfEmailCanBeSent()) {
       return;
     }
 
