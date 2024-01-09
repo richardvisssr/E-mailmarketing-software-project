@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import styles from "./resubscribeComponent.module.css";
+import styles from "./ResubscribeComponent.module.css";
 import Cookies from "js-cookie";
 
 export default function ResubscribeComponent({}) {
