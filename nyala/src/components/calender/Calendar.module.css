@@ -14,3 +14,15 @@
 .customSelect {
   accent-color: #a66cf2;
 }
+
+.statusError {
+  background: #ff00003b;
+}
+
+.statusSuccess {
+  background: #00d60019;
+}
+
+.statusPending {
+  background: #ffd61f40;
+}
