@@ -175,27 +175,28 @@ const MailEditor = ({ id }) => {
         message: "Onderwerp mag niet leeg zijn!",
       });
       return false;
-    }
-
-    if (!html || html.trim() === "") {
+    } else if (!html || html.trim() === "") {
       setModalNotification({
         type: "error",
         message: "Design is nog niet opgeslagen en is leeg",
       });
       return false;
-    }
-
-    if (showHeader && headerText.trim() === "") {
+    } else if (showHeader && headerText.trim() === "") {
       setModalNotification({
         type: "error",
         message: "Header mag niet leeg zijn!",
       });
       return false;
+    } else {
+      return true;
     }
   };
 
   const handleSendEmailClick = async () => {
+    console.log("handleSendEmailClick");
+
     if (!checkIfEmailCanBeSent()) {
+      console.log("checkIfEmailCanBeSent");
       return;
     }
 

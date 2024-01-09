@@ -134,7 +134,9 @@ function TemplateCard(props) {
   }, [template.id]);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:3001/isMailSended/${template.id}`, { headers: { Authorization: `Bearer ${token}` }})
+    fetch(`http://127.0.0.1:3001/isMailSended/${template.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((data) => {
         if (data.status === 200) {
           setEmailSent(true);
@@ -150,27 +152,25 @@ function TemplateCard(props) {
 
   const checkIfEmailCanBeSent = () => {
     if (!subject || subject.trim() === "") {
-      setNotification({
+      setModalNotification({
         type: "error",
         message: "Onderwerp mag niet leeg zijn!",
       });
       return false;
-    }
-
-    if (!html || html.trim() === "") {
-      setNotification({
+    } else if (!html || html.trim() === "") {
+      setModalNotification({
         type: "error",
         message: "Design is nog niet opgeslagen en is leeg",
       });
       return false;
-    }
-
-    if (showHeader && headerText.trim() === "") {
-      setNotification({
+    } else if (showHeader && headerText.trim() === "") {
+      setModalNotification({
         type: "error",
         message: "Header mag niet leeg zijn!",
       });
       return false;
+    } else {
+      return true;
     }
   };
 
