@@ -17,6 +17,12 @@ export default function ResubscribeComponent({}) {
     });
   }, []);
 
+  /**
+   * Handles the undo action to resubscribe the user.
+   * @async
+   * @function
+   * @returns {Promise<void>} A promise that resolves when the undo action is complete.
+   */
   const handleUndo = async () => {
     const unsubscribedEmail = localStorage.getItem("unsubscribedEmail");
     const unsubscribedSubs = localStorage.getItem("unsubscribedSubs");
@@ -37,6 +43,14 @@ export default function ResubscribeComponent({}) {
     }
   };
 
+  /**
+   * Attempts to resubscribe the user with the provided email and subscriptions.
+   * @async
+   * @function
+   * @param {string} email - The email address to resubscribe.
+   * @param {Array<string>} subs - An array of subscription strings.
+   * @returns {Promise<boolean>} A promise that resolves to true if resubscription is successful, otherwise false.
+   */
   const resubscribe = async (email, subs) => {
     try {
       const reasonResponse = await fetch(

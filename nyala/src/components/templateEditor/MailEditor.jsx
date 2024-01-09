@@ -11,6 +11,14 @@ import styles from "./MailEditor.module.css";
 
 const EmailEditor = dynamic(() => import("react-email-editor"), { ssr: false });
 
+/**
+ * MailEditor component for composing and sending emails.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {string} props.id - Unique identifier for the mail editor.
+ * @returns {JSX.Element} React component.
+ */
 const MailEditor = ({ id }) => {
   const editorRef = useRef(null);
   const [headerText, setHeaderText] = useState("");
@@ -148,6 +156,11 @@ const MailEditor = ({ id }) => {
     onLoad(editorRef.current);
   };
 
+  /**
+   * Loads a saved email design when the editor is ready.
+   *
+   * @param {Object} editor - The email editor instance.
+   */
   const onLoad = async (editor) => {
     try {
       const response = await fetch(
@@ -160,15 +173,6 @@ const MailEditor = ({ id }) => {
           },
         }
       );
-
-      // if (!response.ok) {
-      //   setNotification({
-      //     type: "error",
-      //     message: `Er is iets misgegaan bij het laden van de mail`,
-      //   });
-      //   return;
-      // }
-
       const design = await response.json();
 
       if (editorRef.current) {

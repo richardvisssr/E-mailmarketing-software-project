@@ -13,6 +13,11 @@ const UnsubscribeReasonChart = ({ linkData }) => {
     }
   }, [linkData]);
 
+  /**
+   * Renders a bar chart using D3.js based on the provided linkData.
+   * @function
+   * @returns {void}
+   */
   const showChart = () => {
     const svg = d3.select(chartRef.current);
     svg.selectAll("*").remove();

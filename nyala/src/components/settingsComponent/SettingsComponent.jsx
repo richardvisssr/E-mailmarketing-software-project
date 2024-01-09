@@ -82,6 +82,16 @@ function SettingsComponent() {
     }
   };
 
+  /**
+   * Parses the user agent string to extract information about the operating system and browser.
+   *
+   * @function
+   * @param {string} userAgent - The user agent string.
+   * @returns {Object} An object containing information about the operating system and browser.
+   * @property {string} osName - The name of the operating system.
+   * @property {string} osVersion - The version of the operating system.
+   * @property {string} browser - The browser used.
+   */
   function parseUserAgent(userAgent) {
     const osRegex = /(Windows|Mac).*?(\d+).*?/;
     const browserRegex = /(Edg|Chrome|Firefox|Safari)/;
@@ -107,7 +117,22 @@ function SettingsComponent() {
     return { osName, osVersion, browser };
   }
 
+  /**
+   * React hook for initializing and updating component state based on user settings and activity log.
+   *
+   * @effect
+   * @async
+   * @function
+   * @returns {void}
+   */
   useEffect(() => {
+    /**
+     * Retrieves user settings and recent activity log from the server.
+     *
+     * @async
+     * @function
+     * @returns {void}
+     */
     const retrieveSettings = async () => {
       try {
         const response = await fetch("http://localhost:3001/settings", {
@@ -173,6 +198,14 @@ function SettingsComponent() {
     retrieveSettings();
   }, [update]);
 
+  /**
+   * React hook for updating the interval setting on the server.
+   *
+   * @effect
+   * @async
+   * @function
+   * @returns {void}
+   */
   useEffect(() => {
     const updateInterval = async () => {
       try {
@@ -208,6 +241,14 @@ function SettingsComponent() {
     }
   }, [shouldUpdateInterval]);
 
+  /**
+   * React hook for updating the expiration setting on the server.
+   *
+   * @effect
+   * @async
+   * @function
+   * @returns {void}
+   */
   useEffect(() => {
     const updateExpiration = async () => {
       try {

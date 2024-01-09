@@ -6,6 +6,12 @@ import ModelComponent from "./ModelComponent";
 import styles from "./Views.module.css";
 import Cookies from "js-cookie";
 
+/**
+ * SubscribersTable component for managing subscribers and their details.
+ *
+ * @component
+ * @returns {JSX.Element} - SubscribersTable component.
+ */
 export default function SubscribersTable() {
   const [subscribers, setSubscribers] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -29,6 +35,12 @@ export default function SubscribersTable() {
   });
   const token = Cookies.get("token");
 
+  /**
+   * Retrieves all subscribers from the server on component mount.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     fetch("http://localhost:3001/subscribers/all", {
       method: "GET",
@@ -56,6 +68,13 @@ export default function SubscribersTable() {
     });
   };
 
+  /**
+   * Displays the update subscriber modal with subscriber details.
+   *
+   * @function
+   * @param {Object} subscriber - The selected subscriber.
+   * @returns {void}
+   */
   const handleShow = (subscriber) => {
     setShowModal(true);
     setSelectedSubscriber({
@@ -113,6 +132,12 @@ export default function SubscribersTable() {
     );
   };
 
+  /**
+   * Updates the subscriber based on the provided email and new details.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     if (bool === true) {
       if (email == null && name == null) {
@@ -141,6 +166,12 @@ export default function SubscribersTable() {
     }
   }, [bool]);
 
+  /**
+   * Handles updating a subscriber with new details, making a PUT request to the server.
+   *
+   * @function
+   * @returns {void}
+   */
   const handleUpdateSubscriber = () => {
     const updatedData = {
       email: email || selectedSubscriber.email,
@@ -228,6 +259,13 @@ export default function SubscribersTable() {
     );
   };
 
+  /**
+   * Deletes the subscriber based on the provided email.
+   *
+   * @function
+   * @param {string} email - The email of the subscriber to be deleted.
+   * @returns {void}
+   */
   const handleDeleteSubscriber = (email) => {
     fetch(`http://localhost:3001/unsubscribe`, {
       method: "DELETE",
