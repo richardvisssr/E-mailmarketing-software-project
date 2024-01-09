@@ -213,6 +213,7 @@ const MailEditor = ({ id }) => {
         });
       } else if (post === true) {
         setShow(false);
+        handleClose();
         setNotification({
           type: "success",
           message: "Mail is succesvol verstuurd.",
@@ -264,6 +265,8 @@ const MailEditor = ({ id }) => {
               message: "Er zijn geen leden in de geselecteerde lijst(en).",
             });
           } else {
+            setShow(false);
+            handleClose();
             setNotification({
               type: "error",
               message: "Er is iets fout gegaan tijdens het inplannen",
@@ -271,6 +274,7 @@ const MailEditor = ({ id }) => {
           }
         } else {
           setShow(false);
+          handleClose();
           setNotification({
             type: "success",
             message: "Mail is succesvol ingepland.",

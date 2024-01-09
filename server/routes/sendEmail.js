@@ -223,6 +223,8 @@ router.put("/planMail", async (req, res) => {
       return;
     }
 
+    console.log(subs);
+
     const subscribers = subs.map((subscriberArray) => {
       const subscriber = subscriberArray[0];
       return {
