@@ -177,7 +177,7 @@ async function sendEmail(email) {
         
           `,
         };
-      sentSubscribers.push(subscriber.email);
+        sentSubscribers.push(subscriber.email);
 
         await new Promise((resolve, reject) => {
           transporter.sendMail(mailOptions, (error, info) => {
@@ -191,10 +191,10 @@ async function sendEmail(email) {
           });
         });
       }
-    const emailAnalytics = await createOrUpdateEmailAnalytics(
-      email.mailId,
-      sentSubscribers
-    );
+      const emailAnalytics = await createOrUpdateEmailAnalytics(
+        email.mailId,
+        sentSubscribers
+      );
 
       return true;
     } catch (error) {
@@ -265,7 +265,7 @@ async function checkEmails() {
         });
         continue;
       }
-      
+
       if (success) {
         sendWebsocketMessage({ type: "sendEmail", templateId: emails.mail });
         email.status = "Verzonden";

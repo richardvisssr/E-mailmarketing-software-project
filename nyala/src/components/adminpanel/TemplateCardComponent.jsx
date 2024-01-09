@@ -228,7 +228,7 @@ function TemplateCard(props) {
             id: generateUniqueShortId(),
             title: template.title,
             html: html,
-            subs: subscribers,
+            subs: sentData.subscribersData,
             date: dateTime,
             showHeader: showHeader,
             headerText: headerText,

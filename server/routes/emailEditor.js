@@ -46,12 +46,6 @@ router.put("/sendEmail", async (req, res) => {
   const showHeader = req.body.showHeader;
   const headerText = req.body.headerText;
 
-  if (subscribers.length < 1) {
-    res.status(400).json({ error: "No subscribers found" });
-    console.log("is this triggering?");
-    return;
-  }
-
   try {
     const existingHtml = await Email.findOneAndUpdate(
       { id },
