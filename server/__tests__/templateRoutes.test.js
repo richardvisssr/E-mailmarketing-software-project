@@ -12,7 +12,7 @@ let token;
 
 beforeAll(async () => {
   token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3MjI0NjgsImV4cCI6MTcxMjQ5ODQ2OH0.a-WwuZn-jBwTfZi3UIvCrJxr-dU8cyyKAnZZCVAtByU";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3OTU4NjEsImV4cCI6MTcxMjU3MTg2MX0.XbetRe5V3cNlGcJbS3_yzV01lTFcUfCuGef6Ukt--q0";
   if (mongoose.connection.readyState === 0) {
     await mongoose.connect(`mongodb://localhost:27017/nyala`);
   }
@@ -120,7 +120,9 @@ describe("DELETE /template/:id", () => {
       throw new Error("Internal Server Error");
     });
 
-    const response = await request(app).delete("/template/testEmailId").set("Authorization", `Bearer ${token}`);
+    const response = await request(app)
+      .delete("/template/testEmailId")
+      .set("Authorization", `Bearer ${token}`);
     expect(response.statusCode).toBe(500);
     expect(response.body).toEqual({ message: "Internal Server Error" });
   }, 10000);

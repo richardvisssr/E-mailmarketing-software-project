@@ -11,7 +11,7 @@ describe("Subscribers routes test", () => {
 
   beforeAll(async () => {
     token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3MjI0NjgsImV4cCI6MTcxMjQ5ODQ2OH0.a-WwuZn-jBwTfZi3UIvCrJxr-dU8cyyKAnZZCVAtByU";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3OTU4NjEsImV4cCI6MTcxMjU3MTg2MX0.XbetRe5V3cNlGcJbS3_yzV01lTFcUfCuGef6Ukt--q0";
     if (mongoose.connection.readyState === 0) {
       await mongoose.connect("mongodb:127.0.0.1:27017/nyalaTest", {
         useNewUrlParser: true,
@@ -64,7 +64,7 @@ describe("Subscribers routes test", () => {
 
   test("Adding reason to unsubscribe", async () => {
     const response = await request(app)
-      .post("/reason")
+      .put("/reason")
       .send({ reden: "Ik wil geen mail meer" })
       .set("Authorization", `Bearer ${token}`);
 
@@ -248,7 +248,7 @@ describe("Subscribers routes test", () => {
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ message: "Internal server error" });
-  });
+  }, 10000);
 
   test("Adding a subscriber with existing email", async () => {
     const response = await request(app)

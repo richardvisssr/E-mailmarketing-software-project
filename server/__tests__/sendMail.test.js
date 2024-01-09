@@ -17,7 +17,7 @@ describe("Email Router", () => {
 
   beforeAll(async () => {
     token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3MjI0NjgsImV4cCI6MTcxMjQ5ODQ2OH0.a-WwuZn-jBwTfZi3UIvCrJxr-dU8cyyKAnZZCVAtByU";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3OTU4NjEsImV4cCI6MTcxMjU3MTg2MX0.XbetRe5V3cNlGcJbS3_yzV01lTFcUfCuGef6Ukt--q0";
     testAccount = await nodemailer.createTestAccount();
     transporter = nodemailer.createTransport({
       host: "smtp.ethereal.email",
@@ -67,7 +67,7 @@ describe("Email Router", () => {
     const response = await request(app)
       .post("/sendEmail/sendEmail")
       .send({ html: htmlContent, subscribers, id })
-    .set("Authorization", `Bearer ${token}`);
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
   }, 150000);
