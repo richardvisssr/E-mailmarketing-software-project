@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SubscribersTable should render the subscribers table component with no subscribers 1`] = `undefined`;
+
+exports[`SubscribersTable should render the subscribers table component with subscribers 1`] = `undefined`;
