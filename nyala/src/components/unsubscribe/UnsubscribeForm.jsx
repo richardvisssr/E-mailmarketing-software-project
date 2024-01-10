@@ -14,6 +14,7 @@ export default function UnsubscribeForm({ userid, emailid }) {
   const [subscribersList, setSubscribersList] = useState();
   const [selectedSubs, setSelectedSubs] = useState([]);
   const [subs, setSubs] = useState([]);
+  const [name, setName] = useState("");
   const [warning, setWarning] = useState({ type: "", message: "" });
   const token = Cookies.get("token");
 
@@ -44,6 +45,7 @@ export default function UnsubscribeForm({ userid, emailid }) {
 
       if (unsubscribeResponse.status === 200) {
         localStorage.setItem("unsubscribedEmail", email);
+        localStorage.setItem("unsubscribeName", name);
         return true;
       } else if (unsubscribeResponse.status === 404) {
         setWarning({
@@ -78,6 +80,7 @@ export default function UnsubscribeForm({ userid, emailid }) {
 
       if (unsubscribeResponse.status === 200) {
         localStorage.setItem("unsubscribedEmail", email);
+        localStorage.setItem("unsubscribeName", name);
         return true;
       } else if (unsubscribeResponse.status === 404) {
         setWarning({
@@ -194,6 +197,7 @@ export default function UnsubscribeForm({ userid, emailid }) {
             return response.json();
           })
           .then((data) => {
+            setName(data.name);
             setSubs(data.subscription);
             setEmail(data.email);
             setSubscribersList(

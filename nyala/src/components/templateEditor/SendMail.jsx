@@ -120,7 +120,12 @@ function SelectMailingLists(props) {
               }),
             }
           );
-
+          if (response.status === 400) {
+            setNotification({
+              type: "error",
+              message: "Er zijn geen leden in de geselecteerde lijst(en).",
+            });
+          }
           if (!response.ok || !secondResponse.ok) {
             setNotification({
               type: "error",
