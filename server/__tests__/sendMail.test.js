@@ -17,7 +17,7 @@ describe("Email Router", () => {
 
   beforeAll(async () => {
     token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3OTU4NjEsImV4cCI6MTcxMjU3MTg2MX0.XbetRe5V3cNlGcJbS3_yzV01lTFcUfCuGef6Ukt--q0";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ4ODY0OTYsImV4cCI6MTcxMjY2MjQ5Nn0.STjc2iZmL_VjLXI5UrPhyIvRSqHd5IxbUITB7oLzjSc";
     testAccount = await nodemailer.createTestAccount();
     transporter = nodemailer.createTransport({
       host: "smtp.ethereal.email",
@@ -39,6 +39,10 @@ describe("Email Router", () => {
 
   afterEach(async () => {
     await mongoose.disconnect();
+  });
+
+  afterAll(async () => {  
+    await transporter.close();
   });
 
   test("should add 500 subscribers", async () => {

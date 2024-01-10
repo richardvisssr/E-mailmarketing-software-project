@@ -5,6 +5,7 @@ const { sendWebsocketMessage } = require("../utils/websockets");
 
 async function getAnalytics(emailId) {
   return (
+    console.log(  emailId),
     (await EmailAnalytics.findOne({ emailId })) ||
     new EmailAnalytics({ emailId })
   );
@@ -73,16 +74,15 @@ router.get("/trackHyperlinks/:link/:emailId", async (req, res) => {
 router.get("/trackUnsubscribe/:emailId", async (req, res) => {
   try {
     const { emailId } = req.params;
-    console.log(emailId);
+
     if (!emailId) {
       return res.status(400).send("Email ID is required");
     }
 
-    const analytics = await EmailAnalytics.findOne({ emailId: emailId });
-    console.log(analytics);
+    const analytics = await getAnalytics(emailId);
+
     analytics.unsubscribed += 1;
     await analytics.save();
-    // console.log(analytics)
     if (res.statusCode === 200) {
       sendWebsocketMessage({
         type: "trackUnsubscribe",
@@ -92,7 +92,6 @@ router.get("/trackUnsubscribe/:emailId", async (req, res) => {
     }
     return res.status(200).send();
   } catch (error) {
-    console.log(error);
     return res.status(500).send("An error occurred");
   }
 });

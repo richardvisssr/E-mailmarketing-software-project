@@ -12,7 +12,7 @@ let token;
 
 beforeAll(async () => {
   token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3OTU4NjEsImV4cCI6MTcxMjU3MTg2MX0.XbetRe5V3cNlGcJbS3_yzV01lTFcUfCuGef6Ukt--q0";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ4ODY0OTYsImV4cCI6MTcxMjY2MjQ5Nn0.STjc2iZmL_VjLXI5UrPhyIvRSqHd5IxbUITB7oLzjSc";
   if (mongoose.connection.readyState === 0) {
     await mongoose.connect(`mongodb://localhost:27017/nyalaTest`);
   }
@@ -59,7 +59,8 @@ describe("PUT /planMail", () => {
         mailId: "testMailId",
         sent: false,
         html: "<p>Test HTML content</p>",
-        subs: [[{ _id: '1234567', name: 'test', email: 'test@gmail.com' }]],        date: new Date(),
+        subs: [[{ _id: "1234567", name: "test", email: "test@gmail.com" }]],
+        date: new Date(),
         showHeader: true,
         headerText: "Test Header",
         subject: "testSubject",
@@ -79,7 +80,8 @@ describe("PUT /planMail", () => {
         mailId: "testMailId",
         sent: false,
         html: "<p>Test HTML content</p>",
-        subs: [[{ _id: '1234567', name: 'test', email: 'test@gmail.com' }]],        date: new Date(),
+        subs: [[{ _id: "1234567", name: "test", email: "test@gmail.com" }]],
+        date: new Date(),
         sended: false,
         showHeader: true,
         subject: "testSubject",
@@ -99,7 +101,8 @@ describe("PUT /planMail", () => {
         mailId: "testMailId",
         sent: false,
         html: "<p>Test HTML content</p>",
-        subs: [[{ _id: '1234567', name: 'test', email: 'test@gmail.com' }]],        date: new Date(),
+        subs: [[{ _id: "1234567", name: "test", email: "test@gmail.com" }]],
+        date: new Date(),
         showHeader: true,
         subject: "testSubject",
       })
@@ -122,7 +125,8 @@ describe("PUT /planMail", () => {
         html: "<p>Test HTML content</p>",
         mailId: "testMailId",
         sent: false,
-        subs: [[{ _id: '1234567', name: 'test', email: 'test@gmail.com' }]],        date: new Date(),
+        subs: [[{ _id: "1234567", name: "test", email: "test@gmail.com" }]],
+        date: new Date(),
         showHeader: true,
         subject: "testSubject",
       })
