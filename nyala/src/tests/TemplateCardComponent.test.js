@@ -1,40 +1,48 @@
-import { cleanup, render } from "@testing-library/react";
-import { createRoot } from "react-dom/client";
-import { act } from "react-dom/test-utils";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom/";
+import userEvent from "@testing-library/user-event";
 import TemplateCard from "../components/adminpanel/templateCardComponent";
-import { useRouter } from "next/navigation";
+
+jest.mock("js-cookie", () => ({
+  get: jest.fn(() => "mockedToken"),
+}));
 
 jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
+  useRouter: () => ({
+    prefetch: () => {},
+  }),
 }));
 
 global.fetch = jest.fn(() =>
   Promise.resolve({
-    json: () => Promise.resolve({ data: "mockData" }),
+    json: () => Promise.resolve([]),
   })
 );
 
-afterEach(() => {
-  fetch.mockClear();
-  cleanup();
+afterEach(cleanup);
+
+it("TemplateCard should render without problems", () => {
+  render(
+    <TemplateCard
+      template={{ id: 589743, title: "Test Template" }}
+      onDelete={() => {}}
+    />
+  );
+
+  expect(screen.getByText("Test Template")).toBeInTheDocument();
 });
 
-it("should render the template card component", async () => {
-  // make the function async
-  const div = document.createElement("div");
-  const root = createRoot(div);
+it("should delete template", async () => {
+  const onDelete = jest.fn();
 
-  await act(async () => {
-    // use await act(async () => { ... })
-    useRouter.mockImplementation(() => ({
-      pathname: "",
-      route: "",
-      query: "",
-      prefetch: jest.fn(),
-    }));
-    const mockTemplate = { id: "mockId" /* other properties as needed */ };
-    root.render(<TemplateCard template={mockTemplate} />);
-  });
+  render(
+    <TemplateCard
+      template={{ id: 589743, title: "Test Template" }}
+      onDelete={onDelete}
+    />
+  );
 
-  expect(root.container).toMatchSnapshot();
+  userEvent.click(screen.getByText("Verwijderen"));
+
+  await waitFor(() => expect(onDelete).toHaveBeenCalledTimes(1));
 });

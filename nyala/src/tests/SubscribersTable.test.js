@@ -34,9 +34,7 @@ describe("SubscribersTable", () => {
       root.render(<SubscribersTable />);
     });
 
-    expect(root.container).toBeDefined();
     expect(root.container).toMatchSnapshot();
-    console.log(root.container);
   });
 
   it("should render the subscribers table component with subscribers", async () => {
