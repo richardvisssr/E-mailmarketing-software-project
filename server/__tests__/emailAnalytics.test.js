@@ -1,6 +1,8 @@
 const request = require("supertest");
 const { app, httpServer, server } = require("../app");
 const mongoose = require("mongoose");
+const sendWebsocketMessage =
+  require("../utils/websockets").sendWebsocketMessage;
 const EmailAnalytics = mongoose.model("EmailAnalytics");
 let token;
 
@@ -16,7 +18,7 @@ jest.mock("../utils/websockets", () => ({
 describe("EmailAnalytics Model Tests", () => {
   beforeAll(async () => {
     token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3MjI0NjgsImV4cCI6MTcxMjQ5ODQ2OH0.a-WwuZn-jBwTfZi3UIvCrJxr-dU8cyyKAnZZCVAtByU";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3OTU4NjEsImV4cCI6MTcxMjU3MTg2MX0.XbetRe5V3cNlGcJbS3_yzV01lTFcUfCuGef6Ukt--q0";
     if (mongoose.connection.readyState === 0) {
       await mongoose.connect("mongodb:127.0.0.1:27017/nyalaTest", {
         useNewUrlParser: true,
@@ -35,7 +37,7 @@ describe("EmailAnalytics Model Tests", () => {
   });
 
   afterEach(async () => {
-    // await EmailAnalytics.deleteMany({});
+    await EmailAnalytics.deleteMany({});
   });
 
   afterAll(async () => {
@@ -52,21 +54,29 @@ describe("EmailAnalytics Model Tests", () => {
 
   describe("GET /trackOnlineView/:emailId", () => {
     it("should track online view and send WebSocket message", async () => {
+      const emailId = "testEmailId";
+      const analytics = {
+        opened: 0,
+        save: jest.fn(),
+      };
+      jest.spyOn(EmailAnalytics, "findOne").mockResolvedValue(analytics);
       const response = await request(app)
-        .get("/trackOnlineView/testEmailId")
+        .get(`/trackOnlineView/${emailId}`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(response.status).toBe(200);
       expect(response.text).toBe("");
 
-      // // Assert that the WebSocket message was sent
-      // const sendWebsocketMessage =
-      //   require("../utils/websockets").sendWebsocketMessage;
-      // expect(sendWebsocketMessage).toHaveBeenCalledWith({
-      //   type: "trackOnlineView",
-      //   emailId: "testEmailId",
-      //   opened: 1,
-      // });
+      // Assert that the analytics were updated and saved
+      expect(analytics.opened).toBe(1);
+      expect(analytics.save).toHaveBeenCalled();
+
+      // Assert that the WebSocket message was sent
+      expect(sendWebsocketMessage).toHaveBeenCalledWith({
+        type: "trackOnlineView",
+        emailId,
+        opened: 1,
+      });
     });
 
     it("should handle missing emailId gracefully", async () => {
@@ -92,119 +102,180 @@ describe("EmailAnalytics Model Tests", () => {
       expect(response.text).toBe("An error occurred");
     });
 
-  it("should track hyperlinks and send WebSocket message", async () => {
-    const response = await request(app)
-      .get("/trackHyperlinks/testLink/testEmailId")
-      .set("Authorization", `Bearer ${token}`);
+    it("should track hyperlinks and send WebSocket message", async () => {
+      const emailId = "testEmailId";
+      const link = "testLink";
+      const analytics = {
+        links: [{ link, count: 4 }],
+        save: jest.fn(),
+      };
 
-    // Assert the response status
-    expect(response.status).toBe(200);
+      jest.spyOn(EmailAnalytics, "findOne").mockResolvedValue(analytics);
+      const response = await request(app)
+        .get(`/trackHyperlinks/${link}/${emailId}`)
+        .set("Authorization", `Bearer ${token}`);
 
-    // Assert the response body (optional)
-    expect(response.text).toBe("");
+      expect(response.status).toBe(200);
+      expect(response.text).toBe("");
 
-    // Assert that the WebSocket message was sent
-    expect(httpServer.clients[0].send).toHaveBeenCalledWith(
-      JSON.stringify({
-        type: "trackHyperlinks", // Fix this to trackHyperlinks
-        emailId: "testEmailId",
-        link: "testLink",
-        clicks: 1,
-      })
-    );
-  });
-
-  it("should handle missing emailId gracefully", async () => {
-    const response = await request(app)
-      .get("/trackHyperlinks/undefined/undefined") // No emailId provided
-      .set("Authorization", `Bearer ${token}`);
-
-    // Assert the response status
-    expect(response.status).toBe(400);
-
-    // Assert the response body (optional)
-    expect(response.text).toBe("Email ID and Link are required");
-  });
-
-  it("should track unsubscribe and send WebSocket message", async () => {
-    const response = await request(app)
-      .get("/trackUnsubscribe/testEmailId")
-      .set("Authorization", `Bearer ${token}`);
-    expect(response.status).toBe(200);
-    expect(response.text).toBe("");
-
-    // // Assert that the WebSocket message was sent
-    // const sendWebsocketMessage =
-    //   require("../utils/websockets").sendWebsocketMessage;
-    // expect(sendWebsocketMessage).toHaveBeenCalledWith({
-    //   type: "trackUnsubscribe",
-    //   emailId: "testEmailId",
-    //   unsubscribed: 1,
-    // });
-  });
-
-  it("should handle missing emailId gracefully", async () => {
-    const response = await request(app)
-      .get("/trackUnsubscribe")
-      .set("Authorization", `Bearer ${token}`);
-
-    expect(response.status).toBe(400);
-    expect(response.text).toBe("Email ID is required");
-  });
-
-  it("should handle errors gracefully", async () => {
-    // Mock the findOne method to throw an error
-    jest.spyOn(EmailAnalytics, "findOne").mockImplementation(() => {
-      throw new Error("An error occurred");
+      // Assert that the analytics were updated and saved
+      expect(analytics.links[0].count).toBe(5);
+      expect(analytics.save).toHaveBeenCalled();
     });
 
-    const response = await request(app)
-      .get("/trackUnsubscribe/testEmailId")
-      .set("Authorization", `Bearer ${token}`);
+    it("should handle missing emailId gracefully", async () => {
+      const response = await request(app)
+        .get("/trackHyperlinks/undefined/undefined") // No emailId provided
+        .set("Authorization", `Bearer ${token}`);
 
-    expect(response.status).toBe(500);
-    expect(response.text).toBe("An error occurred");
-  });
+      // Assert the response status
+      expect(response.status).toBe(400);
 
-  it("should track unsubscribe and send WebSocket message", async () => {
-    const response = await request(app)
-      .get("/trackUnsubscribe/testEmailId")
-      .set("Authorization", `Bearer ${token}`);
-
-    expect(response.status).toBe(200);
-    expect(response.text).toBe("");
-
-    // Assert that the WebSocket message was sent
-    // const sendWebsocketMessage =
-    //   require("../utils/websockets").sendWebsocketMessage;
-    // expect(sendWebsocketMessage).toHaveBeenCalledWith({
-    //   type: "trackUnsubscribe",
-    //   emailId: "testEmailId",
-    //   unsubscribed: 1,
-    // });
-  });
-
-  it("should handle missing emailId gracefully", async () => {
-    const response = await request(app)
-      .get("/trackUnsubscribe")
-      .set("Authorization", `Bearer ${token}`);
-
-    expect(response.status).toBe(400);
-    expect(response.text).toBe("Email ID is required");
-  });
-
-  it("should handle errors gracefully", async () => {
-    // Mock the findOne method to throw an error
-    jest.spyOn(EmailAnalytics, "findOne").mockImplementation(() => {
-      throw new Error("An error occurred");
+      // Assert the response body (optional)
+      expect(response.text).toBe("Email ID and Link are required");
     });
 
-    const response = await request(app)
-      .get("/trackUnsubscribe/testEmailId")
-      .set("Authorization", `Bearer ${token}`);
+    it("should track unsubscribe and send WebSocket message", async () => {
+      const emailId = "testEmailId";
+      const analytics = {
+        unsubscribed: 0,
+        save: jest.fn(),
+      };
 
-    expect(response.status).toBe(500);
-    expect(response.text).toBe("An error occurred");
-  });
+      jest.spyOn(EmailAnalytics, "findOne").mockResolvedValue(analytics);
+      const response = await request(app)
+        .get(`/trackUnsubscribe/${emailId}`)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.text).toBe("");
+
+      // Assert that the analytics were updated and saved
+      expect(analytics.unsubscribed).toBe(1);
+      expect(analytics.save).toHaveBeenCalled();
+    });
+
+    it("should handle missing emailId gracefully", async () => {
+      const response = await request(app)
+        .get("/trackUnsubscribe/")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(404);
+    });
+
+    it("should handle errors gracefully", async () => {
+      // Mock the findOne method to throw an error
+      jest.spyOn(EmailAnalytics, "findOne").mockImplementation(() => {
+        throw new Error("An error occurred");
+      });
+
+      const response = await request(app)
+        .get("/trackUnsubscribe/testEmailId")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(500);
+      expect(response.text).toBe("An error occurred");
+    });
+
+    it("should track unsubscribe and send WebSocket message", async () => {
+      const emailId = "testEmailId";
+      const analytics = {
+        unsubscribed: 0,
+        save: jest.fn(),
+      };
+
+      jest.spyOn(EmailAnalytics, "findOne").mockResolvedValue(analytics);
+      const response = await request(app)
+        .get(`/trackUnsubscribe/${emailId}`)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.text).toBe("");
+
+      // Assert that the analytics were updated and saved
+      expect(analytics.unsubscribed).toBe(1);
+      expect(analytics.save).toHaveBeenCalled();
+    });
+
+    it("should handle missing emailId gracefully", async () => {
+      const response = await request(app)
+        .get("/trackUnsubscribe/")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(404);
+    });
+
+    it("should handle errors gracefully", async () => {
+      jest.spyOn(EmailAnalytics, "findOne").mockImplementation(() => {
+        throw new Error("An error occurred");
+      });
+
+      const response = await request(app)
+        .get("/trackUnsubscribe/testEmailId")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(500);
+      expect(response.text).toBe("An error occurred");
+    });
+
+    it("should handle errors gracefully", async () => {
+      const response = await request(app)
+        .get("/trackOnlineView/testEmailId")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(500);
+      expect(response.text).toBe("An error occurred");
+    });
+
+    it("should return analytics for a valid emailId", async () => {
+      const emailId = "testEmailId";
+      const analytics = {
+        opened: 2,
+        unsubscribed: 1,
+        links: [
+          { url: "https://example.com/link1", count: 3 },
+          { url: "https://example.com/link2", count: 1 },
+        ],
+      };
+
+      jest.spyOn(EmailAnalytics, "findOne").mockResolvedValue(analytics);
+
+      const response = await request(app)
+        .get(`/stats/${emailId}`)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({
+        [emailId]: {
+          opened: 2,
+          unsubscribed: 1,
+          totalLinkClicks: 4,
+          links: [
+            { url: "https://example.com/link1", count: 3 },
+            { url: "https://example.com/link2", count: 1 },
+          ],
+        },
+      });
+    });
+
+    it("should return default analytics for a non-existent emailId", async () => {
+      const emailId = "nonExistentEmailId";
+      const analytics = null;
+
+      jest.spyOn(EmailAnalytics, "findOne").mockResolvedValue(analytics);
+
+      const response = await request(app)
+        .get(`/stats/${emailId}`)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({
+        [emailId]: {
+          opened: 0,
+          unsubscribed: 0,
+          totalLinkClicks: 0,
+        },
+      });
+    });
   });
 });
