@@ -1,7 +1,7 @@
 "use strict";
 
 const express = require("express");
-const { Subscriber, Unsubscriber, Category } = require("../model/subscribers");
+const { Subscriber } = require("../model/subscribers");
 const router = express.Router();
 
 router.get("/subscribers", async (req, res) => {
@@ -200,10 +200,10 @@ router.put("/change/:subscriber", async (req, res) => {
 router.put("/update/:list", async (req, res) => {
   const prevList = req.params.list;
   const { name } = req.body;
-
+  console.log(prevList, name,"tttttttttttttt");
   try {
     const subscribers = await Subscriber.find({ subscription: prevList });
-
+console.log(subscribers, "sssssssssssssss");
     if (!name) {
       return res.status(400).send({ message: "No new name provided" });
     }
@@ -238,6 +238,9 @@ router.put("/update/:list", async (req, res) => {
 
     res.status(200).json({ message: "Subscriber updated" });
   } catch (err) {
+    console.log("Error:", err.message);
+    console.log(err.stack);  // Log the stack trace for detailed error information
+    
     res.status(500).json({ message: "Internal Server Error" });
   }
 });

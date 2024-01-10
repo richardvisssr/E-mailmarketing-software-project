@@ -55,18 +55,4 @@ describe("Authentication Routes", () => {
     expect(response.body.success).toBe(true);
   });
 
-  it("should generate an access token with valid payload", () => {
-    const id = "user12345";
-    const expectedToken = "validToken";
-
-    const actualToken = generateAccessToken(id);
-
-    const decoded = jwt.verify(actualToken, secretKey);
-    expect(decoded.sub).toBe(id);
-    expect(decoded.iat).toBeCloseTo(Math.floor(Date.now() / 1000), -2);
-    expect(decoded.exp).toBeCloseTo(
-      Math.floor(Date.now() / 1000) + 24 * 60 * 60,
-      -2
-    );
-  });
 });

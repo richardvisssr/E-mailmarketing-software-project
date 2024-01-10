@@ -11,7 +11,7 @@ describe("Subscribers routes test", () => {
 
   beforeAll(async () => {
     token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3OTU4NjEsImV4cCI6MTcxMjU3MTg2MX0.XbetRe5V3cNlGcJbS3_yzV01lTFcUfCuGef6Ukt--q0";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ4ODY0OTYsImV4cCI6MTcxMjY2MjQ5Nn0.STjc2iZmL_VjLXI5UrPhyIvRSqHd5IxbUITB7oLzjSc";
     if (mongoose.connection.readyState === 0) {
       await mongoose.connect("mongodb:127.0.0.1:27017/nyalaTest", {
         useNewUrlParser: true,
@@ -253,7 +253,6 @@ describe("Subscribers routes test", () => {
   }, 10000);
 
   test("Adding a subscriber with existing email", async () => {
-    console.log(subscriberEmail.email);
     const response = await request(app)
       .put("/subscribers/add") // Changed from .post to .put
       .send({
@@ -397,5 +396,21 @@ describe("Subscribers routes test", () => {
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Subscriber not found" });
+  });
+
+  test("should update list", async () => {
+    const newList = "ICT";
+    await Subscriber.create({
+      email: "Matthias@budding.nl",
+      name: "Matthias",
+      subscriptions: ["Nieuwsbrief", "CMD", "ICT", "Leden"],
+    });
+    const response = await request(app)
+      .put("/update/Nieuwsbrief")
+      .send({ name: newList })
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ message: "Subscriber updated" });
   });
 });

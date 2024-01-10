@@ -26,6 +26,7 @@ function restartServer() {
     isRestarting = false;
 
     if (error) {
+      console.log(error);
       console.error("Error closing the server:", error);
     } else {
       console.log("Server closed successfully. Restarting...");

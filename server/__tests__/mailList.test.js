@@ -1,5 +1,3 @@
-"use strict";
-
 const mongoose = require("mongoose");
 require("../model/mailList");
 const { httpServer, server } = require("../app");
