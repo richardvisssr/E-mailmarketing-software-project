@@ -72,7 +72,6 @@ const sendMailRouter = require("./routes/sendEmail");
 const adminpanelRouter = require("./routes/templateRoutes");
 const emailAnalyticsRouter = require("./routes/emailAnalytics");
 const unsubscribeAnalyticsRouters = require("./routes/unsubcsribeAnalytics");
-const afbeeldingRouter = require("./routes/afbeeldingRouter");
 
 const app = express();
 
@@ -101,7 +100,6 @@ app.use("/mail", mailListRouter);
 app.use("/", sendMailRouter);
 app.use("/", emailAnalyticsRouter);
 app.use("/", unsubscribeAnalyticsRouters);
-app.use("/afbeelding", afbeeldingRouter);
 
 const httpServer = http.createServer(app);
 

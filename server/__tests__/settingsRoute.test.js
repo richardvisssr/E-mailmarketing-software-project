@@ -11,7 +11,7 @@ describe("API Routes", () => {
   let token;
   beforeAll(async () => {
     token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ4ODY0OTYsImV4cCI6MTcxMjY2MjQ5Nn0.STjc2iZmL_VjLXI5UrPhyIvRSqHd5IxbUITB7oLzjSc";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3OTU4NjEsImV4cCI6MTcxMjU3MTg2MX0.XbetRe5V3cNlGcJbS3_yzV01lTFcUfCuGef6Ukt--q0";
   });
 
   // Define a setup function to create a test token before tests
@@ -31,9 +31,6 @@ describe("API Routes", () => {
   afterEach(async () => {
     await Activity.deleteMany();
   });
-
-
-
 
   it("should update settings", async () => {
     const response = await request(app)
@@ -72,13 +69,13 @@ describe("API Routes", () => {
     expect(response.body).toHaveLength(1); // Adjust based on your test data
   });
 
-//   it("should generate token", async () => {
-//     const response = await request(app)
-//       .post("/generateToken")
-//       .set("Authorization", `Bearer ${token}`);
+  //   it("should generate token", async () => {
+  //     const response = await request(app)
+  //       .post("/generateToken")
+  //       .set("Authorization", `Bearer ${token}`);
 
-//     expect(response.status).toBe(200);
-//     expect(response.body.token).toBeDefined();
-//     expect(response.body.secret).toBeDefined();
-//   });
- });
+  //     expect(response.status).toBe(200);
+  //     expect(response.body.token).toBeDefined();
+  //     expect(response.body.secret).toBeDefined();
+  //   });
+});
