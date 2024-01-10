@@ -20,12 +20,14 @@ export default function ResubscribeComponent({}) {
   const handleUndo = async () => {
     const unsubscribedEmail = localStorage.getItem("unsubscribedEmail");
     const unsubscribedSubs = localStorage.getItem("unsubscribedSubs");
+    const unsubscribedName = localStorage.getItem("unsubscribeName");
     if (unsubscribedEmail && unsubscribedSubs) {
       const subsArray = JSON.parse(unsubscribedSubs);
-      const success = await resubscribe(unsubscribedEmail, subsArray);
+      const success = await resubscribe(unsubscribedEmail, subsArray, unsubscribedName);
       if (success) {
         localStorage.removeItem("unsubscribedEmail");
         localStorage.removeItem("unsubscribedSubs");
+        localStorage.removeItem("unsubscribeName");
         router.push("/resubscribed");
       } else {
         setWarning({
@@ -37,7 +39,7 @@ export default function ResubscribeComponent({}) {
     }
   };
 
-  const resubscribe = async (email, subs) => {
+  const resubscribe = async (email, subs, name) => {
     try {
       const reasonResponse = await fetch(
         "http://localhost:3001/subscribers/add",
@@ -48,7 +50,7 @@ export default function ResubscribeComponent({}) {
             Authorization: `Bearer ${token}`,
           },
           credentials: "include",
-          body: JSON.stringify({ email: email, subscriptions: subs }),
+          body: JSON.stringify({ name: name, email: email, subscriptions: subs }),
         }
       );
 

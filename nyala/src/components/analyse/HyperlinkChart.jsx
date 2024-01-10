@@ -14,15 +14,15 @@ const UnsubscribeReasonChart = ({ linkData }) => {
   }, [linkData]);
 
   const showChart = () => {
+    const pattern = /^(?:https?:\/\/)?(?:www\.)?([^\.]+)\..+?\/?/;
     const svg = d3.select(chartRef.current);
     svg.selectAll("*").remove();
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     const linked = linkData.map((item) => {
-      if (item.link.length > 30) {
-        return item.link.substring(0, 30) + "...";
-      } else {
-        return item.link;
+      const match = item.link.match(pattern);
+      if (match) {
+        return match[1].charAt(0).toUpperCase() + match[1].slice(1);
       }
     });
 
@@ -69,7 +69,7 @@ const UnsubscribeReasonChart = ({ linkData }) => {
       .attr("transform", `translate(${margin.left},0)`)
       .call(d3.axisLeft(y))
       .selectAll("text")
-      .html((d, i) => `<a href="${completeLink[i]}">${linked[i]}</a>`);
+      .html((d, i) => `<a href="${completeLink[i]}" style="text-decoration: none; color:black;">${linked[i]}</a>`);
 
     svg
       .append("g")
