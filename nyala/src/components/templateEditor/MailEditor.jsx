@@ -297,7 +297,7 @@ const MailEditor = ({ id }) => {
 
   return (
     <div>
-      <h1 className="text-center">Mail Editor</h1>
+      <h1 className="text-center">Maileditor</h1>
       <div className="p-2 gap-3 d-flex justify-content-center">
         <AlertComponent notification={notification} />
       </div>
@@ -340,10 +340,10 @@ const MailEditor = ({ id }) => {
           onClick={saveDesign}
           className={`btn ${styles.buttonSecondary} `}
         >
-          Design Opslaan
+          Design opslaan
         </button>
         <button onClick={sendEmail} className={`btn ${styles.buttonPrimary} `}>
-          Email Versturen
+          Email versturen
         </button>
       </div>
 
