@@ -76,7 +76,13 @@ describe("Email Editor Routes", () => {
       // Delete existing email with the same id
       await Email.deleteOne({ id: "456" });
 
-      const testEmail = await Email.create({ id: "456", html: "Test Email" });
+      const testEmail = await Email.create({
+        id: "456",
+        html: "Test Email",
+        showHeader: true,
+        subject: "Test Subject",
+        subject: "Test Subject",
+      });
 
       const response = await request(app)
         .get(`/mail/getEmail/${testEmail.id}`)

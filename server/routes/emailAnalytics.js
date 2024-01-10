@@ -14,7 +14,7 @@ router.get("/trackOnlineView/:emailId", async (req, res) => {
   try {
     const { emailId } = req.params;
 
-    if (!emailId) {
+    if (!emailId || emailId === "undefined") {
       return res.status(400).send("Email ID is required");
     }
 
@@ -39,8 +39,8 @@ router.get("/trackHyperlinks/:link/:emailId", async (req, res) => {
   try {
     const { emailId, link } = req.params;
 
-    if (!emailId) {
-      return res.status(400).send("Email ID is required");
+    if (!emailId || !link || link === "undefined" || emailId === "undefined") {
+      return res.status(400).send("Email ID and Link are required");
     }
 
     const analytics = await getAnalytics(emailId);
@@ -73,15 +73,16 @@ router.get("/trackHyperlinks/:link/:emailId", async (req, res) => {
 router.get("/trackUnsubscribe/:emailId", async (req, res) => {
   try {
     const { emailId } = req.params;
-
+    console.log(emailId);
     if (!emailId) {
       return res.status(400).send("Email ID is required");
     }
 
-    const analytics = await getAnalytics(emailId);
+    const analytics = await EmailAnalytics.findOne({ emailId: emailId });
+    console.log(analytics);
     analytics.unsubscribed += 1;
     await analytics.save();
-
+    // console.log(analytics)
     if (res.statusCode === 200) {
       sendWebsocketMessage({
         type: "trackUnsubscribe",
@@ -91,6 +92,7 @@ router.get("/trackUnsubscribe/:emailId", async (req, res) => {
     }
     return res.status(200).send();
   } catch (error) {
+    console.log(error);
     return res.status(500).send("An error occurred");
   }
 });

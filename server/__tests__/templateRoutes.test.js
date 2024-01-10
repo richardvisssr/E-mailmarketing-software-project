@@ -28,6 +28,8 @@ beforeEach(async () => {
   const emailData = {
     id: "testEmailId",
     html: "<p>Your test HTML content here</p>",
+    showHeader: true,
+    subject: "Test Subject",
   };
 
   await Email.create(emailData);
