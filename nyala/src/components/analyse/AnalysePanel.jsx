@@ -97,7 +97,7 @@ export default function AnalysePanel() {
       if (data.length === 0) {
         setListNotifcation({
           type: "error",
-          message: "Er zijn nog geen mailings om weer te geven",
+          message: "Er zijn uitschrijvingen in een van alle maillijsten",
         });
         return;
       }

@@ -19,7 +19,6 @@ export default function UnsubscribeForm({ userid, emailid }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [reason, setReason] = useState("");
-  const [customReason, setCustomReason] = useState("");
   const [subscribersList, setSubscribersList] = useState();
   const [selectedSubs, setSelectedSubs] = useState([]);
   const [subs, setSubs] = useState([]);
@@ -358,8 +357,6 @@ export default function UnsubscribeForm({ userid, emailid }) {
                         type="text"
                         className="form-control"
                         placeholder="Typ hier uw reden"
-                        value={customReason}
-                        onChange={handleEigenRedenChange}
                       />
                     </div>
                   )}

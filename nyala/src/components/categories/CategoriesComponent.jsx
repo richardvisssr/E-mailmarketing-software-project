@@ -18,7 +18,7 @@ const SubscriptionForm = ({ subscribers, setValue, selectedSubscribers }) => {
                   name="subscription"
                   value={subscription}
                   className={`me-2 control ${styles.customSelect}`}
-                  onChange={() => setValue}
+                  onChange={setValue}
                   checked={selectedSubscribers.includes(subscription)}
                 />
                 {subscription}

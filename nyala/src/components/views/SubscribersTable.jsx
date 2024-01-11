@@ -5,6 +5,7 @@ import AlertComponent from "../alert/AlertComponent";
 import ModelComponent from "./ModelComponent";
 import styles from "./Views.module.css";
 import Cookies from "js-cookie";
+import { Form, FormGroup } from "react-bootstrap";
 
 /**
  * SubscribersTable component for managing subscribers and their details.
@@ -20,6 +21,7 @@ export default function SubscribersTable() {
   const [name, setName] = useState(null);
   const [modalContent, setModalContent] = useState(null);
   const [footerContent, setFooterContent] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
   const [bool, setBool] = useState(false);
   const [modalNotification, setModalNotification] = useState({
     type: "",
@@ -297,6 +299,15 @@ export default function SubscribersTable() {
       });
   };
 
+  const handleSearchChange = (e) => {
+    setSearchValue(e.target.value);
+  };
+  const filteredSubscribers = Object.values(subscribers).filter(
+    (subscribers) =>
+      subscribers.email &&
+      subscribers.email.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   return (
     <div>
       <div className="d-flex justify-content-center">
@@ -304,6 +315,20 @@ export default function SubscribersTable() {
       </div>
 
       <h1 className="text-center mb-2">Ledenlijst</h1>
+      <div className="d-flex justify-content-center mt-3">
+        <Form>
+          <div className="row">
+            <div className="">
+              <Form.Control
+                type="text"
+                placeholder="Vul een emailadres in"
+                value={searchValue}
+                onChange={handleSearchChange}
+              />
+            </div>
+          </div>
+        </Form>
+      </div>
       <div className="table-responsive p-5">
         <table className="table table-hover">
           <caption>Lijst met alle geabonneerden leden</caption>
@@ -316,14 +341,14 @@ export default function SubscribersTable() {
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            {subscribers.length === 0 ? (
+            {filteredSubscribers.length === 0 ? (
               <tr>
                 <td colSpan="4" className="text-center">
                   <h1>Geen abonnees gevonden</h1>
                 </td>
               </tr>
             ) : (
-              subscribers.map((subscriber, index) => (
+              filteredSubscribers.map((subscriber, index) => (
                 <tr key={index}>
                   <td>{subscriber.name}</td>
                   <td>{subscriber.email}</td>
