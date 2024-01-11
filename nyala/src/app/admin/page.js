@@ -24,16 +24,16 @@ function Page() {
   const [tokenExists, setTokenExists] = useState(false);
   const router = useRouter();
   const headers = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   };
 
   const login = async () => {
     try {
       if (Cookies.get("token")) {
         setTokenExists(true);
-        headers['Authorization'] = `Bearer ${Cookies.get("token")}`;
+        headers["Authorization"] = `Bearer ${Cookies.get("token")}`;
       }
-      
+
       const response = await fetch("http://localhost:3001/login", {
         method: "POST",
         headers: headers,
@@ -43,7 +43,12 @@ function Page() {
       // Assuming your login endpoint returns a success status code, e.g., 200
       if (response.status === 200) {
         const token = data.token;
-        Cookies.set("token", token, { secure: true, sameSite: "strict", domain: 'localhost', path: '/'});
+        Cookies.set("token", token, {
+          secure: true,
+          sameSite: "strict",
+          domain: "localhost",
+          path: "/",
+        });
         const response = await fetch("http://localhost:3001/templates", {
           method: "GET",
           headers: {

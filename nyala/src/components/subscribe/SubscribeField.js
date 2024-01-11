@@ -164,7 +164,7 @@ export default function SubscribeField(props) {
               responseData.message ===
                 "Subscriber already subscribed to particular list"
             ) {
-              setNotification({type: "warning", message: EXISTING_LIST});
+              setNotification({ type: "warning", message: EXISTING_LIST });
               return;
             }
             setData({ email: undefined, name: "" });

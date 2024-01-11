@@ -32,13 +32,13 @@ function MailCalendar(props) {
     setShowFutureMails(false);
 
     switch (status) {
-      case 'In afwachting':
+      case "In afwachting":
         setSelectBackgroundClass(`${styles.statusPending}`);
         break;
-      case 'Verzonden':
+      case "Verzonden":
         setSelectBackgroundClass(`${styles.statusSuccess}`);
         break;
-      case 'Mislukt':
+      case "Mislukt":
         setSelectBackgroundClass(`${styles.statusError}`);
         break;
       default:

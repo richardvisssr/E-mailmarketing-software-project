@@ -23,7 +23,11 @@ export default function ResubscribeComponent({}) {
     const unsubscribedName = localStorage.getItem("unsubscribeName");
     if (unsubscribedEmail && unsubscribedSubs) {
       const subsArray = JSON.parse(unsubscribedSubs);
-      const success = await resubscribe(unsubscribedEmail, subsArray, unsubscribedName);
+      const success = await resubscribe(
+        unsubscribedEmail,
+        subsArray,
+        unsubscribedName
+      );
       if (success) {
         localStorage.removeItem("unsubscribedEmail");
         localStorage.removeItem("unsubscribedSubs");
@@ -50,7 +54,11 @@ export default function ResubscribeComponent({}) {
             Authorization: `Bearer ${token}`,
           },
           credentials: "include",
-          body: JSON.stringify({ name: name, email: email, subscriptions: subs }),
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            subscriptions: subs,
+          }),
         }
       );
 

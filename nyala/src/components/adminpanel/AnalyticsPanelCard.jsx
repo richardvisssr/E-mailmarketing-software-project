@@ -24,7 +24,9 @@ const AnalyticsPanelCard = (props) => {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/stats/${id}`, {headers: {Authorization: `Bearer ${token}`}})
+    fetch(`http://localhost:3001/stats/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((response) => response.json())
       .then((data) => {
         const key = Object.keys(data)[0];

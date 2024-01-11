@@ -16,9 +16,9 @@ export default function FooterComponent() {
             Ruitenberglaan 26, Arnhem
           </a>
         </div>
-        
+
         <div className={`${styles.linky}`}>
-        <i className="bi bi-envelope-fill "></i>
+          <i className="bi bi-envelope-fill "></i>
           <a
             className={`link-underline link-underline-opacity-0 ${styles.space}`}
             href="mailto: info@svxtend.nl"
