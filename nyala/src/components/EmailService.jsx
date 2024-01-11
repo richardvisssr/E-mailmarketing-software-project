@@ -26,6 +26,9 @@ async function sendDataToSendEmail(
         id,
       }),
     });
+    if (response.status === 400) {
+      return "no_members";
+    }
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

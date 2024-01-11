@@ -127,6 +127,60 @@ function SelectMailingLists(props) {
     });
   };
 
+  const handleSendEmailClick = async () => {
+    if (selectedMailingList.length === 0) {
+      if (selectedMailingList.length > 0 && subscribers.length === 0) {
+        try {
+          const response = await fetch(
+            "http://localhost:3001/sendMail/sendEmail",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              credentials: "include",
+              body: JSON.stringify({
+                html: html,
+                subscribers: subscribers,
+                id: id,
+              }),
+            }
+          );
+          if (response.status === 400) {
+            setNotification({
+              type: "error",
+              message: "Er zijn geen leden in de geselecteerde lijst(en).",
+            });
+          }
+          if (!response.ok || !secondResponse.ok) {
+            setNotification({
+              type: "error",
+              message: "Er ging iets mis met het versturen van de mail",
+            });
+          }
+
+          setNotification({
+            type: "success",
+            message: "E-mail is succesvol verstuurd!",
+          });
+        } catch (error) {
+          setNotification({ type: "error", message: error });
+        }
+      } else {
+        setNotification({
+          type: "error",
+          message: "Er zijn geen abonnees gevonden voor deze mailinglijst",
+        });
+      }
+    } else {
+      setNotification({
+        type: "error",
+        message: "Selecteer een mailinglijst",
+      });
+    }
+  };
+
   return (
     <div className="container mt-4">
       <AlertComponent notification={notification} />

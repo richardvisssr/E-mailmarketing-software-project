@@ -50,7 +50,7 @@ export default function SubscribeLinkButton({ list }) {
   const handleClose = () => setShowNotification(false);
 
   /**
-   * 
+   *
    * Renders the component.
    * @returns {JSX.Element} The JSX element representing the component.
    */

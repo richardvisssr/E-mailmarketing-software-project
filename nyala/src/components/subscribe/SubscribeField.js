@@ -17,6 +17,7 @@ const NO_LISTS_MADE = "Er zijn nog geen maillijsten gemaakt.";
 const FETCH_PROBLEM = "Er is iets foutgegaan tijdens het ophalen.";
 const ADDING_PROBLEM =
   "Er heeft zich een fout opgetreden tijdens het toevoegen van de mail.";
+const EXISTING_LIST = "Dit emailadres is al geabonneerd op deze lijst.";
 
 /**
  * Message to show when a subscriber gets succesfully added.
@@ -155,7 +156,17 @@ export default function SubscribeField(props) {
             }
           );
 
+          const responseData = await response.json();
+
           if (response.ok) {
+            if (
+              response.status === 202 &&
+              responseData.message ===
+                "Subscriber already subscribed to particular list"
+            ) {
+              setNotification({ type: "warning", message: EXISTING_LIST });
+              return;
+            }
             setData({ email: undefined, name: "" });
             setStatus(false);
             setNotification({

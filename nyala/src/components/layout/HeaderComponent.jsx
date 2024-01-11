@@ -75,16 +75,6 @@ export default function HeaderComponent() {
             </Link>
           </li>
           <span className="fs-4 text-dark">|</span>
-          <li className="nav-item">
-            <Link
-              href="/"
-              className={`${styles.linky} nav-link`}
-              aria-current="page"
-            >
-              Uitloggen
-            </Link>
-          </li>
-          <span className="fs-4 text-dark">|</span>
         </ul>
       </div>
       <Link

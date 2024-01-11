@@ -92,7 +92,6 @@ export default function Page({ params }) {
               type: "error",
               message: "Er is iets foutgegaan tijdens het inzien van de mail",
             });
-            console.log(error);
           });
       }
     };

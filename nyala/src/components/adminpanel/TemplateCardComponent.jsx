@@ -1,5 +1,4 @@
 "use client";
-
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import styles from "./button.module.css";
@@ -63,40 +62,15 @@ function TemplateCard(props) {
   const toggleAnalyticsCard = () => {
     setShowAnalytics((prevVisibility) => !prevVisibility);
   };
-
   const setNewTime = (event) => {
     setDateTime(event.target.value);
   };
 
-  /**
-   * Handles changes in the header text input.
-   *
-   * @param {Event} e - The input event containing the new header text value.
-   */
   const handleHeaderTextChange = (e) => {
-    if (e.target.value.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Header mag niet leeg zijn",
-      });
-      return;
-    }
     setHeaderText(e.target.value);
   };
 
-  /**
-   * Handles changes in the subject input.
-   *
-   * @param {Event} e - The input event containing the new subject value.
-   */
   const handleSubjectChange = (e) => {
-    if (e.target.value.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Onderwerp mag niet leeg zijn",
-      });
-      return;
-    }
     setSubject(e.target.value);
   };
 
@@ -117,26 +91,15 @@ function TemplateCard(props) {
     setEmails([]);
     setDateTime("");
     setSubscribers([]);
+    setSubject("");
+    setHeaderText("");
+    setShowHeader(false);
   }, [show]);
 
   useEffect(() => {
     router.prefetch(`/mail/${template.id}`);
   }, [router, template.id]);
 
-  /**
-   * Fetches the HTML content of the email template from the server.
-   *
-   * Initiates an asynchronous request to the server to retrieve the HTML content
-   * of the specified email template. If the request is successful, updates the
-   * component state with the retrieved HTML content. If the template has not been
-   * saved or is empty, sets an error notification. If an error occurs during the
-   * fetch process, sets an error notification.
-   *
-   * @async
-   * @function
-   * @throws {Error} If there is an issue with fetching the template content.
-   * @returns {void}
-   */
   useEffect(() => {
     const fetchHtmlContent = async () => {
       try {
@@ -170,19 +133,6 @@ function TemplateCard(props) {
     fetchHtmlContent();
   }, [template.id]);
 
-  /**
-   * Checks if the email associated with the template has been sent.
-   *
-   * Initiates a request to the server to check whether the email associated with
-   * the current template has been sent. If the request is successful and the
-   * status code is 200, sets the `emailSent` state to true. If an error occurs
-   * during the request, sets an error notification.
-   *
-   * @async
-   * @function
-   * @throws {Error} If there is an issue with checking the email sending status.
-   * @returns {void}
-   */
   useEffect(() => {
     fetch(`http://127.0.0.1:3001/isMailSended/${template.id}`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -200,28 +150,37 @@ function TemplateCard(props) {
       });
   }, []);
 
-  /**
-   * Sends the email using the provided data.
-   */
-  const handleSendEmailClick = async () => {
+  const checkIfEmailCanBeSent = () => {
     if (!subject || subject.trim() === "") {
       setNotification({
         type: "error",
         message: "Onderwerp mag niet leeg zijn!",
       });
-      return;
-    }
-
-    if (!html || html.trim() === "") {
+      return false;
+    } else if (!html || html.trim() === "") {
       setNotification({
         type: "error",
         message: "Design is nog niet opgeslagen en is leeg",
       });
+      return false;
+    } else if (showHeader && headerText.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Header mag niet leeg zijn!",
+      });
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const handleSendEmailClick = async () => {
+    if (!checkIfEmailCanBeSent()) {
       return;
     }
 
     if (mails.length > 0) {
-      await sendDataToSendEmail(
+      const sent = await sendDataToSendEmail(
         html,
         sentData.subscribersData,
         subject,
@@ -229,12 +188,19 @@ function TemplateCard(props) {
         headerText,
         template.id
       );
-      props.setNotification((prevNotification) => ({
-        ...prevNotification,
-        type: "success",
-        message: "Mail is succesvol verstuurd.",
-      }));
-      setShow(false);
+      if (sent === "no_members") {
+        setNotification({
+          type: "error",
+          message: "Er zijn geen leden in de geselecteerde lijst(en).",
+        });
+      } else if (sent === true) {
+        props.setNotification((prevNotification) => ({
+          ...prevNotification,
+          type: "success",
+          message: "Mail is succesvol verstuurd.",
+        }));
+        setShow(false);
+      }
     } else {
       setNotification({
         type: "error",
@@ -243,23 +209,8 @@ function TemplateCard(props) {
     }
   };
 
-  /**
-   * Plans the email for future sending.
-   */
   const handlePlanMail = async () => {
-    if (!subject || subject.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Onderwerp mag niet leeg zijn!",
-      });
-      return;
-    }
-
-    if (!html || html.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Design is nog niet opgeslagen en is leeg",
-      });
+    if (!checkIfEmailCanBeSent()) {
       return;
     }
 
@@ -277,7 +228,7 @@ function TemplateCard(props) {
             id: generateUniqueShortId(),
             title: template.title,
             html: html,
-            subs: subscribers,
+            subs: sentData.subscribersData,
             date: dateTime,
             showHeader: showHeader,
             headerText: headerText,
@@ -285,19 +236,28 @@ function TemplateCard(props) {
           }),
         });
         if (!response.ok) {
+          if (response.status === 400) {
+            setNotification({
+              type: "error",
+              message: "Er zijn geen leden in de geselecteerde lijst(en).",
+            });
+          } else {
+            props.setNotification((prevNotification) => ({
+              ...prevNotification,
+              type: "error",
+              message: "Er is iets misgegaan bij het versturen van de mail",
+            }));
+            setShow(false);
+          }
+        } else {
           props.setNotification((prevNotification) => ({
             ...prevNotification,
-            type: "error",
-            message: "Er is iets misgegaan bij het versturen van de mail",
+            type: "success",
+            message: "Mail is succesvol ingepland",
           }));
+          setShow(false);
+          socket.send("Email send");
         }
-        props.setNotification((prevNotification) => ({
-          ...prevNotification,
-          type: "success",
-          message: "Mail is succesvol ingepland",
-        }));
-        setShow(false);
-        socket.send("Email send");
       } catch (error) {
         props.setNotification((prevNotification) => ({
           ...prevNotification,
@@ -324,19 +284,6 @@ function TemplateCard(props) {
     setShowDeleteModal(false);
   };
 
-  /**
-   * Handles the confirmation of template deletion.
-   *
-   * Initiates the deletion of the current email template by making a DELETE request
-   * to the server. If the deletion is successful, updates the UI and displays a
-   * success notification. If an error occurs during the deletion process,
-   * displays an error notification.
-   *
-   * @async
-   * @function
-   * @throws {Error} If there is an issue with the template deletion process.
-   * @returns {void}
-   */
   const confirmDelete = () => {
     fetch(`http://localhost:3001/template/${template.id}`, {
       method: "DELETE",
@@ -364,6 +311,7 @@ function TemplateCard(props) {
           type: "error",
           message: "Er ging iets mis met het verwijderen van de template",
         });
+        // Handle error as needed
         setShowDeleteModal(false);
       });
   };
@@ -375,6 +323,14 @@ function TemplateCard(props) {
           <Button variant="danger" onClick={handleDelete}>
             Verwijderen
           </Button>
+          {/* {!error && (
+            <Card.Img
+              variant="top"
+              src={image.src}
+              style={{ width: "100%", height: "auto" }}
+            />
+          )} */}
+
           <Card.Body style={{ marginTop: "1.5rem" }}>
             <Card.Title>{template.title}</Card.Title>
             <div className="d-flex justify-content-between">
@@ -473,9 +429,9 @@ function TemplateCard(props) {
                 placeholder="Voer header tekst in"
                 className="form-control text-center"
                 wrap="hard"
-                rows="4"
+                rows="4" // Set the number of rows as needed
                 style={{
-                  whiteSpace: "pre-wrap",
+                  whiteSpace: "pre-wrap", // Behoudt witruimte inclusief nieuwe regels
                   fontFamily: "Arial, sans-serif",
                 }}
               />

@@ -19,11 +19,19 @@ const UnsubscribeReasonChart = ({ linkData }) => {
    * @returns {void}
    */
   const showChart = () => {
+    const pattern = /^(?:https?:\/\/)?(?:www\.)?([^\.]+)\..+?\/?/;
     const svg = d3.select(chartRef.current);
     svg.selectAll("*").remove();
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-    const linked = linkData.map((item) => item.link);
+    const linked = linkData.map((item) => {
+      const match = item.link.match(pattern);
+      if (match) {
+        return match[1].charAt(0).toUpperCase() + match[1].slice(1);
+      }
+    });
+
+    const completeLink = linkData.map((item) => item.link);
     const count = linkData.map((item) => item.count);
 
     const barHeight = 20;
@@ -40,7 +48,7 @@ const UnsubscribeReasonChart = ({ linkData }) => {
 
     const y = d3
       .scaleBand()
-      .domain(d3.sort(linkData, (d) => -d.count).map((d) => d.link))
+      .domain(linked)
       .rangeRound([margin.top, height - margin.bottom])
       .padding(0.2);
 
@@ -64,7 +72,12 @@ const UnsubscribeReasonChart = ({ linkData }) => {
     svg
       .append("g")
       .attr("transform", `translate(${margin.left},0)`)
-      .call(d3.axisLeft(y));
+      .call(d3.axisLeft(y))
+      .selectAll("text")
+      .html(
+        (d, i) =>
+          `<a href="${completeLink[i]}" style="text-decoration: none; color:black;">${linked[i]}</a>`
+      );
 
     svg
       .append("g")

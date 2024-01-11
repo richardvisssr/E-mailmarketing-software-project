@@ -75,14 +75,14 @@ export default function TemplateAnalyse({ id }) {
         <ProgressBar
           text="Het aantal online views"
           count={stats.opened}
-          total={20}
+          total={stats.recipientCount}
         />
       </div>
       <div className="w-50 mx-auto mt-5">
         <ProgressBar
           text="Het aantal uitgeschreven personen"
           count={stats.unsubscribed}
-          total={10}
+          total={stats.recipientCount}
         />
       </div>
       <div className="w-50 mx-auto mt-5">
