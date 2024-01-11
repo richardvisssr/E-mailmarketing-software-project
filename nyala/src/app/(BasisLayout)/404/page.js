@@ -9,8 +9,8 @@ export default function page() {
       <h1 className={`${styles.head}`}>
         <span>404</span> - Pagina niet gevonden
       </h1>
-      <p>Sorry, de pagina die je zoekt bestaat niet.</p>
-      <p>Voor meer informatie, neem contact op met info@svxtend.nl</p>
+      <h5 className={`mb-4`}>Sorry, de pagina die je zoekt bestaat niet.</h5>
+      <p>Voor meer informatie, neem contact op met <a className={`${styles.mail}`} href="mailto: info@svxtend.nl">info@svxtend.nl</a></p>
       <Link href="/" replace className={`${styles.customContainer}`}>
         <button type="button" className={`btn ${styles.button}`}>
           Ga naar de thuispagina
