@@ -24,6 +24,7 @@ function TableRowComponent(props) {
       <td className="text-end">
         {mail.status !== "Verzonden" && (
           <i
+            id="calendar"
             className={`bi bi-calendar-week-fill ${styles.icon}`}
             onClick={() => props.handleOpenModal(mail.id, mail.title)}
             style={{ cursor: "pointer" }}

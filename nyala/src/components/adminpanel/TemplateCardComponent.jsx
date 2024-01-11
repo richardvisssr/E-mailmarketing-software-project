@@ -387,7 +387,7 @@ function TemplateCard(props) {
             onClick={confirmDelete}
             className={`btn ${styles.knopPrimary}`}
           >
-            Verwijderen
+            Bevestigen
           </Button>
         </Modal.Footer>
       </Modal>

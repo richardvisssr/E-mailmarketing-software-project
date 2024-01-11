@@ -65,8 +65,8 @@ export default function SubscribersTable() {
     setModalContent(
       <div className="p-2">
         <p>
-          Weet u zeker dat u de gebruiker <strong>{subscriber.email}</strong>{" "}
-          wilt aanpassen?
+          Weet u zeker dat u de gegevens van de gebruiker{" "}
+          <strong>{subscriber.email}</strong> wilt veranderen?
         </p>
 
         <div className="p-2">
@@ -294,10 +294,12 @@ export default function SubscribersTable() {
                     <i
                       className={`bi bi-pencil-fill m-4 ${styles.icon}`}
                       onClick={() => handleShow(subscriber)}
+                      placeholder="Wijzigen"
                     ></i>
                     <i
                       className={`bi bi-trash3-fill m-4 me-5 ${styles.icon}`}
                       onClick={() => handleShowDelete(subscriber.email)}
+                      placeholder="Verwijderen"
                     ></i>
                   </td>
                 </tr>

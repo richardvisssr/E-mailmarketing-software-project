@@ -225,6 +225,7 @@ function MailCalendar(props) {
             <div className="form-group mb-3">
               <label htmlFor="statusFilterSelect">Filter op status:</label>
               <select
+                id="statusFilterSelect"
                 className={`form-control ${selectBackgroundClass}`}
                 value={statusFilter}
                 onChange={(e) => {
@@ -287,6 +288,7 @@ function MailCalendar(props) {
           <Form.Group controlId="emailDate">
             <Form.Label>Nieuwe datum</Form.Label>
             <Form.Control
+              id="emailDate"
               type="datetime-local"
               value={emailDate}
               onChange={(e) => updateEmailDate(e)}
@@ -298,7 +300,11 @@ function MailCalendar(props) {
           <Button variant="secondary" onClick={handleCloseModal}>
             Close
           </Button>
-          <Button variant="primary" onClick={() => handleSaveChanges(id)}>
+          <Button
+            id="saveChanges"
+            variant="primary"
+            onClick={() => handleSaveChanges(id)}
+          >
             Save Changes
           </Button>
         </Modal.Footer>
