@@ -66,7 +66,6 @@ describe("PUT /planMail", () => {
         subject: "testSubject",
       })
       .set("Authorization", `Bearer ${token}`);
-    // console.log(response.error);
     expect(response.statusCode).toBe(200);
     expect(response.text).toBe("Mail planned successfully");
   });

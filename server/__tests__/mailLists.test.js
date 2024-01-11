@@ -228,7 +228,6 @@ describe("Mail List API", () => {
       .put("/mail/updateListName")
       .send({ newName: newName, name: name })
       .set("Authorization", `Bearer ${token}`);
-    console.log(response.body);
     expect(response.status).toBe(200);
     expect(response.body.message).toBe(
       `The list ${name} is updated to ${newName}`
