@@ -4,17 +4,17 @@ const routes = require("../routes/sendEmail");
 const mongoose = require("mongoose");
 
 const { app, httpServer, server } = require("../app");
+const { PlannedEmail } = require("../model/emailEditor");
 app.use(express.json());
 app.use("/", routes);
 
-const PlannedEmail = mongoose.model("PlannedEmail");
 let token;
 
 beforeAll(async () => {
   token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3MjI0NjgsImV4cCI6MTcxMjQ5ODQ2OH0.a-WwuZn-jBwTfZi3UIvCrJxr-dU8cyyKAnZZCVAtByU";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ4ODY0OTYsImV4cCI6MTcxMjY2MjQ5Nn0.STjc2iZmL_VjLXI5UrPhyIvRSqHd5IxbUITB7oLzjSc";
   if (mongoose.connection.readyState === 0) {
-    await mongoose.connect(`mongodb://localhost:27017/nyala`);
+    await mongoose.connect(`mongodb://localhost:27017/nyalaTest`);
   }
 });
 
@@ -22,8 +22,10 @@ beforeEach(async () => {
   const plannedEmailData = {
     id: "testPlannedEmailId",
     title: "testTitle",
+    mailId: "testMailId",
+    sent: false,
     html: "<p>Your test HTML content here</p>",
-    subscribers: [{ id: "1234567", name: "test", email: "test@gmail.com" }],
+    subscribers: [{ _id: "1234567", name: "test", email: "test@gmail.com" }],
     date: new Date(),
     sended: false,
     showHeader: true,
@@ -55,17 +57,15 @@ describe("PUT /planMail", () => {
         id: "testPlannedEmailId",
         title: "testTitle",
         mailId: "testMailId",
+        sent: false,
         html: "<p>Test HTML content</p>",
-        subs: [
-          { _id: "1234567", name: "test1", email: "test1@gmail.com" },
-          { _id: "7654321", name: "test2", email: "test2@gmail.com" },
-        ],
+        subs: [[{ _id: "1234567", name: "test", email: "test@gmail.com" }]],
         date: new Date(),
         showHeader: true,
+        headerText: "Test Header",
         subject: "testSubject",
       })
       .set("Authorization", `Bearer ${token}`);
-
     expect(response.statusCode).toBe(200);
     expect(response.text).toBe("Mail planned successfully");
   });
@@ -77,8 +77,9 @@ describe("PUT /planMail", () => {
         id: "testPlannedEmailId",
         title: "testTitle",
         mailId: "testMailId",
+        sent: false,
         html: "<p>Test HTML content</p>",
-        subs: [{ _id: "1234567", name: "test1", email: "test@gmail.com" }],
+        subs: [[{ _id: "1234567", name: "test", email: "test@gmail.com" }]],
         date: new Date(),
         sended: false,
         showHeader: true,
@@ -97,8 +98,9 @@ describe("PUT /planMail", () => {
         id: "testPlannedEmailId2",
         title: "testTitle",
         mailId: "testMailId",
+        sent: false,
         html: "<p>Test HTML content</p>",
-        subs: [{ _id: "1234568", name: "test1", email: "jan@gmail.com" }],
+        subs: [[{ _id: "1234567", name: "test", email: "test@gmail.com" }]],
         date: new Date(),
         showHeader: true,
         subject: "testSubject",
@@ -120,10 +122,9 @@ describe("PUT /planMail", () => {
         id: "testPlannedEmailId",
         title: "testTitle",
         html: "<p>Test HTML content</p>",
-        subs: [
-          { _id: "1234567", name: "test1", email: "test1@gmail.com" },
-          { _id: "7654321", name: "test2", email: "test2@gmail.com" },
-        ],
+        mailId: "testMailId",
+        sent: false,
+        subs: [[{ _id: "1234567", name: "test", email: "test@gmail.com" }]],
         date: new Date(),
         showHeader: true,
         subject: "testSubject",

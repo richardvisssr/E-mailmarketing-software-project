@@ -12,7 +12,7 @@ let token;
 
 beforeAll(async () => {
   token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3MjI0NjgsImV4cCI6MTcxMjQ5ODQ2OH0.a-WwuZn-jBwTfZi3UIvCrJxr-dU8cyyKAnZZCVAtByU";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ4ODY0OTYsImV4cCI6MTcxMjY2MjQ5Nn0.STjc2iZmL_VjLXI5UrPhyIvRSqHd5IxbUITB7oLzjSc";
   if (mongoose.connection.readyState === 0) {
     await mongoose.connect(`mongodb://localhost:27017/nyala`);
   }
@@ -28,6 +28,8 @@ beforeEach(async () => {
   const emailData = {
     id: "testEmailId",
     html: "<p>Your test HTML content here</p>",
+    showHeader: true,
+    subject: "Test Subject",
   };
 
   await Email.create(emailData);
@@ -100,7 +102,6 @@ describe("GET /templates/:id", () => {
 
 describe("DELETE /template/:id", () => {
   it("should respond with a success message", async () => {
-    // Create a design or email with the id "testEmailId"
     await Design.create({
       id: "testEmailId",
       design: { key: "value" },
@@ -120,7 +121,9 @@ describe("DELETE /template/:id", () => {
       throw new Error("Internal Server Error");
     });
 
-    const response = await request(app).delete("/template/testEmailId").set("Authorization", `Bearer ${token}`);
+    const response = await request(app)
+      .delete("/template/testEmailId")
+      .set("Authorization", `Bearer ${token}`);
     expect(response.statusCode).toBe(500);
     expect(response.body).toEqual({ message: "Internal Server Error" });
   }, 10000);

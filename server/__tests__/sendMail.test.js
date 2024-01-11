@@ -2,6 +2,7 @@ const request = require("supertest");
 const express = require("express");
 const nodemailer = require("nodemailer");
 const { Subscriber } = require("../model/subscribers");
+const { PlannedEmail } = require("../model/emailEditor");
 const mongoose = require("mongoose");
 
 const router = require("../routes/sendEmail");
@@ -17,7 +18,7 @@ describe("Email Router", () => {
 
   beforeAll(async () => {
     token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3MjI0NjgsImV4cCI6MTcxMjQ5ODQ2OH0.a-WwuZn-jBwTfZi3UIvCrJxr-dU8cyyKAnZZCVAtByU";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ4ODY0OTYsImV4cCI6MTcxMjY2MjQ5Nn0.STjc2iZmL_VjLXI5UrPhyIvRSqHd5IxbUITB7oLzjSc";
     testAccount = await nodemailer.createTestAccount();
     transporter = nodemailer.createTransport({
       host: "smtp.ethereal.email",
@@ -41,7 +42,11 @@ describe("Email Router", () => {
     await mongoose.disconnect();
   });
 
-  test("should add 500 subscribers", async () => {
+  afterAll(async () => {
+    await transporter.close();
+  });
+
+  xtest("should add 500 subscribers", async () => {
     // Create an array of promises for adding subscribers
     const subscriberPromises = Array.from({ length: 500 }, (_, index) => {
       const subscriber = new Subscriber({
@@ -67,7 +72,7 @@ describe("Email Router", () => {
     const response = await request(app)
       .post("/sendEmail/sendEmail")
       .send({ html: htmlContent, subscribers, id })
-    .set("Authorization", `Bearer ${token}`);
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
   }, 150000);

@@ -11,7 +11,7 @@ describe("Subscribers routes test", () => {
 
   beforeAll(async () => {
     token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ3MjI0NjgsImV4cCI6MTcxMjQ5ODQ2OH0.a-WwuZn-jBwTfZi3UIvCrJxr-dU8cyyKAnZZCVAtByU";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ4ODY0OTYsImV4cCI6MTcxMjY2MjQ5Nn0.STjc2iZmL_VjLXI5UrPhyIvRSqHd5IxbUITB7oLzjSc";
     if (mongoose.connection.readyState === 0) {
       await mongoose.connect("mongodb:127.0.0.1:27017/nyalaTest", {
         useNewUrlParser: true,
@@ -64,7 +64,7 @@ describe("Subscribers routes test", () => {
 
   test("Adding reason to unsubscribe", async () => {
     const response = await request(app)
-      .post("/reason")
+      .put("/reason")
       .send({ reden: "Ik wil geen mail meer" })
       .set("Authorization", `Bearer ${token}`);
 
@@ -244,25 +244,26 @@ describe("Subscribers routes test", () => {
       throw new Error("Internal server error");
     });
 
-    const response = await request(app).get("/subscribers/all");
+    const response = await request(app)
+      .get("/subscribers/all")
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ message: "Internal server error" });
-  });
+  }, 10000);
 
   test("Adding a subscriber with existing email", async () => {
     const response = await request(app)
-      .post("/subscribers/add")
+      .put("/subscribers/add") // Changed from .post to .put
       .send({
         email: subscriberEmail.email,
         name: subscriberEmail.name,
-        subscriptions: ["Leden"],
+        subscriptions: subscriberEmail.subscriptions,
       })
       .set("Authorization", `Bearer ${token}`);
-
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-      message: "Subscriptions added to existing subscriber",
+      message: "Subscriber updated",
     });
   });
 
@@ -395,5 +396,21 @@ describe("Subscribers routes test", () => {
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Subscriber not found" });
+  });
+
+  test("should update list", async () => {
+    const newList = "ICT";
+    await Subscriber.create({
+      email: "Matthias@budding.nl",
+      name: "Matthias",
+      subscriptions: ["Nieuwsbrief", "CMD", "ICT", "Leden"],
+    });
+    const response = await request(app)
+      .put("/update/Nieuwsbrief")
+      .send({ name: newList })
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ message: "Subscriber updated" });
   });
 });
