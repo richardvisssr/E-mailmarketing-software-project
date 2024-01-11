@@ -2,13 +2,18 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-
 import styles from "./Views.module.css";
 import AlertComponent from "../alert/AlertComponent";
 import MailListAccordion from "./MailListAcordionComponent";
 import ModelComponent from "./ModelComponent";
 import Cookies from "js-cookie";
 
+/**
+ * MailListComponent for managing mailing lists and subscribers.
+ *
+ * @component
+ * @returns {JSX.Element} - MailListComponent.
+ */
 export default function MailListComponent() {
   const [mailLists, setMailLists] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
@@ -33,6 +38,12 @@ export default function MailListComponent() {
   });
   const token = Cookies.get("token");
 
+  /**
+   * Fetches mailing lists from the server on component mount.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     fetch("http://localhost:3001/mail/getList", {
       method: "GET",
@@ -52,6 +63,12 @@ export default function MailListComponent() {
       );
   }, []);
 
+  /**
+   * Fetches subscribers for each mailing list on mailing list change.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     const fetchSubscribers = async () => {
       const promises = mailLists.map((mailList) =>
@@ -104,6 +121,12 @@ export default function MailListComponent() {
     setNewName(e.target.value);
   };
 
+  /**
+   * Sets modal content and footer content based on the selected subscriber.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     if (selectedSubscriber) {
       setModalContent(
@@ -138,6 +161,12 @@ export default function MailListComponent() {
     }
   }, [selectedSubscriber]);
 
+  /**
+   * Sets modal content and footer content based on the selected list to delete.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     if (selectedListToDelete) {
       setModalContent(
@@ -168,6 +197,12 @@ export default function MailListComponent() {
     }
   }, [selectedListToDelete]);
 
+  /**
+   * Sets modal content and footer content based on the selected list to update.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     if (selectedListToUpdate) {
       setModalContent(
@@ -221,6 +256,13 @@ export default function MailListComponent() {
     });
   };
 
+  /**
+   * Handles the form submission for adding a new mailing list.
+   *
+   * @function
+   * @param {Event} event - The form submit event.
+   * @returns {void}
+   */
   const handleListAdd = (event) => {
     event.preventDefault();
 
@@ -261,6 +303,15 @@ export default function MailListComponent() {
     }
   };
 
+  /**
+   * Handles the unsubscription of a subscriber from a mailing list.
+   *
+   * @async
+   * @function
+   * @param {string} email - Email of the subscriber.
+   * @param {string} subs - Mailing list from which to unsubscribe.
+   * @returns {Promise<void>}
+   */
   const handleUnsubscribe = async (email, subs) => {
     try {
       await fetch("http://localhost:3001/unsubscribe/subs", {
@@ -299,6 +350,12 @@ export default function MailListComponent() {
     }
   };
 
+  /**
+   * Handles changes when updating the mailing list name.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     if (changeName) {
       if (newName === "" || newName === null) {
@@ -409,6 +466,14 @@ export default function MailListComponent() {
     }
   }, [changeName]);
 
+  /**
+   * Deletes a mailing list.
+   *
+   * @async
+   * @function
+   * @param {string} list - The list to delete.
+   * @returns {Promise<void>}
+   */
   const deleteList = async (list) => {
     try {
       await fetch(`http://localhost:3001/mail/deleteList`, {
@@ -432,6 +497,14 @@ export default function MailListComponent() {
     }
   };
 
+  /**
+   * Handles the deletion of subscriptions associated with a mailing list.
+   *
+   * @async
+   * @function
+   * @param {string} subscription - The mailing list to delete subscriptions.
+   * @returns {Promise<void>}
+   */
   const handleSubscribtionDelete = async (subscription) => {
     try {
       await fetch(`http://localhost:3001/unsubscribe/${subscription}`, {

@@ -13,6 +13,12 @@ const UnsubscribeReasonChart = ({ reasonData }) => {
     }
   }, [reasonData]);
 
+  /**
+   * Renders a bar chart using D3.js based on the provided data.
+   *
+   * @function
+   * @returns {void}
+   */
   const showChart = () => {
     const svg = d3.select(chartRef.current);
     svg.selectAll("*").remove();
@@ -73,6 +79,7 @@ const UnsubscribeReasonChart = ({ reasonData }) => {
       .style("font-size", "16px")
       .text("Aantal uitschrijvingen per reden");
   };
+
   return <svg className={`${styles.chart}`} ref={chartRef} />;
 };
 

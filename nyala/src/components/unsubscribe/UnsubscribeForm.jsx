@@ -6,6 +6,15 @@ import SubscriptionForm from "../categories/CategoriesComponent";
 import AlertComponent from "../alert/AlertComponent";
 import Cookies from "js-cookie";
 
+/**
+ * UnsubscribeForm component for handling user unsubscription and providing relevant UI.
+ *
+ * @component
+ * @param {Object} props - Component properties.
+ * @param {string} props.userid - User ID.
+ * @param {string} props.emailid - Email ID.
+ * @returns {JSX.Element} - UnsubscribeForm component.
+ */
 export default function UnsubscribeForm({ userid, emailid }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -18,7 +27,6 @@ export default function UnsubscribeForm({ userid, emailid }) {
   const [warning, setWarning] = useState({ type: "", message: "" });
   const token = Cookies.get("token");
 
-  // Dit zijn de redenen gekregen van de PO
   const reasons = [
     "Te veel e-mails",
     "Irrelevantie",
@@ -27,8 +35,13 @@ export default function UnsubscribeForm({ userid, emailid }) {
     "Anders",
   ];
 
-  // Wanneer de gebruiker zich overal voor wilt uitschrijven en zichzelf wilt verwijderen uit de database
-  const handleCompleteUnsubscribe = async () => {
+  /**
+   * Handles the complete unsubscription of the user and deletion from the database.
+   *
+   * @async
+   * @function
+   * @returns {Promise<boolean>} - True if successful, false otherwise.
+   */ const handleCompleteUnsubscribe = async () => {
     try {
       const unsubscribeResponse = await fetch(
         "http://localhost:3001/unsubscribe",
@@ -59,8 +72,13 @@ export default function UnsubscribeForm({ userid, emailid }) {
     } catch (error) {}
   };
 
-  // Wanneer de gebruiker een aantal abonnementen wilt verwijderen
-  const handleUnsubscribe = async () => {
+  /**
+   * Handles the unsubscription of the user from selected subscriptions.
+   *
+   * @async
+   * @function
+   * @returns {Promise<boolean>} - True if successful, false otherwise.
+   */ const handleUnsubscribe = async () => {
     try {
       const unsubscribeResponse = await fetch(
         "http://localhost:3001/unsubscribe/subs",
@@ -102,6 +120,13 @@ export default function UnsubscribeForm({ userid, emailid }) {
     }
   };
 
+  /**
+   * Saves unsubscribed subscriptions to the database.
+   *
+   * @async
+   * @function
+   * @returns {Promise<boolean>} - True if successful, false otherwise.
+   */
   const saveUnsubscribedSubs = async () => {
     try {
       const unsubscribedSubs = await fetch(
@@ -132,8 +157,13 @@ export default function UnsubscribeForm({ userid, emailid }) {
     }
   };
 
-  // Reden van uitschrijven toevoegen aan de database
-  const handleReasonSubmit = async () => {
+  /**
+   * Submits the reason for unsubscription to the database.
+   *
+   * @async
+   * @function
+   * @returns {Promise<boolean>} - True if successful, false otherwise.
+   */ const handleReasonSubmit = async () => {
     try {
       const reasonResponse = await fetch("http://localhost:3001/reason", {
         method: "PUT",
@@ -159,6 +189,12 @@ export default function UnsubscribeForm({ userid, emailid }) {
     }
   };
 
+  /**
+   * Fetches user subscriptions and sets the state when a subscription is selected.
+   *
+   * @function
+   * @returns {void}
+   */
   useEffect(() => {
     const getAuth = async () => {
       const response = await fetch("http://localhost:3001/tempAuth", {
@@ -216,6 +252,13 @@ export default function UnsubscribeForm({ userid, emailid }) {
     } catch (error) {}
   }, [selectedSubs]);
 
+  /**
+   * Handles the change of checkbox value for selected subscriptions.
+   *
+   * @function
+   * @param {Event} event - The checkbox change event.
+   * @returns {void}
+   */
   const changeValue = (event) => {
     const { value, checked } = event.target;
     setSelectedSubs((prevSelection) => {
@@ -229,18 +272,16 @@ export default function UnsubscribeForm({ userid, emailid }) {
 
   const changeReason = (selectedReason) => {
     setReason(selectedReason);
-
-    if (selectedReason === "Anders") {
-      setCustomReason("");
-    }
   };
 
-  const handleEigenRedenChange = (e) => {
-    setCustomReason(e.target.value);
-  };
-
-  // Hierin worden alle functies op zijn eigen tijd aangeroepen
-  const handleSubmit = async (e) => {
+  /**
+   * Handles the form submission for unsubscription.
+   *
+   * @async
+   * @function
+   * @param {Event} e - The form submit event.
+   * @returns {void}
+   */ const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedSubs || !reason) {
       setWarning({
@@ -285,6 +326,12 @@ export default function UnsubscribeForm({ userid, emailid }) {
     }
   };
 
+  /**
+   * Renders the list of unsubscribe reasons and associated UI elements.
+   *
+   * @function
+   * @returns {JSX.Element} - JSX element containing unsubscribe reasons and UI elements.
+   */
   const showRedenen = () => {
     if (subscribersList) {
       return (
@@ -330,6 +377,7 @@ export default function UnsubscribeForm({ userid, emailid }) {
         </div>
       );
     } else {
+      return <></>;
     }
   };
 

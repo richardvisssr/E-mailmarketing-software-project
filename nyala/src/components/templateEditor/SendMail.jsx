@@ -4,6 +4,16 @@ import SubscriptionForm from "../categories/CategoriesComponent";
 import AlertComponent from "../alert/AlertComponent";
 import Cookies from "js-cookie";
 
+/**
+ * React component for selecting mailing lists and sending emails.
+ *
+ * @component
+ * @param {Object} props - The properties passed to the component.
+ * @param {string} props.id - The identifier for the email.
+ * @param {Function} props.onDataChange - Callback function triggered on data change.
+ * @param {Function} props.setEmails - Function to set the selected emails.
+ * @returns {JSX.Element} JSX element representing the SelectMailingLists component.
+ */
 function SelectMailingLists(props) {
   const { id } = props;
   const [mailingList, setMailingLists] = useState([]);
@@ -13,6 +23,11 @@ function SelectMailingLists(props) {
   const [notification, setNotification] = useState({ type: "", message: "" });
   const token = Cookies.get("token");
 
+  /**
+   * Fetch mailing lists from the server on component mount.
+   *
+   * @useEffect
+   */
   useEffect(() => {
     fetch("http://localhost:3001/mail/getList", {
       credentials: "include",
@@ -30,6 +45,11 @@ function SelectMailingLists(props) {
       );
   }, []);
 
+  /**
+   * Fetch subscribers and email data when selected mailing lists change.
+   *
+   * @useEffect
+   */
   useEffect(() => {
     if (selectedMailingList.length > 0) {
       Promise.all([
@@ -81,6 +101,13 @@ function SelectMailingLists(props) {
     }
   }, [selectedMailingList, id]);
 
+  /**
+   * Handle change in selected mailing lists.
+   *
+   * @param {Object} event - The event object.
+   * @param {boolean} event.target.checked - Whether the checkbox is checked.
+   * @param {string} event.target.value - The value of the selected mailing list.
+   */
   const handleMailingChange = (event) => {
     const { checked, value } = event.target;
     setSelectedMailingList((prevSelected) => {

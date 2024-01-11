@@ -14,6 +14,10 @@ const AnalyticsPanelCard = (props) => {
   const id = props.id;
   const token = Cookies.get("token");
 
+  /**
+   * Initializes a WebSocket connection when the component mounts.
+   * Closes the WebSocket connection when the component unmounts.
+   */
   useEffect(() => {
     const socket = new WebSocket("ws://localhost:7002/socket");
     setSocket(socket);
@@ -23,6 +27,11 @@ const AnalyticsPanelCard = (props) => {
     };
   }, []);
 
+  /**
+   * Fetches analytics data for the specified ID from the server and updates state.
+   * Displays an error notification if there's an issue with the data retrieval.
+   * @param {string} id - The ID of the analytics data to be fetched.
+   */
   useEffect(() => {
     fetch(`http://localhost:3001/stats/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -43,6 +52,13 @@ const AnalyticsPanelCard = (props) => {
       });
   }, [id]);
 
+  /**
+   * Listens for WebSocket messages and updates state based on the received data.
+   * Handles different types of tracking events (online view, unsubscribe, hyperlinks).
+   * Displays an error notification if there's an issue with parsing the WebSocket message.
+   * @param {WebSocket} socket - The WebSocket connection.
+   * @param {string} id - The ID of the analytics data to be updated.
+   */
   useEffect(() => {
     if (!socket) return;
 

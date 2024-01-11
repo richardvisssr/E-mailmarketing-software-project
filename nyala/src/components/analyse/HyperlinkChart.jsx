@@ -13,6 +13,11 @@ const UnsubscribeReasonChart = ({ linkData }) => {
     }
   }, [linkData]);
 
+  /**
+   * Renders a bar chart using D3.js based on the provided linkData.
+   * @function
+   * @returns {void}
+   */
   const showChart = () => {
     const pattern = /^(?:https?:\/\/)?(?:www\.)?([^\.]+)\..+?\/?/;
     const svg = d3.select(chartRef.current);
@@ -92,6 +97,7 @@ const UnsubscribeReasonChart = ({ linkData }) => {
       .style("font-size", "16px")
       .text("Aantal keren dat er op een link is geklikt");
   };
+
   return <svg className={`${styles.barChart}`} ref={chartRef} />;
 };
 

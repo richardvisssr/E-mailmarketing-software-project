@@ -6,6 +6,14 @@ import HyperlinkChart from "./HyperLinkChart";
 import AlertComponent from "../alert/AlertComponent";
 import Cookies from "js-cookie";
 
+/**
+ * React component for analyzing and displaying statistics.
+ *
+ * @component
+ * @param {Object} props - The properties passed to the component.
+ * @param {string} props.id - The ID used to fetch statistics.
+ * @returns {JSX.Element} JSX element representing the template analysis.
+ */
 export default function TemplateAnalyse({ id }) {
   const socket = new WebSocket("ws://127.0.0.1:7002/socket");
   const [stats, setStats] = useState(0);
@@ -38,6 +46,13 @@ export default function TemplateAnalyse({ id }) {
     setViewChange(false);
   }, [viewChange]);
 
+  /**
+   * Fetches statistics data from the server and updates the component state.
+   *
+   * @async
+   * @function
+   * @returns {void}
+   */
   const getStats = async () => {
     fetch(`http://localhost:3001/stats/${id}`, {
       headers: { Authorization: `Bearer ${token}` },

@@ -13,16 +13,15 @@ const MailListChart = ({ mailListData, refreshChart }) => {
     }
   }, [mailListData, refreshChart]);
 
+  /**
+   * Renders a donut chart based on the provided mail list data.
+   */
   const showChart = () => {
     const svg = d3.select(chartRef.current);
-
     svg.selectAll("*").remove();
-
     const name = mailListData.map((item) => item.name);
     const count = mailListData.map((item) => item.count);
-
     const total = count.reduce((a, b) => a + b, 0);
-
     const width = 400;
     const height = 400;
 

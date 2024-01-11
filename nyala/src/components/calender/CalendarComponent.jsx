@@ -7,6 +7,17 @@ import AlertComponent from "../alert/AlertComponent";
 import TableRowComponent from "./TableRowComponent";
 import Cookies from "js-cookie";
 
+/**
+ * MailCalendar component for displaying and managing scheduled emails.
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {Object} props.emails - Object containing email data
+ * @param {Array} props.emails.plannedMails - Array of planned email objects
+ * @param {Function} props.shouldUpdate - Function to trigger an update in the parent component
+ * @param {Function} props.deleteMail - Function to delete an email
+ * @returns {JSX.Element} - Rendered component
+ */
 function MailCalendar(props) {
   const emails = props.emails;
   const [date, setDate] = useState(new Date());
@@ -26,6 +37,11 @@ function MailCalendar(props) {
   const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
   lastDayOfMonth.setHours(23, 59, 59, 999);
 
+  /**
+   * Handles changes in the status filter dropdown.
+   *
+   * @param {Object} e - The event object
+   */
   const handleStatusChange = (e) => {
     const status = e.target.value;
     setStatusFilter(status);
@@ -61,6 +77,10 @@ function MailCalendar(props) {
     setShowModal(false);
   };
 
+  /**
+   * Saves changes to the email date in the backend.
+   * Triggers an update in the parent component upon success.
+   */
   const handleSaveChanges = async () => {
     if (emailDate === "") {
       setNotification({
@@ -109,6 +129,11 @@ function MailCalendar(props) {
     setDate(nextMonth);
   };
 
+  /**
+   * Filters and sorts the list of planned emails based on selected options.
+   *
+   * @type {Array} filteredMails - Array of filtered and sorted email objects
+   */
   const filteredMails = emails.plannedMails
     .filter((email) => {
       const emailDate = new Date(email.date);

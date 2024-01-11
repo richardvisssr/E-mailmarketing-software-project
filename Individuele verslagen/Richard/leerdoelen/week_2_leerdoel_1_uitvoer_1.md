@@ -3,26 +3,25 @@
 _Beschrijf wat je -tot nu toe- hebt gedaan om te werken aan je persoonlijke leerdoel_
 
 ### Hoe heb je het aangepakt?
-Ik heb bewust aandacht besteed aan mijn spreekgedrag tijdens Scrum ceremonies en heb actief geprobeerd ruimte te laten voor de meningen van anderen.
+Ik heb bewust gewerkt aan mijn spreekgedrag tijdens Scrum ceremonies, met als doel meer ruimte te bieden aan mijn teamleden. Tijdens sprint reviews met de product owner heb ik actief gewacht en anderen de kans gegeven om als eerste ideeën te delen. Ik heb gemerkt dat de dynamiek afhangt van de situatie, en soms nam ik het voortouw als anderen terughoudend waren.
 
 ### Welke acties op welke momenten heb je uitgevoerd? 
-Tijdens belangrijke Scrum ceremonies, zoals stand-ups en retrospectives, heb ik actief gewacht voordat ik mijn mening deelde. Ik gaf anderen de kans om als eerste hun gedachten en meningen te uiten voordat ik mijn bijdrage leverde.
+Bij belangrijke Scrum ceremonies heb ik gewacht met het delen van mijn mening, waardoor ik anderen aanmoedig om eerst te spreken. Tijdens een gesprek met Pim en onze scrum coach heb ik besproken hoe ik meer naar de achtergrond kan stappen en anderen de ruimte kan geven. Ik heb mijn aanpak aangepast op basis van deze inzichten. 
 
 ### Wie heb je om hulp gevraagd?
-Tot nu toe heb ik niemand om hulp gevraagd, omdat ik denk dat deze aanpak meer gericht is op zelfontwikkeling.
+Ik heb Pim om advies gevraagd en besproken hoe ik meer op de achtergrond kan blijven. Door onze scrum coach kreeg ik de inzicht in de dynamiek van het team en waarom anderen mogelijk terughoudend zijn. Dit heeft me geholpen mijn aanpak aan te passen.
 
 ### Tot welke inzichten ben je gekomen?
-Ik heb gemerkt dat zelfs wanneer ik ruimte geef, sommige teamleden terughoudend zijn en mogelijk een zetje nodig hebben om hun mening te delen. Dit heeft me aan het denken gezet over hoe ik anderen actief kan helpen om uit hun comfortzone te komen.
+Ik heb gemerkt dat het geven van ruimte niet altijd voldoende is. Sommige teamleden zijn terughoudend en hebben een zetje nodig om hun mening te delen. Ook ben ik me bewust geworden van hoe anderen reageren op mijn spreken en hoe dit van invloed kan zijn op de teamdynamiek. 
 
 ### Heb je iets bijgesteld? Waarom?
-Op basis van mijn inzichten over terughoudendheid bij teamleden, overweeg ik mijn leerdoel aan te passen naar het actief helpen van anderen bij het delen van hun mening.
+Op basis van mijn inzichten over terughoudendheid bij teamleden overweeg ik mijn leerdoel iets te verschuiven naar het actief betrekken van anderen bij de discussie. Ik wil niet alleen ruimte geven, maar ook actief stimuleren dat anderen hun mening delen. Hierdoor hoop ik een significante toename te zien in bijdragen van andere teamleden.
 
 ### Wat heeft het opgeleverd voor jou?
-Ik heb geleerd dat het geven van ruimte niet altijd voldoende is en dat ik actiever betrokken moet zijn bij het betrekken van andere teamleden in de discussie.
+Ik heb geleerd dat bewustwording van teaminteracties belangrijk is. Door actiever betrokken te zijn, kan ik een positieve invloed uitoefenen op de teamdynamiek. Ook ben ik me bewust geworden van mijn eigen spreekgedrag en hoe dit anderen beïnvloedt.
 
 ### Wat heeft het opgeleverd voor je team?
-Tot nu toe lijkt het meer bewustzijn te creëren over de dynamiek van de teaminteracties. Het heeft echter nog niet geleid tot een significante toename van bijdragen van andere teamleden.
+Tot nu toe lijkt er meer bewustzijn te zijn over de dynamiek binnen het team. Hoewel het nog niet heeft geleid tot een significante toename van bijdragen van andere teamleden, hoop ik dat de aangepaste aanpak hier verandering in brengt.
 
 ### Welke acties zijn de komende 2 weken nodig om (nog meer) voortgang te boeken?
-Ik wil mijn aanpak aanpassen door niet alleen ruimte te geven, maar actief anderen aan te moedigen om hun mening te delen. Bijvoorbeeld door gerichte vragen te stellen en het stokje door te geven aan andere teamleden om uit hun comfortzone te stappen.
->> Naast ruimte geven ook stimuleren lees ik. Welke gesprekstechniek zo hier bij passen? Voer deze techniek op en check welke onderdelen je wel/niet gaat toepassen.
+Ik wil mijn aanpak verder aanpassen door niet alleen ruimte te geven, maar actief anderen aan te moedigen om hun mening te delen. Dit kan ik doen door gerichte vragen te stellen en het stokje door te geven aan andere teamleden. Ik zal ook extra letten op lichaamstaal en oogcontact om de reacties van mijn teamgenoten beter te begrijpen. Het doel is om niet alleen te observeren maar ook te stimuleren.

@@ -44,8 +44,7 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
-| | | | | | |
+| 4u | [link naar de taak](https://github.com/HANICA-DWA/project-sep23-nyala/issues/171) | n.v.t. | De hele dag gewerkt aan het toepassen van feedback op mijn branches |:scream: | [link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/4dbbc9d0012e2f89cb4f9f838ef863c12d06d456) |
 
 ## Vrijdag 15 december
 
@@ -53,5 +52,4 @@
 
 | Uren | Taak  | Met Wie | Resultaten | Emotie | Link |
 |---|---|---|---|---|---|
-| rond af op uren, of halve uren | [link naar de taak](https://github.com/link-naar-de-taak) of beschrijving | Groepsgenoten indien relevant | Geef belangrijke inhoudelijke overwegingen en/of de leerpunten en/of puzzels en/of frustraties, etc.  |bijvoorbeeld <br />:smiley:, :rage:, :scream:, of :satisfied:, <br />maar een andere emoji, en/of opmerking is ook goed | [link naar de resultaten](https://github.com/link-naar-de-commit) |
-| | | | | | |
+| 4u | [link naar de taak](https://github.com/HANICA-DWA/project-sep23-nyala/issues/188) | n.v.t. | Gewerkt aan sessions voor de server |:satisfied: | [link naar de resultaten](https://github.com/HANICA-DWA/project-sep23-nyala/commit/92937c62ad1dc9def1523155a8c9a42d28af378a) |
