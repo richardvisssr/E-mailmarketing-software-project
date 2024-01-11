@@ -5,6 +5,7 @@ const { sendWebsocketMessage } = require("../utils/websockets");
 
 async function getAnalytics(emailId) {
   return (
+    console.log(  emailId),
     (await EmailAnalytics.findOne({ emailId })) ||
     new EmailAnalytics({ emailId })
   );
@@ -14,7 +15,7 @@ router.get("/trackOnlineView/:emailId", async (req, res) => {
   try {
     const { emailId } = req.params;
 
-    if (!emailId) {
+    if (!emailId || emailId === "undefined") {
       return res.status(400).send("Email ID is required");
     }
 
@@ -39,8 +40,8 @@ router.get("/trackHyperlinks/:link/:emailId", async (req, res) => {
   try {
     const { emailId, link } = req.params;
 
-    if (!emailId) {
-      return res.status(400).send("Email ID is required");
+    if (!emailId || !link || link === "undefined" || emailId === "undefined") {
+      return res.status(400).send("Email ID and Link are required");
     }
 
     const analytics = await getAnalytics(emailId);
@@ -79,9 +80,9 @@ router.get("/trackUnsubscribe/:emailId", async (req, res) => {
     }
 
     const analytics = await getAnalytics(emailId);
+
     analytics.unsubscribed += 1;
     await analytics.save();
-
     if (res.statusCode === 200) {
       sendWebsocketMessage({
         type: "trackUnsubscribe",
@@ -106,6 +107,8 @@ router.get("/stats/:emailId", async (req, res) => {
         opened: 0,
         unsubscribed: 0,
         totalLinkClicks: 0,
+        recipientCount: 0,
+        links: [],
       },
     });
   }
@@ -119,6 +122,7 @@ router.get("/stats/:emailId", async (req, res) => {
     [emailId]: {
       opened: analytics.opened,
       unsubscribed: analytics.unsubscribed,
+      recipientCount: analytics.recipientCount,
       totalLinkClicks,
       links: analytics.links,
     },

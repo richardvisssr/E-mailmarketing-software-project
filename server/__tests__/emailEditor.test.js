@@ -7,8 +7,11 @@ const router = require("../routes/emailEditor");
 const { app, httpServer, server } = require("../app");
 app.use(express.json());
 app.use("/mail", router);
+let token;
 
 beforeAll(async () => {
+  token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ4ODY0OTYsImV4cCI6MTcxMjY2MjQ5Nn0.STjc2iZmL_VjLXI5UrPhyIvRSqHd5IxbUITB7oLzjSc";
   if (mongoose.connection.readyState === 0) {
     await mongoose.connect(`mongodb://127.0.0.1:27017/nyalaTest`, {
       useNewUrlParser: true,
@@ -40,9 +43,9 @@ describe("Email Editor Routes", () => {
         title: "testen",
       });
 
-      const response = await request(app).get(
-        `/mail/loadDesign/${testDesign.id}`
-      );
+      const response = await request(app)
+        .get(`/mail/loadDesign/${testDesign.id}`)
+        .set("Authorization", `Bearer ${token}`);
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
         design: testDesign.design,
@@ -60,7 +63,8 @@ describe("Email Editor Routes", () => {
 
       const response = await request(app)
         .put("/mail/sendEmail")
-        .send({ id: "789", html: "<p>Email content</p>" });
+        .send({ id: "789", html: "<p>Email content</p>" })
+        .set("Authorization", `Bearer ${token}`);
 
       expect(response.status).toBe(200);
       expect(response.text).toBe("Design updated successfully");
@@ -72,12 +76,29 @@ describe("Email Editor Routes", () => {
       // Delete existing email with the same id
       await Email.deleteOne({ id: "456" });
 
-      const testEmail = await Email.create({ id: "456", html: "Test Email" });
+      const testEmail = await Email.create({
+        id: "456",
+        html: "Test Email",
+        showHeader: true,
+        subject: "Test Subject",
+        subject: "Test Subject",
+      });
 
-      const response = await request(app).get(`/mail/getEmail/${testEmail.id}`);
+      const response = await request(app)
+        .get(`/mail/getEmail/${testEmail.id}`)
+        .set("Authorization", `Bearer ${token}`);
       expect(response.status).toBe(200);
       expect(response.body.subject).toBe(testEmail.subject);
       await Email.deleteOne({ _id: testEmail._id });
+    });
+
+    it("should return a 404 error if the email is not found", async () => {
+      const response = await request(app)
+        .get("/mail/getEmail/0987654321")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ error: "Email not found" });
     });
   });
 
@@ -89,7 +110,8 @@ describe("Email Editor Routes", () => {
 
       const response = await request(app)
         .put("/mail/sendEmail")
-        .send({ id: "789", html: "<p>Email content</p>" });
+        .send({ id: "789", html: "<p>Email content</p>" })
+        .set("Authorization", `Bearer ${token}`);
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({ error: "Internal server error" });
@@ -102,7 +124,9 @@ describe("Email Editor Routes", () => {
         throw new Error("Mocked email loading error");
       });
 
-      const response = await request(app).get("/mail/getEmail/someid");
+      const response = await request(app)
+        .get("/mail/getEmail/someid")
+        .set("Authorization", `Bearer ${token}`);
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({ error: "Internal server error" });
@@ -115,7 +139,9 @@ describe("Email Editor Routes", () => {
         throw new Error("Mocked design loading error");
       });
 
-      const response = await request(app).get("/mail/loadDesign/someid");
+      const response = await request(app)
+        .get("/mail/loadDesign/someid")
+        .set("Authorization", `Bearer ${token}`);
       expect(response.status).toBe(500);
       expect(response.body).toEqual({ error: "Internal server error" });
     });
@@ -136,10 +162,24 @@ describe("Email Editor Routes", () => {
           id: "456",
           design: { key: "updatedValue" },
           title: "Updated Title",
-        });
+        })
+        .set("Authorization", `Bearer ${token}`);
 
       expect(response.status).toBe(200);
       expect(response.text).toBe("Design updated successfully");
+    });
+
+    it("should give an 500 error if the design is not found", async () => {
+      const response = await request(app)
+        .put("/mail/saveDesign")
+        .send({
+          id: "456",
+          title: "Updated Title",
+        })
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(500);
+      expect(response.body).toEqual({ error: "Internal server error" });
     });
   });
 
@@ -151,11 +191,11 @@ describe("Email Editor Routes", () => {
           id: "789",
           design: { key: "newValue" },
           title: "New Title",
-        });
-  
+        })
+        .set("Authorization", `Bearer ${token}`);
+
       expect(response.status).toBe(200);
       expect(response.text).toBe("Design saved successfully");
     });
   });
- 
 });

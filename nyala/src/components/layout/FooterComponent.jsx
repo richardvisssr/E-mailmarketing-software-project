@@ -4,7 +4,7 @@ export default function FooterComponent() {
   return (
     <footer className="border-top bg-white">
       <div className="d-flex flex-wrap justify-content-around py-0 mt-3">
-        <p>@ 2023 Nyala</p>
+        <p>@ 2024 S.V.Xtend</p>
 
         <div className={`${styles.linky}`}>
           <i className={`bi bi-map mr-3`}></i>
@@ -16,9 +16,9 @@ export default function FooterComponent() {
             Ruitenberglaan 26, Arnhem
           </a>
         </div>
-        
+
         <div className={`${styles.linky}`}>
-        <i className="bi bi-envelope-fill "></i>
+          <i className="bi bi-envelope-fill "></i>
           <a
             className={`link-underline link-underline-opacity-0 ${styles.space}`}
             href="mailto: info@svxtend.nl"

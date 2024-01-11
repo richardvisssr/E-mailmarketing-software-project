@@ -32,6 +32,21 @@ export default function AlertComponent({ notification }) {
         </div>
       )}
 
+      {notification.type === "warning" && (
+        <div
+          className="alert alert-warning mx-auto d-flex justify-content-around w-auto alert-dismissible"
+          role="alert"
+        >
+          <button
+            type="button"
+            className="btn-close"
+            onClick={handleDismiss}
+          ></button>
+          <p>{notification.message}</p>
+          <i className="ms-2 bi bi-dash-square"></i>
+        </div>
+      )}
+
       {notification.type === "error" && (
         <div
           className="alert alert-danger mx-auto d-flex justify-content-center w-auto alert-dismissible"

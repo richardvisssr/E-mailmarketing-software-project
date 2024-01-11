@@ -7,7 +7,7 @@ export default function Resubscribed() {
           className="alert alert-success d-flex justify-content-around"
           role="alert"
         >
-          <p>He topper, bedankt dat je jezelf weer hebt ingeschreven</p>
+          <p>Bedankt dat je weer bent ingeschreven.</p>
           <i className="bi bi-check"></i>
         </div>
       </div>

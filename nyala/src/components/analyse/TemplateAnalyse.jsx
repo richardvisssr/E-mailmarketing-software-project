@@ -39,7 +39,9 @@ export default function TemplateAnalyse({ id }) {
   }, [viewChange]);
 
   const getStats = async () => {
-    fetch(`http://localhost:3001/stats/${id}`,{ headers: { Authorization: `Bearer ${token}` } })
+    fetch(`http://localhost:3001/stats/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((response) => response.json())
       .then((data) => setStats(data[id]))
       .catch((error) =>
@@ -58,14 +60,14 @@ export default function TemplateAnalyse({ id }) {
         <ProgressBar
           text="Het aantal online views"
           count={stats.opened}
-          total={20}
+          total={stats.recipientCount}
         />
       </div>
       <div className="w-50 mx-auto mt-5">
         <ProgressBar
           text="Het aantal uitgeschreven personen"
           count={stats.unsubscribed}
-          total={10}
+          total={stats.recipientCount}
         />
       </div>
       <div className="w-50 mx-auto mt-5">

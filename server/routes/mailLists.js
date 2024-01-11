@@ -68,8 +68,8 @@ router.put("/updateListName", async (req, res) => {
       console.log("No list");
       return res.status(404).json({ message: "List not found" });
     }
-
     list.name = newName;
+
     await list.save();
     await existingList.save();
 
@@ -77,6 +77,7 @@ router.put("/updateListName", async (req, res) => {
       .status(200)
       .json({ message: "The list " + name + " is updated to " + newName });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });

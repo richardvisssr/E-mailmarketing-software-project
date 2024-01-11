@@ -11,13 +11,12 @@ async function verifyToken(req, res, next) {
   }
 
   const token = tokenHeader.split(" ")[1];
+  const dbToken = await Token.findOne({ token: token });
 
   if (!token) {
     res.status(401).send({ message: "Unauthorized: token missing" });
     return;
   }
-
-  const dbToken = await Token.findOne({ token: token });
 
   if (!dbToken) {
     jwt.verify(token, secretKey, (err, decoded) => {

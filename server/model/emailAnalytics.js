@@ -19,6 +19,10 @@ const emailAnalyticsSchema = new mongoose.Schema({
       count: { type: Number, default: 0 },
     },
   ],
+    recipientCount: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const EmailAnalytics = mongoose.model("EmailAnalytics", emailAnalyticsSchema);

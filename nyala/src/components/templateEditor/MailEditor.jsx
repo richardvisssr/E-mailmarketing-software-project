@@ -193,15 +193,12 @@ const MailEditor = ({ id }) => {
   };
 
   const handleSendEmailClick = async () => {
-    console.log("handleSendEmailClick");
-
     if (!checkIfEmailCanBeSent()) {
-      console.log("checkIfEmailCanBeSent");
       return;
     }
 
     if (mails.length > 0) {
-      await sendDataToSendEmail(
+      const post = await sendDataToSendEmail(
         html,
         sentData.subscribersData,
         subject,
@@ -209,11 +206,19 @@ const MailEditor = ({ id }) => {
         headerText,
         id
       );
-      setShow(false);
-      setNotification({
-        type: "success",
-        message: "Mail is succesvol verstuurd.",
-      });
+      if (post === "no_members") {
+        setModalNotification({
+          type: "error",
+          message: "Er zijn geen leden in de geselecteerde lijst(en).",
+        });
+      } else if (post === true) {
+        setShow(false);
+        handleClose();
+        setNotification({
+          type: "success",
+          message: "Mail is succesvol verstuurd.",
+        });
+      }
     } else {
       setModalNotification({
         type: "error",
@@ -254,16 +259,27 @@ const MailEditor = ({ id }) => {
           }),
         });
         if (!response.ok) {
+          if (response.status === 400) {
+            setModalNotification({
+              type: "error",
+              message: "Er zijn geen leden in de geselecteerde lijst(en).",
+            });
+          } else {
+            setShow(false);
+            handleClose();
+            setNotification({
+              type: "error",
+              message: "Er is iets fout gegaan tijdens het inplannen",
+            });
+          }
+        } else {
+          setShow(false);
+          handleClose();
           setNotification({
-            type: "error",
-            message: "Er is iets fout gegaan tijdens het inplannen",
+            type: "success",
+            message: "Mail is succesvol ingepland.",
           });
         }
-        setShow(false);
-        setNotification({
-          type: "success",
-          message: "Mail is succesvol ingepland.",
-        });
       } catch (error) {
         setEmailSent(false);
       }
@@ -281,7 +297,7 @@ const MailEditor = ({ id }) => {
 
   return (
     <div>
-      <h1 className="text-center">Mail Editor</h1>
+      <h1 className="text-center">Maileditor</h1>
       <div className="p-2 gap-3 d-flex justify-content-center">
         <AlertComponent notification={notification} />
       </div>
@@ -324,10 +340,10 @@ const MailEditor = ({ id }) => {
           onClick={saveDesign}
           className={`btn ${styles.buttonSecondary} `}
         >
-          Design Opslaan
+          Design opslaan
         </button>
         <button onClick={sendEmail} className={`btn ${styles.buttonPrimary} `}>
-          Email Versturen
+          Email versturen
         </button>
       </div>
 

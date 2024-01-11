@@ -1,4 +1,4 @@
-import styles from "./loading.module.css";
+import Spinner from "@/components/spinner/Spinner";
 
 export default function Loading() {
   return (
@@ -6,9 +6,7 @@ export default function Loading() {
       className={`d-flex flex-column justify-conten-center align-items-center py-5`}
     >
       <h3>Aan het laden...</h3>
-      <div className={`spinner-border ${styles.spinner}`} role="status">
-        <span className="sr-only"></span>
-      </div>
+      <Spinner />
     </div>
   );
 }

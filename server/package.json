@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "jest --verbose --coverage --maxWorkers=1 --detectOpenHandles"
+    "test": "jest "
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
