@@ -69,7 +69,10 @@ const UnsubscribeReasonChart = ({ linkData }) => {
       .attr("transform", `translate(${margin.left},0)`)
       .call(d3.axisLeft(y))
       .selectAll("text")
-      .html((d, i) => `<a href="${completeLink[i]}" style="text-decoration: none; color:black;">${linked[i]}</a>`);
+      .html(
+        (d, i) =>
+          `<a href="${completeLink[i]}" style="text-decoration: none; color:black;">${linked[i]}</a>`
+      );
 
     svg
       .append("g")

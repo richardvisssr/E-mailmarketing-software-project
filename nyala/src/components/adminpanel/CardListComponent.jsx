@@ -12,7 +12,7 @@ function CardList(props) {
 
   return (
     <div>
-      <AlertComponent notification={notification}/>
+      <AlertComponent notification={notification} />
       <Row xs={1} md={3} className="g-4">
         {Object.values(templates).length === 0 ? (
           <Alert key="dark" variant="dark">
@@ -20,7 +20,12 @@ function CardList(props) {
           </Alert>
         ) : (
           Object.values(templates).map((template, idx) => (
-            <TemplateCard key={idx} template={template} onDelete={onDelete} setNotification={setNotification} />
+            <TemplateCard
+              key={idx}
+              template={template}
+              onDelete={onDelete}
+              setNotification={setNotification}
+            />
           ))
         )}
       </Row>

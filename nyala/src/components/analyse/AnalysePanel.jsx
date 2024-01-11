@@ -43,7 +43,9 @@ export default function AnalysePanel() {
 
   const getUnsubscribeReasons = async () => {
     try {
-  const response = await fetch("http://localhost:3001/unsubscribeReasons", {headers : {Authorization: `Bearer ${token}`}});
+      const response = await fetch("http://localhost:3001/unsubscribeReasons", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await response.json();
 
       if (data.length === 0) {
@@ -70,7 +72,9 @@ export default function AnalysePanel() {
 
   const getMailList = async () => {
     try {
-      const response = await fetch("http://localhost:3001/unsubscribe/count", {headers : {Authorization: `Bearer ${token}`}});
+      const response = await fetch("http://localhost:3001/unsubscribe/count", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await response.json();
 
       setMailListData(data);

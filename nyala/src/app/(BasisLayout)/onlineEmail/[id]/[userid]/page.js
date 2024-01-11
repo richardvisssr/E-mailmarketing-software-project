@@ -91,8 +91,6 @@ export default function Page({ params }) {
     getAuth();
   }, []);
 
-
-
   return (
     <main>
       {notification != "" && <AlertComponent notification={notification} />}

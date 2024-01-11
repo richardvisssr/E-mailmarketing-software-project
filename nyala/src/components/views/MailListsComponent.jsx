@@ -56,7 +56,8 @@ export default function MailListComponent() {
     const fetchSubscribers = async () => {
       const promises = mailLists.map((mailList) =>
         fetch(
-          `http://localhost:3001/subscribers?selectedMailingList=${mailList}`, {
+          `http://localhost:3001/subscribers?selectedMailingList=${mailList}`,
+          {
             method: "GET",
             credentials: "include",
             headers: {
@@ -389,7 +390,6 @@ export default function MailListComponent() {
               type: "success",
               message: "De lijst is succesvol bijgewerkt.",
             });
-
           } catch (error) {
             setNotification({
               type: "error",
