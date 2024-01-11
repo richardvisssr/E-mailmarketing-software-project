@@ -93,6 +93,15 @@ async function handleSubscriberRequest(req, res, isEdit) {
     const existingSubscriber = await checkExistingSubscriber(email);
 
     if (existingSubscriber) {
+      if (
+        existingSubscriber.subscription.includes(subscriptions[0]) &&
+        !isEdit
+      ) {
+        return res.status(202).json({
+          message: "Subscriber already subscribed to particular list",
+        });
+      }
+
       if (isEdit) {
         existingSubscriber.subscription = Array.from(
           new Set([...existingSubscriber.subscription, ...subscriptions])
@@ -124,7 +133,7 @@ async function handleSubscriberRequest(req, res, isEdit) {
  * @param {import('express').Response} res - The Express response object.
  */
 router.post("/subscribers/add", async (req, res) => {
-  await handleSubscriberRequest(req, res, false);
+  await handleSubscriberRequest(req, res, true);
 });
 
 /**
@@ -153,15 +162,25 @@ router.get("/:subscriber/subs", async (req, res) => {
 });
 
 router.put("/subscribers/add", async (req, res) => {
-  const { email, subscriptions } = req.body;
+  const { name, email, subscriptions } = req.body;
+  
   try {
-    await Subscriber.findOneAndUpdate(
-      { email: email },
-      { $addToSet: { subscription: subscriptions } },
-      { upsert: true }
-    );
+    const subscriber = await Subscriber.findOne({ email: email });
+    if (!subscriber) {
+      await Subscriber.create({
+        name: name,
+        email: email,
+        subscription: subscriptions,
+      });
 
-    res.status(200).json({ message: "Subscriber updated" });
+      return res.status(200).send({ message: "Subscriber added" });
+    } else {
+      const newSubscriptions = [...subscriber.subscription, ...subscriptions];
+      subscriber.subscription = newSubscriptions;
+      await subscriber.save();
+
+      return res.status(200).send({ message: "Subscriber updated" });
+    }
   } catch (err) {
     res.status(500).json({ message: "Internal Server Error" });
   }

@@ -3,7 +3,7 @@ import { ProgressBar } from "react-bootstrap";
 
 export default function Progress({ text, count, total }) {
   const calculatePercentage = (part, everything) => {
-    return (part / everything) * 100;
+    return Math.ceil((part / everything) * 100);
   };
 
   return (

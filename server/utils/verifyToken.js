@@ -4,9 +4,15 @@ const jwt = require("jsonwebtoken");
 const secretKey = "z576lkp4tMzGqP0KOINOE+De3ajsPJChBk+bhJ9XoxF9VJG4E0Da+g==";
 
 async function verifyToken(req, res, next) {
-  const token = req.headers.authorization.split(" ")[1];
-  const dbToken = await Token.findOne({ token: token });
-  if (!token && !dbToken) {
+  const tokenHeader = req.headers.authorization;
+  if (!tokenHeader || !tokenHeader.startsWith("Bearer ")) {
+    res.status(401).send({ message: "Unauthorized: invalid token format" });
+    return;
+  }
+
+  const token = tokenHeader.split(" ")[1];
+
+  if (!token) {
     res.status(401).send({ message: "Unauthorized: token missing" });
     return;
   }

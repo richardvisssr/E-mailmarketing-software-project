@@ -63,7 +63,7 @@ export default function EmailForm({
       <input
         type="submit"
         className={`btn ${styles.buttonPrimary} rounded mt-4`}
-        value="Submit"
+        value="Toevoegen"
       />
     </form>
   );

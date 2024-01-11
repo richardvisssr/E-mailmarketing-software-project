@@ -67,24 +67,10 @@ function TemplateCard(props) {
   };
 
   const handleHeaderTextChange = (e) => {
-    if (e.target.value.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Header mag niet leeg zijn",
-      });
-      return;
-    }
     setHeaderText(e.target.value);
   };
 
   const handleSubjectChange = (e) => {
-    if (e.target.value.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Onderwerp mag niet leeg zijn",
-      });
-      return;
-    }
     setSubject(e.target.value);
   };
 
@@ -105,6 +91,9 @@ function TemplateCard(props) {
     setEmails([]);
     setDateTime("");
     setSubscribers([]);
+    setSubject("");
+    setHeaderText("");
+    setShowHeader(false);
   }, [show]);
 
   useEffect(() => {
@@ -161,25 +150,37 @@ function TemplateCard(props) {
       });
   }, []);
 
-  const handleSendEmailClick = async () => {
+  const checkIfEmailCanBeSent = () => {
     if (!subject || subject.trim() === "") {
       setNotification({
         type: "error",
         message: "Onderwerp mag niet leeg zijn!",
       });
-      return;
-    }
-
-    if (!html || html.trim() === "") {
+      return false;
+    } else if (!html || html.trim() === "") {
       setNotification({
         type: "error",
         message: "Design is nog niet opgeslagen en is leeg",
       });
+      return false;
+    } else if (showHeader && headerText.trim() === "") {
+      setNotification({
+        type: "error",
+        message: "Header mag niet leeg zijn!",
+      });
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const handleSendEmailClick = async () => {
+    if (!checkIfEmailCanBeSent()) {
       return;
     }
 
     if (mails.length > 0) {
-      await sendDataToSendEmail(
+      const sent = await sendDataToSendEmail(
         html,
         sentData.subscribersData,
         subject,
@@ -187,12 +188,19 @@ function TemplateCard(props) {
         headerText,
         template.id
       );
-      props.setNotification((prevNotification) => ({
-        ...prevNotification,
-        type: "success",
-        message: "Mail is succesvol verstuurd.",
-      }));
-      setShow(false);
+      if (sent === "no_members") {
+        setNotification({
+          type: "error",
+          message: "Er zijn geen leden in de geselecteerde lijst(en).",
+        });
+      } else if (sent === true) {
+        props.setNotification((prevNotification) => ({
+          ...prevNotification,
+          type: "success",
+          message: "Mail is succesvol verstuurd.",
+        }));
+        setShow(false);
+      }
     } else {
       setNotification({
         type: "error",
@@ -202,19 +210,7 @@ function TemplateCard(props) {
   };
 
   const handlePlanMail = async () => {
-    if (!subject || subject.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Onderwerp mag niet leeg zijn!",
-      });
-      return;
-    }
-
-    if (!html || html.trim() === "") {
-      setNotification({
-        type: "error",
-        message: "Design is nog niet opgeslagen en is leeg",
-      });
+    if (!checkIfEmailCanBeSent()) {
       return;
     }
 
@@ -232,7 +228,7 @@ function TemplateCard(props) {
             id: generateUniqueShortId(),
             title: template.title,
             html: html,
-            subs: subscribers,
+            subs: sentData.subscribersData,
             date: dateTime,
             showHeader: showHeader,
             headerText: headerText,
@@ -240,19 +236,28 @@ function TemplateCard(props) {
           }),
         });
         if (!response.ok) {
+          if (response.status === 400) {
+            setNotification({
+              type: "error",
+              message: "Er zijn geen leden in de geselecteerde lijst(en).",
+            });
+          } else {
+            props.setNotification((prevNotification) => ({
+              ...prevNotification,
+              type: "error",
+              message: "Er is iets misgegaan bij het versturen van de mail",
+            }));
+            setShow(false);
+          }
+        } else {
           props.setNotification((prevNotification) => ({
             ...prevNotification,
-            type: "error",
-            message: "Er is iets misgegaan bij het versturen van de mail",
+            type: "success",
+            message: "Mail is succesvol ingepland",
           }));
+          setShow(false);
+          socket.send("Email send");
         }
-        props.setNotification((prevNotification) => ({
-          ...prevNotification,
-          type: "success",
-          message: "Mail is succesvol ingepland",
-        }));
-        setShow(false);
-        socket.send("Email send");
       } catch (error) {
         props.setNotification((prevNotification) => ({
           ...prevNotification,
