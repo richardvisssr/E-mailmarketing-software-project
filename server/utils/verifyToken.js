@@ -17,8 +17,6 @@ async function verifyToken(req, res, next) {
     return;
   }
 
-  const dbToken = await Token.findOne({ token: token });
-
   if (!dbToken) {
     jwt.verify(token, secretKey, (err, decoded) => {
       if (err) {

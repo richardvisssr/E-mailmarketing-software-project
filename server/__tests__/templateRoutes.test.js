@@ -8,8 +8,11 @@ app.use("/", routes);
 
 const Design = mongoose.model("Design");
 const Email = mongoose.model("Email");
+let token;
 
 beforeAll(async () => {
+  token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDQ4ODY0OTYsImV4cCI6MTcxMjY2MjQ5Nn0.STjc2iZmL_VjLXI5UrPhyIvRSqHd5IxbUITB7oLzjSc";
   if (mongoose.connection.readyState === 0) {
     await mongoose.connect(`mongodb://localhost:27017/nyala`);
   }
@@ -25,6 +28,8 @@ beforeEach(async () => {
   const emailData = {
     id: "testEmailId",
     html: "<p>Your test HTML content here</p>",
+    showHeader: true,
+    subject: "Test Subject",
   };
 
   await Email.create(emailData);
@@ -45,7 +50,9 @@ afterAll(async () => {
 
 describe("GET /templates", () => {
   it("should respond with an array of templates", async () => {
-    const response = await request(app).get("/templates");
+    const response = await request(app)
+      .get("/templates")
+      .set("Authorization", `Bearer ${token}`);
     expect(response.body).toEqual(expect.any(Array));
     expect(response.statusCode).toBe(200);
   }, 10000);
@@ -54,7 +61,10 @@ describe("GET /templates", () => {
       throw new Error("Internal Server Error");
     });
 
-    const response = await request(app).get("/templates");
+    const response = await request(app)
+      .get("/templates")
+      .set("Authorization", `Bearer ${token}`);
+
     expect(response.statusCode).toBe(500);
     expect(response.body).toEqual({ error: "Internal Server Error" });
   }, 10000);
@@ -62,13 +72,17 @@ describe("GET /templates", () => {
 
 describe("GET /templates/:id", () => {
   it("should respond with a template", async () => {
-    const response = await request(app).get("/templates/testEmailId");
+    const response = await request(app)
+      .get("/templates/testEmailId")
+      .set("Authorization", `Bearer ${token}`);
     expect(response.body).toEqual(expect.any(Object));
     expect(response.statusCode).toBe(200);
   }, 10000);
 
   it("should respond with an error", async () => {
-    const response = await request(app).get("/templates/100");
+    const response = await request(app)
+      .get("/templates/100")
+      .set("Authorization", `Bearer ${token}`);
     expect(response.body).toEqual({ error: "Email not found" });
     expect(response.statusCode).toBe(404);
   }, 10000);
@@ -78,7 +92,9 @@ describe("GET /templates/:id", () => {
       throw new Error("Internal Server Error");
     });
 
-    const response = await request(app).get("/templates/testEmailId");
+    const response = await request(app)
+      .get("/templates/testEmailId")
+      .set("Authorization", `Bearer ${token}`);
     expect(response.statusCode).toBe(500);
     expect(response.body).toEqual({ error: "Internal Server Error" });
   }, 10000);
@@ -86,14 +102,15 @@ describe("GET /templates/:id", () => {
 
 describe("DELETE /template/:id", () => {
   it("should respond with a success message", async () => {
-    // Create a design or email with the id "testEmailId"
     await Design.create({
       id: "testEmailId",
       design: { key: "value" },
       title: "Title",
     });
 
-    const response = await request(app).delete("/template/testEmailId");
+    const response = await request(app)
+      .delete("/template/testEmailId")
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.body).toEqual({ success: true });
     expect(response.statusCode).toBe(200);
@@ -104,7 +121,9 @@ describe("DELETE /template/:id", () => {
       throw new Error("Internal Server Error");
     });
 
-    const response = await request(app).delete("/template/testEmailId");
+    const response = await request(app)
+      .delete("/template/testEmailId")
+      .set("Authorization", `Bearer ${token}`);
     expect(response.statusCode).toBe(500);
     expect(response.body).toEqual({ message: "Internal Server Error" });
   }, 10000);
