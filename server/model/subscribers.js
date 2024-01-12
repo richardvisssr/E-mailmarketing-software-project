@@ -51,4 +51,37 @@ const Category = mongoose.model("Category", categories);
 
 // sub.save();
 
+const checkData = async (req, res, next) => {
+  const count = await Category.countDocuments({});
+
+  if (count === 0) {
+    const updateICT = new Category({
+      name: "ICT",
+      count: 0,
+    });
+
+    const updateCMD = new Category({
+      name: "CMD",
+      count: 0,
+    });
+
+    const updateLeden = new Category({
+      name: "Leden",
+      count: 0,
+    });
+
+    const updateNieuwsbrief = new Category({
+      name: "Nieuwsbrief",
+      count: 0,
+    });
+
+    await updateICT.save();
+    await updateCMD.save();
+    await updateLeden.save();
+    await updateNieuwsbrief.save();
+  }
+};
+
+checkData();
+
 module.exports = { Subscriber, Unsubscriber, Category };

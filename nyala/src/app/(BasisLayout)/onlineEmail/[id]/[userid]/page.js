@@ -5,14 +5,6 @@ import Cookies from "js-cookie";
 import AlertComponent from "@/components/alert/AlertComponent";
 import styles from "./onlineEmail.module.css";
 
-/**
- * @module OnlineEmailPage
- * @description React component for displaying an online email with personalized content.
- * @param {Object} params - Parameters passed to the component.
- * @param {string} params.id - The ID of the email.
- * @param {string} params.userid - The ID of the user.
- * @returns {JSX.Element} JSX representation of the component.
- */
 export default function Page({ params }) {
   const { id, userid } = params;
   const [email, setEmail] = useState(null);
@@ -20,11 +12,8 @@ export default function Page({ params }) {
   const [subscriber, setSubscriber] = useState(null);
   const token = Cookies.get("token");
 
-  /**
-   * @function useEffect
-   * @description Fetches temporary authentication token and email content on component mount.
-   */
   useEffect(() => {
+    // Fetch email
     const getAuth = async () => {
       const response = await fetch("http://localhost:3001/tempAuth", {
         method: "GET",
@@ -52,8 +41,11 @@ export default function Page({ params }) {
         )
           .then((response) => response.json())
           .then((data) => {
+            const email = data.email;
+            const bodyBackground = data.bodyBackground;
+            const textColor = data.textColor;
             const analysisPageUrl = `http://localhost:3000/analyse/`;
-            const personalizedHtmlText = data.html.replace(
+            const personalizedHtmlText = email.html.replace(
               /href="([^"]*)"/g,
               function (match, originalUrl) {
                 return `href="${analysisPageUrl}${encodeURIComponent(
@@ -62,9 +54,11 @@ export default function Page({ params }) {
               }
             );
 
-            data.subscribers.forEach((subscriber) => {
+            // Loop over each subscriber
+            email.subscribers.forEach((subscriber) => {
+              // Only personalize the header text for the matching subscriber
               if (userid === subscriber.id || userid === subscriber._id) {
-                let personalizedHeaderText = data.headerText.replace(
+                let personalizedHeaderText = email.headerText.replace(
                   "{name}",
                   subscriber.name
                 );
@@ -79,15 +73,19 @@ export default function Page({ params }) {
                   `<img src="/xtend-logo.webp" alt="Xtend Logo" style="width: 100px; height: auto;" />`
                 );
 
+                // Update the email data with the personalized header text
                 setEmail({
-                  ...data,
+                  ...email,
                   headerText: personalizedHeaderText,
                   html: personalizedHtmlText,
+                  bodyBackground: bodyBackground,
+                  textColor: textColor,
                 });
               }
             });
           })
           .catch((error) => {
+            console.log(error);
             setNotification({
               type: "error",
               message: "Er is iets foutgegaan tijdens het inzien van de mail",
@@ -100,7 +98,11 @@ export default function Page({ params }) {
   }, []);
 
   return (
-    <main>
+    <main
+      style={{
+        backgroundColor: email ? email.bodyBackground : undefined,
+      }}
+    >
       {notification != "" && <AlertComponent notification={notification} />}
       {email ? (
         <div>
@@ -110,6 +112,8 @@ export default function Page({ params }) {
               style={{
                 textAlign: "center",
                 padding: "10px",
+                backgroundColor: email.bodyBackground,
+                color: email.textColor,
               }}
             />
           )}

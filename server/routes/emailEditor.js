@@ -1,4 +1,5 @@
 const express = require("express");
+const cheerio = require("cheerio");
 const { PlannedEmail, Design, Email } = require("../model/emailEditor");
 const router = express.Router();
 
@@ -70,7 +71,16 @@ router.get("/getEmail/:id", async (req, res) => {
     }
 
     if (email) {
-      res.json(email);
+      const $ = cheerio.load(email.html);
+      const bodyBackground = $("body").css("background-color");
+
+      const textColor = getReadableTextColor(bodyBackground);
+
+      res.json({
+        email: email,
+        bodyBackground: bodyBackground,
+        textColor: textColor,
+      });
     } else {
       res.status(404).json({ error: "Email not found" });
     }
@@ -95,5 +105,53 @@ router.get("/subscribers/:id", async (req, res) => {
     res.status(500).send({ message: "Internal server error" });
   }
 });
+
+function getReadableTextColor(bodyBackground) {
+  const rgbColor = () => {
+    if (bodyBackground == "transparent") {
+      return "rgb(255, 255, 255)";
+    } else {
+      return hexToRgb(bodyBackground);
+    }
+  };
+
+  switch (rgbColor()) {
+    case "rgb(255, 255, 255)":
+      return "#282828";
+    case "rgb(0, 0, 0)":
+      return "#ffffff";
+    default:
+      const luminance = calculateLuminance(rgbColor());
+      return luminance > 0.5 ? "#282828" : "#ffffff";
+  }
+}
+
+function calculateLuminance(rgbColor) {
+  const rgbArray = rgbColor.match(/\d+/g).map(Number);
+  const [r, g, b] = rgbArray.map((value) => {
+    value /= 255;
+    return value <= 0.03928
+      ? value / 12.92
+      : Math.pow((value + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function hexToRgb(hexColor) {
+  const hex = hexColor.replace(
+    /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
+    (m, r, g, b) => {
+      return "#" + r + r + g + g + b + b;
+    }
+  );
+
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? `rgb(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(
+        result[3],
+        16
+      )})`
+    : null;
+}
 
 module.exports = router;

@@ -318,12 +318,17 @@ export default function SubscribersTable() {
       <div className="d-flex justify-content-center mt-3">
         <Form>
           <div className="row">
-            <div className="">
+            <div>
               <Form.Control
                 type="text"
-                placeholder="Vul een emailadres in"
+                placeholder="Zoek op email..."
                 value={searchValue}
                 onChange={handleSearchChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                  }
+                }}
               />
             </div>
           </div>

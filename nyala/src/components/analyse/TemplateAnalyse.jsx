@@ -71,21 +71,21 @@ export default function TemplateAnalyse({ id }) {
   return (
     <div>
       <AlertComponent notification={notification} />
-      <div className="w-50 mx-auto mt-5">
+      <div className="w-50 mx-auto mb-5">
         <ProgressBar
           text="Het aantal online views"
           count={stats.opened}
           total={stats.recipientCount}
         />
       </div>
-      <div className="w-50 mx-auto mt-5">
+      <div className="w-50 mx-auto mb-5">
         <ProgressBar
           text="Het aantal uitgeschreven personen"
           count={stats.unsubscribed}
           total={stats.recipientCount}
         />
       </div>
-      <div className="w-50 mx-auto mt-5">
+      <div className="w-50 mx-auto">
         <HyperlinkChart linkData={stats.links} />
       </div>
     </div>

@@ -11,23 +11,6 @@
   animation: pulse 2s infinite;
 }
 
-.btn-primary {
-  --bs-btn-color: #fff;
-  --bs-btn-bg: #e800e9;
-  --bs-btn-border-color: #e800e9;
-  --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #fb2dfb;
-  --bs-btn-hover-border-color: #fb2dfb;
-  --bs-btn-focus-shadow-rgb: 49, 132, 253;
-  --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: #e800e9;
-  --bs-btn-active-border-color: #e800e9;
-  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  --bs-btn-disabled-color: #fff;
-  --bs-btn-disabled-bg: #c54cc5;
-  --bs-btn-disabled-border-color: #c54cc5;
-}
-
 .knopSecondary {
   --bs-btn-color: #fff !important;
   --bs-btn-bg: #779bef !important;
@@ -52,7 +35,7 @@
 }
 
 .linkText {
-  color: #e800e9;
+  color: #a66cf2;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;

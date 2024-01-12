@@ -24,7 +24,7 @@ router.put("/addList", async (req, res) => {
     existingList.mailList.push(name);
     const updatedList = await existingList.save();
 
-    // await Category.create({ name: name });
+    await Category.create({ name: name, count: 0 });
     res.json(updatedList);
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
@@ -62,7 +62,7 @@ router.put("/updateListName", async (req, res) => {
       mail === name ? newName : mail
     );
 
-    const list = await Category.findOne({ name: name }); // DIT GAAT FOUT
+    const list = await Category.findOne({ name: name });
 
     if (!list) {
       console.log("No list");
@@ -95,6 +95,9 @@ router.delete("/deleteList", async (req, res) => {
     existingList.mailList = existingList.mailList.filter(
       (mail) => mail !== name
     );
+
+    const deleteCategory = await Category.findOne({ name: name });
+    await deleteCategory.deleteOne();
     await existingList.save();
 
     res.status(200).json({ message: "The list " + name + " is deleted" });

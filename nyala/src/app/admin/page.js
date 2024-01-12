@@ -127,6 +127,11 @@ function Page() {
                         placeholder="Vul hier de titel in"
                         value={searchValue}
                         onChange={handleSearchChange}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                          }
+                        }}
                       />
                     </FormGroup>
                   </div>

@@ -73,6 +73,10 @@ export default function AnalysePanel() {
           return { reason: item.reason, count: item.count };
         })
       );
+      setReasonNotification({
+        type: "",
+        message: "",
+      });
     } catch (error) {
       setNotification({
         type: "error",
@@ -92,20 +96,25 @@ export default function AnalysePanel() {
       });
       const data = await response.json();
 
-      setMailListData(data);
-
       if (data.length === 0) {
         setListNotifcation({
           type: "error",
-          message: "Er zijn uitschrijvingen in een van alle maillijsten",
+          message: "Er zijn nog geen mailings om weer te geven",
         });
         return;
       }
+
+      setMailListData(data);
+      setListNotifcation({
+        type: "",
+        message: "",
+      });
     } catch (error) {
       setListNotifcation({
         type: "error",
         message: "Er ging iets mis bij het ophalen van de data",
       });
+      console.log(error);
     }
   };
 

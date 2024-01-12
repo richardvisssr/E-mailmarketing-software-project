@@ -292,6 +292,7 @@ export default function MailListComponent() {
             type: "success",
             message: "De lijst is succesvol toegevoegd.",
           });
+          setList("");
         })
         .catch(() => {
           setNotification({
@@ -397,20 +398,20 @@ export default function MailListComponent() {
                 message:
                   "Er is een fout opgetreden bij het bijwerken van de lijstnaam.",
               });
+            } else {
+              setMailLists((prevLists) => {
+                const updatedLists = [...prevLists];
+                const index = updatedLists.findIndex((list) => list === name);
+                if (index !== -1) {
+                  updatedLists[index] = newName;
+                }
+                return updatedLists;
+              });
+              setNotification({
+                type: "success",
+                message: "De lijstnaam is succesvol bijgewerkt.",
+              });
             }
-
-            setMailLists((prevLists) => {
-              const updatedLists = [...prevLists];
-              const index = updatedLists.findIndex((list) => list === name);
-              if (index !== -1) {
-                updatedLists[index] = newName;
-              }
-              return updatedLists;
-            });
-            setNotification({
-              type: "success",
-              message: "De lijstnaam is succesvol bijgewerkt.",
-            });
           } catch (error) {
             setNotification({
               type: "error",
@@ -424,40 +425,46 @@ export default function MailListComponent() {
           handleUpdateListName(selectedListToUpdate, newName);
         }
 
-        const handleUpdateListChange = (list, name) => {
+        const handleUpdateListChange = async (list, name) => {
           try {
-            const response = fetch(`http://localhost:3001/update/${list}`, {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify({ name }),
-            });
+            const response = await fetch(
+              `http://localhost:3001/update/${list}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ name }),
+              }
+            );
 
             if (!response.ok) {
               setModalNotification({
                 type: "error",
                 message:
-                  "Er is een fout opgetreden bij het bijwerken van de lijst.",
+                  "Er is een fout opgetreden bij het bijwerken van de lijst in de subscribers.",
               });
+            } else {
+              // setNotification({
+              //   type: "success",
+              //   message: "De lijst is succesvol bijgewerkt.",
+              // });
+              setChangeName(false);
+              handleCloseUpdateListModal();
             }
-
-            setNotification({
-              type: "success",
-              message: "De lijst is succesvol bijgewerkt.",
-            });
           } catch (error) {
             setNotification({
               type: "error",
               message:
                 "Er is een fout opgetreden bij het bijwerken van de lijst.",
             });
-          } finally {
-            setChangeName(false);
-            handleCloseUpdateListModal();
           }
         };
+
+        if (selectedListToUpdate !== "" && newName !== "") {
+          handleUpdateListChange(selectedListToUpdate, newName);
+        }
 
         if (selectedListToUpdate !== "" && newName !== "") {
           handleUpdateListChange(selectedListToUpdate, newName);
@@ -537,6 +544,7 @@ export default function MailListComponent() {
           type="text"
           className="form-control"
           placeholder="Lijst"
+          value={list}
           aria-describedby="basic-addon1"
           onChange={(e) => {
             const value = e.target.value;
